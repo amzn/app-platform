@@ -13,7 +13,7 @@ fun main() {
         desktopApp.destroy()
         exitApplication()
       },
-      title = "LastMile App Platform",
+      title = "App Platform",
     ) {
       desktopApp.renderTemplates()
     }
