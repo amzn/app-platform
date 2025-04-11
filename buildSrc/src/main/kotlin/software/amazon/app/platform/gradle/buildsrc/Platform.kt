@@ -150,30 +150,10 @@ internal sealed interface Platform {
         add(IosArm64(project = this@allPlatforms))
         add(IosX64(project = this@allPlatforms))
 
-        // TODO: check with Github
-        if (!ci) {
-          // Compose Multiplatform does not support Linux, so exclude these modules.
-          //
-          // Also don't build Linux in CI, because the KMP plugin attempts to download
-          // resources that are blocked:
-          //
-          // > Failed to apply plugin class 'software.amazon.app.platform.gradle.buildsrc.KmpPlugin'.
-          //   > Could not resolve all files for configuration ':kotlin-inject:impl:detachedConfiguration7'.
-          //      > Could not resolve :kotlin-native-prebuilt-linux-x86_64:1.9.23.
-          //        Required by:
-          //            project :kotlin-inject:impl
-          //         > Could not resolve :kotlin-native-prebuilt-linux-x86_64:1.9.23.
-          //            > Could not get resource
-          // 'https://download.jetbrains.com/kotlin/native/builds/releases/1.9.23/linux-x86_64/kotlin-native-prebuilt-linux-x86_64-1.9.23.tar.gz'.
-          //               > Could not HEAD
-          // 'https://download.jetbrains.com/kotlin/native/builds/releases/1.9.23/linux-x86_64/kotlin-native-prebuilt-linux-x86_64-1.9.23.tar.gz'.
-          //                  > download.jetbrains.com
-          //
-          // https://youtrack.jetbrains.com/issue/KT-47026/Use-gradle-dependency-resolution-for-konan-dependencies
-          if (projectsUsingCompose.none { path.startsWith(it) }) {
-            add(LinuxArm64(project = this@allPlatforms))
-            add(LinuxX64(project = this@allPlatforms))
-          }
+        // Compose Multiplatform does not support Linux, so exclude these modules.
+        if (projectsUsingCompose.none { path.startsWith(it) }) {
+          add(LinuxArm64(project = this@allPlatforms))
+          add(LinuxX64(project = this@allPlatforms))
         }
       }
     }
