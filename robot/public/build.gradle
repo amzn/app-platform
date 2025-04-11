@@ -1,0 +1,17 @@
+plugins {
+    id 'software.amazon.app.platform.lib'
+}
+
+appPlatformBuildSrc {
+    enableDi true
+    enablePublishing true
+}
+
+dependencies {
+    commonMainApi project(':scope:public')
+    commonMainImplementation project(':robot-internal:public')
+
+    androidMainApi libs.androidx.test.espresso
+
+    commonTestApi project(':scope:testing')
+}

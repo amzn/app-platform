@@ -1,0 +1,37 @@
+public class software/amazon/app/platform/renderer/BaseRendererFactory : software/amazon/app/platform/renderer/RendererFactory {
+	public fun <init> (Lsoftware/amazon/app/platform/scope/RootScopeProvider;)V
+	public fun createRenderer (Lkotlin/reflect/KClass;)Lsoftware/amazon/app/platform/renderer/Renderer;
+	public fun getRenderer (Lkotlin/reflect/KClass;I)Lsoftware/amazon/app/platform/renderer/Renderer;
+}
+
+public abstract interface class software/amazon/app/platform/renderer/Renderer {
+	public abstract fun render (Lsoftware/amazon/app/platform/presenter/BaseModel;)V
+}
+
+public abstract interface class software/amazon/app/platform/renderer/RendererComponent {
+	public abstract fun getModelToRendererMapping ()Ljava/util/Map;
+	public abstract fun getRenderers ()Ljava/util/Map;
+}
+
+public abstract interface class software/amazon/app/platform/renderer/RendererComponent$Parent {
+	public abstract fun rendererComponent (Lsoftware/amazon/app/platform/renderer/RendererFactory;)Lsoftware/amazon/app/platform/renderer/RendererComponent;
+}
+
+public abstract interface class software/amazon/app/platform/renderer/RendererFactory {
+	public abstract fun createRenderer (Lkotlin/reflect/KClass;)Lsoftware/amazon/app/platform/renderer/Renderer;
+	public abstract fun getRenderer (Lkotlin/reflect/KClass;I)Lsoftware/amazon/app/platform/renderer/Renderer;
+}
+
+public final class software/amazon/app/platform/renderer/RendererFactory$DefaultImpls {
+	public static synthetic fun getRenderer$default (Lsoftware/amazon/app/platform/renderer/RendererFactory;Lkotlin/reflect/KClass;IILjava/lang/Object;)Lsoftware/amazon/app/platform/renderer/Renderer;
+}
+
+public final class software/amazon/app/platform/renderer/RendererFactoryKt {
+	public static final fun createRenderer (Lsoftware/amazon/app/platform/renderer/RendererFactory;Lsoftware/amazon/app/platform/presenter/BaseModel;)Lsoftware/amazon/app/platform/renderer/Renderer;
+	public static final fun getRenderer (Lsoftware/amazon/app/platform/renderer/RendererFactory;Lsoftware/amazon/app/platform/presenter/BaseModel;I)Lsoftware/amazon/app/platform/renderer/Renderer;
+	public static synthetic fun getRenderer$default (Lsoftware/amazon/app/platform/renderer/RendererFactory;Lsoftware/amazon/app/platform/presenter/BaseModel;IILjava/lang/Object;)Lsoftware/amazon/app/platform/renderer/Renderer;
+}
+
+public abstract class software/amazon/app/platform/renderer/RendererScope {
+}
+

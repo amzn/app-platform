@@ -1,0 +1,16 @@
+plugins {
+    id 'software.amazon.app.platform.lib'
+}
+
+appPlatformBuildSrc {
+    enableDi true
+    enableMolecule true
+    enablePublishing true
+}
+
+dependencies {
+    commonMainApi project(':scope:public')
+
+    commonTestImplementation project(':kotlin-inject:impl')
+    commonTestImplementation libs.kotlin.inject.runtime.kmp
+}

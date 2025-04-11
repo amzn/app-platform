@@ -1,0 +1,15 @@
+plugins {
+    id 'software.amazon.app.platform.lib'
+}
+
+appPlatformBuildSrc {
+    enablePublishing true
+}
+
+dependencies {
+    commonMainApi project(':scope:public')
+
+    androidMainImplementation libs.androidx.test.monitor
+
+    commonTestApi project(':scope:testing')
+}

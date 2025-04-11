@@ -1,0 +1,33 @@
+public abstract interface annotation class software/amazon/app/platform/inject/ContributesRenderer : java/lang/annotation/Annotation {
+	public abstract fun includeSealedSubtypes ()Z
+	public abstract fun modelType ()Ljava/lang/Class;
+}
+
+public abstract interface annotation class software/amazon/app/platform/inject/mock/ContributesMockImpl : java/lang/annotation/Annotation {
+	public abstract fun boundType ()Ljava/lang/Class;
+	public abstract fun scope ()Ljava/lang/Class;
+}
+
+public abstract interface annotation class software/amazon/app/platform/inject/mock/ContributesMockImpl$Container : java/lang/annotation/Annotation {
+	public abstract fun value ()[Lsoftware/amazon/app/platform/inject/mock/ContributesMockImpl;
+}
+
+public abstract interface annotation class software/amazon/app/platform/inject/mock/ContributesRealImpl : java/lang/annotation/Annotation {
+	public abstract fun boundType ()Ljava/lang/Class;
+	public abstract fun scope ()Ljava/lang/Class;
+}
+
+public abstract interface annotation class software/amazon/app/platform/inject/mock/ContributesRealImpl$Container : java/lang/annotation/Annotation {
+	public abstract fun value ()[Lsoftware/amazon/app/platform/inject/mock/ContributesRealImpl;
+}
+
+public abstract interface annotation class software/amazon/app/platform/inject/mock/MockMode : java/lang/annotation/Annotation {
+}
+
+public abstract interface annotation class software/amazon/app/platform/inject/mock/RealImpl : java/lang/annotation/Annotation {
+}
+
+public abstract interface annotation class software/amazon/app/platform/inject/robot/ContributesRobot : java/lang/annotation/Annotation {
+	public abstract fun scope ()Ljava/lang/Class;
+}
+

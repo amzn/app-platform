@@ -1,0 +1,88 @@
+//file:noinspection UnnecessaryQualifiedReference
+plugins {
+    id 'java-gradle-plugin'
+    alias libs.plugins.kotlin.jvm
+    alias libs.plugins.ktfmt
+    alias libs.plugins.build.config
+}
+
+buildConfig {
+    buildConfigField(String, 'APP_PLATFORM_GROUP', property('GROUP'))
+}
+
+ktfmt {
+    googleStyle()
+    manageTrailingCommas.set(true)
+    removeUnusedImports.set(true)
+    maxWidth.set(120)
+}
+
+java {
+    sourceCompatibility = libs.versions.jvm.gradle.get()
+    targetCompatibility = libs.versions.jvm.gradle.get()
+}
+
+kotlin {
+    compilerOptions {
+        jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.fromTarget(libs.versions.jvm.gradle.get()))
+    }
+
+    explicitApi()
+}
+
+gradlePlugin {
+    plugins {
+        appPlatformAppPlugin {
+            id = "software.amazon.app.platform.app"
+            displayName = "App Platform App Gradle Plugin"
+            implementationClass = "software.amazon.app.platform.gradle.buildsrc.AppPlugin"
+            description = "The Gradle convention plugin for app modules."
+        }
+        appPlatformLibPlugin {
+            id = "software.amazon.app.platform.lib"
+            displayName = "App Platform Library Gradle Plugin"
+            implementationClass = "software.amazon.app.platform.gradle.buildsrc.LibraryPlugin"
+            description = "The Gradle convention plugin for library modules."
+        }
+        appPlatformJvmLibPlugin {
+            id = "software.amazon.app.platform.lib.jvm"
+            displayName = "App Platform JVM Library Gradle Plugin"
+            implementationClass = "software.amazon.app.platform.gradle.buildsrc.JvmLibraryPlugin"
+            description = "The Gradle convention plugin for JVM library modules."
+        }
+        appPlatformRootPlugin {
+            id = "software.amazon.app.platform.root"
+            displayName = "App Platform Root Gradle Plugin"
+            implementationClass = "software.amazon.app.platform.gradle.buildsrc.RootPlugin"
+            description = "The Gradle convention plugin for the root module."
+        }
+    }
+}
+
+dependencies {
+    implementation libs.android.gradle.plugin.api
+    implementation libs.android.gradle.plugin.asProvider()
+
+    implementation libs.compose.gradle.plugin
+    implementation libs.kotlin.gradle.plugin.api
+    implementation libs.kotlin.multiplatform.gradle.plugin
+    implementation libs.kotlin.compose.gradle.plugin
+    implementation libs.kotlinx.binaryCompatibilityValidator
+    runtimeOnly libs.kotlin.gradle.plugin.asProvider()
+
+    // This is needed to reference KspExperimental for experimental features.
+    compileOnly libs.ksp.api
+    implementation libs.ksp.gradle.plugin
+
+    implementation libs.graphviz.java
+    implementation libs.kotlin.hierarchy.plugin
+    implementation libs.ktfmt.gradle.plugin
+    implementation libs.maven.publish.gradle.plugin
+    implementation libs.detekt.gradle.plugin
+    implementation libs.build.config.gradle.plugin
+    implementation "$GROUP:gradle-plugin:$VERSION_NAME"
+}
+
+tasks.register('release') {
+    dependsOn('build', 'check', 'ktfmtCheck')
+}

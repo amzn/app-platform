@@ -1,0 +1,29 @@
+plugins {
+    id 'software.amazon.app.platform'
+
+    // This plugin lives in the buildSrc directory and is not published.
+    // It's used to manage certain configurations and dependencies for all
+    // :sample:* modules, otherwise we'd need to repeat them several times.
+    id 'software.amazon.app.platform.lib'
+}
+
+appPlatform {
+    enableComposeUi true
+    enableKotlinInject true
+    enableModuleStructure true
+    enableMoleculePresenters true
+}
+
+dependencies {
+    commonMainApi project(':sample:user:public')
+    commonTestImplementation project(':sample:user:testing')
+}
+
+compose {
+    dependencies {
+        commonMainImplementation dependencies.components.resources
+        commonMainImplementation dependencies.material
+
+        appleAndDesktopTestImplementation dependencies.uiTest
+    }
+}

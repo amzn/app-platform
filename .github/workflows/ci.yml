@@ -1,0 +1,277 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+    tags-ignore:
+      - '**'
+    paths-ignore:
+      - '**/*.md'
+  pull_request:
+
+jobs:
+  test-android:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+
+    strategy:
+      fail-fast: false
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup
+        uses: ./.github/actions/setup-action
+
+      - name: Test
+        run: ./gradlew testDebugUnitTest --stacktrace --show-version --continue
+
+      - name: Upload Test Results
+        uses: ./.github/actions/upload-results-action
+
+  test-ios:
+    runs-on: macos-latest-xlarge
+    timeout-minutes: 25
+
+    strategy:
+      fail-fast: false
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup
+        uses: ./.github/actions/setup-action
+
+      - name: Test
+        run: ./gradlew iosSimulatorArm64Test -Pkotlin.incremental.native=true --stacktrace --show-version --continue
+
+      - name: Upload Test Results
+        uses: ./.github/actions/upload-results-action
+
+  test-desktop:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+
+    strategy:
+      fail-fast: false
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup
+        uses: ./.github/actions/setup-action
+
+      - name: Test
+        run: ./gradlew desktopTest --stacktrace --show-version --continue
+
+      - name: Upload Test Results
+        uses: ./.github/actions/upload-results-action
+
+  test-linux:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+
+    strategy:
+      fail-fast: false
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup
+        uses: ./.github/actions/setup-action
+
+      - name: Test
+        run: ./gradlew linuxX64Test --stacktrace --show-version --continue
+
+      - name: Upload Test Results
+        uses: ./.github/actions/upload-results-action
+
+  test-jvm-modules:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+
+    strategy:
+      fail-fast: false
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup
+        uses: ./.github/actions/setup-action
+
+      - name: Test
+        run: ./gradlew :kotlin-inject-extensions:contribute:impl-code-generators:test --stacktrace --show-version --continue
+
+      - name: Upload Test Results
+        uses: ./.github/actions/upload-results-action
+
+  test-emulator-renderer-android-view:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+
+    strategy:
+      fail-fast: false
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup
+        uses: ./.github/actions/setup-action
+
+      - name: Prepare emulator
+        uses: ./.github/actions/prepare-emulator-action
+
+      - name: Test
+        run: ./gradlew :renderer-android-view:public:emulatorCheck --stacktrace --show-version --continue
+
+      - name: Upload Test Results
+        uses: ./.github/actions/upload-results-action
+
+  test-emulator-renderer-compose-multiplatform:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+
+    strategy:
+      fail-fast: false
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup
+        uses: ./.github/actions/setup-action
+
+      - name: Prepare emulator
+        uses: ./.github/actions/prepare-emulator-action
+
+      - name: Test
+        run: ./gradlew :renderer-compose-multiplatform:public:emulatorCheck --stacktrace --show-version --continue
+
+      - name: Upload Test Results
+        uses: ./.github/actions/upload-results-action
+
+  test-emulator-sample-app:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+
+    strategy:
+      fail-fast: false
+
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup
+        uses: ./.github/actions/setup-action
+
+      - name: Prepare emulator
+        uses: ./.github/actions/prepare-emulator-action
+
+      - name: Test
+        run: ./gradlew :sample:app:emulatorCheck --stacktrace --show-version --continue
+
+      - name: Upload Test Results
+        uses: ./.github/actions/upload-results-action
+
+  binary-compatibility-check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup
+        uses: ./.github/actions/setup-action
+
+      - name: API check
+        run: ./gradlew apiCheck --stacktrace --show-version --continue
+
+  ktfmt:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup
+        uses: ./.github/actions/setup-action
+
+      - name: ktfmt
+        run: ./gradlew ktfmtCheck --stacktrace --show-version --continue
+
+  android-lint:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup
+        uses: ./.github/actions/setup-action
+
+      - name: Android Lint
+        run: ./gradlew lint --stacktrace --show-version --continue
+
+      - name: Upload Test Results
+        uses: ./.github/actions/upload-results-action
+
+  detekt:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup
+        uses: ./.github/actions/setup-action
+
+      - name: Detekt
+        run: ./gradlew detekt --stacktrace --show-version --continue
+
+      - name: Upload Test Results
+        uses: ./.github/actions/upload-results-action
+
+  publish-maven-local:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup
+        uses: ./.github/actions/setup-action
+
+      - name: Publish to Maven Local
+        run: |
+          ./gradlew publishToMavenLocal --stacktrace --show-version --no-configuration-cache
+          ./gradlew -p gradle-plugin publishToMavenLocal --stacktrace --show-version --no-configuration-cache
+
+  build-src:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup
+        uses: ./.github/actions/setup-action
+
+      - name: Run release task
+        run: ./gradlew -p buildSrc release --stacktrace --show-version --continue
+
+      - name: Upload Test Results
+        uses: ./.github/actions/upload-results-action
+
+  gradle-plugin:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup
+        uses: ./.github/actions/setup-action
+
+      - name: Run release task
+        run: ./gradlew -p gradle-plugin release --stacktrace --show-version --continue
+
+      - name: Upload Test Results
+        uses: ./.github/actions/upload-results-action

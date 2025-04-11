@@ -1,0 +1,16 @@
+plugins {
+    id 'software.amazon.app.platform.lib'
+    alias libs.plugins.kotlin.atomicfu
+}
+
+appPlatformBuildSrc {
+    enableDi true
+    enablePublishing true
+}
+
+dependencies {
+    commonMainApi project(':presenter:public')
+    commonMainApi project(':scope:public')
+
+    commonTestApi project(':scope:testing')
+}

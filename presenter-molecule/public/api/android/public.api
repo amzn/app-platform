@@ -1,0 +1,35 @@
+public final class software/amazon/app/platform/presenter/molecule/LaunchMoleculePresenterKt {
+	public static final fun launchMoleculePresenter (Lkotlinx/coroutines/CoroutineScope;Lsoftware/amazon/app/platform/presenter/molecule/MoleculePresenter;Lkotlinx/coroutines/flow/StateFlow;Lapp/cash/molecule/RecompositionMode;)Lsoftware/amazon/app/platform/presenter/Presenter;
+	public static final fun launchMoleculePresenter (Lsoftware/amazon/app/platform/presenter/molecule/MoleculeScope;Lsoftware/amazon/app/platform/presenter/molecule/MoleculePresenter;Ljava/lang/Object;)Lsoftware/amazon/app/platform/presenter/Presenter;
+	public static final fun launchMoleculePresenter (Lsoftware/amazon/app/platform/presenter/molecule/MoleculeScope;Lsoftware/amazon/app/platform/presenter/molecule/MoleculePresenter;Lkotlinx/coroutines/flow/StateFlow;)Lsoftware/amazon/app/platform/presenter/Presenter;
+}
+
+public abstract interface class software/amazon/app/platform/presenter/molecule/MoleculePresenter {
+	public abstract fun present (Ljava/lang/Object;Landroidx/compose/runtime/Composer;I)Lsoftware/amazon/app/platform/presenter/BaseModel;
+}
+
+public final class software/amazon/app/platform/presenter/molecule/MoleculeScope {
+	public static final field $stable I
+	public fun <init> (Lkotlinx/coroutines/CoroutineScope;Lapp/cash/molecule/RecompositionMode;)V
+	public final fun cancel ()V
+	public final fun getCoroutineScope ()Lkotlinx/coroutines/CoroutineScope;
+	public final fun getRecompositionMode ()Lapp/cash/molecule/RecompositionMode;
+}
+
+public abstract interface class software/amazon/app/platform/presenter/molecule/MoleculeScopeFactory {
+	public abstract fun createMoleculeScope ()Lsoftware/amazon/app/platform/presenter/molecule/MoleculeScope;
+	public abstract fun createMoleculeScopeFromCoroutineScope (Lkotlinx/coroutines/CoroutineScope;Lkotlin/coroutines/CoroutineContext;)Lsoftware/amazon/app/platform/presenter/molecule/MoleculeScope;
+}
+
+public final class software/amazon/app/platform/presenter/molecule/MoleculeScopeFactory$DefaultImpls {
+	public static synthetic fun createMoleculeScopeFromCoroutineScope$default (Lsoftware/amazon/app/platform/presenter/molecule/MoleculeScopeFactory;Lkotlinx/coroutines/CoroutineScope;Lkotlin/coroutines/CoroutineContext;ILjava/lang/Object;)Lsoftware/amazon/app/platform/presenter/molecule/MoleculeScope;
+}
+
+public final class software/amazon/app/platform/presenter/molecule/OnEventKt {
+	public static final fun onEvent (Lsoftware/amazon/app/platform/presenter/molecule/MoleculePresenter;Lkotlin/jvm/functions/Function2;Landroidx/compose/runtime/Composer;I)Lkotlin/jvm/functions/Function1;
+}
+
+public final class software/amazon/app/platform/presenter/molecule/ReturningCompositionLocalProviderKt {
+	public static final fun returningCompositionLocalProvider ([Landroidx/compose/runtime/ProvidedValue;Lkotlin/jvm/functions/Function2;Landroidx/compose/runtime/Composer;I)Lsoftware/amazon/app/platform/presenter/BaseModel;
+}
+

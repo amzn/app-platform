@@ -1,0 +1,14 @@
+public abstract interface class software/amazon/app/platform/robot/ComposeInteractionsProvider {
+	public abstract fun getSemanticsNodeInteractionsProvider ()Landroidx/compose/ui/test/SemanticsNodeInteractionsProvider;
+}
+
+public abstract class software/amazon/app/platform/robot/ComposeRobot : software/amazon/app/platform/robot/Robot {
+	public static final field $stable I
+	public field interactionsProvider Landroidx/compose/ui/test/SemanticsNodeInteractionsProvider;
+	public fun <init> ()V
+	public fun close ()V
+	protected final fun getCompose ()Landroidx/compose/ui/test/SemanticsNodeInteractionsProvider;
+	public final fun getInteractionsProvider ()Landroidx/compose/ui/test/SemanticsNodeInteractionsProvider;
+	public final fun setInteractionsProvider (Landroidx/compose/ui/test/SemanticsNodeInteractionsProvider;)V
+}
+
