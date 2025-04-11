@@ -105,8 +105,7 @@ internal sealed interface Platform {
   }
 
   private class LinuxX64(override val project: Project) : Linux() {
-    override val unitTestTaskName
-      get() = "linuxX64Test"
+    override val unitTestTaskName = "linuxX64Test"
 
     override val target: KotlinNativeTarget by lazy { project.kmpExtension.linuxX64() }
   }

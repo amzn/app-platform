@@ -9,10 +9,8 @@ on:
   pull_request:
 
 jobs:
-  test:
-    name: assemble-and-test
-
-    runs-on: macos-latest
+  test-android:
+    runs-on: ubuntu-latest
     timeout-minutes: 25
 
     strategy:
@@ -26,12 +24,240 @@ jobs:
           java-version: 21
       - uses: gradle/actions/setup-gradle@v4
 
-      - name: Test on Mac
-        run: ./gradlew assemble test --stacktrace --show-version --continue
+      - name: Test
+        run: ./gradlew testDebugUnitTest --stacktrace --show-version --continue
 
       - name: Upload Test Results
         uses: actions/upload-artifact@v4
         if: ${{ failure() }}
         with:
           name: test-results-${{ matrix.use-ksp2 }}
+          path: ./**/build/reports/tests/
+
+  test-ios:
+    runs-on: macos-latest-xlarge
+    timeout-minutes: 25
+
+    strategy:
+      fail-fast: false
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: 'zulu'
+          java-version: 21
+      - uses: gradle/actions/setup-gradle@v4
+
+      - name: Test
+        run: ./gradlew iosSimulatorArm64Test -Pkotlin.incremental.native=true --stacktrace --show-version --continue
+
+      - name: Upload Test Results
+        uses: actions/upload-artifact@v4
+        if: ${{ failure() }}
+        with:
+          name: test-results-${{ matrix.use-ksp2 }}
+          path: ./**/build/reports/tests/
+
+  test-desktop:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+
+    strategy:
+      fail-fast: false
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: 'zulu'
+          java-version: 21
+      - uses: gradle/actions/setup-gradle@v4
+
+      - name: Test
+        run: ./gradlew desktopTest --stacktrace --show-version --continue
+
+      - name: Upload Test Results
+        uses: actions/upload-artifact@v4
+        if: ${{ failure() }}
+        with:
+          name: test-results-${{ matrix.use-ksp2 }}
+          path: ./**/build/reports/tests/
+
+  test-linux:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+
+    strategy:
+      fail-fast: false
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: 'zulu'
+          java-version: 21
+      - uses: gradle/actions/setup-gradle@v4
+
+      - name: Test
+        run: ./gradlew linuxX64Test --stacktrace --show-version --continue
+
+      - name: Upload Test Results
+        uses: actions/upload-artifact@v4
+        if: ${{ failure() }}
+        with:
+          name: test-results-${{ matrix.use-ksp2 }}
+          path: ./**/build/reports/tests/
+
+  test-jvm-modules:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+
+    strategy:
+      fail-fast: false
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: 'zulu'
+          java-version: 21
+      - uses: gradle/actions/setup-gradle@v4
+
+      - name: Test
+        run: ./gradlew :kotlin-inject-extensions:contribute:impl-code-generators:test --stacktrace --show-version --continue
+
+      - name: Upload Test Results
+        uses: actions/upload-artifact@v4
+        if: ${{ failure() }}
+        with:
+          name: test-results-${{ matrix.use-ksp2 }}
+          path: ./**/build/reports/tests/
+
+  binary-compatibility-check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: 'zulu'
+          java-version: '21'
+      - uses: gradle/actions/setup-gradle@v4
+
+      - name: API check
+        run: ./gradlew apiCheck --stacktrace --show-version --continue
+
+  ktfmt:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: 'zulu'
+          java-version: '21'
+      - uses: gradle/actions/setup-gradle@v4
+
+      - name: ktfmt
+        run: ./gradlew ktfmtCheck --stacktrace --show-version --continue
+
+  android-lint:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: 'zulu'
+          java-version: '21'
+      - uses: gradle/actions/setup-gradle@v4
+
+      - name: Android Lint
+        run: ./gradlew lint --stacktrace --show-version --continue
+
+      - name: Upload Android Lint Results
+        uses: actions/upload-artifact@v4
+        if: ${{ failure() }}
+        with:
+          name: lint-results
+          path: ./**/build/reports/lint-results.html
+
+  detekt:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: 'zulu'
+          java-version: '21'
+      - uses: gradle/actions/setup-gradle@v4
+
+      - name: Detekt
+        run: ./gradlew detekt --stacktrace --show-version --continue
+
+  publish-maven-local:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: 'zulu'
+          java-version: '21'
+      - uses: gradle/actions/setup-gradle@v4
+
+      - name: Publish to Maven Local
+        run: |
+          ./gradlew publishToMavenLocal --stacktrace --show-version --no-configuration-cache
+          ./gradlew -p gradle-plugin publishToMavenLocal --stacktrace --show-version --no-configuration-cache
+
+  build-src:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: 'zulu'
+          java-version: 21
+      - uses: gradle/actions/setup-gradle@v4
+
+      - name: Run release task
+        run: ./gradlew -p buildSrc release --stacktrace --show-version --continue
+
+      - name: Upload Test Results
+        uses: actions/upload-artifact@v4
+        if: ${{ failure() }}
+        with:
+          name: test-results
+          path: ./**/build/reports/tests/
+
+  gradle-plugin:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: 'zulu'
+          java-version: 21
+      - uses: gradle/actions/setup-gradle@v4
+
+      - name: Run release task
+        run: ./gradlew -p gradle-plugin release --stacktrace --show-version --continue
+
+      - name: Upload Test Results
+        uses: actions/upload-artifact@v4
+        if: ${{ failure() }}
+        with:
+          name: test-results
           path: ./**/build/reports/tests/

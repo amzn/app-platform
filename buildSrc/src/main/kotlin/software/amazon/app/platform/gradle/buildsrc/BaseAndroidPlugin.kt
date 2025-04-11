@@ -19,7 +19,6 @@ public open class BaseAndroidPlugin : Plugin<Project> {
     when (android) {
       is LibraryExtension -> {
         android.lint.targetSdk = libs.findVersion("android.targetSdk").get().requiredVersion.toInt()
-        @Suppress("UnstableApiUsage")
         android.testOptions.targetSdk = libs.findVersion("android.targetSdk").get().requiredVersion.toInt()
         android.defaultConfig.multiDexEnabled = true
       }
@@ -42,7 +41,6 @@ public open class BaseAndroidPlugin : Plugin<Project> {
     android.compileOptions.sourceCompatibility = javaVersion
     android.compileOptions.targetCompatibility = javaVersion
 
-    @Suppress("UnstableApiUsage")
     android.testOptions.unitTests {
       isIncludeAndroidResources = true
       isReturnDefaultValues = true
@@ -69,7 +67,6 @@ public open class BaseAndroidPlugin : Plugin<Project> {
         testInstrumentationRunnerArguments += "clearPackageData" to "true"
       }
 
-      @Suppress("UnstableApiUsage")
       android.testOptions.execution = "ANDROIDX_TEST_ORCHESTRATOR"
 
       dependencies.add("androidTestUtil", libs.findLibrary("androidx.test.orchestrator").get().get().toString())

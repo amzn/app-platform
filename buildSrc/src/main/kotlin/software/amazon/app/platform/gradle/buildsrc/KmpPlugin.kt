@@ -284,8 +284,7 @@ public open class KmpPlugin : Plugin<Project> {
       fun SourceTask.configureDefaultDetektTask() {
         // The :detekt task in a multiplatform project doesn't do anything, it has no
         // sources configured. Instead, the Detekt plugin creates a Gradle task for each
-        // source set, which then need to be wired manually to the 'release' task. This is
-        // annoying and tedious.
+        // source set, which then need to be called manually. This is annoying and tedious.
         //
         // We make the default :detekt task analyze all .kt files, which is faster,
         // because only a single task runs, and we avoid all the wiring.
