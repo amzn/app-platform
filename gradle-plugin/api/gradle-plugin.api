@@ -1,0 +1,81 @@
+public class software/amazon/app/platform/gradle/AppPlatformExtension {
+	public fun <init> (Lorg/gradle/api/model/ObjectFactory;Lorg/gradle/api/Project;)V
+	public final fun addImplModuleDependencies (Z)V
+	public final fun addPublicModuleDependencies (Z)V
+	public final fun enableComposeUi (Z)V
+	public final fun enableKotlinInject (Z)V
+	public final fun enableModuleStructure (Z)V
+	public final fun enableMoleculePresenters (Z)V
+}
+
+public class software/amazon/app/platform/gradle/AppPlatformPlugin : org/gradle/api/Plugin {
+	public static final field Companion Lsoftware/amazon/app/platform/gradle/AppPlatformPlugin$Companion;
+	public fun <init> ()V
+	public synthetic fun apply (Ljava/lang/Object;)V
+	public fun apply (Lorg/gradle/api/Project;)V
+}
+
+public final class software/amazon/app/platform/gradle/AppPlatformPlugin$Companion {
+	public final fun exportedDependencies ()Ljava/util/Set;
+}
+
+public abstract class software/amazon/app/platform/gradle/ModuleStructureDependencyCheckTask : org/gradle/api/DefaultTask {
+	public static final field Companion Lsoftware/amazon/app/platform/gradle/ModuleStructureDependencyCheckTask$Companion;
+	public fun <init> ()V
+	public final fun checkDependencies ()V
+	public abstract fun getIgnoredOutputFile ()Ljava/io/File;
+	public abstract fun getModuleCompileClasspath ()Ljava/util/Set;
+	public abstract fun getModulePath ()Ljava/lang/String;
+	public abstract fun setIgnoredOutputFile (Ljava/io/File;)V
+	public abstract fun setModuleCompileClasspath (Ljava/util/Set;)V
+	public abstract fun setModulePath (Ljava/lang/String;)V
+}
+
+public final class software/amazon/app/platform/gradle/ModuleStructureDependencyCheckTask$Companion {
+	public final fun registerModuleStructureDependencyCheckTask (Lorg/gradle/api/Project;)V
+}
+
+public class software/amazon/app/platform/gradle/ModuleStructurePlugin : org/gradle/api/Plugin {
+	public static final field Companion Lsoftware/amazon/app/platform/gradle/ModuleStructurePlugin$Companion;
+	public fun <init> ()V
+	public synthetic fun apply (Ljava/lang/Object;)V
+	public fun apply (Lorg/gradle/api/Project;)V
+}
+
+public final class software/amazon/app/platform/gradle/ModuleStructurePlugin$Companion {
+	public final fun artifactId (Lorg/gradle/api/Project;Ljava/lang/String;)Ljava/lang/String;
+	public static synthetic fun artifactId$default (Lsoftware/amazon/app/platform/gradle/ModuleStructurePlugin$Companion;Lorg/gradle/api/Project;Ljava/lang/String;ILjava/lang/Object;)Ljava/lang/String;
+	public final fun namespace (Lorg/gradle/api/Project;)Ljava/lang/String;
+}
+
+public final class software/amazon/app/platform/gradle/ModuleType : java/lang/Enum {
+	public static final field APP Lsoftware/amazon/app/platform/gradle/ModuleType;
+	public static final field IMPL Lsoftware/amazon/app/platform/gradle/ModuleType;
+	public static final field IMPL_ROBOTS Lsoftware/amazon/app/platform/gradle/ModuleType;
+	public static final field INTERNAL Lsoftware/amazon/app/platform/gradle/ModuleType;
+	public static final field INTERNAL_ROBOTS Lsoftware/amazon/app/platform/gradle/ModuleType;
+	public static final field PUBLIC Lsoftware/amazon/app/platform/gradle/ModuleType;
+	public static final field PUBLIC_ROBOTS Lsoftware/amazon/app/platform/gradle/ModuleType;
+	public static final field TESTING Lsoftware/amazon/app/platform/gradle/ModuleType;
+	public static final field UNKNOWN Lsoftware/amazon/app/platform/gradle/ModuleType;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public final fun getUseTestDependenciesInMain ()Z
+	public final fun isRobotsModule ()Z
+	public static fun valueOf (Ljava/lang/String;)Lsoftware/amazon/app/platform/gradle/ModuleType;
+	public static fun values ()[Lsoftware/amazon/app/platform/gradle/ModuleType;
+}
+
+public final class software/amazon/app/platform/gradle/ModuleTypeKt {
+	public static final fun getModuleType (Lorg/gradle/api/Project;)Lsoftware/amazon/app/platform/gradle/ModuleType;
+	public static final fun isAnyImplModule (Lorg/gradle/api/Project;)Z
+	public static final fun isAnyInternalModule (Lorg/gradle/api/Project;)Z
+	public static final fun isAnyPublicModule (Lorg/gradle/api/Project;)Z
+	public static final fun isAppModule (Lorg/gradle/api/Project;)Z
+	public static final fun isImplModule (Lorg/gradle/api/Project;)Z
+	public static final fun isInternalModule (Lorg/gradle/api/Project;)Z
+	public static final fun isPublicModule (Lorg/gradle/api/Project;)Z
+	public static final fun isRobotsModule (Lorg/gradle/api/Project;)Z
+	public static final fun isTestingModule (Lorg/gradle/api/Project;)Z
+	public static final fun isUsingModuleStructure (Lorg/gradle/api/Project;)Z
+}
+

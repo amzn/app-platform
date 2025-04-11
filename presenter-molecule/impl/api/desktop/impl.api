@@ -1,0 +1,7 @@
+public final class software/amazon/app/platform/presenter/molecule/DesktopMoleculeScopeFactory : software/amazon/app/platform/presenter/molecule/MoleculeScopeFactory {
+	public static final field $stable I
+	public fun <init> (Lkotlin/jvm/functions/Function0;)V
+	public fun createMoleculeScope ()Lsoftware/amazon/app/platform/presenter/molecule/MoleculeScope;
+	public fun createMoleculeScopeFromCoroutineScope (Lkotlinx/coroutines/CoroutineScope;Lkotlin/coroutines/CoroutineContext;)Lsoftware/amazon/app/platform/presenter/molecule/MoleculeScope;
+}
+

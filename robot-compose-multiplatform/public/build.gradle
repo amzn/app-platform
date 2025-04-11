@@ -1,0 +1,26 @@
+plugins {
+    id 'software.amazon.app.platform.lib'
+}
+
+appPlatformBuildSrc {
+    enableCompose true
+    enableDi true
+    enablePublishing true
+}
+
+dependencies {
+    commonMainApi project(':robot:public')
+    commonMainApi project(':scope:public')
+    commonMainImplementation project(':robot-internal:public')
+
+    commonTestApi project(':scope:testing')
+}
+
+compose {
+    dependencies {
+        commonMainApi dependencies.uiTest
+
+        desktopTestImplementation dependencies.material
+        iosTestImplementation dependencies.material
+    }
+}

@@ -1,0 +1,8 @@
+plugins {
+    id 'software.amazon.app.platform.lib'
+    alias libs.plugins.kotlin.atomicfu
+}
+
+appPlatformBuildSrc {
+    enablePublishing true
+}

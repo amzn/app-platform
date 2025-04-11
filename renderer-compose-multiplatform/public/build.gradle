@@ -1,0 +1,25 @@
+plugins {
+    id 'software.amazon.app.platform.lib'
+}
+
+appPlatformBuildSrc {
+    enableCompose true
+    enableDi true
+    enableInstrumentedTests true
+    enablePublishing true
+}
+
+dependencies {
+    commonMainApi project(':presenter:public')
+    commonMainApi project(':renderer:public')
+    commonMainApi project(':scope:public')
+
+    androidMainApi project(':renderer-android-view:public')
+
+    commonTestImplementation project(':scope:testing')
+
+    androidTestImplementation libs.compose.material
+    androidTestImplementation libs.compose.ui.test.junit4
+    androidTestImplementation libs.compose.ui.test.junit4.android
+    androidTestImplementation libs.compose.ui.test.manifest
+}

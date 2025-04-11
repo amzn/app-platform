@@ -1,0 +1,68 @@
+plugins {
+    id "com.gradle.develocity" version "3.19.2"
+}
+
+includeBuild('gradle-plugin') {
+    dependencySubstitution {
+        substitute module("$GROUP:gradle-plugin") using project(':')
+    }
+}
+
+dependencyResolutionManagement {
+    repositories {
+        mavenCentral()
+        google()
+        gradlePluginPortal()
+
+        maven {
+            url = "https://oss.sonatype.org/content/repositories/snapshots/"
+        }
+    }
+}
+
+develocity {
+    buildScan {
+        def isCi = providers.environmentVariable("CI").isPresent() ||
+                providers.systemProperty("CI").isPresent() ||
+                providers.gradleProperty("CI").isPresent()
+
+        if (isCi) {
+            publishing.onlyIf { true }
+            uploadInBackground = false
+        }
+
+        termsOfUseUrl = "https://gradle.com/terms-of-service"
+        termsOfUseAgree = "yes"
+    }
+}
+
+rootProject.name = 'app-platform'
+
+include ':kotlin-inject:impl'
+include ':kotlin-inject:public'
+include ':kotlin-inject-extensions:contribute:impl-code-generators'
+include ':kotlin-inject-extensions:contribute:public'
+include ':presenter:public'
+include ':presenter-molecule:impl'
+include ':presenter-molecule:public'
+include ':presenter-molecule:testing'
+include ':renderer:public'
+include ':renderer-android-view:public'
+include ':renderer-compose-multiplatform:public'
+include ':robot:public'
+include ':robot-compose-multiplatform:public'
+include ':robot-internal:public'
+include ':sample:app'
+include ':sample:login:impl'
+include ':sample:login:impl-robots'
+include ':sample:login:public'
+include ':sample:navigation:impl'
+include ':sample:navigation:public'
+include ':sample:templates:impl'
+include ':sample:templates:public'
+include ':sample:user:impl'
+include ':sample:user:impl-robots'
+include ':sample:user:public'
+include ':sample:user:testing'
+include ':scope:public'
+include ':scope:testing'

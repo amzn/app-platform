@@ -1,0 +1,23 @@
+includeBuild('../gradle-plugin') {
+    dependencySubstitution {
+        substitute module("$GROUP:gradle-plugin") using project(':')
+    }
+}
+
+dependencyResolutionManagement {
+    repositories {
+        mavenCentral()
+        google()
+        gradlePluginPortal()
+
+        maven {
+            url = "https://oss.sonatype.org/content/repositories/snapshots/"
+        }
+    }
+
+    versionCatalogs {
+        libs {
+            from files('../gradle/libs.versions.toml')
+        }
+    }
+}

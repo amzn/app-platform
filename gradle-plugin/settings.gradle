@@ -1,0 +1,19 @@
+dependencyResolutionManagement {
+    repositories {
+        mavenCentral()
+        google()
+        gradlePluginPortal()
+
+        maven {
+            url = "https://oss.sonatype.org/content/repositories/snapshots/"
+        }
+    }
+
+    versionCatalogs {
+        libs {
+            from files('../gradle/libs.versions.toml')
+        }
+    }
+}
+
+rootProject.name = 'gradle-plugin'
