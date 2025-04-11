@@ -1,6 +1,5 @@
 package software.amazon.app.platform.gradle.buildsrc
 
-import com.github.gmazzo.buildconfig.BuildConfigExtension
 import com.google.devtools.ksp.KspExperimental
 import com.google.devtools.ksp.gradle.KspExtension
 import com.google.devtools.ksp.gradle.KspTask
@@ -31,12 +30,6 @@ public open class KmpPlugin : Plugin<Project> {
     target.configureKtfmt()
     target.configureTests()
     target.configureDetekt()
-
-    target.plugins.withId(Plugins.COMPOSE_MULTIPLATFORM) {
-      // We need to do this for Compose, because there are issues for Desktop tests in CI.
-      // TODO: check with Github
-      target.generateCiFlagForTests()
-    }
 
     target.plugins.withId(Plugins.KSP) { target.patchIosKspForCi() }
 
@@ -168,24 +161,6 @@ public open class KmpPlugin : Plugin<Project> {
       }
 
       allPlatforms().forEach { platform -> platform.configureCompose() }
-    }
-
-    private fun Project.generateCiFlagForTests() {
-      // Generate a flag to allow tests to disable
-      // During CI build builds the native binaries for Compose aren't available, so allow
-      // tests to be skipped in CI by checking the generated flag below.
-      //
-      // java.lang.UnsatisfiedLinkError:
-      // /home/p4admin/.skiko/c7e8e6b2bfb3a52eb4cd32174de30725cdf585d44271d2c576db6b19719e95f2/libskiko-linux-x64.so:
-      // libGL.so.1: cannot open shared object file: No such file or directory
-
-      plugins.apply(Plugins.BUILD_CONFIG)
-
-      extensions.getByType(BuildConfigExtension::class.java).sourceSets.named("test").configure { sourceSet ->
-        sourceSet.forClass(packageName = "software.amazon.app.platform", className = "BuildConfig") { classSpec ->
-          classSpec.buildConfigField(Boolean::class.java, "IS_CI", ci)
-        }
-      }
     }
 
     fun Project.enableDi() {

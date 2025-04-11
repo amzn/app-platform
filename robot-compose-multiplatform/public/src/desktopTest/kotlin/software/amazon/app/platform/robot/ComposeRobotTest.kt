@@ -14,8 +14,6 @@ import assertk.assertions.isFalse
 import assertk.assertions.isTrue
 import kotlin.reflect.KClass
 import kotlin.test.Test
-import org.junit.Assume.assumeFalse
-import software.amazon.app.platform.BuildConfig.IS_CI
 import software.amazon.app.platform.scope.Scope
 import software.amazon.app.platform.scope.di.addDiComponent
 
@@ -26,14 +24,6 @@ class ComposeRobotTest {
 
   @Test
   fun `the close function is called after the lambda is invoked`() {
-    // During dry-run builds the native binaries for Compose aren't available, so ignore this
-    // test in CI for now. We still want to run it locally though.
-    //
-    // java.lang.UnsatisfiedLinkError:
-    // /home/p4admin/.skiko/c7e8e6b2bfb3a52eb4cd32174de30725cdf585d44271d2c576db6b19719e95f2/libskiko-linux-x64.so:
-    // libGL.so.1: cannot open shared object file: No such file or directory
-    assumeFalse(IS_CI)
-
     val rootScope = rootScope(TestRobot())
 
     lateinit var robot: TestRobot
@@ -51,14 +41,6 @@ class ComposeRobotTest {
 
   @Test
   fun `the SemanticsNodeInteractionsProvider is applied within the composeRobot function`() {
-    // During dry-run builds the native binaries for Compose aren't available, so ignore this
-    // test in CI for now. We still want to run it locally though.
-    //
-    // java.lang.UnsatisfiedLinkError:
-    // /home/p4admin/.skiko/c7e8e6b2bfb3a52eb4cd32174de30725cdf585d44271d2c576db6b19719e95f2/libskiko-linux-x64.so:
-    // libGL.so.1: cannot open shared object file: No such file or directory
-    assumeFalse(IS_CI)
-
     val rootScope = rootScope(TestRobot())
 
     runComposeUiTest {
