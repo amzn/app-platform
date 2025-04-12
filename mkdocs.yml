@@ -9,6 +9,7 @@ remote_branch: gh-pages
 theme:
   name: 'material'
   favicon: images/favicon.png
+  logo: image/logo.svg
   palette:
     - media: '(prefers-color-scheme: light)'
       scheme: default
@@ -31,6 +32,7 @@ theme:
   features:
     - content.code.copy
     - content.code.select
+    - content.tooltips
 
 markdown_extensions:
   - smarty
