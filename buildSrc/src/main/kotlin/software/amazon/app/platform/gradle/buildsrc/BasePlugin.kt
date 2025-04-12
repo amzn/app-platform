@@ -1,6 +1,7 @@
 package software.amazon.app.platform.gradle.buildsrc
 
 import buildSrc.BuildConfig.APP_PLATFORM_GROUP
+import com.android.build.gradle.internal.tasks.factory.dependsOn
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.tasks.testing.Test
@@ -89,6 +90,8 @@ public open class BasePlugin : Plugin<Project> {
 
       plugins.withIds(Plugins.KOTLIN_MULTIPLATFORM, Plugins.KOTLIN_JVM) {
         appPlatformGradlePlugin.enableModuleStructure(true)
+
+        releaseTask.dependsOn("checkModuleStructureDependencies")
       }
     }
   }
