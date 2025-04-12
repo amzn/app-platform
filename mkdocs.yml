@@ -4,6 +4,7 @@ repo_name: app-platform
 repo_url: https://github.com/amzn/app-platform
 site_description: "A lightweight application framework for state and memory management suitable for Kotlin Multiplatform projects."
 remote_branch: gh-pages
+copyright: 'Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.'
 
 # https://squidfunk.github.io/mkdocs-material/
 theme:

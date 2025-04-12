@@ -1,5 +1,7 @@
 # App Platform
 
+## Introduction
+
 The App Platform is a lightweight application framework for state and memory management suitable
 for Kotlin Multiplatform projects, in particular Android, iOS, JVM, native and Web (1). It makes the
 dependency inversion (2) and dependency injection (DI) design patterns first class principles to develop
@@ -14,10 +16,74 @@ App Platform pushes for code reuse by sharing APIs and implementations, while ma
 platform strengths and changing app or device specific behavior when needed.
 
 === "Android"
-    ![Android screenshot](docs/images/Android.png)
+    ![Android screenshot](images/Android.png)
 
 === "iOS"
-    ![iOS screenshot](docs/images/iOS.png)
+    ![iOS screenshot](images/iOS.png)
 
 === "Desktop"
-    ![Desktop screenshot](docs/images/Desktop.png)
+    ![Desktop screenshot](images/Desktop.png)
+
+## Overview
+
+App Platform is built on top of several all frameworks. While all of them are optional, they help significantly
+to recommended best practices.
+
+#### Module Structure
+
+The module structure helps to separate APIs from implementations. This prevents leaking implementation
+details, forces developers to think about strong APIs and reduces build times. Checks for the correct
+usage of the module structure are implemented in the Gradle plugin.
+
+#### Dependency Injection
+
+App Platform uses by default [kotlin-inject-anvil](https://github.com/amzn/kotlin-inject-anvil) for dependency
+injection. But this isn't enforced and can be changed (1).
+{ .annotate }
+
+1.  In the very first versions of App Platform, we at Amazon used [Dagger 2](https://dagger.dev/) and
+[Anvil](https://github.com/square/anvil). Later we migrated to *kotlin-inject-anvil*.
+
+#### Scopes
+
+`Scopes` are essential in our architecture. They define the boundary our software components operate in.
+A scope is a space with a well-defined lifecycle that can be created and torn down. App Platform
+provides hooks to create your own scopes with easy callbacks, integration for dependency injection
+frameworks and `CoroutineScopes`.
+
+#### Presenters
+
+Presenters are implemented using [Molecule](https://github.com/cashapp/molecule). Writing business and
+navigation logic using *Compose* is significantly easier than chaining `Flows`.
+
+#### UI
+
+The UI layer is fully decoupled using `Renderers`. [Compose Multiplatform](https://www.jetbrains.com/compose-multiplatform/)
+is fully supported out of the box. For Android there is seamless interop with Android `Views` (1).
+{ .annotate }
+
+1.  We have a mix of both UI frameworks on Android.
+
+#### Testing
+
+Fakes for unit and device tests are essential and integral part of our architecture. There are many
+test helpers to setup fakes for core components such as `Scopes`. We like using [Turbine](https://github.com/cashapp/turbine/)
+for verifying the reactive behavior of our `Presenters`.
+
+## License
+
+```
+Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+   https://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+```
