@@ -16,13 +16,13 @@ App Platform pushes for code reuse by sharing APIs and implementations, while ma
 platform strengths and changing app or device specific behavior when needed.
 
 === "Android"
-    ![Android screenshot](images/Android.png)
+    ![Android screenshot](images/Android.png){ width="300" }
 
 === "iOS"
-    ![iOS screenshot](images/iOS.png)
+    ![iOS screenshot](images/iOS.png){ width="400" }
 
 === "Desktop"
-    ![Desktop screenshot](images/Desktop.png)
+    ![Desktop screenshot](images/Desktop.png){ width="500" }
 
 ## Overview
 
