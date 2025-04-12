@@ -19,10 +19,10 @@ platform strengths and changing app or device specific behavior when needed.
     ![Android screenshot](images/Android.png){ width="300" }
 
 === "iOS"
-    ![iOS screenshot](images/iOS.png){ width="400" }
+    ![iOS screenshot](images/iOS.png){ width="300" }
 
 === "Desktop"
-    ![Desktop screenshot](images/Desktop.png){ width="500" }
+    ![Desktop screenshot](images/Desktop.png){ width="300" }
 
 ## Overview
 
