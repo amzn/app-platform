@@ -6,6 +6,8 @@ on:
       - main
     tags-ignore:
       - '**'
+    paths-ignore:
+      - '**/*.md'
   pull_request:
 
 jobs:
@@ -18,21 +20,15 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-java@v4
-        with:
-          distribution: 'zulu'
-          java-version: 21
-      - uses: gradle/actions/setup-gradle@v4
+
+      - name: Setup
+        uses: ./.github/actions/setup-action
 
       - name: Test
         run: ./gradlew testDebugUnitTest --stacktrace --show-version --continue
 
       - name: Upload Test Results
-        uses: actions/upload-artifact@v4
-        if: ${{ failure() }}
-        with:
-          name: test-results-${{ github.job }}
-          path: ./**/build/reports/tests/
+        uses: ./.github/actions/upload-results-action
 
   test-ios:
     runs-on: macos-latest-xlarge
@@ -43,21 +39,15 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-java@v4
-        with:
-          distribution: 'zulu'
-          java-version: 21
-      - uses: gradle/actions/setup-gradle@v4
+
+      - name: Setup
+        uses: ./.github/actions/setup-action
 
       - name: Test
         run: ./gradlew iosSimulatorArm64Test -Pkotlin.incremental.native=true --stacktrace --show-version --continue
 
       - name: Upload Test Results
-        uses: actions/upload-artifact@v4
-        if: ${{ failure() }}
-        with:
-          name: test-results-${{ github.job }}
-          path: ./**/build/reports/tests/
+        uses: ./.github/actions/upload-results-action
 
   test-desktop:
     runs-on: ubuntu-latest
@@ -68,21 +58,15 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-java@v4
-        with:
-          distribution: 'zulu'
-          java-version: 21
-      - uses: gradle/actions/setup-gradle@v4
+
+      - name: Setup
+        uses: ./.github/actions/setup-action
 
       - name: Test
         run: ./gradlew desktopTest --stacktrace --show-version --continue
 
       - name: Upload Test Results
-        uses: actions/upload-artifact@v4
-        if: ${{ failure() }}
-        with:
-          name: test-results-${{ github.job }}
-          path: ./**/build/reports/tests/
+        uses: ./.github/actions/upload-results-action
 
   test-linux:
     runs-on: ubuntu-latest
@@ -93,21 +77,15 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-java@v4
-        with:
-          distribution: 'zulu'
-          java-version: 21
-      - uses: gradle/actions/setup-gradle@v4
+
+      - name: Setup
+        uses: ./.github/actions/setup-action
 
       - name: Test
         run: ./gradlew linuxX64Test --stacktrace --show-version --continue
 
       - name: Upload Test Results
-        uses: actions/upload-artifact@v4
-        if: ${{ failure() }}
-        with:
-          name: test-results-${{ github.job }}
-          path: ./**/build/reports/tests/
+        uses: ./.github/actions/upload-results-action
 
   test-jvm-modules:
     runs-on: ubuntu-latest
@@ -118,21 +96,15 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-java@v4
-        with:
-          distribution: 'zulu'
-          java-version: 21
-      - uses: gradle/actions/setup-gradle@v4
+
+      - name: Setup
+        uses: ./.github/actions/setup-action
 
       - name: Test
         run: ./gradlew :kotlin-inject-extensions:contribute:impl-code-generators:test --stacktrace --show-version --continue
 
       - name: Upload Test Results
-        uses: actions/upload-artifact@v4
-        if: ${{ failure() }}
-        with:
-          name: test-results-${{ github.job }}
-          path: ./**/build/reports/tests/
+        uses: ./.github/actions/upload-results-action
 
   test-emulator-renderer-android-view:
     runs-on: ubuntu-latest
@@ -143,31 +115,18 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-java@v4
-        with:
-          distribution: 'zulu'
-          java-version: 21
-      - uses: gradle/actions/setup-gradle@v4
 
-      # This is needed for hardware acceleration, see https://github.blog/changelog/2023-02-23-hardware-accelerated-android-virtualization-on-actions-windows-and-linux-larger-hosted-runners/
-      - name: Enable KVM group perms
-        run: |
-          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
-          sudo udevadm control --reload-rules
-          sudo udevadm trigger --name-match=kvm
+      - name: Setup
+        uses: ./.github/actions/setup-action
 
-      # This is needed to accept the Android license, see https://issuetracker.google.com/issues/193118030
-      - uses: android-actions/setup-android@v3
+      - name: Prepare emulator
+        uses: ./.github/actions/prepare-emulator-action
 
       - name: Test
         run: ./gradlew :renderer-android-view:public:emulatorCheck --stacktrace --show-version --continue
 
       - name: Upload Test Results
-        uses: actions/upload-artifact@v4
-        if: ${{ failure() }}
-        with:
-          name: test-results-${{ github.job }}
-          path: ./**/build/reports/androidTests/
+        uses: ./.github/actions/upload-results-action
 
   test-emulator-renderer-compose-multiplatform:
     runs-on: ubuntu-latest
@@ -178,31 +137,18 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-java@v4
-        with:
-          distribution: 'zulu'
-          java-version: 21
-      - uses: gradle/actions/setup-gradle@v4
 
-      # This is needed for hardware acceleration, see https://github.blog/changelog/2023-02-23-hardware-accelerated-android-virtualization-on-actions-windows-and-linux-larger-hosted-runners/
-      - name: Enable KVM group perms
-        run: |
-          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
-          sudo udevadm control --reload-rules
-          sudo udevadm trigger --name-match=kvm
+      - name: Setup
+        uses: ./.github/actions/setup-action
 
-      # This is needed to accept the Android license, see https://issuetracker.google.com/issues/193118030
-      - uses: android-actions/setup-android@v3
+      - name: Prepare emulator
+        uses: ./.github/actions/prepare-emulator-action
 
       - name: Test
         run: ./gradlew :renderer-compose-multiplatform:public:emulatorCheck --stacktrace --show-version --continue
 
       - name: Upload Test Results
-        uses: actions/upload-artifact@v4
-        if: ${{ failure() }}
-        with:
-          name: test-results-${{ github.job }}
-          path: ./**/build/reports/androidTests/
+        uses: ./.github/actions/upload-results-action
 
   test-emulator-sample-app:
     runs-on: ubuntu-latest
@@ -213,31 +159,17 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-java@v4
-        with:
-          distribution: 'zulu'
-          java-version: 21
-      - uses: gradle/actions/setup-gradle@v4
+      - name: Setup
+        uses: ./.github/actions/setup-action
 
-      # This is needed for hardware acceleration, see https://github.blog/changelog/2023-02-23-hardware-accelerated-android-virtualization-on-actions-windows-and-linux-larger-hosted-runners/
-      - name: Enable KVM group perms
-        run: |
-          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
-          sudo udevadm control --reload-rules
-          sudo udevadm trigger --name-match=kvm
-
-      # This is needed to accept the Android license, see https://issuetracker.google.com/issues/193118030
-      - uses: android-actions/setup-android@v3
+      - name: Prepare emulator
+        uses: ./.github/actions/prepare-emulator-action
 
       - name: Test
         run: ./gradlew :sample:app:emulatorCheck --stacktrace --show-version --continue
 
       - name: Upload Test Results
-        uses: actions/upload-artifact@v4
-        if: ${{ failure() }}
-        with:
-          name: test-results-${{ github.job }}
-          path: ./**/build/reports/androidTests/
+        uses: ./.github/actions/upload-results-action
 
   binary-compatibility-check:
     runs-on: ubuntu-latest
@@ -245,11 +177,9 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-java@v4
-        with:
-          distribution: 'zulu'
-          java-version: '21'
-      - uses: gradle/actions/setup-gradle@v4
+
+      - name: Setup
+        uses: ./.github/actions/setup-action
 
       - name: API check
         run: ./gradlew apiCheck --stacktrace --show-version --continue
@@ -260,11 +190,9 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-java@v4
-        with:
-          distribution: 'zulu'
-          java-version: '21'
-      - uses: gradle/actions/setup-gradle@v4
+
+      - name: Setup
+        uses: ./.github/actions/setup-action
 
       - name: ktfmt
         run: ./gradlew ktfmtCheck --stacktrace --show-version --continue
@@ -275,21 +203,15 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-java@v4
-        with:
-          distribution: 'zulu'
-          java-version: '21'
-      - uses: gradle/actions/setup-gradle@v4
+
+      - name: Setup
+        uses: ./.github/actions/setup-action
 
       - name: Android Lint
         run: ./gradlew lint --stacktrace --show-version --continue
 
-      - name: Upload Android Lint Results
-        uses: actions/upload-artifact@v4
-        if: ${{ failure() }}
-        with:
-          name: lint-results-${{ github.job }}
-          path: ./**/build/reports/lint-results.html
+      - name: Upload Test Results
+        uses: ./.github/actions/upload-results-action
 
   detekt:
     runs-on: ubuntu-latest
@@ -297,21 +219,15 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-java@v4
-        with:
-          distribution: 'zulu'
-          java-version: '21'
-      - uses: gradle/actions/setup-gradle@v4
+
+      - name: Setup
+        uses: ./.github/actions/setup-action
 
       - name: Detekt
         run: ./gradlew detekt --stacktrace --show-version --continue
 
       - name: Upload Test Results
-        uses: actions/upload-artifact@v4
-        if: ${{ failure() }}
-        with:
-          name: test-results-${{ github.job }}
-          path: ./**/build/reports/detekt/detekt.html
+        uses: ./.github/actions/upload-results-action
 
   publish-maven-local:
     runs-on: ubuntu-latest
@@ -319,16 +235,14 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-java@v4
-        with:
-          distribution: 'zulu'
-          java-version: '21'
-      - uses: gradle/actions/setup-gradle@v4
+
+      - name: Setup
+        uses: ./.github/actions/setup-action
 
       - name: Publish to Maven Local
         run: |
-          ./gradlew publishToMavenLocal -PRELEASE_SIGNING_ENABLED=true --stacktrace --show-version --no-configuration-cache
-          ./gradlew -p gradle-plugin publishToMavenLocal -PRELEASE_SIGNING_ENABLED=true --stacktrace --show-version --no-configuration-cache
+          ./gradlew publishToMavenLocal --stacktrace --show-version --no-configuration-cache
+          ./gradlew -p gradle-plugin publishToMavenLocal --stacktrace --show-version --no-configuration-cache
 
   build-src:
     runs-on: ubuntu-latest
@@ -336,21 +250,15 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-java@v4
-        with:
-          distribution: 'zulu'
-          java-version: 21
-      - uses: gradle/actions/setup-gradle@v4
+
+      - name: Setup
+        uses: ./.github/actions/setup-action
 
       - name: Run release task
         run: ./gradlew -p buildSrc release --stacktrace --show-version --continue
 
       - name: Upload Test Results
-        uses: actions/upload-artifact@v4
-        if: ${{ failure() }}
-        with:
-          name: test-results-${{ github.job }}
-          path: ./**/build/reports/tests/
+        uses: ./.github/actions/upload-results-action
 
   gradle-plugin:
     runs-on: ubuntu-latest
@@ -358,18 +266,12 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-java@v4
-        with:
-          distribution: 'zulu'
-          java-version: 21
-      - uses: gradle/actions/setup-gradle@v4
+
+      - name: Setup
+        uses: ./.github/actions/setup-action
 
       - name: Run release task
         run: ./gradlew -p gradle-plugin release --stacktrace --show-version --continue
 
       - name: Upload Test Results
-        uses: actions/upload-artifact@v4
-        if: ${{ failure() }}
-        with:
-          name: test-results-${{ github.job }}
-          path: ./**/build/reports/tests/
+        uses: ./.github/actions/upload-results-action
