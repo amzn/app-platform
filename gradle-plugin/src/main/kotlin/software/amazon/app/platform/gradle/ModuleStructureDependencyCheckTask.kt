@@ -147,10 +147,7 @@ public abstract class ModuleStructureDependencyCheckTask : DefaultTask() {
           it.group = "Verification"
         }
 
-      afterEvaluate {
-        tasks.namedOptional("check") { it.dependsOn(baseTask) }
-        tasks.namedOptional("release") { it.dependsOn(baseTask) }
-      }
+      afterEvaluate { tasks.namedOptional("check") { it.dependsOn(baseTask) } }
 
       fun registerForConfiguration(taskSuffix: String, configuration: () -> Configuration) {
         val checkTask =
