@@ -66,3 +66,5 @@ markdown_extensions:
 nav:
   - 'Introduction': index.md
   - 'Setup': setup.md
+  - 'Changelog': changelog.md
+  - 'Contributing': contributing.md

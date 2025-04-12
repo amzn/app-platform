@@ -29,13 +29,13 @@ platform strengths and changing app or device specific behavior when needed.
 App Platform is built on top of several all frameworks. While all of them are optional, they help significantly
 to recommended best practices.
 
-#### Module Structure
+### Module Structure
 
 The module structure helps to separate APIs from implementations. This prevents leaking implementation
 details, forces developers to think about strong APIs and reduces build times. Checks for the correct
 usage of the module structure are implemented in the Gradle plugin.
 
-#### Dependency Injection
+### Dependency Injection
 
 App Platform uses by default [kotlin-inject-anvil](https://github.com/amzn/kotlin-inject-anvil) for dependency
 injection. But this isn't enforced and can be changed (1).
@@ -44,19 +44,19 @@ injection. But this isn't enforced and can be changed (1).
 1.  In the very first versions of App Platform, we at Amazon used [Dagger 2](https://dagger.dev/) and
 [Anvil](https://github.com/square/anvil). Later we migrated to *kotlin-inject-anvil*.
 
-#### Scopes
+### Scopes
 
 `Scopes` are essential in our architecture. They define the boundary our software components operate in.
 A scope is a space with a well-defined lifecycle that can be created and torn down. App Platform
 provides hooks to create your own scopes with easy callbacks, integration for dependency injection
 frameworks and `CoroutineScopes`.
 
-#### Presenters
+### Presenters
 
 Presenters are implemented using [Molecule](https://github.com/cashapp/molecule). Writing business and
 navigation logic using *Compose* is significantly easier than chaining `Flows`.
 
-#### UI
+### UI
 
 The UI layer is fully decoupled using `Renderers`. [Compose Multiplatform](https://www.jetbrains.com/compose-multiplatform/)
 is fully supported out of the box. For Android there is seamless interop with Android `Views` (1).
@@ -64,13 +64,13 @@ is fully supported out of the box. For Android there is seamless interop with An
 
 1.  We have a mix of both UI frameworks on Android.
 
-#### Testing
+### Testing
 
 Fakes for unit and device tests are essential and integral part of our architecture. There are many
 test helpers to setup fakes for core components such as `Scopes`. We like using [Turbine](https://github.com/cashapp/turbine/)
 for verifying the reactive behavior of our `Presenters`.
 
-#### Integration
+### Integration
 
 The Gradle plugin comes with a convenient DSL to take care of many necessary configurations, e.g. it sets
 up the *Compose* compiler for *Molecule* and *Compose Multiplatform*. It configures KSP and integrates
