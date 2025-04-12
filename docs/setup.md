@@ -1,5 +1,7 @@
 # Setup
 
+## Gradle
+
 App Platform, its various features and dependencies are all configured through a Gradle plugin. All settings
 are opt-in
 ```groovy
@@ -29,3 +31,13 @@ appPlatform {
 }
 ```
 The various options are explained in more detail in many of the following sections.
+
+## Snapshot
+
+To import snapshot builds use following repository:
+
+```gradle
+maven {
+  url = 'https://aws.oss.sonatype.org/content/repositories/snapshots/'
+}
+```

@@ -70,6 +70,13 @@ Fakes for unit and device tests are essential and integral part of our architect
 test helpers to setup fakes for core components such as `Scopes`. We like using [Turbine](https://github.com/cashapp/turbine/)
 for verifying the reactive behavior of our `Presenters`.
 
+#### Integration
+
+The Gradle plugin comes with a convenient DSL to take care of many necessary configurations, e.g. it sets
+up the *Compose* compiler for *Molecule* and *Compose Multiplatform*. It configures KSP and integrates
+*kotlin-inject-anvil* for each platform. It sets the Android namespace and artifact ID when the module
+structure is enabled.
+
 ## License
 
 ```
