@@ -327,8 +327,8 @@ jobs:
 
       - name: Publish to Maven Local
         run: |
-          ./gradlew publishToMavenLocal --stacktrace --show-version --no-configuration-cache
-          ./gradlew -p gradle-plugin publishToMavenLocal --stacktrace --show-version --no-configuration-cache
+          ./gradlew publishToMavenLocal -PRELEASE_SIGNING_ENABLED=true --stacktrace --show-version --no-configuration-cache
+          ./gradlew -p gradle-plugin publishToMavenLocal -PRELEASE_SIGNING_ENABLED=true --stacktrace --show-version --no-configuration-cache
 
   build-src:
     runs-on: ubuntu-latest
