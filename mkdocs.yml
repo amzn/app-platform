@@ -1,0 +1,9 @@
+site_name: "App Platform"
+
+repo_name: "App Platform"
+repo_url: https://github.com/amzn/app-platform
+site_description: "A lightweight application framework for state and memory management suitable for Kotlin Multiplatform projects."
+remote_branch: gh-pages
+
+theme:
+  name: material
