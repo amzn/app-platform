@@ -40,7 +40,7 @@ If both classes live in the same module, then the shared Gradle module must depe
 automatically depend on code from the *Navigation App* and the *Navigation App* on *Delivery App* code through
 a transitive dependency as highlighted in the diagram below.
 
-``` mermaid
+```mermaid
 %%{init: {'themeCSS': '.label { font-family: monospace; }'}}%%
 graph TD
   delivery-platform["`:delivery-platform`"]
@@ -50,8 +50,30 @@ graph TD
   *NavigationAppLocationProvider*`"]
   delivery-app["`:delivery-app`"]
   navigation-app["`:navigation-app`"]
+
   delivery-platform --> location
   navigation-platform --> location
+  location --> delivery-app
+  location --> navigation-app
+```
+
+To avoid the issue of the transitive dependencies, concrete implementation classes `DeliveryAppLocationProvider`
+and `NavigationAppLocationProvider` could be moved into the final respective application packages `:delivery-app`
+and `:navigation-app`.
+
+```mermaid
+%%{init: {'themeCSS': '.label { font-family: monospace; }'}}%%
+graph TD
+  delivery-platform["`:delivery-platform`"]
+  navigation-platform["`:navigation-platform`"]
+  location["`:location`"]
+  delivery-app["`**:delivery-app**
+  *DeliveryAppLocationProvider*`"]
+  navigation-app["**`:navigation-app**
+  *NavigationAppLocationProvider*`"]
+
+  delivery-platform --> delivery-app
+  navigation-platform --> navigation-app
   location --> delivery-app
   location --> navigation-app
 ```
