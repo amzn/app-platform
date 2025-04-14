@@ -183,7 +183,7 @@ graph TD
   navigation-platform["`:navigation-platform`"]
   location-impl-delivery["`**:location:impl-delivery**
   *DeliveryAppLocationProvider*`"]
-  navigation-impl-delivery["`**:location:impl-navigation**
+  location-impl-navigation["`**:location:impl-navigation**
   *NavigationAppLocationProvider*`"]
   delivery-app["`:delivery-app`"]
   navigation-app["`:navigation-app`"]
@@ -200,3 +200,7 @@ By cleanly separating shared code in `:public` modules from implementations in `
 dependencies in our build graph. `DeliveryAppLocationProvider` and `NavigationAppLocationProvider` provide a
 separate implementation for each application target of the shared API, have dependencies on each individual
 platform and yet don’t leak any implementation details nor platform APIs.
+
+In order to follow the dependency inversion principle correctly the most important rule in this module structure
+is that no other module but the final application module is allowed to depend on `:impl` modules. `:public`
+modules on the other hand are widely shared and can be imported by any other module.
