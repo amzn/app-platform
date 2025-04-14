@@ -35,7 +35,6 @@ jobs:
       - run: |
           cp CHANGELOG.md docs/changelog.md
           cp CONTRIBUTING.md docs/contributing.md
-          cp LICENSE docs/LICENSE
       - run: pip install mkdocs-material
       - run: mkdocs gh-deploy --config-file mkdocs.yml --force
 
