@@ -172,4 +172,31 @@ larger and larger over time and the many classes within it would have a low cohe
 longer roughly linear to the size of the module, because individual build steps such as Kotlin compilation
 can’t be parallelized.
 
-Instead, a similar approach to [dependency inversion in Kotlin code](module-structure.md#dependency-inversion-in-kotlin-code) is applied to modules. The shared package can be split into a public API and implementation sub-module:
+Instead, a similar approach to [dependency inversion in Kotlin code](module-structure.md#dependency-inversion-in-kotlin-code)
+is applied to modules. The shared package can be split into a public API and implementation sub-module:
+
+```mermaid
+%%{init: {'themeCSS': '.label { font-family: monospace; }'}}%%
+graph TD
+  delivery-platform["`:delivery-platform`"]
+  location-public["`:location:public`"]
+  navigation-platform["`:navigation-platform`"]
+  location-impl-delivery["`**:location:impl-delivery**
+  *DeliveryAppLocationProvider*`"]
+  navigation-impl-delivery["`**:location:impl-navigation**
+  *NavigationAppLocationProvider*`"]
+  delivery-app["`:delivery-app`"]
+  navigation-app["`:navigation-app`"]
+
+  delivery-platform --> location-impl-delivery
+  navigation-platform --> location-impl-navigation
+  location-public --> location-impl-delivery
+  location-public --> location-impl-navigation
+  location-impl-delivery --> delivery-app
+  location-impl-navigation --> navigation-app
+```
+
+By cleanly separating shared code in `:public` modules from implementations in `:impl` modules we break
+dependencies in our build graph. `DeliveryAppLocationProvider` and `NavigationAppLocationProvider` provide a
+separate implementation for each application target of the shared API, have dependencies on each individual
+platform and yet don’t leak any implementation details nor platform APIs.
