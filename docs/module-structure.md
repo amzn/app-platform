@@ -99,7 +99,7 @@ over `expect / actual` functions to implement dependency inversion as this appro
 
 1.  When you use a DI framework, you inject all of the dependencies through this framework. The same logic applies to handling platform dependencies. We recommend continuing to use DI if you already have it in your project, rather than using the expected and actual functions manually. This way, you can avoid mixing two different ways of injecting dependencies.
 
-## Module structure background
+## Background
 
 The App Platform separates APIs from implementations by splitting the code in separate Gradle modules. The same
 recommendation applies not only to other core libraries but also feature code due to the many benefits such as
@@ -201,27 +201,30 @@ dependencies in our build graph. `DeliveryAppLocationProvider` and `NavigationAp
 separate implementation for each application target of the shared API, have dependencies on each individual
 platform and yet don’t leak any implementation details nor platform APIs.
 
+## Rules
+
 In order to follow the dependency inversion principle correctly the most important rule in this module structure
 is that no other module but the final application module is allowed to depend on `:impl` modules. `:public`
 modules on the other hand are widely shared and can be imported by any other module.
 
-```mermaid
-%%{init: {'themeCSS': '.label { font-family: monospace; }'}}%%
-graph RL
-  subgraph navigation ["`:navigation`"]
-    direction TB
-    navigation-public["`:public`"]
-    navigation-impl["`:impl`"]
-    navigation-public --> navigation-impl
-  end
-  subgraph location ["`:location`"]
-    direction TB
-    location-public["`:public`"]
-    location-impl["`:impl`"]
-    location-public --> location-impl
-  end
+![Forbidden dependency](images/module-structure-forbidden-dep.png){ width="300" }
 
-  navigation-public --> location-public
-  navigation-impl --> location-public
-  navigation-impl --> location-impl
-```
+A library always comes with a single `:public` module for shared code. There can be zero, one or more `:impl`
+modules, e.g. when dependency inversion isn’t needed, then the `:impl` module is redundant. When the implementation
+can be shared between all apps, then only a single `:impl` module is needed. When there are multiple different
+implementations for different applications, then multiple `:impl` modules are required like in the example above.
+To make code easier to discover, it’s recommended to put all Gradle modules into the same sub module.
+
+This module structure reduces coupling between libraries and increases cohesion within modules, which are two
+desired attributes in a modularized codebase. `:impl` modules can change and be modified without impacting any
+other library. Our build dependency graph stays flat and all `:impl` modules can be compiled and assembled in
+parallel.
+
+The `:public / :impl` module split is recommended whenever dependency inversion is needed for code, because of
+all the benefits mentioned above. The split becomes more natural over time and the benefit increases. Rare
+exceptions are when dependency inversion isn’t applied such as for sharing utilities like extension functions,
+UI components or test helpers.
+
+Beyond `:public` and `:impl` modules, there are further optional module types:
+
+![Module types](images/module-structure-types.png){ width="300" }
