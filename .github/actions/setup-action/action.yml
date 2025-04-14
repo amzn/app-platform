@@ -1,5 +1,11 @@
 name: 'Setup'
 description: 'Common setup steps'
+
+inputs:
+  gradle-encryption-key:
+    description: "The key used to encrypt the Gradle cache"
+    required: true
+
 runs:
   using: "composite"
   steps:
@@ -18,5 +24,4 @@ runs:
         # Don't reuse cache entries from any other Job.
         gradle-home-cache-strict-match: true
 
-        # This doesn't work for now: https://github.com/orgs/community/discussions/27054
-        # cache-encryption-key: ${{ secrets.GRADLE_ENCRYPTION_KEY }}
+        cache-encryption-key: ${{ inputs.gradle-encryption-key }}

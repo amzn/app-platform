@@ -18,6 +18,8 @@ jobs:
 
       - name: Setup
         uses: ./.github/actions/setup-action
+        with:
+          gradle-encryption-key: ${{ secrets.GRADLE_ENCRYPTION_KEY }}
 
       - name: Publish snapshot
         run: |

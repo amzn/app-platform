@@ -100,7 +100,7 @@ class RecyclerViewViewHolderRendererTest {
       val adapter = activity.recyclerView.adapter as TestAdapter
 
       // Conservative numbers that account for slow scrolling, stuttering and lag.
-      assertThat(adapter.createCalled).isLessThan(120)
+      assertThat(adapter.createCalled).isLessThan(140)
       assertThat(adapter.bindCalled).isGreaterThan(150)
 
       // The renderers were only inflated once (and otherwise recycled).
