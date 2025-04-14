@@ -16,6 +16,8 @@ Dependency inversion means that high-level APIs don’t depend on low-level deta
 only import other high-level APIs. It significantly reduces coupling between components. Dependency
 inversion can be implemented on different levels, e.g. in code and in the module structure.
 
+### Kotlin code
+
 Dependency inversion implemented in Kotlin code refers to having abstractions in place instead of
 relying on concrete implementations. Imagine this example:
 
@@ -99,7 +101,7 @@ over `expect / actual` functions to implement dependency inversion as this appro
 
 1.  When you use a DI framework, you inject all of the dependencies through this framework. The same logic applies to handling platform dependencies. We recommend continuing to use DI if you already have it in your project, rather than using the expected and actual functions manually. This way, you can avoid mixing two different ways of injecting dependencies.
 
-## Background
+### Gradle modules
 
 The App Platform separates APIs from implementations by splitting the code in separate Gradle modules. The same
 recommendation applies not only to other core libraries but also feature code due to the many benefits such as
@@ -172,7 +174,7 @@ larger and larger over time and the many classes within it would have a low cohe
 longer roughly linear to the size of the module, because individual build steps such as Kotlin compilation
 can’t be parallelized.
 
-Instead, a similar approach to [dependency inversion in Kotlin code](module-structure.md#dependency-inversion)
+Instead, a similar approach to [dependency inversion in Kotlin code](module-structure.md#kotlin-code)
 is applied to modules. The shared package can be split into a public API and implementation sub-module:
 
 ```mermaid
@@ -201,7 +203,7 @@ dependencies in our build graph. `DeliveryAppLocationProvider` and `NavigationAp
 separate implementation for each application target of the shared API, have dependencies on each individual
 platform and yet don’t leak any implementation details nor platform APIs.
 
-## Rules
+## Module rules
 
 In order to follow the dependency inversion principle correctly the most important rule in this module structure
 is that no other module but the final application module is allowed to depend on `:impl` modules. `:public`
@@ -225,6 +227,14 @@ all the benefits mentioned above. The split becomes more natural over time and t
 exceptions are when dependency inversion isn’t applied such as for sharing utilities like extension functions,
 UI components or test helpers.
 
+## Module types
+
 Beyond `:public` and `:impl` modules, there are further optional module types:
 
 ![Module types](images/module-structure-types.png){ width="600" }
+
+### `:public`
+
+`:public` modules contain the code that should be shared and reused by other modules and libraries.
+APIs (interfaces) usually live in `:public` modules, but also code where dependency inversion isn’t applied
+such as static utilities, extension functions and UI components.
