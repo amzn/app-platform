@@ -10,6 +10,17 @@
     }
     ```
 
+!!! tip
+
+    [`:impl`](module-structure.md#impl) modules are usually imported by the final [`:app`](module-structure.md#app)
+    modules. This also applies to App Platform itself. This Gradle option imports all necessary `:impl` modules for
+    enabled features.
+    ```groovy
+    appPlatform {
+      addImplModuleDependencies true
+    }
+    ```
+
 ## Dependency inversion
 
 Dependency inversion means that high-level APIs don’t depend on low-level details and low-level details
@@ -269,7 +280,7 @@ added as dependency to the runtime classpath of a module similar to `:testing` m
 as a single binary. Therefore, `:app` modules are allowed to depend on `:impl` modules of all imported libraries
 and features.
 
-#### Example
+## Example
 
 A more complex dependency graph could look like this:
 
@@ -285,7 +296,25 @@ know about this dependency or depend on it.
 
 The second library `:navigation:public`, which imports `:location:public`, reuses testing module `:location:testing`
 for its unit tests. This saves boilerplate to setup fake implementations of the shared APIs from `:location:public`
-and avoids using mocking frameworks (for more details regarding the testing strategy see Testing Strategy for Kotlin Multiplatform Projects).
+and discourages using mocking frameworks.
 
-The app :navigation-app imports its specific impl module :location:impl-navigation. It also reuses the robots from the :location:impl-navigation-robots module for its UI tests, further reducing strong dependencies on concrete implementations and favoring reusability.
+The app `:navigation-app` imports its specific impl module `:location:impl-navigation`. It also reuses the
+robots from the `:location:impl-navigation-robots` module for its UI tests, further reducing strong dependencies
+on concrete implementations and favoring reusability.
 
+## Gradle setup
+
+Using the module structure is an opt-in feature through the Gradle DSL. The default value is `false` and
+this feature has to be enabled for each module.
+
+```groovy
+appPlatform {
+  enableModuleStructure true
+}
+```
+
+With this setting enabled, several checks and features are enabled:
+* App Platform ensures that the Gradle module follows the naming convention, e.g. it's named `:public` or `:impl`.
+* Default dependencies are added, e.g. an `:impl` module imports its `:public` module by default, or `:impl-robots` imports its `:impl` module by default.
+* An [Android namespace](https://developer.android.com/build/configure-app-module#set-namespace) is set automatically if it hasn't been configured yet.
+* A Gradle task `:checkModuleStructureDependencies` is registered, which verifies that module structure dependency rules are followed. The `:check` Gradle task automatically depends on `:checkModuleStructureDependencies`.

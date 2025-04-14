@@ -15,7 +15,7 @@ public open class ModuleStructurePlugin : Plugin<Project> {
 
   private fun Project.ensureFollowsNamingConvention() {
     check(isUsingModuleStructure()) {
-      "$path enables the module structure, but the project name doesn't follow the " + "naming convention."
+      "$path enables the module structure, but the project name doesn't follow the naming convention."
     }
   }
 
