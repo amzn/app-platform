@@ -13,7 +13,8 @@ which allows different application targets to change the look and feel.
 2.  Dependency inversion means that high-level APIs don’t depend on low-level details and low-level details only import other high-level APIs.
 
 App Platform pushes for code reuse by sharing APIs and implementations, while making it easy to leverage
-platform strengths and changing app or device specific behavior when needed.
+platform strengths and changing app or device specific behavior when needed. The framework helps you to get started
+writing Kotlin Multiplatform effectively.
 
 === "Android"
     ![Android screenshot](images/Android.png){ width="300" }
@@ -68,7 +69,8 @@ is fully supported out of the box. For Android there is seamless interop with An
 
 Fakes for unit and device tests are essential and integral part of our architecture. There are many
 test helpers to setup fakes for core components such as `Scopes`. We like using [Turbine](https://github.com/cashapp/turbine/)
-for verifying the reactive behavior of our `Presenters`.
+for verifying the reactive behavior of our `Presenters`. Thanks to *Compose Multiplatform*, `Renderers` can be easily
+tested in isolation for iOS and Desktop.
 
 ### Integration
 
