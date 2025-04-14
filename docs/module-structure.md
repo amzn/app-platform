@@ -204,3 +204,24 @@ platform and yet don’t leak any implementation details nor platform APIs.
 In order to follow the dependency inversion principle correctly the most important rule in this module structure
 is that no other module but the final application module is allowed to depend on `:impl` modules. `:public`
 modules on the other hand are widely shared and can be imported by any other module.
+
+```mermaid
+%%{init: {'themeCSS': '.label { font-family: monospace; }'}}%%
+graph RL
+  subgraph navigation ["`:navigation`"]
+    direction TB
+    navigation-public["`:public`"]
+    navigation-impl["`:impl`"]
+    navigation-public --> navigation-impl
+  end
+  subgraph location ["`:location`"]
+    direction TB
+    location-public["`:public`"]
+    location-impl["`:impl`"]
+    location-public --> location-impl
+  end
+
+  navigation-public --> location-public
+  navigation-impl --> location-public
+  navigation-impl --> location-impl
+```
