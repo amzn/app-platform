@@ -5,7 +5,8 @@ import software.amazon.app.platform.scope.Scoped
 import software.amazon.lastmile.kotlin.inject.anvil.extend.ContributingAnnotation
 
 /**
- * Used to contribute a real implementation to a given interface that has a mocked implementation as well.
+ * Used to contribute a real implementation to a given interface that has a mocked implementation as
+ * well.
  *
  * ```
  * @ContributesRealImpl(AppScope::class)
@@ -24,15 +25,16 @@ import software.amazon.lastmile.kotlin.inject.anvil.extend.ContributingAnnotatio
  * }
  * ```
  *
- * This annotation is also repeatable, where for each bound type a provider method will be generated:
+ * This annotation is also repeatable, where for each bound type a provider method will be
+ * generated:
  * ```
  * @ContributesRealImpl(AppScope::class, boundType = Vts::class)
  * @ContributesRealImpl(AppScope::class, boundType = Vts2::class)
  * class RealVts : Vts, Vts2
  * ```
  *
- * It is safe to implement the [Scoped] interface. [Scoped.onEnterScope] and [Scoped.onExitScope] will only be called if
- * the real implementation is used at runtime:
+ * It is safe to implement the [Scoped] interface. [Scoped.onEnterScope] and [Scoped.onExitScope]
+ * will only be called if the real implementation is used at runtime:
  * ```
  * @ContributesRealImpl(AppScope::class)
  * @Inject
@@ -47,8 +49,8 @@ public annotation class ContributesRealImpl(
   val scope: KClass<*>,
 
   /**
-   * The type that this class is bound to, this is required when there is more than a single superType or the superType
-   * is not an interface.
+   * The type that this class is bound to, this is required when there is more than a single
+   * superType or the superType is not an interface.
    */
   val boundType: KClass<*> = Unit::class,
 )

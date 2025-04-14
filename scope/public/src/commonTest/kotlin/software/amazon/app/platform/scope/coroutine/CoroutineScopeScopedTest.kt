@@ -66,8 +66,10 @@ class CoroutineScopeScopedTest {
     val scope = CoroutineScopeScoped(Job() + StandardTestDispatcher() + CoroutineName("abc"))
     val child = scope.createChild(UnconfinedTestDispatcher())
 
-    assertThat(scope.coroutineContext[CoroutineDispatcher.Key].toString()).contains("StandardTestDispatcher")
-    assertThat(child.coroutineContext[CoroutineDispatcher.Key].toString()).contains("UnconfinedTestDispatcher")
+    assertThat(scope.coroutineContext[CoroutineDispatcher.Key].toString())
+      .contains("StandardTestDispatcher")
+    assertThat(child.coroutineContext[CoroutineDispatcher.Key].toString())
+      .contains("UnconfinedTestDispatcher")
   }
 
   @Test
@@ -101,7 +103,8 @@ class CoroutineScopeScopedTest {
     val scope = Scope.buildRootScope()
     val exitScopeOrder = mutableListOf<String>()
 
-    val coroutineScope = CoroutineScopeScoped(Job() + CoroutineName("abc") + UnconfinedTestDispatcher())
+    val coroutineScope =
+      CoroutineScopeScoped(Job() + CoroutineName("abc") + UnconfinedTestDispatcher())
 
     coroutineScope.launch {
       try {

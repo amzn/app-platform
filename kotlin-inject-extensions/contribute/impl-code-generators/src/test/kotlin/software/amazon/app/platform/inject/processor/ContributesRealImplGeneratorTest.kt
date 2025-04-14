@@ -43,7 +43,8 @@ class ContributesRealImplGeneratorTest {
     ) {
       val component = realImpl.component
 
-      assertThat(component.getAnnotation(ContributesTo::class.java)?.scope).isEqualTo(AppScope::class)
+      assertThat(component.getAnnotation(ContributesTo::class.java)?.scope)
+        .isEqualTo(AppScope::class)
 
       val providesMethod = component.declaredMethods.single()
       assertThat(providesMethod.parameters[0].type).isEqualTo(realImpl)
@@ -73,7 +74,8 @@ class ContributesRealImplGeneratorTest {
     ) {
       val component = realImpl.inner.component
 
-      assertThat(component.getAnnotation(ContributesTo::class.java)?.scope).isEqualTo(AppScope::class)
+      assertThat(component.getAnnotation(ContributesTo::class.java)?.scope)
+        .isEqualTo(AppScope::class)
 
       val providesMethod = component.declaredMethods.single()
       assertThat(providesMethod.parameters[0].type).isEqualTo(realImpl.inner)
@@ -103,7 +105,8 @@ class ContributesRealImplGeneratorTest {
     ) {
       val component = realImpl.component
 
-      assertThat(component.getAnnotation(ContributesTo::class.java)?.scope).isEqualTo(AppScope::class)
+      assertThat(component.getAnnotation(ContributesTo::class.java)?.scope)
+        .isEqualTo(AppScope::class)
 
       val providesMethod1 = component.declaredMethods.single { it.name == "provideBaseRealImpl" }
       val providesMethod2 = component.declaredMethods.single { it.name == "provideBase2RealImpl" }
@@ -137,7 +140,8 @@ class ContributesRealImplGeneratorTest {
             """,
       exitCode = COMPILATION_ERROR,
     ) {
-      assertThat(messages).contains("The same type should not be contributed twice: software.amazon.test.Base.")
+      assertThat(messages)
+        .contains("The same type should not be contributed twice: software.amazon.test.Base.")
     }
   }
 
@@ -178,7 +182,9 @@ class ContributesRealImplGeneratorTest {
       exitCode = COMPILATION_ERROR,
     ) {
       assertThat(messages)
-        .contains("The bound type could not be determined for RealImpl. " + "There are no super types.")
+        .contains(
+          "The bound type could not be determined for RealImpl. " + "There are no super types."
+        )
     }
   }
 
@@ -219,7 +225,8 @@ class ContributesRealImplGeneratorTest {
     ) {
       val component = realImpl.component
 
-      assertThat(component.getAnnotation(ContributesTo::class.java)?.scope).isEqualTo(AppScope::class)
+      assertThat(component.getAnnotation(ContributesTo::class.java)?.scope)
+        .isEqualTo(AppScope::class)
 
       val providesMethod = component.declaredMethods.single()
       assertThat(providesMethod.parameters[0].type).isEqualTo(realImpl)
@@ -250,7 +257,8 @@ class ContributesRealImplGeneratorTest {
     ) {
       assertThat(messages)
         .contains(
-          "The bound type could not be determined for RealImpl. " + "There are multiple super types: Base, Base2."
+          "The bound type could not be determined for RealImpl. " +
+            "There are multiple super types: Base, Base2."
         )
     }
   }
@@ -273,7 +281,8 @@ class ContributesRealImplGeneratorTest {
     ) {
       val component = realImpl.component
 
-      assertThat(component.getAnnotation(ContributesTo::class.java)?.scope).isEqualTo(AppScope::class)
+      assertThat(component.getAnnotation(ContributesTo::class.java)?.scope)
+        .isEqualTo(AppScope::class)
 
       with(component.declaredMethods.single { it.name == "provideBaseRealImpl" }) {
         assertThat(parameters[0].type).isEqualTo(realImpl)
@@ -285,7 +294,8 @@ class ContributesRealImplGeneratorTest {
 
       with(component.declaredMethods.single { it.name == "provideRealImplScoped" }) {
         assertThat(parameters[0].annotations.single().annotationClass).isEqualTo(MockMode::class)
-        assertThat(parameters[1].parameterizedType.parameterizedTypeArguments.single()).isEqualTo(realImpl)
+        assertThat(parameters[1].parameterizedType.parameterizedTypeArguments.single())
+          .isEqualTo(realImpl)
 
         assertThat(getAnnotation(Provides::class.java)).isNotNull()
         assertThat(getAnnotation(IntoSet::class.java)).isNotNull()
@@ -323,7 +333,8 @@ class ContributesRealImplGeneratorTest {
         assertThat(getAnnotation(RealImpl::class.java)).isNotNull()
       }
 
-      assertThat(component.declaredMethods.firstOrNull { it.name == "provideRealImplScoped" }).isNull()
+      assertThat(component.declaredMethods.firstOrNull { it.name == "provideRealImplScoped" })
+        .isNull()
     }
   }
 
@@ -359,7 +370,9 @@ class ContributesRealImplGeneratorTest {
     get() =
       classLoader.loadClass(
         "$APP_PLATFORM_LOOKUP_PACKAGE.$packageName." +
-          canonicalName.substringAfter(packageName).substring(1).split(".").joinToString(separator = "") {
+          canonicalName.substringAfter(packageName).substring(1).split(".").joinToString(
+            separator = ""
+          ) {
             it.capitalize()
           } +
           "RealImplComponent"

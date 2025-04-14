@@ -8,10 +8,11 @@ import androidx.recyclerview.widget.RecyclerView
 import software.amazon.app.platform.presenter.BaseModel
 
 /**
- * A specific [Renderer] implementation that can be used for single elements in a [RecyclerView]. This implementation is
- * different than [ViewRenderer] in the way that views, which are instantiated by [inflate], aren't removed from the
- * view hierarchy nor nullified when they get detached. It's expected in a [RecyclerView] that views frequently are
- * detached and attached (recycled).
+ * A specific [Renderer] implementation that can be used for single elements in a [RecyclerView].
+ * This implementation is different than [ViewRenderer] in the way that views, which are
+ * instantiated by [inflate], aren't removed from the view hierarchy nor nullified when they get
+ * detached. It's expected in a [RecyclerView] that views frequently are detached and attached
+ * (recycled).
  *
  * An implementation could look like this:
  * ```
@@ -36,8 +37,8 @@ import software.amazon.app.platform.presenter.BaseModel
  * }
  * ```
  *
- * The expected pattern is to use [RendererFactory] in a [RecyclerView.Adapter] to create instances of
- * [RecyclerViewViewHolderRenderer] and call them whenever a view needs to be updated:
+ * The expected pattern is to use [RendererFactory] in a [RecyclerView.Adapter] to create instances
+ * of [RecyclerViewViewHolderRenderer] and call them whenever a view needs to be updated:
  * ```
  * private class SampleAdapter(
  *     private val rendererFactory: RendererFactory,
@@ -67,7 +68,8 @@ import software.amazon.app.platform.presenter.BaseModel
  * [viewHolder] provides the [RecyclerView.ViewHolder] instance, which keeps a reference to the
  * [RecyclerViewViewHolderRenderer].
  */
-public abstract class RecyclerViewViewHolderRenderer<ModelT : BaseModel> : BaseAndroidViewRenderer<ModelT> {
+public abstract class RecyclerViewViewHolderRenderer<ModelT : BaseModel> :
+  BaseAndroidViewRenderer<ModelT> {
 
   private var _activity: Activity? = null
   private var _parent: ViewGroup? = null
@@ -96,8 +98,8 @@ public abstract class RecyclerViewViewHolderRenderer<ModelT : BaseModel> : BaseA
   }
 
   /**
-   * The [RecyclerView.ViewHolder] associated with this [RecyclerViewViewHolderRenderer]. This `ViewHolder` should be
-   * returned from [RecyclerView.Adapter.onCreateViewHolder]:
+   * The [RecyclerView.ViewHolder] associated with this [RecyclerViewViewHolderRenderer]. This
+   * `ViewHolder` should be returned from [RecyclerView.Adapter.onCreateViewHolder]:
    * ```
    * override fun onCreateViewHolder(
    *     parent: ViewGroup,
@@ -111,19 +113,27 @@ public abstract class RecyclerViewViewHolderRenderer<ModelT : BaseModel> : BaseA
    * ```
    */
   public fun viewHolder(): ViewHolder<ModelT> {
-    return viewHolder ?: ViewHolder(inflate(activity, parent, activity.layoutInflater), this).also { viewHolder = it }
+    return viewHolder
+      ?: ViewHolder(inflate(activity, parent, activity.layoutInflater), this).also {
+        viewHolder = it
+      }
   }
 
   /**
-   * Perform one time view inflation for the layout of this `Renderer`. This method is called when the [viewHolder] is
-   * initialized and won't be called again. It is therefore a good place to do initial setup that need only be done a
-   * single time.
+   * Perform one time view inflation for the layout of this `Renderer`. This method is called when
+   * the [viewHolder] is initialized and won't be called again. It is therefore a good place to do
+   * initial setup that need only be done a single time.
    */
-  protected abstract fun inflate(activity: Activity, parent: ViewGroup, layoutInflater: LayoutInflater): View
+  protected abstract fun inflate(
+    activity: Activity,
+    parent: ViewGroup,
+    layoutInflater: LayoutInflater,
+  ): View
 
   /**
-   * Common [RecyclerView.ViewHolder] implementation that provides access to your particular [renderer] instance.
-   * Retrieve the [renderer] in [RecyclerView.Adapter.onBindViewHolder] and call [Renderer.render]:
+   * Common [RecyclerView.ViewHolder] implementation that provides access to your particular
+   * [renderer] instance. Retrieve the [renderer] in [RecyclerView.Adapter.onBindViewHolder] and
+   * call [Renderer.render]:
    * ```
    * override fun onBindViewHolder(
    *     holder: RecyclerViewHolderRenderer.ViewHolder<SampleRowPresenter.Model>,
@@ -135,6 +145,7 @@ public abstract class RecyclerViewViewHolderRenderer<ModelT : BaseModel> : BaseA
    * }
    * ```
    */
-  public class ViewHolder<M : BaseModel> internal constructor(view: View, public val renderer: Renderer<M>) :
+  public class ViewHolder<M : BaseModel>
+  internal constructor(view: View, public val renderer: Renderer<M>) :
     RecyclerView.ViewHolder(view)
 }

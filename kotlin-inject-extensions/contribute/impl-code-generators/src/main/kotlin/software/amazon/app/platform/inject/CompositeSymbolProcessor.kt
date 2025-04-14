@@ -4,7 +4,8 @@ import com.google.devtools.ksp.processing.Resolver
 import com.google.devtools.ksp.processing.SymbolProcessor
 import com.google.devtools.ksp.symbol.KSAnnotated
 
-internal class CompositeSymbolProcessor(vararg symbolProcessors: SymbolProcessor) : SymbolProcessor {
+internal class CompositeSymbolProcessor(vararg symbolProcessors: SymbolProcessor) :
+  SymbolProcessor {
 
   private val symbolProcessors = symbolProcessors.sortedBy { it::class.qualifiedName }
 

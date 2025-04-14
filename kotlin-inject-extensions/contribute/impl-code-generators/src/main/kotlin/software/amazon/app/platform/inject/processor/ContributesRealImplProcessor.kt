@@ -33,7 +33,8 @@ import software.amazon.lastmile.kotlin.inject.anvil.ForScope
 /**
  * Generates the necessary code in order to support [ContributesRealImpl].
  *
- * If the class implements `Scoped`, then based on the mock mode flag the real implementation gets called or not.
+ * If the class implements `Scoped`, then based on the mock mode flag the real implementation gets
+ * called or not.
  *
  * ```
  * package app.platform.inject.software.amazon.test
@@ -54,8 +55,10 @@ import software.amazon.lastmile.kotlin.inject.anvil.ForScope
  * }
  * ```
  */
-internal class ContributesRealImplProcessor(private val codeGenerator: CodeGenerator, override val logger: KSPLogger) :
-  SymbolProcessor, ContextAware {
+internal class ContributesRealImplProcessor(
+  private val codeGenerator: CodeGenerator,
+  override val logger: KSPLogger,
+) : SymbolProcessor, ContextAware {
 
   override fun process(resolver: Resolver): List<KSAnnotated> {
     resolver
@@ -93,7 +96,9 @@ internal class ContributesRealImplProcessor(private val codeGenerator: CodeGener
 
                 check(!boundType.isScoped(), clazz) { "Scoped cannot be used as bound type." }
 
-                FunSpec.builder("provide${boundType.declaration.simpleName.asString()}" + "RealImpl")
+                FunSpec.builder(
+                    "provide${boundType.declaration.simpleName.asString()}" + "RealImpl"
+                  )
                   .addAnnotation(Provides::class)
                   .addAnnotation(RealImpl::class)
                   .addParameter("realImpl", clazz.toClassName())
@@ -117,7 +122,9 @@ internal class ContributesRealImplProcessor(private val codeGenerator: CodeGener
                         .build()
                     )
                     .addParameter(
-                      ParameterSpec.builder("mockMode", Boolean::class).addAnnotation(MockMode::class).build()
+                      ParameterSpec.builder("mockMode", Boolean::class)
+                        .addAnnotation(MockMode::class)
+                        .build()
                     )
                     .addParameter("realImpl", LambdaTypeName.get(returnType = clazz.toClassName()))
                     .returns(scopedClassName)

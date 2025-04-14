@@ -64,7 +64,11 @@ class ComposeAndroidRendererFactoryDeviceTest {
       activity.setContentView(container)
 
       factory =
-        ComposeAndroidRendererFactory(rootScopeProvider = testApplication, activity = activity, parent = container)
+        ComposeAndroidRendererFactory(
+          rootScopeProvider = testApplication,
+          activity = activity,
+          parent = container,
+        )
     }
   }
 
@@ -132,13 +136,18 @@ class ComposeAndroidRendererFactoryDeviceTest {
 
         factory.getRenderer(viewModel).render(viewModel)
 
-        val outerTextView = activity.contentView.getChildViewGroupAt(0).getChildViewGroupAt(0).getChildAt(0) as TextView
+        val outerTextView =
+          activity.contentView.getChildViewGroupAt(0).getChildViewGroupAt(0).getChildAt(0)
+            as TextView
 
         assertThat(outerTextView.text.toString()).isEqualTo("View test: $it")
 
         val innerTextView =
-          activity.contentView.getChildViewGroupAt(0).getChildViewGroupAt(0).getChildViewGroupAt(1).getChildAt(0)
-            as TextView
+          activity.contentView
+            .getChildViewGroupAt(0)
+            .getChildViewGroupAt(0)
+            .getChildViewGroupAt(1)
+            .getChildAt(0) as TextView
 
         assertThat(innerTextView.text.toString()).isEqualTo("View test: ${it + 1}")
       }
@@ -171,7 +180,10 @@ class ComposeAndroidRendererFactoryDeviceTest {
       }
 
       composeTestRule.onNodeWithText("Compose test: $it").assertIsDisplayed()
-      composeTestRule.onNodeWithText("Compose test: $it").onSiblings().assertAny(hasText("Compose test: ${it + 1}"))
+      composeTestRule
+        .onNodeWithText("Compose test: $it")
+        .onSiblings()
+        .assertAny(hasText("Compose test: ${it + 1}"))
     }
 
     assertThat(createdRenderers).isEqualTo(2)
@@ -213,7 +225,8 @@ class ComposeAndroidRendererFactoryDeviceTest {
     assertThat(viewField.get(innerRenderer)).isNull()
 
     // No coroutineScope was initialized was initialized
-    val coroutineScopeField = ViewRenderer::class.java.declaredFields.single { it.name == "coroutineScope" }
+    val coroutineScopeField =
+      ViewRenderer::class.java.declaredFields.single { it.name == "coroutineScope" }
     coroutineScopeField.isAccessible = true
     assertThat(coroutineScopeField.get(innerRenderer)).isNull()
 
@@ -228,7 +241,9 @@ class ComposeAndroidRendererFactoryDeviceTest {
     var activity: A? = null
     rule.scenario.onActivity { activity = it }
 
-    return with(activity) { checkNotNull(this) { "Activity was not set in the ActivityScenarioRule!" } }
+    return with(activity) {
+      checkNotNull(this) { "Activity was not set in the ActivityScenarioRule!" }
+    }
   }
 
   private val Activity.contentView: ViewGroup
@@ -254,7 +269,8 @@ class ComposeAndroidRendererFactoryDeviceTest {
     val viewModel: ViewModel? = null,
   ) : BaseModel
 
-  private inner class TestViewRenderer(private val rendererFactory: RendererFactory) : ViewRenderer<ViewModel>() {
+  private inner class TestViewRenderer(private val rendererFactory: RendererFactory) :
+    ViewRenderer<ViewModel>() {
 
     private lateinit var container: ViewGroup
     private lateinit var textView: TextView
@@ -283,7 +299,9 @@ class ComposeAndroidRendererFactoryDeviceTest {
         rendererFactory.getRenderer(model.composeModel).render(model.composeModel)
       }
       if (model.viewModel != null) {
-        rendererFactory.getRenderer(model.viewModel::class, container, rendererId = 1).render(model.viewModel)
+        rendererFactory
+          .getRenderer(model.viewModel::class, container, rendererId = 1)
+          .render(model.viewModel)
       }
     }
   }
@@ -313,13 +331,17 @@ class ComposeAndroidRendererFactoryDeviceTest {
     }
   }
 
-  private inner class TestRendererComponent(private val rendererFactory: () -> RendererFactory) : RendererComponent {
+  private inner class TestRendererComponent(private val rendererFactory: () -> RendererFactory) :
+    RendererComponent {
     override val renderers: Map<KClass<out BaseModel>, () -> Renderer<*>> =
       mapOf(
         ViewModel::class to { TestViewRenderer(rendererFactory()) },
         ComposeModel::class to { TestComposeRenderer(rendererFactory()) },
       )
     override val modelToRendererMapping: Map<KClass<out BaseModel>, KClass<out Renderer<*>>> =
-      mapOf(ViewModel::class to TestViewRenderer::class, ComposeModel::class to TestComposeRenderer::class)
+      mapOf(
+        ViewModel::class to TestViewRenderer::class,
+        ComposeModel::class to TestComposeRenderer::class,
+      )
   }
 }

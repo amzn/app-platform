@@ -8,8 +8,9 @@ import androidx.compose.ui.viewinterop.AndroidView
 import software.amazon.app.platform.presenter.BaseModel
 
 /**
- * A renderer that allows you to embed a [BaseAndroidViewRenderer] within a [ComposeRenderer]. All [renderCompose] calls
- * are forwarded to the [androidRenderer]. The Android View hierarchy is embedded within the Compose hierarchy.
+ * A renderer that allows you to embed a [BaseAndroidViewRenderer] within a [ComposeRenderer]. All
+ * [renderCompose] calls are forwarded to the [androidRenderer]. The Android View hierarchy is
+ * embedded within the Compose hierarchy.
  */
 internal class AndroidViewWithinComposeRenderer<in ModelT : BaseModel>(
   private val androidRenderer: BaseAndroidViewRenderer<ModelT>

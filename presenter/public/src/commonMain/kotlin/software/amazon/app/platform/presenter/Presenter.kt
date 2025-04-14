@@ -3,15 +3,16 @@ package software.amazon.app.platform.presenter
 import kotlinx.coroutines.flow.StateFlow
 
 /**
- * A presenter is the glue between our business logic and UI. A presenter injects service objects, data repositories and
- * other presenters to compute a model to represent what should be shown to the user. Presenters are reactive. If its
- * internal state or state of injected dependencies change, then a new model is emitted.
+ * A presenter is the glue between our business logic and UI. A presenter injects service objects,
+ * data repositories and other presenters to compute a model to represent what should be shown to
+ * the user. Presenters are reactive. If its internal state or state of injected dependencies
+ * change, then a new model is emitted.
  *
- * Presenters are composable, meaning that one presenter can inject other presenters and combine their emitted models to
- * a single model. This enables to implement model-driven navigation.
+ * Presenters are composable, meaning that one presenter can inject other presenters and combine
+ * their emitted models to a single model. This enables to implement model-driven navigation.
  *
- * By decoupling presenters from UI and Android components like Activities, Fragments and ViewModels we make them easier
- * to test. Business logic and UI integration can evolve independently.
+ * By decoupling presenters from UI and Android components like Activities, Fragments and ViewModels
+ * we make them easier to test. Business logic and UI integration can evolve independently.
  *
  * Events from the UI layer flow back to the presenter inform of callbacks provided by the model:
  * ```
@@ -27,9 +28,9 @@ import kotlinx.coroutines.flow.StateFlow
  * }
  * ```
  *
- * Presenters can be implemented with any framework or by hand. Most commonly we use `MoleculePresenter`, which can be
- * transformed into a [Presenter] with `launchMoleculePresenter`. A direct implementation of this interface could look
- * like this:
+ * Presenters can be implemented with any framework or by hand. Most commonly we use
+ * `MoleculePresenter`, which can be transformed into a [Presenter] with `launchMoleculePresenter`.
+ * A direct implementation of this interface could look like this:
  * ```
  * @Inject
  * class LoginPresenter(

@@ -5,8 +5,8 @@ import software.amazon.lastmile.kotlin.inject.anvil.AppScope
 import software.amazon.lastmile.kotlin.inject.anvil.ContributesBinding
 
 /**
- * Default implementation of [AnimationHelper] that always keeps animations enabled. This implementation is used for iOS
- * and Desktop.
+ * Default implementation of [AnimationHelper] that always keeps animations enabled. This
+ * implementation is used for iOS and Desktop.
  */
 @Inject
 @ContributesBinding(AppScope::class)

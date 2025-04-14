@@ -123,7 +123,8 @@ class ContributesBindingProcessorTest {
             """,
       exitCode = COMPILATION_ERROR,
     ) {
-      assertThat(messages).contains("The bound type could not be determined for Impl. There are no super types.")
+      assertThat(messages)
+        .contains("The bound type could not be determined for Impl. There are no super types.")
     }
   }
 
@@ -146,7 +147,10 @@ class ContributesBindingProcessorTest {
       exitCode = COMPILATION_ERROR,
     ) {
       assertThat(messages)
-        .contains("The bound type could not be determined for Impl. " + "There are multiple super types: Base, Base2.")
+        .contains(
+          "The bound type could not be determined for Impl. " +
+            "There are multiple super types: Base, Base2."
+        )
     }
   }
 
@@ -228,7 +232,8 @@ class ContributesBindingProcessorTest {
             """,
       exitCode = COMPILATION_ERROR,
     ) {
-      assertThat(messages).contains("The same type should not be contributed twice: software.amazon.test.Base.")
+      assertThat(messages)
+        .contains("The same type should not be contributed twice: software.amazon.test.Base.")
     }
   }
 

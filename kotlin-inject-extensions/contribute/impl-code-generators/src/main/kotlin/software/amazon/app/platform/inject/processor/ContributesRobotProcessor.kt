@@ -36,8 +36,8 @@ import software.amazon.lastmile.kotlin.inject.anvil.ContributesTo
 /**
  * Generates the necessary code in order to support [ContributesRobot].
  *
- * If you use `@ContributesRobot(AbcScope::class)`, then this code generator will generate a component interface, which
- * gets contributed to this scope.
+ * If you use `@ContributesRobot(AbcScope::class)`, then this code generator will generate a
+ * component interface, which gets contributed to this scope.
  *
  * ```
  * package app.platform.inject.software.amazon.test
@@ -56,8 +56,10 @@ import software.amazon.lastmile.kotlin.inject.anvil.ContributesTo
  * ```
  */
 @OptIn(KspExperimental::class)
-internal class ContributesRobotProcessor(private val codeGenerator: CodeGenerator, override val logger: KSPLogger) :
-  SymbolProcessor, ContextAware {
+internal class ContributesRobotProcessor(
+  private val codeGenerator: CodeGenerator,
+  override val logger: KSPLogger,
+) : SymbolProcessor, ContextAware {
 
   private val robotClassName = ClassName("software.amazon.app.platform.robot", "Robot")
   private val robotFqName = robotClassName.canonicalName
@@ -108,12 +110,16 @@ internal class ContributesRobotProcessor(private val codeGenerator: CodeGenerato
               FunSpec.builder("provide${clazz.innerClassNames()}IntoMap")
                 .addAnnotation(Provides::class)
                 .addAnnotation(IntoMap::class)
-                .addParameter(name = "robot", type = LambdaTypeName.get(returnType = clazz.toClassName()))
+                .addParameter(
+                  name = "robot",
+                  type = LambdaTypeName.get(returnType = clazz.toClassName()),
+                )
                 .returns(
                   Pair::class.asClassName()
                     .parameterizedBy(
                       listOf(
-                        KClass::class.asClassName().parameterizedBy(WildcardTypeName.producerOf(robotClassName)),
+                        KClass::class.asClassName()
+                          .parameterizedBy(WildcardTypeName.producerOf(robotClassName)),
                         LambdaTypeName.get(returnType = robotClassName),
                       )
                     )
@@ -132,7 +138,8 @@ internal class ContributesRobotProcessor(private val codeGenerator: CodeGenerato
   private fun checkHasInjectAnnotation(clazz: KSClassDeclaration) {
     if (clazz.primaryConstructor?.parameters?.isNotEmpty() == true) {
       check(clazz.annotations.any { it.isAnnotation(injectFqName) }, clazz) {
-        "${clazz.simpleName.asString()} must be annotated with @Inject when " + "injecting arguments into a robot."
+        "${clazz.simpleName.asString()} must be annotated with @Inject when " +
+          "injecting arguments into a robot."
       }
     }
   }
@@ -147,10 +154,12 @@ internal class ContributesRobotProcessor(private val codeGenerator: CodeGenerato
   }
 
   private fun checkSuperType(clazz: KSClassDeclaration) {
-    val extendsRobot = clazz.getAllSuperTypes().any { it.declaration.requireQualifiedName() == robotFqName }
+    val extendsRobot =
+      clazz.getAllSuperTypes().any { it.declaration.requireQualifiedName() == robotFqName }
 
     check(extendsRobot, clazz) {
-      "In order to use @ContributesRobot, ${clazz.simpleName.asString()} must " + "implement $robotFqName."
+      "In order to use @ContributesRobot, ${clazz.simpleName.asString()} must " +
+        "implement $robotFqName."
     }
   }
 

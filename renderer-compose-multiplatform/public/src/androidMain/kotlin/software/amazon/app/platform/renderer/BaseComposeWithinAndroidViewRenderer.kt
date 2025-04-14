@@ -11,10 +11,11 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import software.amazon.app.platform.presenter.BaseModel
 
 /**
- * A renderer that allows you to embed Compose UI within an Android View hierarchy. All [render] calls are forwarded to
- * the [Compose] function using a flow.
+ * A renderer that allows you to embed Compose UI within an Android View hierarchy. All [render]
+ * calls are forwarded to the [Compose] function using a flow.
  *
- * This class is abstract to allow for different Compose UI implementations, but it's not exposed to consumers yet.
+ * This class is abstract to allow for different Compose UI implementations, but it's not exposed to
+ * consumers yet.
  */
 internal abstract class BaseComposeWithinAndroidViewRenderer<in ModelT : BaseModel> :
   ViewRenderer<ModelT>(), BaseComposeRenderer<ModelT> {

@@ -18,12 +18,15 @@ public open class AndroidRendererFactory(
   }
 
   /**
-   * Allows you to override the parent ViewGroup passed in as constructor argument. This is helpful for renderers that
-   * embed other renderers and want to change the parent ViewGroup for them.
+   * Allows you to override the parent ViewGroup passed in as constructor argument. This is helpful
+   * for renderers that embed other renderers and want to change the parent ViewGroup for them.
    *
    * @see [createRenderer] for more details.
    */
-  public fun <T : BaseModel> createRenderer(modelType: KClass<out T>, parent: ViewGroup): Renderer<T> {
+  public fun <T : BaseModel> createRenderer(
+    modelType: KClass<out T>,
+    parent: ViewGroup,
+  ): Renderer<T> {
     val renderer = super.createRenderer(modelType)
 
     if (renderer is BaseAndroidViewRenderer<*>) {
@@ -38,8 +41,8 @@ public open class AndroidRendererFactory(
   }
 
   /**
-   * Allows you to override the parent ViewGroup passed in as constructor argument. This is helpful for renderers that
-   * embed other renderers and want to change the parent ViewGroup for them.
+   * Allows you to override the parent ViewGroup passed in as constructor argument. This is helpful
+   * for renderers that embed other renderers and want to change the parent ViewGroup for them.
    *
    * @see [getRenderer] for more details.
    */
@@ -59,10 +62,14 @@ public open class AndroidRendererFactory(
 }
 
 /**
- * Convenience function to pass in [parent] to [RendererFactory.createRenderer], if it's an [AndroidRendererFactory].
- * Usually, the parent needs to be changed when a [Renderer] embeds another [Renderer].
+ * Convenience function to pass in [parent] to [RendererFactory.createRenderer], if it's an
+ * [AndroidRendererFactory]. Usually, the parent needs to be changed when a [Renderer] embeds
+ * another [Renderer].
  */
-public fun <T : BaseModel> RendererFactory.createRenderer(modelType: KClass<out T>, parent: ViewGroup): Renderer<T> {
+public fun <T : BaseModel> RendererFactory.createRenderer(
+  modelType: KClass<out T>,
+  parent: ViewGroup,
+): Renderer<T> {
   return if (this is AndroidRendererFactory) {
     createRenderer(modelType, parent)
   } else {
@@ -71,8 +78,9 @@ public fun <T : BaseModel> RendererFactory.createRenderer(modelType: KClass<out 
 }
 
 /**
- * Convenience function to pass in [parent] to [RendererFactory.getRenderer], if it's an [AndroidRendererFactory].
- * Usually, the parent needs to be changed when a [Renderer] embeds another [Renderer].
+ * Convenience function to pass in [parent] to [RendererFactory.getRenderer], if it's an
+ * [AndroidRendererFactory]. Usually, the parent needs to be changed when a [Renderer] embeds
+ * another [Renderer].
  */
 public fun <T : BaseModel> RendererFactory.getRenderer(
   modelType: KClass<out T>,
@@ -87,15 +95,16 @@ public fun <T : BaseModel> RendererFactory.getRenderer(
 }
 
 /**
- * Creates and caches the returned [Renderer] with the given [parent] as renderer ID. This implies a one-to-one
- * relationship between the returned [Renderer] and the [parent] view.
+ * Creates and caches the returned [Renderer] with the given [parent] as renderer ID. This implies a
+ * one-to-one relationship between the returned [Renderer] and the [parent] view.
  *
- * This function should generally only be used, when the returned [Renderer] is part of a `RecyclerView`. All child
- * views of the recycled views should be cached for efficiency. This is what this function achieves by having the
- * one-to-one relationship.
+ * This function should generally only be used, when the returned [Renderer] is part of a
+ * `RecyclerView`. All child views of the recycled views should be cached for efficiency. This is
+ * what this function achieves by having the one-to-one relationship.
  *
- * Another use case is showing multiple renderers of the same type on the same screen simultaneously and their identity
- * is determined by the position in the layout or on other words by the [parent] view.
+ * Another use case is showing multiple renderers of the same type on the same screen simultaneously
+ * and their identity is determined by the position in the layout or on other words by the [parent]
+ * view.
  */
 public fun <T : BaseModel> RendererFactory.getChildRendererForParent(
   modelType: KClass<out T>,
@@ -111,15 +120,18 @@ public fun <T : BaseModel> RendererFactory.getChildRendererForParent(
 }
 
 /**
- * Creates and caches the returned [Renderer] with the given [parent] as renderer ID. This implies a one-to-one
- * relationship between the returned [Renderer] and the [parent] view.
+ * Creates and caches the returned [Renderer] with the given [parent] as renderer ID. This implies a
+ * one-to-one relationship between the returned [Renderer] and the [parent] view.
  *
- * This function should generally only be used, when the returned [Renderer] is part of a `RecyclerView`. All child
- * views of the recycled views should be cached for efficiency. This is what this function achieves by having the
- * one-to-one relationship.
+ * This function should generally only be used, when the returned [Renderer] is part of a
+ * `RecyclerView`. All child views of the recycled views should be cached for efficiency. This is
+ * what this function achieves by having the one-to-one relationship.
  *
- * Another use case is showing multiple renderers of the same type on the same screen simultaneously and their identity
- * is determined by the position in the layout or on other words by the [parent] view.
+ * Another use case is showing multiple renderers of the same type on the same screen simultaneously
+ * and their identity is determined by the position in the layout or on other words by the [parent]
+ * view.
  */
-public fun <T : BaseModel> RendererFactory.getChildRendererForParent(model: T, parent: ViewGroup): Renderer<T> =
-  getChildRendererForParent(model::class, parent)
+public fun <T : BaseModel> RendererFactory.getChildRendererForParent(
+  model: T,
+  parent: ViewGroup,
+): Renderer<T> = getChildRendererForParent(model::class, parent)

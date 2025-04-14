@@ -32,8 +32,8 @@ import kotlinx.coroutines.flow.stateIn
  * .stateIn(presenterScope, SharingStarted.WhileSubscribed(), Model(repository.dataFlow.value))
  * ```
  *
- * [SharingStarted.WhileSubscribed] is chosen as default to cancel any upstream subscriptions as soon as nobody collects
- * the returned [StateFlow] anymore.
+ * [SharingStarted.WhileSubscribed] is chosen as default to cancel any upstream subscriptions as
+ * soon as nobody collects the returned [StateFlow] anymore.
  */
 public inline fun <T : BaseModel> Flow<T>.stateInPresenter(
   coroutineScope: CoroutineScope,

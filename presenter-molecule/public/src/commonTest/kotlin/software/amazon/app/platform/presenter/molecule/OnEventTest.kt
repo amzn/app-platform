@@ -73,17 +73,20 @@ class OnEventTest {
       val presenter = OnEventNotInvokedPresenter(onEventCount)
       lateinit var delayedModel: OnEventNotInvokedPresenter.Model
 
-      MoleculeScope(scope1, RecompositionMode.Immediate).launchMoleculePresenter(presenter, Unit).model.test {
-        val model = awaitItem()
-        assertThat(model.onEventInvoked).isEqualTo(0)
-        assertThat(onEventCount.value).isEqualTo(0)
+      MoleculeScope(scope1, RecompositionMode.Immediate)
+        .launchMoleculePresenter(presenter, Unit)
+        .model
+        .test {
+          val model = awaitItem()
+          assertThat(model.onEventInvoked).isEqualTo(0)
+          assertThat(onEventCount.value).isEqualTo(0)
 
-        model.onEvent(OnEventNotInvokedPresenter.Event.AnyEvent)
+          model.onEvent(OnEventNotInvokedPresenter.Event.AnyEvent)
 
-        delayedModel = awaitItem()
-        assertThat(delayedModel.onEventInvoked).isEqualTo(1)
-        assertThat(onEventCount.value).isEqualTo(1)
-      }
+          delayedModel = awaitItem()
+          assertThat(delayedModel.onEventInvoked).isEqualTo(1)
+          assertThat(onEventCount.value).isEqualTo(1)
+        }
 
       // Cancel the presenter. That's the equivalent of leaving the composition and events
       // should not be forwarded anymore.
@@ -94,18 +97,21 @@ class OnEventTest {
       assertThat(onEventCount.value).isEqualTo(1)
 
       // Launch the same presenter again (enters composition).
-      MoleculeScope(scope2, RecompositionMode.Immediate).launchMoleculePresenter(presenter, Unit).model.test {
-        val initialModel = awaitItem()
-        // It's a new composition, therefore the onEventInvoked is 0 again.
-        assertThat(initialModel.onEventInvoked).isEqualTo(0)
-        // The old counter value wasn't updated yet, hence it's 1.
-        assertThat(onEventCount.value).isEqualTo(1)
+      MoleculeScope(scope2, RecompositionMode.Immediate)
+        .launchMoleculePresenter(presenter, Unit)
+        .model
+        .test {
+          val initialModel = awaitItem()
+          // It's a new composition, therefore the onEventInvoked is 0 again.
+          assertThat(initialModel.onEventInvoked).isEqualTo(0)
+          // The old counter value wasn't updated yet, hence it's 1.
+          assertThat(onEventCount.value).isEqualTo(1)
 
-        initialModel.onEvent(OnEventNotInvokedPresenter.Event.AnyEvent)
+          initialModel.onEvent(OnEventNotInvokedPresenter.Event.AnyEvent)
 
-        assertThat(awaitItem().onEventInvoked).isEqualTo(1)
-        assertThat(onEventCount.value).isEqualTo(2)
-      }
+          assertThat(awaitItem().onEventInvoked).isEqualTo(1)
+          assertThat(onEventCount.value).isEqualTo(2)
+        }
     } finally {
       scope1.cancel()
       scope2.cancel()
@@ -300,7 +306,8 @@ class OnEventTest {
     }
   }
 
-  private class CoroutineNamePresenter : MoleculePresenter<StateFlow<String>, CoroutineNamePresenter.Model> {
+  private class CoroutineNamePresenter :
+    MoleculePresenter<StateFlow<String>, CoroutineNamePresenter.Model> {
 
     @Composable
     override fun present(input: StateFlow<String>): Model {
@@ -314,7 +321,8 @@ class OnEventTest {
       )
     }
 
-    data class Model(val value: String, val coroutineName: String, val onEvent: (Event) -> Unit) : BaseModel
+    data class Model(val value: String, val coroutineName: String, val onEvent: (Event) -> Unit) :
+      BaseModel
 
     sealed interface Event {
       object AnyEvent : Event
@@ -372,7 +380,8 @@ class OnEventTest {
       )
     }
 
-    data class Model(val composeTrigger: Int, val counterValue: Int, val onEvent: (Event) -> Unit) : BaseModel
+    data class Model(val composeTrigger: Int, val counterValue: Int, val onEvent: (Event) -> Unit) :
+      BaseModel
 
     object Event
   }

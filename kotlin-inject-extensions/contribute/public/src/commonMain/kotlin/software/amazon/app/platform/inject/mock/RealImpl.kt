@@ -10,8 +10,8 @@ import kotlin.annotation.AnnotationTarget.VALUE_PARAMETER
 import me.tatarka.inject.annotations.Qualifier
 
 /**
- * A qualifier that is used when generating a binds method using [ContributesRealImpl] to denote the realImpl of an
- * interface.
+ * A qualifier that is used when generating a binds method using [ContributesRealImpl] to denote the
+ * realImpl of an interface.
  *
  * This annotation should not be used directly and only used within ContributesRealImplGenerator and
  * ContributesMockImplGenerator.

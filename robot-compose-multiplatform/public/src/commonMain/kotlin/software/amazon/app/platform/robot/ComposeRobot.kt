@@ -4,8 +4,8 @@ import androidx.compose.ui.test.SemanticsNodeInteractionsProvider
 import software.amazon.app.platform.scope.Scope
 
 /**
- * A [Robot] that has access to a [SemanticsNodeInteractionsProvider] and allows you to make assertions and invoke
- * actions on Compose UI elements.
+ * A [Robot] that has access to a [SemanticsNodeInteractionsProvider] and allows you to make
+ * assertions and invoke actions on Compose UI elements.
  */
 public abstract class ComposeRobot : Robot {
 

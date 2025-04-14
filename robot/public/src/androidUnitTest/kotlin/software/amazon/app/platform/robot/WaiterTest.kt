@@ -31,7 +31,13 @@ class WaiterTest {
   @Test
   fun `waitUntil throws an error when the condition is never met`() {
     assertFailure {
-        waitUntil(condition = "Wait for test condition", timeout = 200.milliseconds, delay = 100.milliseconds) { false }
+        waitUntil(
+          condition = "Wait for test condition",
+          timeout = 200.milliseconds,
+          delay = 100.milliseconds,
+        ) {
+          false
+        }
       }
       .messageContains("Waiting until 'Wait for test condition' never returned true.")
   }
@@ -39,7 +45,11 @@ class WaiterTest {
   @Test
   fun `throwing an exception in waitUntil bubbles up`() {
     assertFailure {
-        waitUntil(condition = "Wait for test condition", timeout = 200.milliseconds, delay = 100.milliseconds) {
+        waitUntil(
+          condition = "Wait for test condition",
+          timeout = 200.milliseconds,
+          delay = 100.milliseconds,
+        ) {
           error("Test exception")
         }
       }
@@ -50,7 +60,11 @@ class WaiterTest {
   fun `waitUntilCatching blocks until no exception is thrown`() {
     var counter = 0
 
-    waitUntilCatching(condition = "Wait for test condition", timeout = 2.seconds, delay = 20.milliseconds) {
+    waitUntilCatching(
+      condition = "Wait for test condition",
+      timeout = 2.seconds,
+      delay = 20.milliseconds,
+    ) {
       counter++
       if (counter < 5) {
         error("Test exception")
@@ -63,7 +77,11 @@ class WaiterTest {
   @Test
   fun `waitUntilCatching throws an error when condition is never met`() {
     assertFailure {
-        waitUntilCatching(condition = "Wait for test condition", timeout = 200.milliseconds, delay = 20.milliseconds) {
+        waitUntilCatching(
+          condition = "Wait for test condition",
+          timeout = 200.milliseconds,
+          delay = 20.milliseconds,
+        ) {
           error("Test exception")
         }
       }
@@ -88,7 +106,13 @@ class WaiterTest {
   @Test
   fun `waitFor throws an error when the result is null`() {
     assertFailure {
-        waitFor<Int>(condition = "Wait for result", timeout = 100.milliseconds, delay = 20.milliseconds) { null }
+        waitFor<Int>(
+          condition = "Wait for result",
+          timeout = 100.milliseconds,
+          delay = 20.milliseconds,
+        ) {
+          null
+        }
       }
       .messageContains("Waiting for 'Wait for result' never succeeded and the value is null.")
   }

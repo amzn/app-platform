@@ -31,20 +31,21 @@ class LaunchMoleculePresenterTest {
 
   @Test
   @IgnoreNative
-  fun `the first present call happens inline and the second present call happens on the background thread`() = runTest {
-    val inputFlow = MutableStateFlow("1")
-    TestPresenter().test(this, inputFlow, UnconfinedTestDispatcher()) {
-      val model1 = awaitItem()
-      inputFlow.value = "2"
-      val model2 = awaitItem()
+  fun `the first present call happens inline and the second present call happens on the background thread`() =
+    runTest {
+      val inputFlow = MutableStateFlow("1")
+      TestPresenter().test(this, inputFlow, UnconfinedTestDispatcher()) {
+        val model1 = awaitItem()
+        inputFlow.value = "2"
+        val model2 = awaitItem()
 
-      val testRunnerPackage = "kotlinx.coroutines.test"
-      assertThat(model1.threadName).startsWith("Test worker")
-      assertThat(model1.threadName).contains(testRunnerPackage)
-      assertThat(model2.threadName).startsWith("Test worker")
-      assertThat(model2.threadName).doesNotContain(testRunnerPackage)
+        val testRunnerPackage = "kotlinx.coroutines.test"
+        assertThat(model1.threadName).startsWith("Test worker")
+        assertThat(model1.threadName).contains(testRunnerPackage)
+        assertThat(model2.threadName).startsWith("Test worker")
+        assertThat(model2.threadName).doesNotContain(testRunnerPackage)
+      }
     }
-  }
 
   @Test
   fun `the presenter is called and computes a new model whenever the input changes`() = runTest {

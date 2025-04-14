@@ -6,18 +6,21 @@ import software.amazon.app.platform.presenter.BaseModel
 import software.amazon.app.platform.presenter.Presenter
 
 /**
- * `MoleculePresenter` is a presenter that uses Compose core (don't confuse Compose core with Compose UI, Compose UI is
- * built on-top of Compose core) to create a [StateFlow] of models. [Molecule](https://github.com/cashapp/molecule) is
- * leveraged to turn the composable function [present] into a `StateFlow<ModelT>`. By leveraging Compose we can turn
- * reactive code built on-top of Flow and its operators into imperative code using language statements like
+ * `MoleculePresenter` is a presenter that uses Compose core (don't confuse Compose core with
+ * Compose UI, Compose UI is built on-top of Compose core) to create a [StateFlow] of models.
+ * [Molecule](https://github.com/cashapp/molecule) is leveraged to turn the composable function
+ * [present] into a `StateFlow<ModelT>`. By leveraging Compose we can turn reactive code built
+ * on-top of Flow and its operators into imperative code using language statements like
  * `if-then-else`, `when` or `try-catch`.
  *
- * Note that [MoleculePresenter] itself doesn't extend the [Presenter] interface. Use [launchMoleculePresenter] to
- * transform a [MoleculePresenter] to a [Presenter]. To use another [Presenter] within a [MoleculePresenter] you can
- * inject the presenter directly and subscribe to changes of [Presenter.model].
+ * Note that [MoleculePresenter] itself doesn't extend the [Presenter] interface. Use
+ * [launchMoleculePresenter] to transform a [MoleculePresenter] to a [Presenter]. To use another
+ * [Presenter] within a [MoleculePresenter] you can inject the presenter directly and subscribe to
+ * changes of [Presenter.model].
  *
- * `MoleculePresenters` typically are stateless, meaning they have no properties and are not marked as singletons. If no
- * input is used, then use [Unit] for [InputT]. A typical implementation may look like:
+ * `MoleculePresenters` typically are stateless, meaning they have no properties and are not marked
+ * as singletons. If no input is used, then use [Unit] for [InputT]. A typical implementation may
+ * look like:
  * ```
  * @Inject
  * class MyPresenter : MoleculePresenter<Unit, Model> {
@@ -33,9 +36,10 @@ import software.amazon.app.platform.presenter.Presenter
  * }
  * ```
  *
- * If a consumer like the UI layer should be able to send events back to the presenter, then the [BaseModel]
- * implementation typically has an `onEvent` callback lambda as last parameter. To preserve equality checks of
- * [BaseModel] instances, it's strongly recommended to wrap the lambda with [onEvent]:
+ * If a consumer like the UI layer should be able to send events back to the presenter, then the
+ * [BaseModel] implementation typically has an `onEvent` callback lambda as last parameter. To
+ * preserve equality checks of [BaseModel] instances, it's strongly recommended to wrap the lambda
+ * with [onEvent]:
  * ```
  * @Inject
  * class MyPresenter : MoleculePresenter<Unit, Model> {
@@ -71,9 +75,10 @@ import software.amazon.app.platform.presenter.Presenter
  * }
  * ```
  *
- * `MoleculePresenters` can host and embed other child presenters. To invoke them call [present] inline. This is also
- * the chance to pass inputs from one presenter to another. To avoid instantiating presenters eagerly and only when
- * they're actually needed, it's recommended to inject them lazily:
+ * `MoleculePresenters` can host and embed other child presenters. To invoke them call [present]
+ * inline. This is also the chance to pass inputs from one presenter to another. To avoid
+ * instantiating presenters eagerly and only when they're actually needed, it's recommended to
+ * inject them lazily:
  * ```
  * @Inject
  * class MyPresenter(

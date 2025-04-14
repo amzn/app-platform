@@ -13,26 +13,27 @@ import software.amazon.lastmile.kotlin.inject.anvil.ContributesTo
 /**
  * A [Robot] specific to interacting with the Android View system.
  *
- * [rootMatcher] allows you to change the root for Espresso assertions, e.g. this is needed when interacting with other
- * windows such as dialogs or in a dual screen setup to change the display for particular robots and make assertions on
- * the second display. By default, Espresso's default root matcher is used.
+ * [rootMatcher] allows you to change the root for Espresso assertions, e.g. this is needed when
+ * interacting with other windows such as dialogs or in a dual screen setup to change the display
+ * for particular robots and make assertions on the second display. By default, Espresso's default
+ * root matcher is used.
  *
- * Note that the root matcher needs to be set manually using [ViewInteraction.inRoot]. [onView] is a convenience
- * function that sets the root matcher automatically. It's strongly recommended to use this function instead of
- * [Espresso.onView].
+ * Note that the root matcher needs to be set manually using [ViewInteraction.inRoot]. [onView] is a
+ * convenience function that sets the root matcher automatically. It's strongly recommended to use
+ * this function instead of [Espresso.onView].
  */
 public abstract class AndroidViewRobot : Robot {
 
   /**
-   * The root matcher for this particular robot. It allows you to change the root for Espresso assertions, e.g. this is
-   * needed for other windows such as dialogs.
+   * The root matcher for this particular robot. It allows you to change the root for Espresso
+   * assertions, e.g. this is needed for other windows such as dialogs.
    */
   protected open val rootMatcher: Matcher<Root>
     get() = rootScope.diComponent<Component>().rootMatcherProvider.rootMatcher
 
   /**
-   * Convenience function that automatically sets [rootMatcher] as root for the assertion. It's strongly recommended to
-   * use this function instead of [Espresso.onView].
+   * Convenience function that automatically sets [rootMatcher] as root for the assertion. It's
+   * strongly recommended to use this function instead of [Espresso.onView].
    */
   protected fun onView(viewMatcher: Matcher<View>): ViewInteraction {
     return Espresso.onView(viewMatcher).inRoot(rootMatcher)

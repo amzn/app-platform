@@ -48,9 +48,12 @@ class ComposeRendererFactoryTest {
         isInstanceOf<IllegalStateException>()
 
         messageContains(
-          "The renderer class software.amazon.app.platform.renderer." + "ComposeRendererFactoryTest\$AndroidRenderer"
+          "The renderer class software.amazon.app.platform.renderer." +
+            "ComposeRendererFactoryTest\$AndroidRenderer"
         )
-        messageContains("For Android View and Compose UI interop use ComposeAndroidRendererFactory.")
+        messageContains(
+          "For Android View and Compose UI interop use ComposeAndroidRendererFactory."
+        )
       }
   }
 
@@ -62,8 +65,12 @@ class ComposeRendererFactoryTest {
             override fun rendererComponent(factory: RendererFactory): RendererComponent {
               return object : RendererComponent {
                 override val renderers: Map<KClass<out BaseModel>, () -> Renderer<*>> =
-                  mapOf(ComposeModel::class to { TestComposeRenderer() }, AndroidModel::class to { AndroidRenderer() })
-                override val modelToRendererMapping: Map<KClass<out BaseModel>, KClass<out Renderer<*>>> =
+                  mapOf(
+                    ComposeModel::class to { TestComposeRenderer() },
+                    AndroidModel::class to { AndroidRenderer() },
+                  )
+                override val modelToRendererMapping:
+                  Map<KClass<out BaseModel>, KClass<out Renderer<*>>> =
                   mapOf(
                     ComposeModel::class to TestComposeRenderer::class,
                     AndroidModel::class to AndroidRenderer::class,

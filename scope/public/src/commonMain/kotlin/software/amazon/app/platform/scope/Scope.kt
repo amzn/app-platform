@@ -1,14 +1,16 @@
 package software.amazon.app.platform.scope
 
 /**
- * Scopes define the boundary our software components operate in. A scope is a space with a well-defined lifecycle that
- * can be created and torn down. Scopes host other service objects and serve as container for them, e.g. DI components.
- * To receive a callback when a scope is created or destroyed the [Scoped] interface can be used.
+ * Scopes define the boundary our software components operate in. A scope is a space with a
+ * well-defined lifecycle that can be created and torn down. Scopes host other service objects and
+ * serve as container for them, e.g. DI components. To receive a callback when a scope is created or
+ * destroyed the [Scoped] interface can be used.
  *
- * Scopes can have 0-N children. Child scopes have the same or a shorter lifecycle as their parent scope. If the parent
- * scope gets destroyed, then all child scopes are destroyed as well.
+ * Scopes can have 0-N children. Child scopes have the same or a shorter lifecycle as their parent
+ * scope. If the parent scope gets destroyed, then all child scopes are destroyed as well.
  *
- * After a scope has been destroyed it should no longer be used. All methods will throw an exception instead.
+ * After a scope has been destroyed it should no longer be used. All methods will throw an exception
+ * instead.
  */
 public interface Scope {
 
@@ -16,8 +18,8 @@ public interface Scope {
   public val name: String
 
   /**
-   * Returns the parent scope if this is a child scope and was created with [buildChild], or returns `null` for the root
-   * scope that was created with [buildRootScope].
+   * Returns the parent scope if this is a child scope and was created with [buildChild], or returns
+   * `null` for the root scope that was created with [buildRootScope].
    */
   public val parent: Scope?
 
@@ -28,21 +30,27 @@ public interface Scope {
   public fun children(): Set<Scope>
 
   /**
-   * Registers [scoped] to be notified when this scope is destroyed. Since this scope has been already created at this
-   * point in time, [Scoped.onEnterScope] will be called immediately.
+   * Registers [scoped] to be notified when this scope is destroyed. Since this scope has been
+   * already created at this point in time, [Scoped.onEnterScope] will be called immediately.
    */
   public fun register(scoped: Scoped)
 
-  /** Returns whether this scope has been destroyed. If `true`, then no other methods should be called anymore. */
+  /**
+   * Returns whether this scope has been destroyed. If `true`, then no other methods should be
+   * called anymore.
+   */
   public fun isDestroyed(): Boolean
 
   /**
-   * Destroy this scope and all its children. Calling this function will invoke [Scoped.onExitScope] for all registered
-   * [Scoped] instances.
+   * Destroy this scope and all its children. Calling this function will invoke [Scoped.onExitScope]
+   * for all registered [Scoped] instances.
    */
   public fun destroy()
 
-  /** Returns a registered service for the given [key] or null if no service is registered with this key. */
+  /**
+   * Returns a registered service for the given [key] or null if no service is registered with this
+   * key.
+   */
   public fun <T : Any> getService(key: String): T?
 
   /** Builder type to construct a new [Scope] instance. */
@@ -79,16 +87,18 @@ public interface Scope {
 }
 
 /**
- * Returns a chain of scopes beginning with this scope if [includeSelf] is `true` or the [Scope.parent] if [includeSelf]
- * is false followed by each parent of the previous scope until the root scope is reached. The returned sequence is
- * empty for root scope and [includeSelf] being `false`.
+ * Returns a chain of scopes beginning with this scope if [includeSelf] is `true` or the
+ * [Scope.parent] if [includeSelf] is false followed by each parent of the previous scope until the
+ * root scope is reached. The returned sequence is empty for root scope and [includeSelf] being
+ * `false`.
  */
 public fun Scope.parents(includeSelf: Boolean = false): Sequence<Scope> =
   generateSequence(this) { it.parent }.drop(if (includeSelf) 0 else 1)
 
 /**
- * Registers [scopedInstances] to be notified when this scope is destroyed. Since this scope has been already created at
- * this point in time, [Scoped.onEnterScope] will be called immediately for all instance.
+ * Registers [scopedInstances] to be notified when this scope is destroyed. Since this scope has
+ * been already created at this point in time, [Scoped.onEnterScope] will be called immediately for
+ * all instance.
  */
 public fun Scope.register(scopedInstances: Iterable<Scoped>) {
   scopedInstances.forEach { register(it) }
@@ -100,8 +110,8 @@ public fun Scope.Builder.register(scopedInstances: Iterable<Scoped>) {
 }
 
 /**
- * Invokes the given lambda when the scope is destroyed. This is a convenience function when [Scoped.onExitScope] cannot
- * be overridden or fields are tedious to manage, e.g.
+ * Invokes the given lambda when the scope is destroyed. This is a convenience function when
+ * [Scoped.onExitScope] cannot be overridden or fields are tedious to manage, e.g.
  *
  * ```
  * override fun onEnterScope(scope: Scope) {

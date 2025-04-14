@@ -9,11 +9,13 @@ import kotlinx.coroutines.test.TestDispatcher
 import kotlinx.coroutines.test.TestScope
 
 /**
- * Uses the given [coroutineScope] to create new [MoleculeScope] instances. In testing environments often [TestScope] is
- * used as argument.
+ * Uses the given [coroutineScope] to create new [MoleculeScope] instances. In testing environments
+ * often [TestScope] is used as argument.
  */
-public class FakeMoleculeScopeFactory(private val coroutineScope: CoroutineScope) : MoleculeScopeFactory {
-  override fun createMoleculeScope(): MoleculeScope = createMoleculeScopeFromCoroutineScope(coroutineScope)
+public class FakeMoleculeScopeFactory(private val coroutineScope: CoroutineScope) :
+  MoleculeScopeFactory {
+  override fun createMoleculeScope(): MoleculeScope =
+    createMoleculeScopeFromCoroutineScope(coroutineScope)
 
   override fun createMoleculeScopeFromCoroutineScope(
     coroutineScope: CoroutineScope,

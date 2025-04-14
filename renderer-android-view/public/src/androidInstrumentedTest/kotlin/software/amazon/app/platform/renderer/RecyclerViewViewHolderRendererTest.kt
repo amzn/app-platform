@@ -88,7 +88,8 @@ class RecyclerViewViewHolderRendererTest {
 
       // The renderers were only inflated once (and otherwise recycled).
       assertThat(activity.recyclerView.viewHolderRenderer(0).inflateCalled).isEqualTo(1)
-      assertThat(activity.recyclerView.viewHolderRenderer(0).nestedRenderer.inflateCalled).isEqualTo(1)
+      assertThat(activity.recyclerView.viewHolderRenderer(0).nestedRenderer.inflateCalled)
+        .isEqualTo(1)
     }
 
     smoothScrollTo(200)
@@ -105,7 +106,8 @@ class RecyclerViewViewHolderRendererTest {
       // The renderers were only inflated once (and otherwise recycled).
       for (i in 190..199) {
         assertThat(activity.recyclerView.viewHolderRenderer(i).inflateCalled).isEqualTo(1)
-        assertThat(activity.recyclerView.viewHolderRenderer(i).nestedRenderer.inflateCalled).isEqualTo(1)
+        assertThat(activity.recyclerView.viewHolderRenderer(i).nestedRenderer.inflateCalled)
+          .isEqualTo(1)
       }
     }
 
@@ -123,7 +125,8 @@ class RecyclerViewViewHolderRendererTest {
       // The renderers were only inflated once (and otherwise recycled).
       for (i in 0..10) {
         assertThat(activity.recyclerView.viewHolderRenderer(i).inflateCalled).isEqualTo(1)
-        assertThat(activity.recyclerView.viewHolderRenderer(i).nestedRenderer.inflateCalled).isEqualTo(1)
+        assertThat(activity.recyclerView.viewHolderRenderer(i).nestedRenderer.inflateCalled)
+          .isEqualTo(1)
       }
     }
   }
@@ -170,9 +173,12 @@ class RecyclerViewViewHolderRendererTest {
   }
 
   @Suppress("UNCHECKED_CAST")
-  private fun RecyclerView.viewHolderRenderer(adapterPosition: Int): TestRecyclerViewViewHolderRenderer {
+  private fun RecyclerView.viewHolderRenderer(
+    adapterPosition: Int
+  ): TestRecyclerViewViewHolderRenderer {
     val viewHolder =
-      findViewHolderForAdapterPosition(adapterPosition) as RecyclerViewViewHolderRenderer.ViewHolder<TestModel>
+      findViewHolderForAdapterPosition(adapterPosition)
+        as RecyclerViewViewHolderRenderer.ViewHolder<TestModel>
 
     return viewHolder.renderer as TestRecyclerViewViewHolderRenderer
   }
@@ -190,7 +196,11 @@ class RecyclerViewViewHolderRendererTest {
     var renderCalled = 0
       private set
 
-    override fun inflate(activity: Activity, parent: ViewGroup, layoutInflater: LayoutInflater): View {
+    override fun inflate(
+      activity: Activity,
+      parent: ViewGroup,
+      layoutInflater: LayoutInflater,
+    ): View {
       inflateCalled++
 
       val frameLayout = FrameLayout(activity)
@@ -254,7 +264,10 @@ class RecyclerViewViewHolderRendererTest {
       return renderer.viewHolder()
     }
 
-    override fun onBindViewHolder(holder: RecyclerViewViewHolderRenderer.ViewHolder<TestModel>, position: Int) {
+    override fun onBindViewHolder(
+      holder: RecyclerViewViewHolderRenderer.ViewHolder<TestModel>,
+      position: Int,
+    ) {
       bindCalled++
 
       holder.renderer.render(models[position])

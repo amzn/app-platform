@@ -34,7 +34,8 @@ class SampleAppTemplatePresenterTest {
     }
   }
 
-  private class TestPresenter(private val trigger: StateFlow<Template?>) : MoleculePresenter<Unit, Model> {
+  private class TestPresenter(private val trigger: StateFlow<Template?>) :
+    MoleculePresenter<Unit, Model> {
     @Composable
     override fun present(input: Unit): Model {
       return Model(trigger.collectAsState().value)

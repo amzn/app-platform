@@ -79,7 +79,8 @@ class UserManagerImplTest {
 
   private fun TestScope.rootScopeProvider(appComponent: Any = appComponent()): RootScopeProvider {
     return object : RootScopeProvider {
-      override val rootScope: Scope = Scope.buildTestScope(this@rootScopeProvider) { addDiComponent(appComponent) }
+      override val rootScope: Scope =
+        Scope.buildTestScope(this@rootScopeProvider) { addDiComponent(appComponent) }
     }
   }
 }

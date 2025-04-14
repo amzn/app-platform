@@ -5,8 +5,8 @@ import software.amazon.app.platform.scope.RootScopeProvider
 import software.amazon.app.platform.scope.Scope
 
 /**
- * The [Application] class of our sample app. Note that this class implements [RootScopeProvider]. This is helpful to
- * get access to the root scope from Android components such as activities.
+ * The [Application] class of our sample app. Note that this class implements [RootScopeProvider].
+ * This is helpful to get access to the root scope from Android components such as activities.
  */
 open class AndroidApplication : Application(), RootScopeProvider {
 

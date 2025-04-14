@@ -11,10 +11,12 @@ import software.amazon.app.platform.sample.template.SampleAppTemplate
 import software.amazon.app.platform.sample.template.SampleAppTemplatePresenter
 
 /**
- * Shared class between all platforms to start collecting [SampleAppTemplate] in a [StateFlow]. Inject [Factory] to
- * create a new instance. Once the instance is no longer needed, call [cancel] to clean up any resources.
+ * Shared class between all platforms to start collecting [SampleAppTemplate] in a [StateFlow].
+ * Inject [Factory] to create a new instance. Once the instance is no longer needed, call [cancel]
+ * to clean up any resources.
  *
- * [NavigationPresenter] serves as the root presenter and gets wrapped in a [SampleAppTemplatePresenter].
+ * [NavigationPresenter] serves as the root presenter and gets wrapped in a
+ * [SampleAppTemplatePresenter].
  */
 @Inject
 class TemplateProvider(
@@ -48,8 +50,8 @@ class TemplateProvider(
     private val templateProvider: (MoleculeScope) -> TemplateProvider,
   ) {
     /**
-     * Creates a new instance of [TemplateProvider]. Call [TemplateProvider.cancel] when the instance not needed anymore
-     * to avoid leaking resources.
+     * Creates a new instance of [TemplateProvider]. Call [TemplateProvider.cancel] when the
+     * instance not needed anymore to avoid leaking resources.
      */
     fun createTemplateProvider(): TemplateProvider {
       return templateProvider(moleculeScopeFactory.createMoleculeScope())

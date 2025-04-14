@@ -8,9 +8,10 @@ import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runTest
 
 /**
- * This function is similar to [runTest] and will additionally create a [Scope] using [Scope.Companion.buildTestScope]
- * for you. The [Scope] will be destroyed before the test finishes and clean up all resources. A common pattern to test
- * classes implementing [Scoped] looks like the following
+ * This function is similar to [runTest] and will additionally create a [Scope] using
+ * [Scope.Companion.buildTestScope] for you. The [Scope] will be destroyed before the test finishes
+ * and clean up all resources. A common pattern to test classes implementing [Scoped] looks like the
+ * following
  *
  * ```
  * @Test
@@ -25,8 +26,8 @@ import kotlinx.coroutines.test.runTest
  * }
  * ```
  *
- * Similar to [Scope.Companion.buildTestScope], this function will use [StandardTestDispatcher] by default, but this can
- * be overridden using [context] parameter:
+ * Similar to [Scope.Companion.buildTestScope], this function will use [StandardTestDispatcher] by
+ * default, but this can be overridden using [context] parameter:
  * ```
  * runTestWithScope(UnconfinedTestDispatcher()) { ... }
  * ```
@@ -54,11 +55,12 @@ public fun runTestWithScope(
 }
 
 /**
- * This function is similar to [runTest] and will additionally create a [Scope] using [Scope.Companion.buildTestScope]
- * for you. The [Scope] will be destroyed before the test finishes and clean up all resources. The given [scoped] will
- * be registered automatically in created [Scope] and its [Scoped.onEnterScope] function will be called before the block
- * [testBody] is called. If this behavior is not desired, then you can use [runTestWithScope] and register your [scoped]
- * object manually.
+ * This function is similar to [runTest] and will additionally create a [Scope] using
+ * [Scope.Companion.buildTestScope] for you. The [Scope] will be destroyed before the test finishes
+ * and clean up all resources. The given [scoped] will be registered automatically in created
+ * [Scope] and its [Scoped.onEnterScope] function will be called before the block [testBody] is
+ * called. If this behavior is not desired, then you can use [runTestWithScope] and register your
+ * [scoped] object manually.
  *
  * A common pattern to test classes implementing [Scoped] looks like the following:
  * ```
@@ -77,8 +79,8 @@ public fun runTestWithScope(
  * }
  * ```
  *
- * Similar to [Scope.Companion.buildTestScope], this function will use [StandardTestDispatcher] by default, but this can
- * be overridden using [context] parameter:
+ * Similar to [Scope.Companion.buildTestScope], this function will use [StandardTestDispatcher] by
+ * default, but this can be overridden using [context] parameter:
  * ```
  * runTestWithScoped(myScoped, UnconfinedTestDispatcher()) { ... }
  * ```

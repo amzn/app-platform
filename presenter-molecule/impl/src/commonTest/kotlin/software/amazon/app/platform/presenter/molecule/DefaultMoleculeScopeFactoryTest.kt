@@ -21,7 +21,8 @@ class DefaultMoleculeScopeFactoryTest {
   @Test
   fun `the given coroutine scope is used when creating a new MoleculeScope`() {
     val factory = factory(scope = CoroutineScope(CoroutineName("abc")))
-    val moleculeScope = factory.createMoleculeScopeFromCoroutineScope(CoroutineScope(CoroutineName("def")))
+    val moleculeScope =
+      factory.createMoleculeScopeFromCoroutineScope(CoroutineScope(CoroutineName("def")))
 
     assertThat(moleculeScope.name).isEqualTo("def")
   }

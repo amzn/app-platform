@@ -1,8 +1,8 @@
 package software.amazon.app.platform.presenter
 
 /**
- * `Presenters` produce a stream of models that represents the state of this presenter. Concrete model types are usually
- * implemented as inner classes of the presenter, e.g.
+ * `Presenters` produce a stream of models that represents the state of this presenter. Concrete
+ * model types are usually implemented as inner classes of the presenter, e.g.
  *
  * ```
  * class LoginPresenter : Presenter<Model> {
@@ -10,8 +10,9 @@ package software.amazon.app.platform.presenter
  * }
  * ```
  *
- * Models must be immutable. Making models mutable and changing their state is an error and leads to undesired results
- * or crashes. While technically not required, common practice is to use a `data class` for models.
+ * Models must be immutable. Making models mutable and changing their state is an error and leads to
+ * undesired results or crashes. While technically not required, common practice is to use a `data
+ * class` for models.
  *
  * Using sealed hierarchies for models is common and allows to differentiate between states better:
  * ```
@@ -26,8 +27,8 @@ package software.amazon.app.platform.presenter
  * }
  * ```
  *
- * State observers such as the UI layer communicate with the `Presenter` through events. Events are returned through an
- * `onEvent` callback in the model class and the `Presenter` handles the event:
+ * State observers such as the UI layer communicate with the `Presenter` through events. Events are
+ * returned through an `onEvent` callback in the model class and the `Presenter` handles the event:
  * ```
  * class LoginPresenter : Presenter<Model> {
  *     sealed interface Event {

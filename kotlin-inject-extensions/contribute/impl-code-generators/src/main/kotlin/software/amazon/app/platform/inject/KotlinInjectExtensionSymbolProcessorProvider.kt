@@ -17,12 +17,30 @@ import software.amazon.app.platform.inject.processor.ContributesRobotProcessor
 public class KotlinInjectExtensionSymbolProcessorProvider : SymbolProcessorProvider {
   override fun create(environment: SymbolProcessorEnvironment): SymbolProcessor {
     return CompositeSymbolProcessor(
-      ContributesBindingProcessor(codeGenerator = environment.codeGenerator, logger = environment.logger),
-      ContributesBindingScopedProcessor(codeGenerator = environment.codeGenerator, logger = environment.logger),
-      ContributesRendererProcessor(codeGenerator = environment.codeGenerator, logger = environment.logger),
-      ContributesRealImplProcessor(codeGenerator = environment.codeGenerator, logger = environment.logger),
-      ContributesMockImplProcessor(codeGenerator = environment.codeGenerator, logger = environment.logger),
-      ContributesRobotProcessor(codeGenerator = environment.codeGenerator, logger = environment.logger),
+      ContributesBindingProcessor(
+        codeGenerator = environment.codeGenerator,
+        logger = environment.logger,
+      ),
+      ContributesBindingScopedProcessor(
+        codeGenerator = environment.codeGenerator,
+        logger = environment.logger,
+      ),
+      ContributesRendererProcessor(
+        codeGenerator = environment.codeGenerator,
+        logger = environment.logger,
+      ),
+      ContributesRealImplProcessor(
+        codeGenerator = environment.codeGenerator,
+        logger = environment.logger,
+      ),
+      ContributesMockImplProcessor(
+        codeGenerator = environment.codeGenerator,
+        logger = environment.logger,
+      ),
+      ContributesRobotProcessor(
+        codeGenerator = environment.codeGenerator,
+        logger = environment.logger,
+      ),
     )
   }
 }

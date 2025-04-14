@@ -4,8 +4,9 @@ import kotlin.reflect.KClass
 import software.amazon.lastmile.kotlin.inject.anvil.extend.ContributingAnnotation
 
 /**
- * Robots must be annotated with `@ContributesRobot`. The annotation will generate the necessary code to provide the
- * robot in the dependency graph and allow us to retrieve the robot through the `robot<AbcRobot> { }` function.
+ * Robots must be annotated with `@ContributesRobot`. The annotation will generate the necessary
+ * code to provide the robot in the dependency graph and allow us to retrieve the robot through the
+ * `robot<AbcRobot> { }` function.
  *
  * ```
  * @ContributesRobot(AppScope::class)
@@ -14,7 +15,8 @@ import software.amazon.lastmile.kotlin.inject.anvil.extend.ContributingAnnotatio
  * }
  * ```
  *
- * It's supported to inject dependencies in the constructor. For this the class must be annotated with `@Inject`:
+ * It's supported to inject dependencies in the constructor. For this the class must be annotated
+ * with `@Inject`:
  * ```
  * @Inject
  * @ContributesRobot(AppScope::class)

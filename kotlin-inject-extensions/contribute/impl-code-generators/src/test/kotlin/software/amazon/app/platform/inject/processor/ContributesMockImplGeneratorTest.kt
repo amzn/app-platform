@@ -48,11 +48,13 @@ class ContributesMockImplGeneratorTest {
     ) {
       val component = mockImpl.component
 
-      assertThat(component.getAnnotation(ContributesTo::class.java)?.scope).isEqualTo(AppScope::class)
+      assertThat(component.getAnnotation(ContributesTo::class.java)?.scope)
+        .isEqualTo(AppScope::class)
 
       val providesMethod = component.declaredMethods.single()
       assertThat(providesMethod.parameters[0].type).isEqualTo(Boolean::class.java)
-      assertThat(providesMethod.parameters[1].parameterizedType.parameterizedTypeArguments.single()).isEqualTo(mockImpl)
+      assertThat(providesMethod.parameters[1].parameterizedType.parameterizedTypeArguments.single())
+        .isEqualTo(mockImpl)
       assertThat(
           providesMethod.parameters[2]
             .parameterizedType
@@ -63,7 +65,8 @@ class ContributesMockImplGeneratorTest {
             .single()
         )
         .isEqualTo(base)
-      assertThat(providesMethod.parameters[2].annotations.single().annotationClass).isEqualTo(RealImpl::class)
+      assertThat(providesMethod.parameters[2].annotations.single().annotationClass)
+        .isEqualTo(RealImpl::class)
       assertThat(providesMethod.returnType).isEqualTo(base)
 
       assertThat(providesMethod.getAnnotation(Provides::class.java)).isNotNull()
@@ -87,11 +90,13 @@ class ContributesMockImplGeneratorTest {
     ) {
       val component = mockImpl.component
 
-      assertThat(component.getAnnotation(ContributesTo::class.java)?.scope).isEqualTo(AppScope::class)
+      assertThat(component.getAnnotation(ContributesTo::class.java)?.scope)
+        .isEqualTo(AppScope::class)
 
       val providesMethod = component.declaredMethods.single()
       assertThat(providesMethod.parameters[0].type).isEqualTo(Boolean::class.java)
-      assertThat(providesMethod.parameters[1].parameterizedType.parameterizedTypeArguments.single()).isEqualTo(mockImpl)
+      assertThat(providesMethod.parameters[1].parameterizedType.parameterizedTypeArguments.single())
+        .isEqualTo(mockImpl)
       assertThat(
           providesMethod.parameters[2]
             .parameterizedType
@@ -102,7 +107,8 @@ class ContributesMockImplGeneratorTest {
             .single()
         )
         .isEqualTo(base)
-      assertThat(providesMethod.parameters[2].annotations.single().annotationClass).isEqualTo(RealImpl::class)
+      assertThat(providesMethod.parameters[2].annotations.single().annotationClass)
+        .isEqualTo(RealImpl::class)
       assertThat(providesMethod.returnType).isEqualTo(base)
 
       assertThat(providesMethod.getAnnotation(Provides::class.java)).isNotNull()
@@ -128,7 +134,8 @@ class ContributesMockImplGeneratorTest {
     ) {
       val component = mockImpl.inner.component
 
-      assertThat(component.getAnnotation(ContributesTo::class.java)?.scope).isEqualTo(AppScope::class)
+      assertThat(component.getAnnotation(ContributesTo::class.java)?.scope)
+        .isEqualTo(AppScope::class)
 
       val providesMethod = component.declaredMethods.single()
       assertThat(providesMethod.parameters[0].type).isEqualTo(Boolean::class.java)
@@ -144,7 +151,8 @@ class ContributesMockImplGeneratorTest {
             .single()
         )
         .isEqualTo(base)
-      assertThat(providesMethod.parameters[2].annotations.single().annotationClass).isEqualTo(RealImpl::class)
+      assertThat(providesMethod.parameters[2].annotations.single().annotationClass)
+        .isEqualTo(RealImpl::class)
       assertThat(providesMethod.returnType).isEqualTo(base)
 
       assertThat(providesMethod.getAnnotation(Provides::class.java)).isNotNull()
@@ -189,7 +197,8 @@ class ContributesMockImplGeneratorTest {
     ) {
       val component = mockImpl.component
 
-      assertThat(component.getAnnotation(ContributesTo::class.java)?.scope).isEqualTo(AppScope::class)
+      assertThat(component.getAnnotation(ContributesTo::class.java)?.scope)
+        .isEqualTo(AppScope::class)
 
       assertThat(component.declaredMethods.map { it.name }).contains("provideBase")
       assertThat(component.declaredMethods.map { it.name }).contains("provideBase2")
@@ -213,7 +222,8 @@ class ContributesMockImplGeneratorTest {
             """,
       exitCode = COMPILATION_ERROR,
     ) {
-      assertThat(messages).contains("The same type should not be contributed twice: software.amazon.test.Base.")
+      assertThat(messages)
+        .contains("The same type should not be contributed twice: software.amazon.test.Base.")
     }
   }
 
@@ -254,7 +264,9 @@ class ContributesMockImplGeneratorTest {
       exitCode = COMPILATION_ERROR,
     ) {
       assertThat(messages)
-        .contains("The bound type could not be determined for MockImpl. " + "There are no super types.")
+        .contains(
+          "The bound type could not be determined for MockImpl. " + "There are no super types."
+        )
     }
   }
 
@@ -276,11 +288,13 @@ class ContributesMockImplGeneratorTest {
     ) {
       val component = mockImpl.component
 
-      assertThat(component.getAnnotation(ContributesTo::class.java)?.scope).isEqualTo(AppScope::class)
+      assertThat(component.getAnnotation(ContributesTo::class.java)?.scope)
+        .isEqualTo(AppScope::class)
 
       val providesMethod = component.declaredMethods.single()
       assertThat(providesMethod.parameters[0].type).isEqualTo(Boolean::class.java)
-      assertThat(providesMethod.parameters[1].parameterizedType.parameterizedTypeArguments.single()).isEqualTo(mockImpl)
+      assertThat(providesMethod.parameters[1].parameterizedType.parameterizedTypeArguments.single())
+        .isEqualTo(mockImpl)
       assertThat(
           providesMethod.parameters[2]
             .parameterizedType
@@ -291,7 +305,8 @@ class ContributesMockImplGeneratorTest {
             .single()
         )
         .isEqualTo(base2)
-      assertThat(providesMethod.parameters[2].annotations.single().annotationClass).isEqualTo(RealImpl::class)
+      assertThat(providesMethod.parameters[2].annotations.single().annotationClass)
+        .isEqualTo(RealImpl::class)
       assertThat(providesMethod.returnType).isEqualTo(base2)
 
       assertThat(providesMethod.getAnnotation(Provides::class.java)).isNotNull()
@@ -317,7 +332,8 @@ class ContributesMockImplGeneratorTest {
     ) {
       assertThat(messages)
         .contains(
-          "The bound type could not be determined for MockImpl. " + "There are multiple super types: Base, Base2."
+          "The bound type could not be determined for MockImpl. " +
+            "There are multiple super types: Base, Base2."
         )
     }
   }
@@ -340,11 +356,13 @@ class ContributesMockImplGeneratorTest {
     ) {
       val component = mockImpl.component
 
-      assertThat(component.getAnnotation(ContributesTo::class.java)?.scope).isEqualTo(AppScope::class)
+      assertThat(component.getAnnotation(ContributesTo::class.java)?.scope)
+        .isEqualTo(AppScope::class)
 
       with(component.declaredMethods.single { it.name == "provideBase" }) {
         assertThat(parameters[0].type).isEqualTo(Boolean::class.java)
-        assertThat(parameters[1].parameterizedType.parameterizedTypeArguments.single()).isEqualTo(mockImpl)
+        assertThat(parameters[1].parameterizedType.parameterizedTypeArguments.single())
+          .isEqualTo(mockImpl)
         assertThat(
             parameters[2]
               .parameterizedType
@@ -363,7 +381,8 @@ class ContributesMockImplGeneratorTest {
 
       with(component.declaredMethods.single { it.name == "provideMockImplScoped" }) {
         assertThat(parameters[0].annotations.single().annotationClass).isEqualTo(MockMode::class)
-        assertThat(parameters[1].parameterizedType.parameterizedTypeArguments.single()).isEqualTo(mockImpl)
+        assertThat(parameters[1].parameterizedType.parameterizedTypeArguments.single())
+          .isEqualTo(mockImpl)
 
         assertThat(getAnnotation(Provides::class.java)).isNotNull()
         assertThat(getAnnotation(IntoSet::class.java)).isNotNull()
@@ -395,7 +414,8 @@ class ContributesMockImplGeneratorTest {
 
       assertThat(component.declaredMethods.firstOrNull { it.name == "provideBase" }).isNotNull()
 
-      assertThat(component.declaredMethods.firstOrNull { it.name == "provideMockImplScoped" }).isNull()
+      assertThat(component.declaredMethods.firstOrNull { it.name == "provideMockImplScoped" })
+        .isNull()
     }
   }
 
@@ -600,7 +620,8 @@ class ContributesMockImplGeneratorTest {
             """,
       exitCode = COMPILATION_ERROR,
     ) {
-      assertThat(messages).contains("Cannot find an @Inject constructor or provider for: software.amazon.test.Base")
+      assertThat(messages)
+        .contains("Cannot find an @Inject constructor or provider for: software.amazon.test.Base")
     }
 
     // Test again and verify through the Scoped interface
@@ -656,9 +677,11 @@ class ContributesMockImplGeneratorTest {
 
       @Suppress("UNCHECKED_CAST")
       val scoped =
-        component::class.java.declaredMethods.single { it.name == "getScoped" }.invoke(component) as Set<Scoped>
+        component::class.java.declaredMethods.single { it.name == "getScoped" }.invoke(component)
+          as Set<Scoped>
 
-      assertThat(scoped.single().javaClass.canonicalName).isEqualTo("software.amazon.test.TestScoped")
+      assertThat(scoped.single().javaClass.canonicalName)
+        .isEqualTo("software.amazon.test.TestScoped")
     }
   }
 
@@ -678,7 +701,9 @@ class ContributesMockImplGeneratorTest {
     get() =
       classLoader.loadClass(
         "$APP_PLATFORM_LOOKUP_PACKAGE.$packageName." +
-          canonicalName.substringAfter(packageName).substring(1).split(".").joinToString(separator = "") {
+          canonicalName.substringAfter(packageName).substring(1).split(".").joinToString(
+            separator = ""
+          ) {
             it.capitalize()
           } +
           "MockImplComponent"

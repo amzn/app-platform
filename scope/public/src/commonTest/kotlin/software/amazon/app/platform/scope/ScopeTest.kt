@@ -55,7 +55,8 @@ class ScopeTest {
   @Test
   fun `destroying the parent scope destroys all children`() {
     val root = Scope.buildRootScope()
-    val children = setOf(root.buildChild("child1"), root.buildChild("child2"), root.buildChild("child3"))
+    val children =
+      setOf(root.buildChild("child1"), root.buildChild("child2"), root.buildChild("child3"))
 
     children.forEach { assertThat(it.isDestroyed()).isFalse() }
 
@@ -131,7 +132,8 @@ class ScopeTest {
     val child2 = root.buildChild("child2")
     val grandchild = child1.buildChild("grandchild")
 
-    assertThat(grandchild.parents(includeSelf = true).toList()).containsExactly(grandchild, child1, root)
+    assertThat(grandchild.parents(includeSelf = true).toList())
+      .containsExactly(grandchild, child1, root)
     assertThat(grandchild.parents(includeSelf = false).toList()).containsExactly(child1, root)
 
     assertThat(child2.parents(includeSelf = true).toList()).containsExactly(child2, root)

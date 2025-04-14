@@ -247,7 +247,6 @@ public open class KmpPlugin : Plugin<Project> {
         googleStyle()
         manageTrailingCommas.set(true)
         removeUnusedImports.set(true)
-        maxWidth.set(120)
       }
 
       releaseTask.configure { releaseTask -> releaseTask.dependsOn("ktfmtCheck") }

@@ -6,8 +6,9 @@ import software.amazon.app.platform.presenter.BaseModel
 /**
  * An implementation of [Renderer] that is specific to Compose UI Multiplatform.
  *
- * Your custom renderers should extend this abstract class and provide implementations for [Compose]. This function gets
- * called each time a new [BaseModel] is available and the UI elements should be updated, e.g.
+ * Your custom renderers should extend this abstract class and provide implementations for
+ * [Compose]. This function gets called each time a new [BaseModel] is available and the UI elements
+ * should be updated, e.g.
  *
  * ```
  * @ContributesRenderer
@@ -21,8 +22,8 @@ import software.amazon.app.platform.presenter.BaseModel
  * }
  * ```
  *
- * It's strongly recommended to follow Compose UI best practices, e.g. state should be retained within the [Compose]
- * function between updates and not as a field of the [ComposeRenderer], e.g.
+ * It's strongly recommended to follow Compose UI best practices, e.g. state should be retained
+ * within the [Compose] function between updates and not as a field of the [ComposeRenderer], e.g.
  *
  * ```
  * // Do this
@@ -40,13 +41,18 @@ import software.amazon.app.platform.presenter.BaseModel
  * }
  * ```
  *
- * While [ComposeRenderer] implements the [Renderer] interface for seamless integration in the whole stack, the
- * [Renderer.render] function is not supported and throws an error. The function itself is deprecated and hidden.
- * Instead, [renderCompose] should be called, which preserves the Compose UI context.
+ * While [ComposeRenderer] implements the [Renderer] interface for seamless integration in the whole
+ * stack, the [Renderer.render] function is not supported and throws an error. The function itself
+ * is deprecated and hidden. Instead, [renderCompose] should be called, which preserves the Compose
+ * UI context.
  */
-public abstract class ComposeRenderer<in ModelT : BaseModel> : BaseComposeRenderer<ModelT>, Renderer<ModelT> {
+public abstract class ComposeRenderer<in ModelT : BaseModel> :
+  BaseComposeRenderer<ModelT>, Renderer<ModelT> {
 
-  @Deprecated(message = "ComposeRenderers must invoke renderCompose(model)", level = DeprecationLevel.HIDDEN)
+  @Deprecated(
+    message = "ComposeRenderers must invoke renderCompose(model)",
+    level = DeprecationLevel.HIDDEN,
+  )
   final override fun render(model: ModelT): Nothing {
     error("ComposeRenderers must invoke renderCompose(model).")
   }

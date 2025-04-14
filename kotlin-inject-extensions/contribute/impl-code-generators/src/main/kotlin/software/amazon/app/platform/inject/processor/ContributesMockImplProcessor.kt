@@ -33,7 +33,8 @@ import software.amazon.lastmile.kotlin.inject.anvil.ForScope
 /**
  * Generates the necessary code in order to support [ContributesMockImpl].
  *
- * If the class implements `Scoped`, then based on the mock mode flag the mock implementation gets called or not.
+ * If the class implements `Scoped`, then based on the mock mode flag the mock implementation gets
+ * called or not.
  *
  * ```
  * package app.platform.inject.software.amazon.test
@@ -57,8 +58,10 @@ import software.amazon.lastmile.kotlin.inject.anvil.ForScope
  * }
  * ```
  */
-internal class ContributesMockImplProcessor(private val codeGenerator: CodeGenerator, override val logger: KSPLogger) :
-  SymbolProcessor, ContextAware {
+internal class ContributesMockImplProcessor(
+  private val codeGenerator: CodeGenerator,
+  override val logger: KSPLogger,
+) : SymbolProcessor, ContextAware {
 
   override fun process(resolver: Resolver): List<KSAnnotated> {
     resolver
@@ -99,11 +102,16 @@ internal class ContributesMockImplProcessor(private val codeGenerator: CodeGener
                 FunSpec.builder("provide${boundType.declaration.simpleName.asString()}")
                   .addAnnotation(Provides::class)
                   .addParameter(
-                    ParameterSpec.builder("mockMode", Boolean::class).addAnnotation(MockMode::class).build()
+                    ParameterSpec.builder("mockMode", Boolean::class)
+                      .addAnnotation(MockMode::class)
+                      .build()
                   )
                   .addParameter("mockImpl", LambdaTypeName.get(returnType = clazz.toClassName()))
                   .addParameter(
-                    ParameterSpec.builder("realImpl", LambdaTypeName.get(returnType = boundType.toClassName()))
+                    ParameterSpec.builder(
+                        "realImpl",
+                        LambdaTypeName.get(returnType = boundType.toClassName()),
+                      )
                       .addAnnotation(RealImpl::class)
                       .build()
                   )
@@ -127,7 +135,9 @@ internal class ContributesMockImplProcessor(private val codeGenerator: CodeGener
                         .build()
                     )
                     .addParameter(
-                      ParameterSpec.builder("mockMode", Boolean::class).addAnnotation(MockMode::class).build()
+                      ParameterSpec.builder("mockMode", Boolean::class)
+                        .addAnnotation(MockMode::class)
+                        .build()
                     )
                     .addParameter("mockImpl", LambdaTypeName.get(returnType = clazz.toClassName()))
                     .returns(scopedClassName)

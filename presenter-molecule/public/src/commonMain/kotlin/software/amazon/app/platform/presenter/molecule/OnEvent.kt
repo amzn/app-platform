@@ -12,13 +12,13 @@ import kotlinx.coroutines.launch
 import software.amazon.app.platform.presenter.BaseModel
 
 /**
- * Used to process events returned by the UI layer in the scope that runs our presenters, which usually is
- * `PresenterCoroutineScope`. Without this wrapper events would be processed on the main thread and could potentially
- * block the UI or cause lag.
+ * Used to process events returned by the UI layer in the scope that runs our presenters, which
+ * usually is `PresenterCoroutineScope`. Without this wrapper events would be processed on the main
+ * thread and could potentially block the UI or cause lag.
  *
- * Furthermore, the returned lambda is remembered as state within the composable, which allows to make [BaseModel]
- * implementations data classes. Without remembering every [BaseModel] instance would not equal another instance, since
- * different lambda instances are never equal to each other.
+ * Furthermore, the returned lambda is remembered as state within the composable, which allows to
+ * make [BaseModel] implementations data classes. Without remembering every [BaseModel] instance
+ * would not equal another instance, since different lambda instances are never equal to each other.
  *
  * A common pattern looks as follows:
  * ```

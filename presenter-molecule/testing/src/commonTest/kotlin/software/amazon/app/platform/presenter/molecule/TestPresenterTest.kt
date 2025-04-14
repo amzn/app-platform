@@ -54,7 +54,9 @@ class TestPresenterTest {
       }
     }
 
-    TestPresenter().test(this, CoroutineName("def")) { assertThat(awaitItem().name?.name).isEqualTo("def") }
+    TestPresenter().test(this, CoroutineName("def")) {
+      assertThat(awaitItem().name?.name).isEqualTo("def")
+    }
   }
 
   @Test

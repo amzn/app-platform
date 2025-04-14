@@ -50,17 +50,20 @@ class ComposeRobotTest {
     }
   }
 
-  private fun rootScope(vararg robots: Robot): Scope = Scope.buildRootScope { addDiComponent(Component(*robots)) }
+  private fun rootScope(vararg robots: Robot): Scope =
+    Scope.buildRootScope { addDiComponent(Component(*robots)) }
 
   private fun ComposeUiTest.interactionProvider(): ComposeInteractionsProvider {
     val interactionsProvider = this
     return object : ComposeInteractionsProvider {
-      override val semanticsNodeInteractionsProvider: SemanticsNodeInteractionsProvider = interactionsProvider
+      override val semanticsNodeInteractionsProvider: SemanticsNodeInteractionsProvider =
+        interactionsProvider
     }
   }
 
   private class Component(vararg robots: Robot) : RobotComponent {
-    override val robots: Map<KClass<out Robot>, () -> Robot> = robots.map { robot -> robot::class to { robot } }.toMap()
+    override val robots: Map<KClass<out Robot>, () -> Robot> =
+      robots.map { robot -> robot::class to { robot } }.toMap()
   }
 
   private class TestRobot : ComposeRobot() {

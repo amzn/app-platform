@@ -7,7 +7,8 @@ import software.amazon.app.platform.scope.Scope
 /** A default instance that can be statically obtained. */
 public actual val defaultRootScope: Scope?
   get() {
-    val applicationContext = InstrumentationRegistry.getInstrumentation().targetContext.applicationContext
+    val applicationContext =
+      InstrumentationRegistry.getInstrumentation().targetContext.applicationContext
 
     return (applicationContext as? RootScopeProvider)?.rootScope
   }

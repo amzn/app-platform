@@ -47,7 +47,8 @@ class ContributesRobotGeneratorTest {
     ) {
       val robotComponent = testRobot.component
 
-      assertThat(robotComponent.getAnnotation(ContributesTo::class.java).scope).isEqualTo(AppScope::class)
+      assertThat(robotComponent.getAnnotation(ContributesTo::class.java).scope)
+        .isEqualTo(AppScope::class)
       assertThat(robotComponent.origin).isEqualTo(testRobot)
 
       with(robotComponent.declaredMethods.single { it.name == "provideTestRobot" }) {
@@ -58,13 +59,15 @@ class ContributesRobotGeneratorTest {
       }
 
       with(robotComponent.declaredMethods.single { it.name == "provideTestRobotIntoMap" }) {
-        assertThat(parameters.single().type.canonicalName).isEqualTo("kotlin.jvm.functions.Function0")
+        assertThat(parameters.single().type.canonicalName)
+          .isEqualTo("kotlin.jvm.functions.Function0")
         assertThat(returnType).isEqualTo(Pair::class.java)
         assertThat(this).isAnnotatedWith(Provides::class)
         assertThat(this).isAnnotatedWith(IntoMap::class)
       }
 
-      assertThat(componentInterface.newComponent<RobotComponent>().robots.keys).containsOnly(testRobot.kotlin)
+      assertThat(componentInterface.newComponent<RobotComponent>().robots.keys)
+        .containsOnly(testRobot.kotlin)
     }
   }
 
@@ -87,19 +90,23 @@ class ContributesRobotGeneratorTest {
     ) {
       val robotComponent = testRobot.component
 
-      assertThat(robotComponent.getAnnotation(ContributesTo::class.java).scope).isEqualTo(AppScope::class)
+      assertThat(robotComponent.getAnnotation(ContributesTo::class.java).scope)
+        .isEqualTo(AppScope::class)
       assertThat(robotComponent.origin).isEqualTo(testRobot)
 
-      assertThat(robotComponent.declaredMethods.singleOrNull { it.name == "provideTestRobot" }).isNull()
+      assertThat(robotComponent.declaredMethods.singleOrNull { it.name == "provideTestRobot" })
+        .isNull()
 
       with(robotComponent.declaredMethods.single { it.name == "provideTestRobotIntoMap" }) {
-        assertThat(parameters.single().type.canonicalName).isEqualTo("kotlin.jvm.functions.Function0")
+        assertThat(parameters.single().type.canonicalName)
+          .isEqualTo("kotlin.jvm.functions.Function0")
         assertThat(returnType).isEqualTo(Pair::class.java)
         assertThat(this).isAnnotatedWith(Provides::class)
         assertThat(this).isAnnotatedWith(IntoMap::class)
       }
 
-      assertThat(componentInterface.newComponent<RobotComponent>().robots.keys).containsOnly(testRobot.kotlin)
+      assertThat(componentInterface.newComponent<RobotComponent>().robots.keys)
+        .containsOnly(testRobot.kotlin)
     }
   }
 
@@ -144,7 +151,8 @@ class ContributesRobotGeneratorTest {
     ) {
       assertThat(messages)
         .contains(
-          "In order to use @ContributesRobot, TestRobot must implement " + "software.amazon.app.platform.robot.Robot."
+          "In order to use @ContributesRobot, TestRobot must implement " +
+            "software.amazon.app.platform.robot.Robot."
         )
     }
   }
@@ -193,7 +201,10 @@ class ContributesRobotGeneratorTest {
       exitCode = COMPILATION_ERROR,
     ) {
       assertThat(messages)
-        .contains("Robots can only be contributed to the AppScope for now. " + "Scope kotlin.String is unsupported.")
+        .contains(
+          "Robots can only be contributed to the AppScope for now. " +
+            "Scope kotlin.String is unsupported."
+        )
     }
   }
 
@@ -221,7 +232,9 @@ class ContributesRobotGeneratorTest {
     get() =
       classLoader.loadClass(
         "$APP_PLATFORM_LOOKUP_PACKAGE.$packageName." +
-          canonicalName.substringAfter(packageName).substring(1).split(".").joinToString(separator = "") {
+          canonicalName.substringAfter(packageName).substring(1).split(".").joinToString(
+            separator = ""
+          ) {
             it.capitalize()
           } +
           "Component"

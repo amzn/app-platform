@@ -25,9 +25,11 @@ class TestApplication : Application(), RootScopeProvider {
   private inner class Component : ViewRenderer.Component, RendererComponent.Parent {
     override val dispatcher: CoroutineDispatcher = Dispatchers.Main.immediate
 
-    override fun rendererComponent(factory: RendererFactory): RendererComponent = requireNotNull(rendererComponent)
+    override fun rendererComponent(factory: RendererFactory): RendererComponent =
+      requireNotNull(rendererComponent)
   }
 }
 
 val testApplication: TestApplication
-  get() = InstrumentationRegistry.getInstrumentation().targetContext.applicationContext as TestApplication
+  get() =
+    InstrumentationRegistry.getInstrumentation().targetContext.applicationContext as TestApplication

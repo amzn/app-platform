@@ -12,7 +12,10 @@ import software.amazon.app.platform.renderer.getRenderer
 import software.amazon.app.platform.sample.app.R
 import software.amazon.app.platform.scope.RootScopeProvider
 
-/** The only `Activity` of our sample app. This class is just an entry point to start rendering templates. */
+/**
+ * The only `Activity` of our sample app. This class is just an entry point to start rendering
+ * templates.
+ */
 class MainActivity : ComponentActivity() {
 
   private val rootScopeProvider

@@ -40,7 +40,9 @@ class FakeMoleculeScopeFactoryTest {
 
   @Test
   fun `the coroutine context is added to the scope`() = runTest {
-    val scope = FakeMoleculeScopeFactory(this).createMoleculeScopeFromCoroutineScope(this, CoroutineName("test"))
+    val scope =
+      FakeMoleculeScopeFactory(this)
+        .createMoleculeScopeFromCoroutineScope(this, CoroutineName("test"))
 
     val name = scope.coroutineScope.coroutineContext[CoroutineName.Key]
     assertThat(name?.name).isEqualTo("test")
@@ -49,7 +51,8 @@ class FakeMoleculeScopeFactoryTest {
   @Test
   fun `a regular CoroutineScope can be used to create a MoleculeScope`() = runTest {
     val coroutineScope = CoroutineScope(CoroutineName("test"))
-    val moleculeScope = FakeMoleculeScopeFactory(this).createMoleculeScopeFromCoroutineScope(coroutineScope)
+    val moleculeScope =
+      FakeMoleculeScopeFactory(this).createMoleculeScopeFromCoroutineScope(coroutineScope)
 
     val name = moleculeScope.coroutineScope.coroutineContext[CoroutineName.Key]
     assertThat(name?.name).isEqualTo("test")

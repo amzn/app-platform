@@ -11,15 +11,20 @@ import software.amazon.app.platform.scope.di.addDiComponent
  *
  * This class is part of the `:testing` module and shared with other modules.
  */
-class FakeUserManager(override val user: MutableStateFlow<User?> = MutableStateFlow(null)) : UserManager {
+class FakeUserManager(override val user: MutableStateFlow<User?> = MutableStateFlow(null)) :
+  UserManager {
 
   override fun login(userId: Long) {
     user.value = FakeUser(userId = userId)
   }
 
-  /** Overloaded function to change the coroutine scope and kotlin-inject component for the [FakeUser]. */
+  /**
+   * Overloaded function to change the coroutine scope and kotlin-inject component for the
+   * [FakeUser].
+   */
   fun login(userId: Long, scope: TestScope, component: Any) {
-    user.value = FakeUser(userId = userId, scope = Scope.buildTestScope(scope) { addDiComponent(component) })
+    user.value =
+      FakeUser(userId = userId, scope = Scope.buildTestScope(scope) { addDiComponent(component) })
   }
 
   override fun logout() {

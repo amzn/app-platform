@@ -11,12 +11,13 @@ import software.amazon.app.platform.renderer.ViewRenderer
 import software.amazon.app.platform.renderer.getRenderer
 
 /**
- * Base [Renderer] for Android that wraps concrete templates in a [Container] conceptionally. A [Container] is backed by
- * a [ViewGroup] and when switching between different templates the old container (read `ViewGroup`) gets hidden and the
- * new container (read `ViewGroup`) gets shown.
+ * Base [Renderer] for Android that wraps concrete templates in a [Container] conceptionally. A
+ * [Container] is backed by a [ViewGroup] and when switching between different templates the old
+ * container (read `ViewGroup`) gets hidden and the new container (read `ViewGroup`) gets shown.
  */
-public abstract class AndroidTemplateRenderer<T : Template>(private val rendererFactory: RendererFactory) :
-  ViewRenderer<T>() {
+public abstract class AndroidTemplateRenderer<T : Template>(
+  private val rendererFactory: RendererFactory
+) : ViewRenderer<T>() {
 
   protected inner class Container(
     @Suppress("unused") private val activity: Activity,

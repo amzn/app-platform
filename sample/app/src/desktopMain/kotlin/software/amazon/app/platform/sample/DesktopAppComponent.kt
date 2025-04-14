@@ -8,12 +8,13 @@ import software.amazon.lastmile.kotlin.inject.anvil.MergeComponent
 import software.amazon.lastmile.kotlin.inject.anvil.SingleIn
 
 /**
- * The final Desktop app component. Unlike the Android and iOS specific counterpart, this class doesn't have any
- * platform specific types.
+ * The final Desktop app component. Unlike the Android and iOS specific counterpart, this class
+ * doesn't have any platform specific types.
  *
  * [rootScopeProvider] is provided in the [DesktopAppComponent] and can be injected.
  */
 @Component
 @MergeComponent(AppScope::class)
 @SingleIn(AppScope::class)
-abstract class DesktopAppComponent(@get:Provides val rootScopeProvider: RootScopeProvider) : DesktopAppComponentMerged
+abstract class DesktopAppComponent(@get:Provides val rootScopeProvider: RootScopeProvider) :
+  DesktopAppComponentMerged

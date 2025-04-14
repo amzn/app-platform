@@ -57,21 +57,34 @@ class ContributesRendererProcessorTest {
       assertThat(generatedComponent.packageName).startsWith(APP_PLATFORM_LOOKUP_PACKAGE)
       assertThat(generatedComponent.origin).isEqualTo(testRenderer)
 
-      with(generatedComponent.declaredMethods.single { it.name == "provideSoftwareAmazonTestTestRenderer" }) {
+      with(
+        generatedComponent.declaredMethods.single {
+          it.name == "provideSoftwareAmazonTestTestRenderer"
+        }
+      ) {
         assertThat(parameters).isEmpty()
         assertThat(returnType).isEqualTo(testRenderer)
         assertThat(this).isAnnotatedWith(Provides::class)
         assertThat(getAnnotation(SingleIn::class.java)).isNull()
       }
 
-      with(generatedComponent.declaredMethods.single { it.name == "provideSoftwareAmazonTestTestRendererModel" }) {
-        assertThat(parameters.single().type.canonicalName).isEqualTo("kotlin.jvm.functions.Function0")
+      with(
+        generatedComponent.declaredMethods.single {
+          it.name == "provideSoftwareAmazonTestTestRendererModel"
+        }
+      ) {
+        assertThat(parameters.single().type.canonicalName)
+          .isEqualTo("kotlin.jvm.functions.Function0")
         assertThat(returnType).isEqualTo(Pair::class.java)
         assertThat(this).isAnnotatedWith(Provides::class)
         assertThat(this).isAnnotatedWith(IntoMap::class)
       }
 
-      with(generatedComponent.declaredMethods.single { it.name == "provideSoftwareAmazonTestTestRendererModelKey" }) {
+      with(
+        generatedComponent.declaredMethods.single {
+          it.name == "provideSoftwareAmazonTestTestRendererModelKey"
+        }
+      ) {
         assertThat(parameters).isEmpty()
         assertThat(returnType).isEqualTo(Pair::class.java)
         assertThat(this).isAnnotatedWith(Provides::class)
@@ -79,9 +92,11 @@ class ContributesRendererProcessorTest {
         assertThat(this.getAnnotation(ForScope::class.java).scope).isEqualTo(RendererScope::class)
       }
 
-      assertThat(componentInterface.newComponent<RendererComponent>().renderers.keys).containsOnly(model)
+      assertThat(componentInterface.newComponent<RendererComponent>().renderers.keys)
+        .containsOnly(model)
 
-      assertThat(componentInterface.newComponent<RendererComponent>().modelToRendererMapping.keys).containsOnly(model)
+      assertThat(componentInterface.newComponent<RendererComponent>().modelToRendererMapping.keys)
+        .containsOnly(model)
 
       assertThat(componentInterface.newComponent<RendererComponent>().modelToRendererMapping.values)
         .containsOnly(testRenderer.kotlin)
@@ -114,21 +129,31 @@ class ContributesRendererProcessorTest {
       assertThat(generatedComponent.packageName).startsWith(APP_PLATFORM_LOOKUP_PACKAGE)
       assertThat(generatedComponent.origin).isEqualTo(testRenderer.inner)
 
-      with(generatedComponent.declaredMethods.single { it.name == "provideSoftwareAmazonTestTestRendererInner" }) {
+      with(
+        generatedComponent.declaredMethods.single {
+          it.name == "provideSoftwareAmazonTestTestRendererInner"
+        }
+      ) {
         assertThat(parameters).isEmpty()
         assertThat(returnType).isEqualTo(testRenderer.inner)
         assertThat(this).isAnnotatedWith(Provides::class)
         assertThat(getAnnotation(SingleIn::class.java)).isNull()
       }
 
-      with(generatedComponent.declaredMethods.single { it.name == "provideSoftwareAmazonTestTestRendererInnerModel" }) {
-        assertThat(parameters.single().type.canonicalName).isEqualTo("kotlin.jvm.functions.Function0")
+      with(
+        generatedComponent.declaredMethods.single {
+          it.name == "provideSoftwareAmazonTestTestRendererInnerModel"
+        }
+      ) {
+        assertThat(parameters.single().type.canonicalName)
+          .isEqualTo("kotlin.jvm.functions.Function0")
         assertThat(returnType).isEqualTo(Pair::class.java)
         assertThat(this).isAnnotatedWith(Provides::class)
         assertThat(this).isAnnotatedWith(IntoMap::class)
       }
 
-      assertThat(componentInterface.newComponent<RendererComponent>().renderers.keys).containsOnly(model)
+      assertThat(componentInterface.newComponent<RendererComponent>().renderers.keys)
+        .containsOnly(model)
     }
   }
 
@@ -158,7 +183,11 @@ class ContributesRendererProcessorTest {
       assertThat(generatedComponent.packageName).startsWith(APP_PLATFORM_LOOKUP_PACKAGE)
       assertThat(generatedComponent.origin).isEqualTo(testRenderer)
 
-      with(generatedComponent.declaredMethods.single { it.name == "provideSoftwareAmazonTestTestRenderer" }) {
+      with(
+        generatedComponent.declaredMethods.single {
+          it.name == "provideSoftwareAmazonTestTestRenderer"
+        }
+      ) {
         assertThat(parameters).isEmpty()
         assertThat(returnType).isEqualTo(testRenderer)
         assertThat(this).isAnnotatedWith(Provides::class)
@@ -166,9 +195,12 @@ class ContributesRendererProcessorTest {
       }
 
       with(
-        generatedComponent.declaredMethods.single { it.name == "provideSoftwareAmazonTestTestRendererPresenterModel" }
+        generatedComponent.declaredMethods.single {
+          it.name == "provideSoftwareAmazonTestTestRendererPresenterModel"
+        }
       ) {
-        assertThat(parameters.single().type.canonicalName).isEqualTo("kotlin.jvm.functions.Function0")
+        assertThat(parameters.single().type.canonicalName)
+          .isEqualTo("kotlin.jvm.functions.Function0")
         assertThat(returnType).isEqualTo(Pair::class.java)
         assertThat(this).isAnnotatedWith(Provides::class)
         assertThat(this).isAnnotatedWith(IntoMap::class)
@@ -199,7 +231,8 @@ class ContributesRendererProcessorTest {
             """,
       componentInterfaceSource,
     ) {
-      assertThat(componentInterface.newComponent<RendererComponent>().renderers.keys).containsOnly(model)
+      assertThat(componentInterface.newComponent<RendererComponent>().renderers.keys)
+        .containsOnly(model)
     }
   }
 
@@ -317,7 +350,11 @@ class ContributesRendererProcessorTest {
     ) {
       val generatedComponent = testRenderer.rendererComponent
 
-      with(generatedComponent.declaredMethods.single { it.name == "provideSoftwareAmazonTestTestRenderer" }) {
+      with(
+        generatedComponent.declaredMethods.single {
+          it.name == "provideSoftwareAmazonTestTestRenderer"
+        }
+      ) {
         assertThat(parameters).isEmpty()
         assertThat(returnType).isEqualTo(testRenderer)
         assertThat(this).isAnnotatedWith(Provides::class)
@@ -326,7 +363,8 @@ class ContributesRendererProcessorTest {
 
       val bindingMethods =
         generatedComponent.declaredMethods.filter {
-          it.name.startsWith("provideSoftwareAmazonTestTestRendererPresenterModel") && !it.name.endsWith("Key")
+          it.name.startsWith("provideSoftwareAmazonTestTestRendererPresenterModel") &&
+            !it.name.endsWith("Key")
         }
       assertThat(bindingMethods.map { it.name })
         .containsExactlyInAnyOrder(
@@ -338,7 +376,8 @@ class ContributesRendererProcessorTest {
         )
 
       bindingMethods.forEach {
-        assertThat(it.parameters.single().type.canonicalName).isEqualTo("kotlin.jvm.functions.Function0")
+        assertThat(it.parameters.single().type.canonicalName)
+          .isEqualTo("kotlin.jvm.functions.Function0")
         assertThat(it.returnType).isEqualTo(Pair::class.java)
         assertThat(it).isAnnotatedWith(Provides::class)
         assertThat(it).isAnnotatedWith(IntoMap::class)
@@ -355,7 +394,8 @@ class ContributesRendererProcessorTest {
 
       val keyBindingMethods =
         generatedComponent.declaredMethods.filter {
-          it.name.startsWith("provideSoftwareAmazonTestTestRendererPresenterModel") && it.name.endsWith("Key")
+          it.name.startsWith("provideSoftwareAmazonTestTestRendererPresenterModel") &&
+            it.name.endsWith("Key")
         }
       assertThat(keyBindingMethods.map { it.name })
         .containsExactlyInAnyOrder(
@@ -383,7 +423,13 @@ class ContributesRendererProcessorTest {
           presenter.model.model2.kotlin,
         )
 
-      assertThat(componentInterface.newComponent<RendererComponent>().modelToRendererMapping.values.distinct())
+      assertThat(
+          componentInterface
+            .newComponent<RendererComponent>()
+            .modelToRendererMapping
+            .values
+            .distinct()
+        )
         .containsOnly(testRenderer.kotlin)
     }
   }
@@ -417,7 +463,8 @@ class ContributesRendererProcessorTest {
       assertThat(
           generatedComponent.declaredMethods
             .filter {
-              it.name.startsWith("provideSoftwareAmazonTestTestRendererPresenterModel") && !it.name.endsWith("Key")
+              it.name.startsWith("provideSoftwareAmazonTestTestRendererPresenterModel") &&
+                !it.name.endsWith("Key")
             }
             .map { it.name }
         )
@@ -468,9 +515,13 @@ class ContributesRendererProcessorTest {
       assertThat(generatedComponent.origin).isEqualTo(testRenderer)
 
       assertThat(generatedComponent.declaredMethods.map { it.name })
-        .containsOnly("provideSoftwareAmazonTestTestRendererModel", "provideSoftwareAmazonTestTestRendererModelKey")
+        .containsOnly(
+          "provideSoftwareAmazonTestTestRendererModel",
+          "provideSoftwareAmazonTestTestRendererModelKey",
+        )
 
-      assertThat(componentInterface.newComponent<RendererComponent>().renderers.keys).containsOnly(model)
+      assertThat(componentInterface.newComponent<RendererComponent>().renderers.keys)
+        .containsOnly(model)
     }
   }
 
@@ -631,11 +682,15 @@ class ContributesRendererProcessorTest {
       val defaultImpls = rendererComponent.defaultImpl
 
       val proxy =
-        Proxy.newProxyInstance(classLoader, arrayOf(rendererComponent, Function0::class.java)) { _, _, _ ->
+        Proxy.newProxyInstance(classLoader, arrayOf(rendererComponent, Function0::class.java)) {
+          _,
+          _,
+          _ ->
           throw NotImplementedError()
         }
 
-      val mapBindingMethod = defaultImpls.methods.single { it.name == "provideSoftwareAmazonTestTestRendererModel" }
+      val mapBindingMethod =
+        defaultImpls.methods.single { it.name == "provideSoftwareAmazonTestTestRendererModel" }
 
       return (mapBindingMethod.invoke(null, proxy, proxy) as Pair<*, *>).first as KClass<*>
     }

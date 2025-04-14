@@ -6,9 +6,9 @@ import software.amazon.app.platform.scope.parents
 @PublishedApi internal const val DI_COMPONENT_KEY: String = "diComponent"
 
 /**
- * Provides the DI component that has been added to this [Scope]. A common pattern is to use this function to look up
- * component interfaces in static contexts like test methods, static functions or where constructor injection cannot be
- * used, e.g.
+ * Provides the DI component that has been added to this [Scope]. A common pattern is to use this
+ * function to look up component interfaces in static contexts like test methods, static functions
+ * or where constructor injection cannot be used, e.g.
  *
  * ```
  * interface HudComponent {
@@ -35,7 +35,10 @@ public inline fun <reified T : Any> Scope.diComponent(): T {
     }
 
   val diComponents =
-    parents(includeSelf = true).map { it.getService<Any>(DI_COMPONENT_KEY) }.filterNotNull().map { it::class }
+    parents(includeSelf = true)
+      .map { it.getService<Any>(DI_COMPONENT_KEY) }
+      .filterNotNull()
+      .map { it::class }
 
   // The replace() will align inner class references across platforms. Native uses a '.',
   // whereas the JVM platform use '$'.
@@ -46,7 +49,10 @@ public inline fun <reified T : Any> Scope.diComponent(): T {
   )
 }
 
-/** Adds the given [component] to this builder. The instance can be later retrieved with [diComponent]. */
+/**
+ * Adds the given [component] to this builder. The instance can be later retrieved with
+ * [diComponent].
+ */
 public fun Scope.Builder.addDiComponent(component: Any) {
   addService(DI_COMPONENT_KEY, component)
 }

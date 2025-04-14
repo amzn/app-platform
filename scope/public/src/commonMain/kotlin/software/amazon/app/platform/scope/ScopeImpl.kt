@@ -60,7 +60,8 @@ internal class ScopeImpl(
 
     // Heads up that destroying the child will modify the `children` set. By using a
     // sequence and computing the next value lazily this operation safe.
-    generateSequence { children.firstOrNull { !it.isDestroying } }.forEach { childScope -> childScope.destroy() }
+    generateSequence { children.firstOrNull { !it.isDestroying } }
+      .forEach { childScope -> childScope.destroy() }
 
     // Cancel coroutines first to make the destruction of a scope more deterministic. A common
     // pattern is to use the CoroutineScope in onEnterScope() to launch several jobs. These
@@ -86,6 +87,7 @@ internal class ScopeImpl(
   }
 
   override fun toString(): String {
-    return "Scope(name='$name', isDestroyed=$isDestroyed, children=${children.size}, " + "parentScope=$parentScope)"
+    return "Scope(name='$name', isDestroyed=$isDestroyed, children=${children.size}, " +
+      "parentScope=$parentScope)"
   }
 }

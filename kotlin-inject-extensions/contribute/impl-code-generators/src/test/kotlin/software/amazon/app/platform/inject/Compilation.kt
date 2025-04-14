@@ -40,10 +40,14 @@ class Compilation internal constructor(val kotlinCompilation: KotlinCompilation)
 
     kotlinCompilation.configureKsp(useKsp2 = useKsp2) {
       symbolProcessorProviders +=
-        ServiceLoader.load(SymbolProcessorProvider::class.java, SymbolProcessorProvider::class.java.classLoader)
+        ServiceLoader.load(
+          SymbolProcessorProvider::class.java,
+          SymbolProcessorProvider::class.java.classLoader,
+        )
 
       processorOptions +=
-        "software.amazon.lastmile.kotlin.inject.anvil.processor." + "ContributesBindingProcessor" to "disabled"
+        "software.amazon.lastmile.kotlin.inject.anvil.processor." + "ContributesBindingProcessor" to
+          "disabled"
 
       // Run KSP embedded directly within this kotlinc invocation
       withCompilation = true
@@ -64,7 +68,9 @@ class Compilation internal constructor(val kotlinCompilation: KotlinCompilation)
             ?.replace('.', '/')
             ?.let { "$it/" } ?: ""
 
-        val name = "${kotlinCompilation.workingDir.absolutePath}/sources/src/main/java/" + "$packageDir/Source$index.kt"
+        val name =
+          "${kotlinCompilation.workingDir.absolutePath}/sources/src/main/java/" +
+            "$packageDir/Source$index.kt"
 
         Files.createDirectories(File(name).parentFile.toPath())
 
@@ -78,12 +84,14 @@ class Compilation internal constructor(val kotlinCompilation: KotlinCompilation)
   }
 
   private fun checkNotCompiled() {
-    check(!isCompiled) { "Already compiled! Create a new compilation if you want to compile again." }
+    check(!isCompiled) {
+      "Already compiled! Create a new compilation if you want to compile again."
+    }
   }
 
   /**
-   * Compiles the underlying [KotlinCompilation]. Note that if [configureAppPlatformProcessor] has not been called prior
-   * to this, it will be configured with default behavior.
+   * Compiles the underlying [KotlinCompilation]. Note that if [configureAppPlatformProcessor] has
+   * not been called prior to this, it will be configured with default behavior.
    */
   fun compile(
     @Language("kotlin") vararg sources: String,
@@ -118,7 +126,8 @@ class Compilation internal constructor(val kotlinCompilation: KotlinCompilation)
  * Helpful for testing code generators in unit tests end to end.
  *
  * This covers common cases, but is built upon reusable logic in [Compilation] and
- * [Compilation.configureAppPlatformProcessor]. Consider using those APIs if more advanced configuration is needed.
+ * [Compilation.configureAppPlatformProcessor]. Consider using those APIs if more advanced
+ * configuration is needed.
  */
 fun compile(
   @Language("kotlin") vararg sources: String,

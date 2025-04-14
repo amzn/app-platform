@@ -19,14 +19,16 @@ import software.amazon.lastmile.kotlin.inject.anvil.SingleIn
 /**
  * This class logs out the user after a certain delay.
  *
- * The important part of this class is that it implements [Scoped] and it's part of the [UserScope]. That means when the
- * user logs in, this class gets automatically instantiated and [onEnterScope] will be called. [onExitScope] will be
- * called on the `CoroutineScope` will be destroyed when the user logs out.
+ * The important part of this class is that it implements [Scoped] and it's part of the [UserScope].
+ * That means when the user logs in, this class gets automatically instantiated and [onEnterScope]
+ * will be called. [onExitScope] will be called on the `CoroutineScope` will be destroyed when the
+ * user logs out.
  */
 @Inject
 @SingleIn(UserScope::class)
 @ContributesBinding(UserScope::class)
-class SessionTimeout(private val userManager: UserManager, animationHelper: AnimationHelper) : Scoped {
+class SessionTimeout(private val userManager: UserManager, animationHelper: AnimationHelper) :
+  Scoped {
 
   private val _sessionTimeout = MutableStateFlow(initialTimeout)
 
@@ -41,7 +43,8 @@ class SessionTimeout(private val userManager: UserManager, animationHelper: Anim
     }
 
   override fun onEnterScope(scope: Scope) {
-    // This job will be automatically canceled when the user logs out and the user scope is destroyed.
+    // This job will be automatically canceled when the user logs out and the user scope is
+    // destroyed.
     scope.launch {
       while (userManager.user.value != null) {
         delay(updateDelay)

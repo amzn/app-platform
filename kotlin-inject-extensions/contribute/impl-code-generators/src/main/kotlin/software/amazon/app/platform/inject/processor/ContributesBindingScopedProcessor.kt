@@ -29,9 +29,9 @@ import software.amazon.lastmile.kotlin.inject.anvil.ForScope
 /**
  * Generates the code for [ContributesBinding] and the `Scoped` type.
  *
- * In the lookup package [OPEN_SOURCE_LOOKUP_PACKAGE] a new interface is generated with a provider method for the
- * annotated type. To avoid name clashes the package name of the original interface is encoded in the interface name.
- * E.g.
+ * In the lookup package [OPEN_SOURCE_LOOKUP_PACKAGE] a new interface is generated with a provider
+ * method for the annotated type. To avoid name clashes the package name of the original interface
+ * is encoded in the interface name. E.g.
  *
  * ```
  * package software.amazon.test
@@ -85,7 +85,8 @@ internal class ContributesBindingScopedProcessor(
   @Suppress("LongMethod")
   private fun generateComponentInterface(clazz: KSClassDeclaration) {
     val componentPackage = "${APP_PLATFORM_LOOKUP_PACKAGE}.${clazz.packageName.asString()}"
-    val componentClassName = ClassName(componentPackage, "${clazz.innerClassNames()}ScopedComponent")
+    val componentClassName =
+      ClassName(componentPackage, "${clazz.innerClassNames()}ScopedComponent")
 
     val scope = clazz.scope()
 
@@ -111,7 +112,9 @@ internal class ContributesBindingScopedProcessor(
                 )
                 .apply {
                   val parameterName = clazz.innerClassNames().decapitalize()
-                  addParameter(ParameterSpec.builder(name = parameterName, type = clazz.toClassName()).build())
+                  addParameter(
+                    ParameterSpec.builder(name = parameterName, type = clazz.toClassName()).build()
+                  )
 
                   addStatement("return $parameterName")
                 }

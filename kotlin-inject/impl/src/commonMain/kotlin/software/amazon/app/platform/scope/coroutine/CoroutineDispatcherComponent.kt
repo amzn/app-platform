@@ -11,7 +11,9 @@ import software.amazon.lastmile.kotlin.inject.anvil.ContributesTo
 @ContributesTo(AppScope::class)
 public interface CoroutineDispatcherComponent {
   /** Provides the IO dispatcher in the dependency graph. */
-  @Provides @IoCoroutineDispatcher public fun provideIoCoroutineDispatcher(): CoroutineDispatcher = Dispatchers.IO
+  @Provides
+  @IoCoroutineDispatcher
+  public fun provideIoCoroutineDispatcher(): CoroutineDispatcher = Dispatchers.IO
 
   /** Provides the default dispatcher in the dependency graph. */
   @Provides

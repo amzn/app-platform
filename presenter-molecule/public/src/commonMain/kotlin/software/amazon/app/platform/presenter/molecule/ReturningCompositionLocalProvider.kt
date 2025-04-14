@@ -7,8 +7,8 @@ import androidx.compose.runtime.currentComposer
 import software.amazon.app.platform.presenter.BaseModel
 
 /**
- * Similar to `CompositionLocalProvider` offered by the Compose runtime itself, but allows us to return a result rather
- * than returning `Unit`.
+ * Similar to `CompositionLocalProvider` offered by the Compose runtime itself, but allows us to
+ * return a result rather than returning `Unit`.
  */
 @Composable
 @OptIn(InternalComposeApi::class)

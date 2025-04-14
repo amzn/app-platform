@@ -11,8 +11,8 @@ import java.util.Locale
 import software.amazon.lastmile.kotlin.inject.anvil.internal.Origin
 
 /**
- * The package in which code is generated that should be picked up during the merging phase. This package is used by the
- * open source project.
+ * The package in which code is generated that should be picked up during the merging phase. This
+ * package is used by the open source project.
  */
 internal const val OPEN_SOURCE_LOOKUP_PACKAGE = "amazon.lastmile.inject"
 
@@ -25,10 +25,19 @@ internal fun String.capitalize(): String = replaceFirstChar {
   if (it.isLowerCase()) it.titlecase(Locale.US) else it.toString()
 }
 
-internal fun <T : Annotatable.Builder<T>> Annotatable.Builder<T>.addOriginAnnotation(clazz: KSClassDeclaration): T =
-  addAnnotation(AnnotationSpec.builder(Origin::class).addMember("value = %T::class", clazz.toClassName()).build())
+internal fun <T : Annotatable.Builder<T>> Annotatable.Builder<T>.addOriginAnnotation(
+  clazz: KSClassDeclaration
+): T =
+  addAnnotation(
+    AnnotationSpec.builder(Origin::class)
+      .addMember("value = %T::class", clazz.toClassName())
+      .build()
+  )
 
-internal inline fun <reified T> KSAnnotation.argumentOfTypeAt(context: ContextAware, name: String): T? {
+internal inline fun <reified T> KSAnnotation.argumentOfTypeAt(
+  context: ContextAware,
+  name: String,
+): T? {
   return argumentOfTypeWithMapperAt<T, T>(context, name) { _, value -> value }
 }
 

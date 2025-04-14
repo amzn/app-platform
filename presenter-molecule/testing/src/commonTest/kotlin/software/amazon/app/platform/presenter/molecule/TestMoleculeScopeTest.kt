@@ -50,7 +50,11 @@ class TestMoleculeScopeTest {
 
   @Test
   fun `the coroutine context can be changed`() = runTest {
-    val name = moleculeScope(CoroutineName("Test-abc")).coroutineScope.coroutineContext[CoroutineName.Key]?.name
+    val name =
+      moleculeScope(CoroutineName("Test-abc"))
+        .coroutineScope
+        .coroutineContext[CoroutineName.Key]
+        ?.name
     assertThat(name).isEqualTo("Test-abc")
   }
 

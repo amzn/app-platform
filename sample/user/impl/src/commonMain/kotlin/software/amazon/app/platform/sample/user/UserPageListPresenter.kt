@@ -14,7 +14,8 @@ import software.amazon.app.platform.sample.user.UserPageListPresenter.Model
 
 /** Presenter to manage the list content of the list-detail layout. */
 @Inject
-class UserPageListPresenter(private val sessionTimeout: SessionTimeout) : MoleculePresenter<Input, Model> {
+class UserPageListPresenter(private val sessionTimeout: SessionTimeout) :
+  MoleculePresenter<Input, Model> {
 
   @Composable
   override fun present(input: Input): Model {
@@ -56,8 +57,8 @@ class UserPageListPresenter(private val sessionTimeout: SessionTimeout) : Molecu
   }
 
   /**
-   * The input type of the presenter. [user] is the currently logged in user. More parameters can be added to this class
-   * when needed.
+   * The input type of the presenter. [user] is the currently logged in user. More parameters can be
+   * added to this class when needed.
    */
   data class Input(val user: User)
 }

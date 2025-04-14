@@ -40,7 +40,11 @@ class AndroidRendererFactoryTest {
   fun android_renderer_factory_uses_the_default_parent_view() {
     activityRule.scenario.onActivity { activity ->
       val factory =
-        AndroidRendererFactory(rootScopeProvider = testApplication, activity = activity, parent = activity.contentView)
+        AndroidRendererFactory(
+          rootScopeProvider = testApplication,
+          activity = activity,
+          parent = activity.contentView,
+        )
 
       val model = TestModel(1)
       factory.getRenderer(model).render(model)
@@ -53,7 +57,11 @@ class AndroidRendererFactoryTest {
   fun android_renderer_factory_can_override_the_parent_view() {
     activityRule.scenario.onActivity { activity ->
       val factory: RendererFactory =
-        AndroidRendererFactory(rootScopeProvider = testApplication, activity = activity, parent = activity.contentView)
+        AndroidRendererFactory(
+          rootScopeProvider = testApplication,
+          activity = activity,
+          parent = activity.contentView,
+        )
 
       val container = FrameLayout(activity)
       activity.contentView.addView(container)
@@ -69,7 +77,11 @@ class AndroidRendererFactoryTest {
   fun android_renderer_factory_caches_renderers() {
     activityRule.scenario.onActivity { activity ->
       val factory =
-        AndroidRendererFactory(rootScopeProvider = testApplication, activity = activity, parent = activity.contentView)
+        AndroidRendererFactory(
+          rootScopeProvider = testApplication,
+          activity = activity,
+          parent = activity.contentView,
+        )
 
       val actualRenderer = factory.getRenderer(TestModel(1))
       val expectedRenderer = factory.getRenderer(TestModel(2))
@@ -93,7 +105,11 @@ class AndroidRendererFactoryTest {
       activity.contentView.addView(linearLayout)
 
       val factory: BaseRendererFactory =
-        AndroidRendererFactory(rootScopeProvider = testApplication, activity = activity, parent = activity.contentView)
+        AndroidRendererFactory(
+          rootScopeProvider = testApplication,
+          activity = activity,
+          parent = activity.contentView,
+        )
 
       val renderer1 = factory.getRenderer(TestModel::class, frameLayout1)
       renderer1.render(TestModel(1))
@@ -121,7 +137,11 @@ class AndroidRendererFactoryTest {
       activity.contentView.addView(frameLayout)
 
       val factory: BaseRendererFactory =
-        AndroidRendererFactory(rootScopeProvider = testApplication, activity = activity, parent = activity.contentView)
+        AndroidRendererFactory(
+          rootScopeProvider = testApplication,
+          activity = activity,
+          parent = activity.contentView,
+        )
 
       val renderer = factory.getRenderer(TestModel::class, frameLayout)
       renderer.render(TestModel(2))
@@ -138,12 +158,17 @@ class AndroidRendererFactoryTest {
     testApplication.rendererComponent =
       object : RendererComponent {
         override val renderers: Map<KClass<out BaseModel>, () -> Renderer<*>> = emptyMap()
-        override val modelToRendererMapping: Map<KClass<out BaseModel>, KClass<out Renderer<*>>> = emptyMap()
+        override val modelToRendererMapping: Map<KClass<out BaseModel>, KClass<out Renderer<*>>> =
+          emptyMap()
       }
 
     activityRule.scenario.onActivity { activity ->
       val factory =
-        AndroidRendererFactory(rootScopeProvider = testApplication, activity = activity, parent = activity.contentView)
+        AndroidRendererFactory(
+          rootScopeProvider = testApplication,
+          activity = activity,
+          parent = activity.contentView,
+        )
 
       val exception = assertFailsWith<IllegalStateException> { factory.getRenderer(TestModel(1)) }
 

@@ -26,7 +26,9 @@ class AndroidLoginUiTest : ComposeInteractionsProvider {
 
   @get:Rule val activityRule = ActivityScenarioRule(MainActivity::class.java)
 
-  @get:Rule val composeTestRule: ComposeTestRule = AndroidComposeTestRule(activityRule, ::getActivityFromTestRule)
+  @get:Rule
+  val composeTestRule: ComposeTestRule =
+    AndroidComposeTestRule(activityRule, ::getActivityFromTestRule)
 
   override val semanticsNodeInteractionsProvider: SemanticsNodeInteractionsProvider
     get() = composeTestRule
@@ -39,7 +41,8 @@ class AndroidLoginUiTest : ComposeInteractionsProvider {
   @After
   fun after() {
     val rootScopeProvider =
-      InstrumentationRegistry.getInstrumentation().targetContext.applicationContext as RootScopeProvider
+      InstrumentationRegistry.getInstrumentation().targetContext.applicationContext
+        as RootScopeProvider
 
     // Good hygiene to clean everything up.
     rootScopeProvider.rootScope.destroy()
@@ -53,7 +56,9 @@ class AndroidLoginUiTest : ComposeInteractionsProvider {
       clickLoginButton()
     }
 
-    waitUntilCatching("login finished", timeout = 4.seconds) { composeRobot<UserPageRobot> { seeUserId() } }
+    waitUntilCatching("login finished", timeout = 4.seconds) {
+      composeRobot<UserPageRobot> { seeUserId() }
+    }
   }
 
   // Borrowed from AndroidComposeTestRule.
@@ -61,7 +66,9 @@ class AndroidLoginUiTest : ComposeInteractionsProvider {
     var activity: A? = null
     rule.scenario.onActivity { activity = it }
 
-    return with(activity) { checkNotNull(this) { "Activity was not set in the ActivityScenarioRule!" } }
+    return with(activity) {
+      checkNotNull(this) { "Activity was not set in the ActivityScenarioRule!" }
+    }
   }
 
   private fun setAnimations(enabled: Boolean) {

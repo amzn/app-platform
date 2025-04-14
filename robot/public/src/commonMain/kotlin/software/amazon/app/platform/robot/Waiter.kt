@@ -10,14 +10,14 @@ private val defaultTimeout = 10.seconds
 private val defaultDelay = 15.milliseconds
 
 /**
- * Blocks the current thread until the given [block] returns true or the [timeout] occurs. [block] is invoked multiple
- * times with the given [delay] to check the condition. In case of a timeout an [IllegalStateException] is thrown,
- * because the app never transitioned into the expected state. For better error messages [condition] describes what
- * [block] is checking and waiting for.
+ * Blocks the current thread until the given [block] returns true or the [timeout] occurs. [block]
+ * is invoked multiple times with the given [delay] to check the condition. In case of a timeout an
+ * [IllegalStateException] is thrown, because the app never transitioned into the expected state.
+ * For better error messages [condition] describes what [block] is checking and waiting for.
  *
- * Note that this function should not be called from the main thread. The most common use case is calling it from the
- * instrumentation test thread that is used by default in the test function. The thread this function is invoked in gets
- * blocked and not suspended like a coroutine.
+ * Note that this function should not be called from the main thread. The most common use case is
+ * calling it from the instrumentation test thread that is used by default in the test function. The
+ * thread this function is invoked in gets blocked and not suspended like a coroutine.
  */
 public fun waitUntil(
   condition: String,
@@ -41,8 +41,8 @@ public fun waitUntil(
 }
 
 /**
- * Similar to [waitUntil], but allows [block] to throw any error when the condition isn't met. This is helpful for
- * example to wait for a UI element, e.g.
+ * Similar to [waitUntil], but allows [block] to throw any error when the condition isn't met. This
+ * is helpful for example to wait for a UI element, e.g.
  *
  * ```
  * waitUntilCatching("text is visible") {
@@ -79,8 +79,8 @@ public fun waitUntilCatching(
 }
 
 /**
- * Similar to [waitUntil], but allows [block] to throw any error when the condition isn't met. This is helpful for
- * example to wait for a UI element, e.g.
+ * Similar to [waitUntil], but allows [block] to throw any error when the condition isn't met. This
+ * is helpful for example to wait for a UI element, e.g.
  *
  * ```
  * waitUntilCatching("text is visible") {
@@ -104,7 +104,10 @@ public fun <T : Any> waitFor(
     }
   } catch (t: Throwable) {
     if (result == null) {
-      throw IllegalStateException("Waiting for '$condition' never succeeded and the value is null.", t)
+      throw IllegalStateException(
+        "Waiting for '$condition' never succeeded and the value is null.",
+        t,
+      )
     } else {
       throw t
     }

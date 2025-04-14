@@ -7,8 +7,8 @@ import androidx.compose.ui.test.runComposeUiTest
 import kotlin.test.Test
 
 /**
- * Executes the [LoginRenderer] in unit tests for iOS and Desktop. Note that this test cannot run on Android, because
- * there the test would need to run on an emulator.
+ * Executes the [LoginRenderer] in unit tests for iOS and Desktop. Note that this test cannot run on
+ * Android, because there the test would need to run on an emulator.
  *
  * This test highlights that `ComposeRenderers` are testable in isolation.
  */

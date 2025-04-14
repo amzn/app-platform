@@ -42,7 +42,8 @@ class ViewBindingRendererTest {
 
   private data class TestModel(val value: Int) : BaseModel
 
-  private class TestViewBindingRenderer : ViewBindingRenderer<TestModel, ViewbindingLayoutBinding>() {
+  private class TestViewBindingRenderer :
+    ViewBindingRenderer<TestModel, ViewbindingLayoutBinding>() {
 
     var inflateCalled = 0
       private set

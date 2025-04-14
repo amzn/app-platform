@@ -20,13 +20,15 @@ import software.amazon.lastmile.kotlin.inject.anvil.ContributesTo
 /**
  * Production implementation of [NavigationPresenter].
  *
- * [loginPresenter] is injected lazily to delay initialization until it's actually needed. See [MoleculePresenter] for
- * more details.
+ * [loginPresenter] is injected lazily to delay initialization until it's actually needed. See
+ * [MoleculePresenter] for more details.
  */
 @Inject
 @ContributesBinding(AppScope::class)
-class NavigationPresenterImpl(private val userManager: UserManager, private val loginPresenter: () -> LoginPresenter) :
-  NavigationPresenter {
+class NavigationPresenterImpl(
+  private val userManager: UserManager,
+  private val loginPresenter: () -> LoginPresenter,
+) : NavigationPresenter {
 
   @Composable
   override fun present(input: Unit): BaseModel {
@@ -37,7 +39,8 @@ class NavigationPresenterImpl(private val userManager: UserManager, private val 
       return presenter.present(Unit)
     }
 
-    // A user is logged in. Use the user component to get an instance of UserPagePresenter, which is only
+    // A user is logged in. Use the user component to get an instance of UserPagePresenter, which is
+    // only
     // part of the user scope.
     val userPresenter = remember(scope) { scope.diComponent<UserComponent>().userPresenter }
     return userPresenter.present(Unit)
@@ -50,8 +53,8 @@ class NavigationPresenterImpl(private val userManager: UserManager, private val 
   }
 
   /**
-   * This component interface gives us access to objects from the user scope. We cannot inject `UserPresenter` in the
-   * constructor, because it's part of the user scope.
+   * This component interface gives us access to objects from the user scope. We cannot inject
+   * `UserPresenter` in the constructor, because it's part of the user scope.
    */
   @ContributesTo(UserScope::class)
   interface UserComponent {

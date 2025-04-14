@@ -55,7 +55,9 @@ internal interface ContextAware {
   }
 
   fun checkIsPublic(clazz: KSClassDeclaration) {
-    check(clazz.getVisibility() == Visibility.PUBLIC, clazz) { "Contributed component interfaces must be public." }
+    check(clazz.getVisibility() == Visibility.PUBLIC, clazz) {
+      "Contributed component interfaces must be public."
+    }
   }
 
   fun checkHasScope(clazz: KSClassDeclaration) {
@@ -84,7 +86,9 @@ internal interface ContextAware {
   }
 
   private fun KSType.isKotlinInjectScopeAnnotation(): Boolean {
-    return declaration.annotations.any { it.annotationType.resolve().declaration.requireQualifiedName() == scopeFqName }
+    return declaration.annotations.any {
+      it.annotationType.resolve().declaration.requireQualifiedName() == scopeFqName
+    }
   }
 
   private fun KSAnnotation.hasScopeParameter(): Boolean {
@@ -102,7 +106,8 @@ internal interface ContextAware {
   ): MergeScope {
     val explicitScopes = annotations.map { annotation -> annotation.scopeParameter() }
 
-    explicitScopes.scan(explicitScopes.first().declaration.requireQualifiedName()) { previous, next ->
+    explicitScopes.scan(explicitScopes.first().declaration.requireQualifiedName()) { previous, next
+      ->
       check(previous == next.declaration.requireQualifiedName(), clazz) {
         "All scopes on annotations must be the same."
       }
@@ -128,7 +133,11 @@ internal interface ContextAware {
     return annotations
       .filter { it.isAnnotation(fqName) }
       .toList()
-      .also { check(it.isNotEmpty(), this) { "Couldn't find the @${annotation.simpleName} annotation for $this." } }
+      .also {
+        check(it.isNotEmpty(), this) {
+          "Couldn't find the @${annotation.simpleName} annotation for $this."
+        }
+      }
   }
 
   fun KSAnnotation.isAnnotation(fqName: String): Boolean {
@@ -141,7 +150,8 @@ internal interface ContextAware {
   fun KSDeclaration.requireQualifiedName(): String =
     requireNotNull(qualifiedName?.asString(), this) { "Qualified name was null for $this" }
 
-  fun KClass<*>.requireQualifiedName(): String = requireNotNull(qualifiedName) { "Qualified name was null for $this" }
+  fun KClass<*>.requireQualifiedName(): String =
+    requireNotNull(qualifiedName) { "Qualified name was null for $this" }
 
   fun Resolver.getSymbolsWithAnnotation(annotation: KClass<*>): Sequence<KSAnnotated> =
     getSymbolsWithAnnotation(annotation.requireQualifiedName())
@@ -153,7 +163,8 @@ internal interface ContextAware {
 
   fun KSType.isScoped(): Boolean {
     return declaration.requireQualifiedName() == scopedFqName ||
-      (declaration as? KSTypeAlias)?.type?.resolve()?.declaration?.requireQualifiedName() == scopedFqName
+      (declaration as? KSTypeAlias)?.type?.resolve()?.declaration?.requireQualifiedName() ==
+        scopedFqName
   }
 
   @Suppress("ReturnCount")
@@ -164,12 +175,16 @@ internal interface ContextAware {
 
     // The bound type is not defined in the annotation, let's inspect the super types.
     val superTypes =
-      clazz.superTypes.map { it.resolve() }.filter { it.declaration.requireQualifiedName() != anyFqName }.toList()
+      clazz.superTypes
+        .map { it.resolve() }
+        .filter { it.declaration.requireQualifiedName() != anyFqName }
+        .toList()
 
     when (superTypes.size) {
       0 -> {
         val message =
-          "The bound type could not be determined for " + "${clazz.simpleName.asString()}. There are no super types."
+          "The bound type could not be determined for " +
+            "${clazz.simpleName.asString()}. There are no super types."
         logger.error(message, clazz)
         throw IllegalArgumentException(message)
       }
@@ -218,9 +233,13 @@ internal interface ContextAware {
       }
   }
 
-  fun KSClassDeclaration.findAnnotationsAtLeastOne(annotation: KClass<out Annotation>): List<KSAnnotation> {
+  fun KSClassDeclaration.findAnnotationsAtLeastOne(
+    annotation: KClass<out Annotation>
+  ): List<KSAnnotation> {
     return findAnnotations(annotation).also {
-      check(it.isNotEmpty(), this) { "Couldn't find the @${annotation.simpleName} annotation for $this." }
+      check(it.isNotEmpty(), this) {
+        "Couldn't find the @${annotation.simpleName} annotation for $this."
+      }
     }
   }
 

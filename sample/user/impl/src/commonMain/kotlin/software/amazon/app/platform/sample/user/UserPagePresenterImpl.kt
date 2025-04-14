@@ -9,11 +9,11 @@ import software.amazon.lastmile.kotlin.inject.anvil.ContributesBinding
 /**
  * Production implementation of [UserPagePresenter].
  *
- * This class injects two child presenters to compute models. The child presenters have inputs for bi-directional
- * communication between presenters.
+ * This class injects two child presenters to compute models. The child presenters have inputs for
+ * bi-directional communication between presenters.
  *
- * Note that this class itself doesn't have a [Renderer], because it only combines models from child presenters, which
- * come with a [Renderer].
+ * Note that this class itself doesn't have a [Renderer], because it only combines models from child
+ * presenters, which come with a [Renderer].
  */
 @Inject
 @ContributesBinding(UserScope::class)

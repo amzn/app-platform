@@ -31,7 +31,8 @@ class InjectionTest {
 
     val moleculeScope = component.moleculeScopeFactory.createMoleculeScope()
 
-    assertThat(moleculeScope.coroutineScope.coroutineContext[CoroutineName.Key]?.name).isEqualTo("TestName")
+    assertThat(moleculeScope.coroutineScope.coroutineContext[CoroutineName.Key]?.name)
+      .isEqualTo("TestName")
 
     moleculeScope.cancel()
   }
@@ -45,16 +46,23 @@ abstract class TestComponent(
 ) : PresenterCoroutineScopeComponent {
   abstract val moleculeScopeFactory: MoleculeScopeFactory
 
-  @Provides @ForScope(AppScope::class) fun provideAppScopeCoroutineScope(): CoroutineScope = coroutineScope
+  @Provides
+  @ForScope(AppScope::class)
+  fun provideAppScopeCoroutineScope(): CoroutineScope = coroutineScope
 
-  @Provides @MainCoroutineDispatcher fun provideMainCoroutineDispatcher(): CoroutineDispatcher = coroutineDispatcher
+  @Provides
+  @MainCoroutineDispatcher
+  fun provideMainCoroutineDispatcher(): CoroutineDispatcher = coroutineDispatcher
 
-  @Provides fun provideMoleculeScopeFactory(factory: TestMoleculeScopeFactory): MoleculeScopeFactory = factory
+  @Provides
+  fun provideMoleculeScopeFactory(factory: TestMoleculeScopeFactory): MoleculeScopeFactory = factory
 }
 
 @Inject
 @SingleIn(AppScope::class)
-class TestMoleculeScopeFactory(@PresenterCoroutineScope coroutineScopeFactory: () -> CoroutineScope) :
+class TestMoleculeScopeFactory(
+  @PresenterCoroutineScope coroutineScopeFactory: () -> CoroutineScope
+) :
   MoleculeScopeFactory by DefaultMoleculeScopeFactory(
     coroutineScopeFactory = coroutineScopeFactory,
     coroutineContext = EmptyCoroutineContext,
@@ -62,4 +70,7 @@ class TestMoleculeScopeFactory(@PresenterCoroutineScope coroutineScopeFactory: (
   )
 
 @KmpComponentCreate
-expect fun createTestComponent(coroutineScope: CoroutineScope, coroutineDispatcher: CoroutineDispatcher): TestComponent
+expect fun createTestComponent(
+  coroutineScope: CoroutineScope,
+  coroutineDispatcher: CoroutineDispatcher,
+): TestComponent

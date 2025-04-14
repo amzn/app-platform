@@ -13,7 +13,10 @@ import software.amazon.lastmile.kotlin.inject.anvil.SingleIn
 /** Component providing coroutine scopes in the App scope. */
 @ContributesTo(AppScope::class)
 public interface AppScopeCoroutineScopeComponent {
-  /** Provides the [CoroutineScopeScoped] for the app scope. This is a single instance for the app scope. */
+  /**
+   * Provides the [CoroutineScopeScoped] for the app scope. This is a single instance for the app
+   * scope.
+   */
   @Provides
   @SingleIn(AppScope::class)
   @ForScope(AppScope::class)
@@ -24,8 +27,8 @@ public interface AppScopeCoroutineScopeComponent {
   }
 
   /**
-   * Provides the [CoroutineScope] for the app scope. A new child scope is created every time an instance is injected so
-   * that the parent cannot be canceled accidentally.
+   * Provides the [CoroutineScope] for the app scope. A new child scope is created every time an
+   * instance is injected so that the parent cannot be canceled accidentally.
    */
   @Provides
   @ForScope(AppScope::class)

@@ -4,11 +4,12 @@ import androidx.compose.runtime.Composable
 import software.amazon.app.platform.presenter.BaseModel
 
 /**
- * The base interface for Compose UI enabled renderers. This interface is similar to [Renderer], but does not extend the
- * [Renderer] interface itself. It has its own [renderCompose] function in order to preserve the Compose UI context.
+ * The base interface for Compose UI enabled renderers. This interface is similar to [Renderer], but
+ * does not extend the [Renderer] interface itself. It has its own [renderCompose] function in order
+ * to preserve the Compose UI context.
  *
- * This interface will rarely be used directly and a more specific renderer implementation for a concrete platform such
- * as [ComposeRenderer] should be favored unless there is a specific need.
+ * This interface will rarely be used directly and a more specific renderer implementation for a
+ * concrete platform such as [ComposeRenderer] should be favored unless there is a specific need.
  *
  * For more information see [Renderer].
  */

@@ -46,7 +46,9 @@ class LoginUiTest {
       clickLoginButton()
     }
 
-    waitUntilCatching("login finished", timeout = 2.seconds) { composeRobot<UserPageRobot> { seeUserId() } }
+    waitUntilCatching("login finished", timeout = 2.seconds) {
+      composeRobot<UserPageRobot> { seeUserId() }
+    }
   }
 
   /** Convenience function to start rendering templates. */

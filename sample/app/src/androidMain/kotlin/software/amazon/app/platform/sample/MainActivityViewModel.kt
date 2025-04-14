@@ -10,8 +10,8 @@ import software.amazon.lastmile.kotlin.inject.anvil.AppScope
 import software.amazon.lastmile.kotlin.inject.anvil.ContributesTo
 
 /**
- * `ViewModel` that hosts the stream of templates and survives configuration changes. Note that we use [application] to
- * get access to the root scope.
+ * `ViewModel` that hosts the stream of templates and survives configuration changes. Note that we
+ * use [application] to get access to the root scope.
  */
 class MainActivityViewModel(application: Application) : AndroidViewModel(application) {
 

@@ -19,7 +19,8 @@ internal val Class<*>.origin: Class<*>
 internal val Class<*>.generatedComponent: Class<*>
   get() =
     classLoader.loadClass(
-      "$OPEN_SOURCE_LOOKUP_PACKAGE." + canonicalName.split(".").joinToString(separator = "") { it.capitalize() }
+      "$OPEN_SOURCE_LOOKUP_PACKAGE." +
+        canonicalName.split(".").joinToString(separator = "") { it.capitalize() }
     )
 
 internal fun <T : Any> Class<*>.newComponent(vararg arguments: Any): T {

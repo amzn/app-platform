@@ -78,7 +78,10 @@ class ViewRendererTest {
   @Test
   fun inflate_is_not_invoked_after_detach_when_not_released() {
     activityRule.scenario.onActivity { activity ->
-      val renderer = TestViewRenderer(releaseViewOnDetach = false).also { it.init(activity, activity.contentView) }
+      val renderer =
+        TestViewRenderer(releaseViewOnDetach = false).also {
+          it.init(activity, activity.contentView)
+        }
 
       renderer.render(TestModel(1))
       assertThat(renderer.inflateCalled).isEqualTo(1)
@@ -174,7 +177,8 @@ class ViewRendererTest {
 
   private data class TestModel(val value: Int) : BaseModel
 
-  private class TestViewRenderer(private val releaseViewOnDetach: Boolean = true) : ViewRenderer<TestModel>() {
+  private class TestViewRenderer(private val releaseViewOnDetach: Boolean = true) :
+    ViewRenderer<TestModel>() {
 
     private lateinit var textView: TextView
 

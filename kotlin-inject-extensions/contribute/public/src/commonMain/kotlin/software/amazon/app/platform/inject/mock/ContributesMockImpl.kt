@@ -5,7 +5,8 @@ import software.amazon.app.platform.scope.Scoped
 import software.amazon.lastmile.kotlin.inject.anvil.extend.ContributingAnnotation
 
 /**
- * Used to contribute a mocked implementation to a given interface that has a real implementation as well.
+ * Used to contribute a mocked implementation to a given interface that has a real implementation as
+ * well.
  *
  * ```
  * @ContributesMockImpl(AppScope::class)
@@ -34,8 +35,8 @@ import software.amazon.lastmile.kotlin.inject.anvil.extend.ContributingAnnotatio
  * class MockVts : Vts, Vts2
  * ```
  *
- * It is safe to implement the [Scoped] interface. [Scoped.onEnterScope] and [Scoped.onExitScope] will only be called if
- * the mock implementation is used at runtime:
+ * It is safe to implement the [Scoped] interface. [Scoped.onEnterScope] and [Scoped.onExitScope]
+ * will only be called if the mock implementation is used at runtime:
  * ```
  * @ContributesMockImpl(AppScope::class)
  * @Inject
@@ -50,8 +51,8 @@ public annotation class ContributesMockImpl(
   val scope: KClass<*>,
 
   /**
-   * The type that this class is bound to, this is required when there is more than a single superType or the superType
-   * is not an interface.
+   * The type that this class is bound to, this is required when there is more than a single
+   * superType or the superType is not an interface.
    */
   val boundType: KClass<*> = Unit::class,
 )

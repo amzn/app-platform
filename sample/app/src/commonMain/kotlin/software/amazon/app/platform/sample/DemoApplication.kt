@@ -7,7 +7,8 @@ import software.amazon.app.platform.scope.di.addDiComponent
 import software.amazon.app.platform.scope.register
 
 /**
- * Shared class between the platform to manage the root scope. It itself implements the [RootScopeProvider] interface.
+ * Shared class between the platform to manage the root scope. It itself implements the
+ * [RootScopeProvider] interface.
  */
 class DemoApplication : RootScopeProvider {
 

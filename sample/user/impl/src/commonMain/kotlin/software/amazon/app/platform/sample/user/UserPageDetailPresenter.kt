@@ -11,7 +11,8 @@ import software.amazon.app.platform.sample.user.UserPageDetailPresenter.Model
 
 /** Presenter to manage the detail content of the list-detail layout. */
 @Inject
-class UserPageDetailPresenter(private val sessionTimeout: SessionTimeout) : MoleculePresenter<Input, Model> {
+class UserPageDetailPresenter(private val sessionTimeout: SessionTimeout) :
+  MoleculePresenter<Input, Model> {
 
   @Composable
   override fun present(input: Input): Model {
@@ -32,8 +33,8 @@ class UserPageDetailPresenter(private val sessionTimeout: SessionTimeout) : Mole
   ) : BaseModel
 
   /**
-   * The input type of the presenter. [user] is the currently logged in user. [selectedAttribute] is the index of the
-   * selected attribute in the UI.
+   * The input type of the presenter. [user] is the currently logged in user. [selectedAttribute] is
+   * the index of the selected attribute in the UI.
    */
   data class Input(val user: User, val selectedAttribute: Int)
 }

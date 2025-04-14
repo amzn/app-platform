@@ -11,8 +11,9 @@ import software.amazon.app.platform.presenter.BaseModel
 import software.amazon.app.platform.presenter.Presenter
 
 /**
- * Launch a coroutine into this [CoroutineScope] which will continually recompose [MoleculePresenter.present] to produce
- * a [StateFlow]. The [StateFlow] will be provided by the returned [Presenter].
+ * Launch a coroutine into this [CoroutineScope] which will continually recompose
+ * [MoleculePresenter.present] to produce a [StateFlow]. The [StateFlow] will be provided by the
+ * returned [Presenter].
  */
 public fun <InputT : Any, ModelT : BaseModel> CoroutineScope.launchMoleculePresenter(
   presenter: MoleculePresenter<InputT, ModelT>,
@@ -29,20 +30,27 @@ public fun <InputT : Any, ModelT : BaseModel> CoroutineScope.launchMoleculePrese
 }
 
 /**
- * Launch a coroutine into this [MoleculeScope] which will continually recompose [MoleculePresenter.present] to produce
- * a [StateFlow]. The [StateFlow] will be provided by the returned [Presenter].
+ * Launch a coroutine into this [MoleculeScope] which will continually recompose
+ * [MoleculePresenter.present] to produce a [StateFlow]. The [StateFlow] will be provided by the
+ * returned [Presenter].
  */
 public fun <InputT : Any, ModelT : BaseModel> MoleculeScope.launchMoleculePresenter(
   presenter: MoleculePresenter<InputT, ModelT>,
   input: StateFlow<InputT>,
 ): Presenter<ModelT> =
-  coroutineScope.launchMoleculePresenter(presenter = presenter, input = input, recompositionMode = recompositionMode)
+  coroutineScope.launchMoleculePresenter(
+    presenter = presenter,
+    input = input,
+    recompositionMode = recompositionMode,
+  )
 
 /**
- * Launch a coroutine into this [MoleculeScope] which will continually recompose [MoleculePresenter.present] to produce
- * a [StateFlow]. The [StateFlow] will be provided by the returned [Presenter].
+ * Launch a coroutine into this [MoleculeScope] which will continually recompose
+ * [MoleculePresenter.present] to produce a [StateFlow]. The [StateFlow] will be provided by the
+ * returned [Presenter].
  */
 public fun <InputT : Any, ModelT : BaseModel> MoleculeScope.launchMoleculePresenter(
   presenter: MoleculePresenter<InputT, ModelT>,
   input: InputT,
-): Presenter<ModelT> = launchMoleculePresenter(presenter = presenter, input = MutableStateFlow(input))
+): Presenter<ModelT> =
+  launchMoleculePresenter(presenter = presenter, input = MutableStateFlow(input))

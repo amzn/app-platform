@@ -17,9 +17,13 @@ class RobotTest {
   fun `if no robot can be found in the component then a proper error is thrown`() {
     val exception = assertFailsWith<IllegalStateException> { robot<TestRobot>(rootScope()) {} }
 
-    val message = exception.message?.replace("RobotTest\$TestRobot", "RobotTest.TestRobot").toString()
+    val message =
+      exception.message?.replace("RobotTest\$TestRobot", "RobotTest.TestRobot").toString()
     assertThat(message)
-      .contains("Could not find Robot of type class software.amazon.app.platform." + "robot.RobotTest.TestRobot")
+      .contains(
+        "Could not find Robot of type class software.amazon.app.platform." +
+          "robot.RobotTest.TestRobot"
+      )
     assertThat(message).contains("Did you forget to add the @ContributesRobot annotation?")
   }
 
@@ -42,7 +46,8 @@ class RobotTest {
       Scope.buildRootScope {
         addDiComponent(
           object : RobotComponent {
-            override val robots: Map<KClass<out Robot>, () -> Robot> = mapOf(TestRobot::class to { TestRobot() })
+            override val robots: Map<KClass<out Robot>, () -> Robot> =
+              mapOf(TestRobot::class to { TestRobot() })
           }
         )
       }
@@ -64,10 +69,12 @@ class RobotTest {
     }
   }
 
-  private fun rootScope(vararg robots: Robot): Scope = Scope.buildRootScope { addDiComponent(Component(*robots)) }
+  private fun rootScope(vararg robots: Robot): Scope =
+    Scope.buildRootScope { addDiComponent(Component(*robots)) }
 
   private class Component(vararg robots: Robot) : RobotComponent {
-    override val robots: Map<KClass<out Robot>, () -> Robot> = robots.associate { robot -> robot::class to { robot } }
+    override val robots: Map<KClass<out Robot>, () -> Robot> =
+      robots.associate { robot -> robot::class to { robot } }
   }
 
   private class TestRobot : Robot {

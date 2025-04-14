@@ -12,8 +12,8 @@ import software.amazon.lastmile.kotlin.inject.anvil.AppScope
 import software.amazon.lastmile.kotlin.inject.anvil.ContributesTo
 
 /**
- * Responsible for creating the app component [component] and producing templates. Call [destroy] to clean up any
- * resources.
+ * Responsible for creating the app component [component] and producing templates. Call [destroy] to
+ * clean up any resources.
  *
  * This class is reused in UI tests, but the tests use a different test specific [AppComponent].
  */
@@ -24,7 +24,8 @@ class DesktopApp(private val component: (RootScopeProvider) -> AppComponent) : R
 
   private val demoApplication = DemoApplication().apply { create(component(this)) }
 
-  private val templateProvider = rootScope.diComponent<Component>().templateProviderFactory.createTemplateProvider()
+  private val templateProvider =
+    rootScope.diComponent<Component>().templateProviderFactory.createTemplateProvider()
 
   /** Call this composable function to start rendering templates on the screen. */
   @Composable

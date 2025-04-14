@@ -6,9 +6,9 @@ import software.amazon.app.platform.scope.RootScopeProvider
 public object RobotInternals {
 
   /**
-   * Allows you to override the root scope used to initialize test robots. Some platforms, like Android, try to get the
-   * root scope automatically and this function doesn't need to be called. Other platforms like Desktop must set the
-   * [RootScopeProvider] before a test runs.
+   * Allows you to override the root scope used to initialize test robots. Some platforms, like
+   * Android, try to get the root scope automatically and this function doesn't need to be called.
+   * Other platforms like Desktop must set the [RootScopeProvider] before a test runs.
    */
   public fun setRootScopeProvider(rootScopeProvider: RootScopeProvider?) {
     software.amazon.app.platform.robot.internal.rootScopeProvider = rootScopeProvider

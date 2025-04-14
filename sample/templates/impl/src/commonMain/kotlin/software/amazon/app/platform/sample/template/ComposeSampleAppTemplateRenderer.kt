@@ -39,8 +39,12 @@ class ComposeSampleAppTemplateRenderer(private val rendererFactory: RendererFact
   @Composable
   private fun ListDetail(template: SampleAppTemplate.ListDetailTemplate) {
     Row {
-      Column(Modifier.weight(1f)) { rendererFactory.getComposeRenderer(template.list).renderCompose(template.list) }
-      Column(Modifier.weight(2f)) { rendererFactory.getComposeRenderer(template.detail).renderCompose(template.detail) }
+      Column(Modifier.weight(1f)) {
+        rendererFactory.getComposeRenderer(template.list).renderCompose(template.list)
+      }
+      Column(Modifier.weight(2f)) {
+        rendererFactory.getComposeRenderer(template.detail).renderCompose(template.detail)
+      }
     }
   }
 }

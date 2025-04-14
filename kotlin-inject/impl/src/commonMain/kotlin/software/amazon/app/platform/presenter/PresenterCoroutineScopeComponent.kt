@@ -13,9 +13,10 @@ import software.amazon.lastmile.kotlin.inject.anvil.ForScope
 @ContributesTo(AppScope::class)
 public interface PresenterCoroutineScopeComponent {
   /**
-   * Bind the app coroutine scope as default scope for presenters to allow them to run as long as the app is alive. The
-   * coroutine scope will use the main dispatcher by default, because presenters produce state for the UI and computing
-   * their models should have the highest priority.
+   * Bind the app coroutine scope as default scope for presenters to allow them to run as long as
+   * the app is alive. The coroutine scope will use the main dispatcher by default, because
+   * presenters produce state for the UI and computing their models should have the highest
+   * priority.
    */
   @Provides
   @PresenterCoroutineScope

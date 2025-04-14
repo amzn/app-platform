@@ -3,7 +3,8 @@ package software.amazon.app.platform.inject
 import com.google.devtools.ksp.symbol.KSType
 
 /**
- * Represents the destination of contributed types and which types should be merged during the merge phase, e.g.
+ * Represents the destination of contributed types and which types should be merged during the merge
+ * phase, e.g.
  *
  * ```
  * @ContributesTo(AppScope::class)

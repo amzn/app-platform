@@ -15,27 +15,32 @@ import software.amazon.app.platform.sample.user.UserPagePresenter
 class NavigationPresenterImplTest {
 
   @Test
-  fun `after login the presenter navigates from the login screen to the user page screen`() = runTest {
-    val userManager = FakeUserManager()
+  fun `after login the presenter navigates from the login screen to the user page screen`() =
+    runTest {
+      val userManager = FakeUserManager()
 
-    val presenter = NavigationPresenterImpl(userManager = userManager, loginPresenter = { FakeLoginPresenter() })
+      val presenter =
+        NavigationPresenterImpl(
+          userManager = userManager,
+          loginPresenter = { FakeLoginPresenter() },
+        )
 
-    presenter.test(this) {
-      assertThat(awaitItem()).isInstanceOf<LoginPresenter.Model>()
+      presenter.test(this) {
+        assertThat(awaitItem()).isInstanceOf<LoginPresenter.Model>()
 
-      userManager.login(
-        userId = 1L,
-        scope = this@runTest,
-        component =
-          object : NavigationPresenterImpl.UserComponent {
-            override val userPresenter: UserPagePresenter
-              get() = FakeUserPagePresenter()
-          },
-      )
+        userManager.login(
+          userId = 1L,
+          scope = this@runTest,
+          component =
+            object : NavigationPresenterImpl.UserComponent {
+              override val userPresenter: UserPagePresenter
+                get() = FakeUserPagePresenter()
+            },
+        )
 
-      assertThat(awaitItem()).isInstanceOf<UserPagePresenter.Model>()
+        assertThat(awaitItem()).isInstanceOf<UserPagePresenter.Model>()
+      }
     }
-  }
 
   private class FakeLoginPresenter : LoginPresenter {
     @Composable
@@ -46,6 +51,9 @@ class NavigationPresenterImplTest {
   private class FakeUserPagePresenter : UserPagePresenter {
     @Composable
     override fun present(input: Unit): UserPagePresenter.Model =
-      UserPagePresenter.Model(listModel = object : BaseModel {}, detailModel = object : BaseModel {})
+      UserPagePresenter.Model(
+        listModel = object : BaseModel {},
+        detailModel = object : BaseModel {},
+      )
   }
 }

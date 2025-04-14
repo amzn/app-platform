@@ -10,8 +10,8 @@ import software.amazon.lastmile.kotlin.inject.anvil.ForScope
 import software.amazon.lastmile.kotlin.inject.anvil.SingleIn
 
 /**
- * Shared interface for the app component. The final components live in the platform specific source folders in order to
- * have access to platform specific code.
+ * Shared interface for the app component. The final components live in the platform specific source
+ * folders in order to have access to platform specific code.
  */
 @ContributesTo(AppScope::class)
 @SingleIn(AppScope::class)
@@ -23,8 +23,9 @@ interface AppComponent {
   @ForScope(AppScope::class) val appScopeCoroutineScopeScoped: CoroutineScopeScoped
 
   /**
-   * Provide at least one implementation in the scope, otherwise kotlin-inject will complain. The sample app actually
-   * doesn't have a [Scoped] instance in the app scope, that's why this is needed.
+   * Provide at least one implementation in the scope, otherwise kotlin-inject will complain. The
+   * sample app actually doesn't have a [Scoped] instance in the app scope, that's why this is
+   * needed.
    */
   @Provides @IntoSet @ForScope(AppScope::class) fun provideEmptyScoped(): Scoped = Scoped.NO_OP
 }

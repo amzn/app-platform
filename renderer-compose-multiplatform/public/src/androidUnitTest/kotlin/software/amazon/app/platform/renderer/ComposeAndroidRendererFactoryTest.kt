@@ -25,13 +25,15 @@ class ComposeAndroidRendererFactoryTest {
   @Test
   fun `a ComposeRenderer is wrapped for Android View support`() = runTest {
     val factory = factory()
-    assertThat(factory.getRenderer(ComposeModel::class)).isInstanceOf<ComposeWithinAndroidViewRenderer<ComposeModel>>()
+    assertThat(factory.getRenderer(ComposeModel::class))
+      .isInstanceOf<ComposeWithinAndroidViewRenderer<ComposeModel>>()
   }
 
   @Test
   fun `a ViewRenderer is wrapped for Compose support`() = runTest {
     val factory = factory()
-    assertThat(factory.getRenderer(AndroidModel::class)).isInstanceOf<AndroidViewWithinComposeRenderer<AndroidModel>>()
+    assertThat(factory.getRenderer(AndroidModel::class))
+      .isInstanceOf<AndroidViewWithinComposeRenderer<AndroidModel>>()
   }
 
   @Test
@@ -65,7 +67,8 @@ class ComposeAndroidRendererFactoryTest {
                     AndroidModel::class to { TestAndroidRenderer() },
                     UnsupportedModel::class to { UnsupportedRenderer() },
                   )
-                override val modelToRendererMapping: Map<KClass<out BaseModel>, KClass<out Renderer<*>>> =
+                override val modelToRendererMapping:
+                  Map<KClass<out BaseModel>, KClass<out Renderer<*>>> =
                   mapOf(
                     ComposeModel::class to TestComposeRenderer::class,
                     AndroidModel::class to TestAndroidRenderer::class,

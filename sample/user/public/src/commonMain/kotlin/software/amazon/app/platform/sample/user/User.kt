@@ -11,8 +11,8 @@ interface User {
   val attributes: List<Attribute>
 
   /**
-   * The scope is tied to the lifecycle of the user. It hosts a user specific `CoroutineScope` and kotlin-inject
-   * component. The scope is destroyed on logout.
+   * The scope is tied to the lifecycle of the user. It hosts a user specific `CoroutineScope` and
+   * kotlin-inject component. The scope is destroyed on logout.
    */
   val scope: Scope
 

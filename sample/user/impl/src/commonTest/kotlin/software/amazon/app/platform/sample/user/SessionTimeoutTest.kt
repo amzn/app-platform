@@ -25,7 +25,8 @@ class SessionTimeoutTest {
     scope.register(sessionTimeout)
 
     advanceTimeBy(2.seconds + 1.milliseconds)
-    assertThat(sessionTimeout.sessionTimeout.value).isEqualTo(SessionTimeout.initialTimeout - 2.seconds)
+    assertThat(sessionTimeout.sessionTimeout.value)
+      .isEqualTo(SessionTimeout.initialTimeout - 2.seconds)
 
     // Note that it doesn't go negative.
     advanceTimeBy(SessionTimeout.initialTimeout)
@@ -55,7 +56,8 @@ class SessionTimeoutTest {
     scope.register(sessionTimeout)
 
     advanceTimeBy(2.seconds + 1.milliseconds)
-    assertThat(sessionTimeout.sessionTimeout.value).isEqualTo(SessionTimeout.initialTimeout - 2.seconds)
+    assertThat(sessionTimeout.sessionTimeout.value)
+      .isEqualTo(SessionTimeout.initialTimeout - 2.seconds)
 
     sessionTimeout.resetTimeout()
     assertThat(sessionTimeout.sessionTimeout.value).isEqualTo(SessionTimeout.initialTimeout)
@@ -70,7 +72,8 @@ class SessionTimeoutTest {
     scope.register(sessionTimeout)
 
     advanceTimeBy(2.seconds + 1.milliseconds)
-    assertThat(sessionTimeout.sessionTimeout.value).isEqualTo(SessionTimeout.initialTimeout - 2.seconds)
+    assertThat(sessionTimeout.sessionTimeout.value)
+      .isEqualTo(SessionTimeout.initialTimeout - 2.seconds)
 
     userManager.logout()
 

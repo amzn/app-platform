@@ -13,19 +13,21 @@ import software.amazon.lastmile.kotlin.inject.anvil.ContributesSubcomponent
 import software.amazon.lastmile.kotlin.inject.anvil.ForScope
 import software.amazon.lastmile.kotlin.inject.anvil.SingleIn
 
-/** The kotlin-inject component for the user scope. This is a subcomponent of the AppScope component. */
+/**
+ * The kotlin-inject component for the user scope. This is a subcomponent of the AppScope component.
+ */
 @ContributesSubcomponent(UserScope::class)
 @SingleIn(UserScope::class)
 interface UserComponent {
   /**
-   * The factory instantiates a new instance of [UserComponent]. This interface will be implemented by the AppScope
-   * component.
+   * The factory instantiates a new instance of [UserComponent]. This interface will be implemented
+   * by the AppScope component.
    */
   @ContributesSubcomponent.Factory(AppScope::class)
   interface Factory {
     /**
-     * Creates a new instance of [UserComponent]. The provided [user] argument will be added to the component and the
-     * [User] can be injected in the classes part of the [UserScope].
+     * Creates a new instance of [UserComponent]. The provided [user] argument will be added to the
+     * component and the [User] can be injected in the classes part of the [UserScope].
      */
     fun createUserComponent(user: User): UserComponent
   }
@@ -36,7 +38,10 @@ interface UserComponent {
   /** The coroutine scope that runs as long as the user scope is alive. */
   @ForScope(UserScope::class) val userScopeCoroutineScopeScoped: CoroutineScopeScoped
 
-  /** Provides the [CoroutineScopeScoped] for the user scope. This is a single instance for the user scope. */
+  /**
+   * Provides the [CoroutineScopeScoped] for the user scope. This is a single instance for the user
+   * scope.
+   */
   @Provides
   @SingleIn(UserScope::class)
   @ForScope(UserScope::class)
@@ -47,8 +52,8 @@ interface UserComponent {
   }
 
   /**
-   * Provides the [CoroutineScope] for the user scope. A new child scope is created every time an instance is injected
-   * so that the parent cannot be canceled accidentally.
+   * Provides the [CoroutineScope] for the user scope. A new child scope is created every time an
+   * instance is injected so that the parent cannot be canceled accidentally.
    */
   @Provides
   @ForScope(UserScope::class)

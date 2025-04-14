@@ -27,9 +27,9 @@ import software.amazon.lastmile.kotlin.inject.anvil.ContributesBinding
 /**
  * Generates the code for [ContributesBinding].
  *
- * In the lookup package [OPEN_SOURCE_LOOKUP_PACKAGE] a new interface is generated with a provider method for the
- * annotated type. To avoid name clashes the package name of the original interface is encoded in the interface name.
- * E.g.
+ * In the lookup package [OPEN_SOURCE_LOOKUP_PACKAGE] a new interface is generated with a provider
+ * method for the annotated type. To avoid name clashes the package name of the original interface
+ * is encoded in the interface name. E.g.
  *
  * ```
  * package software.amazon.test
@@ -52,8 +52,10 @@ import software.amazon.lastmile.kotlin.inject.anvil.ContributesBinding
  * }
  * ```
  */
-internal class ContributesBindingProcessor(private val codeGenerator: CodeGenerator, override val logger: KSPLogger) :
-  SymbolProcessor, ContextAware {
+internal class ContributesBindingProcessor(
+  private val codeGenerator: CodeGenerator,
+  override val logger: KSPLogger,
+) : SymbolProcessor, ContextAware {
 
   override fun process(resolver: Resolver): List<KSAnnotated> {
     resolver
@@ -78,7 +80,8 @@ internal class ContributesBindingProcessor(private val codeGenerator: CodeGenera
     val boundTypes =
       annotations
         .mapNotNull { annotation ->
-          val boundType = boundType(clazz, annotation).takeUnless { it.isScoped() } ?: return@mapNotNull null
+          val boundType =
+            boundType(clazz, annotation).takeUnless { it.isScoped() } ?: return@mapNotNull null
 
           GeneratedFunction(
             boundType = boundType,
@@ -117,7 +120,10 @@ internal class ContributesBindingProcessor(private val codeGenerator: CodeGenera
                   }
                   .apply {
                     val parameterName = clazz.innerClassNames().decapitalize()
-                    addParameter(ParameterSpec.builder(name = parameterName, type = clazz.toClassName()).build())
+                    addParameter(
+                      ParameterSpec.builder(name = parameterName, type = clazz.toClassName())
+                        .build()
+                    )
 
                     addStatement("return $parameterName")
                   }

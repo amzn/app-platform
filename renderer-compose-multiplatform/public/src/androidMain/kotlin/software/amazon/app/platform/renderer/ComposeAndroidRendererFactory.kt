@@ -7,10 +7,10 @@ import software.amazon.app.platform.presenter.BaseModel
 import software.amazon.app.platform.scope.RootScopeProvider
 
 /**
- * [RendererFactory] that is able to create [ComposeRenderer] and [ViewRenderer] instances for Android, unlike
- * [ComposeRendererFactory] which only handles [ComposeRenderer] and unlike [AndroidRendererFactory] which only handles
- * [ViewRenderer]. Further, this implementation provides adapters for renderers for a seamless interop between Compose
- * UI and Android Views.
+ * [RendererFactory] that is able to create [ComposeRenderer] and [ViewRenderer] instances for
+ * Android, unlike [ComposeRendererFactory] which only handles [ComposeRenderer] and unlike
+ * [AndroidRendererFactory] which only handles [ViewRenderer]. Further, this implementation provides
+ * adapters for renderers for a seamless interop between Compose UI and Android Views.
  */
 public class ComposeAndroidRendererFactory(
   rootScopeProvider: RootScopeProvider,
@@ -31,7 +31,8 @@ public class ComposeAndroidRendererFactory(
     return when (renderer) {
       // Wrap a ComposeRenderer to support embedding it in an Android View hierarchy.
       is BaseComposeRenderer<*> ->
-        @Suppress("UNCHECKED_CAST") ComposeWithinAndroidViewRenderer(renderer as BaseComposeRenderer<T>)
+        @Suppress("UNCHECKED_CAST")
+        ComposeWithinAndroidViewRenderer(renderer as BaseComposeRenderer<T>)
 
       // Wrap a ViewRenderer to support embedding it in a Compose UI hierarchy.
       is BaseAndroidViewRenderer -> AndroidViewWithinComposeRenderer(renderer)

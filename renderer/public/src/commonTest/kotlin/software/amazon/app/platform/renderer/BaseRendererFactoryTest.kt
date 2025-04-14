@@ -18,12 +18,14 @@ class BaseRendererFactoryTest {
   fun `creating a renderer without mapping throws an error`() {
     val exception =
       assertFailsWith<Exception> {
-        rendererFactory(renderers = emptyMap(), modelToRendererMapping = emptyMap()).getRenderer(TestModel(1))
+        rendererFactory(renderers = emptyMap(), modelToRendererMapping = emptyMap())
+          .getRenderer(TestModel(1))
       }
 
     // Transform the message, because it's slightly different on iOS than on
     // Android and Desktop.
-    val message = exception.message?.replace('\$', '.')?.replace(" (Kotlin reflection is not available)", "")
+    val message =
+      exception.message?.replace('\$', '.')?.replace(" (Kotlin reflection is not available)", "")
 
     assertThat(message)
       .isEqualTo(
@@ -111,9 +113,11 @@ class BaseRendererFactoryTest {
                 object : RendererComponent.Parent {
                   override fun rendererComponent(factory: RendererFactory): RendererComponent =
                     object : RendererComponent {
-                      override val renderers: Map<KClass<out BaseModel>, () -> Renderer<*>> = renderers
+                      override val renderers: Map<KClass<out BaseModel>, () -> Renderer<*>> =
+                        renderers
 
-                      override val modelToRendererMapping: Map<KClass<out BaseModel>, KClass<out Renderer<*>>> =
+                      override val modelToRendererMapping:
+                        Map<KClass<out BaseModel>, KClass<out Renderer<*>>> =
                         modelToRendererMapping
                     }
                 }

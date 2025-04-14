@@ -3,8 +3,9 @@ package software.amazon.app.platform.presenter.template
 import software.amazon.app.platform.presenter.BaseModel
 
 /**
- * Can be implemented by a [BaseModel] class to delegate to another [BaseModel]. This is helpful for presenters whose
- * only concern is navigation to say: render this model or render that model instead, e.g.
+ * Can be implemented by a [BaseModel] class to delegate to another [BaseModel]. This is helpful for
+ * presenters whose only concern is navigation to say: render this model or render that model
+ * instead, e.g.
  *
  * ```
  * data class NavigationModel(

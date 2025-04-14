@@ -4,15 +4,15 @@ import software.amazon.app.platform.presenter.BaseModel
 import software.amazon.app.platform.presenter.Presenter
 
 /**
- * A renderer handles the conversion of a given [BaseModel] into UI. Models are created and updated in the [Presenter]
- * layer.
+ * A renderer handles the conversion of a given [BaseModel] into UI. Models are created and updated
+ * in the [Presenter] layer.
  *
- * This interface will rarely be used directly and a more specific renderer implementation for a concrete platform
- * should be favored unless there is a specific need.
+ * This interface will rarely be used directly and a more specific renderer implementation for a
+ * concrete platform should be favored unless there is a specific need.
  *
- * [Renderer]s are composable and can be injected into other renderers to create more complex UI hierarchies. A parent
- * model should contain sub models that map to the required type of the child renderer. In this way Presenter
- * compositions and Renderer compositions often mirror each other.
+ * [Renderer]s are composable and can be injected into other renderers to create more complex UI
+ * hierarchies. A parent model should contain sub models that map to the required type of the child
+ * renderer. In this way Presenter compositions and Renderer compositions often mirror each other.
  *
  * ```
  * data class ParentModel(

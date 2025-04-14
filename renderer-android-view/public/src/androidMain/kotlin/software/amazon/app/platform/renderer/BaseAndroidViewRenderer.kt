@@ -8,8 +8,8 @@ import software.amazon.app.platform.presenter.BaseModel
 public interface BaseAndroidViewRenderer<in ModelT : BaseModel> : Renderer<ModelT> {
 
   /**
-   * Initialize this [Renderer] with an [Activity] and a parent [ViewGroup], in which the [Renderer] should add its
-   * views as children.
+   * Initialize this [Renderer] with an [Activity] and a parent [ViewGroup], in which the [Renderer]
+   * should add its views as children.
    */
   public fun init(activity: Activity, parent: ViewGroup)
 }

@@ -39,8 +39,8 @@ import software.amazon.lastmile.kotlin.inject.anvil.SingleIn
 /**
  * Generates the code for [ContributesRenderer].
  *
- * In the lookup package [APP_PLATFORM_LOOKUP_PACKAGE] a new interface is generated with a provider method for the
- * renderer, e.g.
+ * In the lookup package [APP_PLATFORM_LOOKUP_PACKAGE] a new interface is generated with a provider
+ * method for the renderer, e.g.
  *
  * ```
  * package software.amazon.test
@@ -73,13 +73,16 @@ import software.amazon.lastmile.kotlin.inject.anvil.SingleIn
  * }
  * ```
  */
-internal class ContributesRendererProcessor(private val codeGenerator: CodeGenerator, override val logger: KSPLogger) :
-  SymbolProcessor, ContextAware {
+internal class ContributesRendererProcessor(
+  private val codeGenerator: CodeGenerator,
+  override val logger: KSPLogger,
+) : SymbolProcessor, ContextAware {
 
   private val baseModel = ClassName("software.amazon.app.platform.presenter", "BaseModel")
   private val baseModelFqName = baseModel.canonicalName
 
-  private val rendererWildcard = ClassName("software.amazon.app.platform.renderer", "Renderer").parameterizedBy(STAR)
+  private val rendererWildcard =
+    ClassName("software.amazon.app.platform.renderer", "Renderer").parameterizedBy(STAR)
 
   private val rendererScope = ClassName("software.amazon.app.platform.renderer", "RendererScope")
 
@@ -112,7 +115,8 @@ internal class ContributesRendererProcessor(private val codeGenerator: CodeGener
       checkZeroArgConstructor(clazz)
     }
 
-    val includeSealedSubtypes = clazz.getAnnotationsByType(ContributesRenderer::class).single().includeSealedSubtypes
+    val includeSealedSubtypes =
+      clazz.getAnnotationsByType(ContributesRenderer::class).single().includeSealedSubtypes
 
     val allModels =
       if (includeSealedSubtypes) {
@@ -130,7 +134,11 @@ internal class ContributesRendererProcessor(private val codeGenerator: CodeGener
           TypeSpec.interfaceBuilder(componentClassName)
             .addOriginatingKSFile(clazz.requireContainingFile())
             .addOriginAnnotation(clazz)
-            .addAnnotation(AnnotationSpec.builder(ContributesTo::class).addMember("%T::class", rendererScope).build())
+            .addAnnotation(
+              AnnotationSpec.builder(ContributesTo::class)
+                .addMember("%T::class", rendererScope)
+                .build()
+            )
             .apply {
               if (!hasInjectAnnotation) {
                 addFunction(
@@ -154,7 +162,8 @@ internal class ContributesRendererProcessor(private val codeGenerator: CodeGener
   private fun modelType(clazz: KSClassDeclaration): KSClassDeclaration {
     val annotation = clazz.findAnnotation(ContributesRenderer::class)
     val explicitModelType =
-      (annotation.arguments.firstOrNull { it.name?.asString() == "modelType" } ?: annotation.arguments.firstOrNull())
+      (annotation.arguments.firstOrNull { it.name?.asString() == "modelType" }
+          ?: annotation.arguments.firstOrNull())
         ?.let { (it.value as? KSType)?.declaration as? KSClassDeclaration }
         ?.takeIf { it.requireQualifiedName() != unitFqName }
 
@@ -165,7 +174,9 @@ internal class ContributesRendererProcessor(private val codeGenerator: CodeGener
     val implicitModelTypes =
       clazz
         .getAllSuperTypes()
-        .flatMap { superType -> superType.arguments.filter { it.type?.resolve()?.extendsBaseModel() ?: false } }
+        .flatMap { superType ->
+          superType.arguments.filter { it.type?.resolve()?.extendsBaseModel() ?: false }
+        }
         .mapNotNull { it.type?.resolve()?.declaration as? KSClassDeclaration }
         .distinctBy { it.requireQualifiedName() }
         .toList()
@@ -173,7 +184,8 @@ internal class ContributesRendererProcessor(private val codeGenerator: CodeGener
     check(implicitModelTypes.size == 1, clazz) {
       buildString {
         append(
-          "Couldn't find BaseModel type for ${clazz.simpleName.asString()}. " + "Consider adding an explicit parameter."
+          "Couldn't find BaseModel type for ${clazz.simpleName.asString()}. " +
+            "Consider adding an explicit parameter."
         )
         if (implicitModelTypes.size > 1) {
           append("Found: ")
@@ -185,7 +197,10 @@ internal class ContributesRendererProcessor(private val codeGenerator: CodeGener
     return implicitModelTypes[0]
   }
 
-  private fun createModelBindingFunction(clazz: KSClassDeclaration, modelType: KSClassDeclaration): FunSpec {
+  private fun createModelBindingFunction(
+    clazz: KSClassDeclaration,
+    modelType: KSClassDeclaration,
+  ): FunSpec {
     return FunSpec.builder("provide${clazz.safeClassName}" + modelType.innerClassNames())
       .addAnnotation(Provides::class)
       .addAnnotation(IntoMap::class)
@@ -203,17 +218,25 @@ internal class ContributesRendererProcessor(private val codeGenerator: CodeGener
       .build()
   }
 
-  private fun createModelKeyFunction(clazz: KSClassDeclaration, modelType: KSClassDeclaration): FunSpec {
+  private fun createModelKeyFunction(
+    clazz: KSClassDeclaration,
+    modelType: KSClassDeclaration,
+  ): FunSpec {
     return FunSpec.builder("provide${clazz.safeClassName}" + modelType.innerClassNames() + "Key")
       .addAnnotation(Provides::class)
       .addAnnotation(IntoMap::class)
-      .addAnnotation(AnnotationSpec.builder(ForScope::class).addMember("scope = %T::class", rendererScope).build())
+      .addAnnotation(
+        AnnotationSpec.builder(ForScope::class)
+          .addMember("scope = %T::class", rendererScope)
+          .build()
+      )
       .returns(
         Pair::class.asClassName()
           .parameterizedBy(
             listOf(
               KClass::class.asClassName().parameterizedBy(WildcardTypeName.producerOf(baseModel)),
-              KClass::class.asClassName().parameterizedBy(WildcardTypeName.producerOf(rendererWildcard)),
+              KClass::class.asClassName()
+                .parameterizedBy(WildcardTypeName.producerOf(rendererWildcard)),
             )
           )
       )
@@ -241,7 +264,8 @@ internal class ContributesRendererProcessor(private val codeGenerator: CodeGener
   private fun checkNoZeroArgConstructor(clazz: KSClassDeclaration) {
     val parameterCount = clazz.primaryConstructor?.parameters?.size ?: 0
     check(parameterCount > 0, clazz) {
-      "It's redundant to use @Inject when using " + "@ContributesRenderer for a Renderer with a zero-arg constructor."
+      "It's redundant to use @Inject when using " +
+        "@ContributesRenderer for a Renderer with a zero-arg constructor."
     }
   }
 
@@ -254,7 +278,8 @@ internal class ContributesRendererProcessor(private val codeGenerator: CodeGener
   }
 
   private fun KSType.extendsBaseModel(): Boolean {
-    val superTypes = (this.declaration as? KSClassDeclaration)?.getAllSuperTypes() ?: emptySequence()
+    val superTypes =
+      (this.declaration as? KSClassDeclaration)?.getAllSuperTypes() ?: emptySequence()
 
     return superTypes.any { it.declaration.qualifiedName?.asString() == baseModelFqName }
   }

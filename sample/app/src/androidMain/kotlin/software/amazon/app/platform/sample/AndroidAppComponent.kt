@@ -9,8 +9,8 @@ import software.amazon.lastmile.kotlin.inject.anvil.MergeComponent
 import software.amazon.lastmile.kotlin.inject.anvil.SingleIn
 
 /**
- * The final Android app component. Note that [application] is an Android specific type and classes living in the
- * Android source folder can therefore inject [Application].
+ * The final Android app component. Note that [application] is an Android specific type and classes
+ * living in the Android source folder can therefore inject [Application].
  *
  * [rootScopeProvider] is provided in the [AndroidAppComponent] and can be injected.
  */

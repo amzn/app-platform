@@ -4,19 +4,21 @@ import software.amazon.app.platform.presenter.BaseModel
 import software.amazon.app.platform.presenter.Presenter
 
 /**
- * Templates connect the presenter with the GUI side of the application and it’s what the UI rendering understands.
- * Practically, a template is one particular type of [BaseModel] that hosts other models (a container of models).
- * However, instead of using a weak type like `List<BaseModel>`, a template carries some semantics around what content
- * should be rendered, how many layers there are and where each individual model should be displayed.
+ * Templates connect the presenter with the GUI side of the application and it’s what the UI
+ * rendering understands. Practically, a template is one particular type of [BaseModel] that hosts
+ * other models (a container of models). However, instead of using a weak type like
+ * `List<BaseModel>`, a template carries some semantics around what content should be rendered, how
+ * many layers there are and where each individual model should be displayed.
  *
- * The UI rendering understands what templates are, extracts the models, lays them out as needed for a particular screen
- * configuration and renders the content within the respective UI containers.
+ * The UI rendering understands what templates are, extracts the models, lays them out as needed for
+ * a particular screen configuration and renders the content within the respective UI containers.
  *
- * For every single state change in the application a new template containing new, immutable models is emitted. The UI
- * renderer receives the update and renders the new template with the new content on screen.
+ * For every single state change in the application a new template containing new, immutable models
+ * is emitted. The UI renderer receives the update and renders the new template with the new content
+ * on screen.
  *
- * For a [Presenter] to change the used template its model should implement [ModelDelegate] and wrap its model in a
- * [Template], e.g.
+ * For a [Presenter] to change the used template its model should implement [ModelDelegate] and wrap
+ * its model in a [Template], e.g.
  *
  * ```
  * data class Model(
@@ -26,8 +28,8 @@ import software.amazon.app.platform.presenter.Presenter
  * }
  * ```
  *
- * This is only a marker interface, because concrete templates are app specific. The recommendation is to introduce a
- * sealed type with a predefined set of app specific templates, e.g.
+ * This is only a marker interface, because concrete templates are app specific. The recommendation
+ * is to introduce a sealed type with a predefined set of app specific templates, e.g.
  *
  * ```
  * sealed interface AmazonTemplate : Template {
@@ -45,10 +47,13 @@ import software.amazon.app.platform.presenter.Presenter
 public interface Template : BaseModel
 
 /**
- * Converts any [BaseModel] to a [Template]. If the given model implements [ModelDelegate] and returns a [Template],
- * then this template is used. Otherwise the result of [defaultTemplate] is used.
+ * Converts any [BaseModel] to a [Template]. If the given model implements [ModelDelegate] and
+ * returns a [Template], then this template is used. Otherwise the result of [defaultTemplate] is
+ * used.
  */
-public inline fun <reified T : Template> BaseModel.toTemplate(defaultTemplate: (BaseModel) -> T): T {
+public inline fun <reified T : Template> BaseModel.toTemplate(
+  defaultTemplate: (BaseModel) -> T
+): T {
   var model = this
   while (model is ModelDelegate) {
     val delegatedModel = model.delegate()

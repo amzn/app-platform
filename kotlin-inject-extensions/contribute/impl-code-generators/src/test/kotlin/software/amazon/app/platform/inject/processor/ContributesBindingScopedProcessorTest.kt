@@ -50,7 +50,8 @@ class ContributesBindingScopedProcessorTest {
       val generatedComponent = impl.scopedComponent
 
       assertThat(generatedComponent.origin).isEqualTo(impl)
-      assertThat(generatedComponent.getAnnotation(ContributesTo::class.java).scope).isEqualTo(AppScope::class)
+      assertThat(generatedComponent.getAnnotation(ContributesTo::class.java).scope)
+        .isEqualTo(AppScope::class)
 
       with(generatedComponent.declaredMethods.single { it.name == "provideImplScoped" }) {
         assertThat(parameters.single().type).isEqualTo(impl)
@@ -85,7 +86,8 @@ class ContributesBindingScopedProcessorTest {
       val generatedComponent = impl.inner.scopedComponent
 
       assertThat(generatedComponent.origin).isEqualTo(impl.inner)
-      assertThat(generatedComponent.getAnnotation(ContributesTo::class.java).scope).isEqualTo(Unit::class)
+      assertThat(generatedComponent.getAnnotation(ContributesTo::class.java).scope)
+        .isEqualTo(Unit::class)
 
       with(generatedComponent.declaredMethods.single { it.name == "provideImplInnerScoped" }) {
         assertThat(parameters.single().type).isEqualTo(impl.inner)
@@ -264,7 +266,8 @@ class ContributesBindingScopedProcessorTest {
 
       @Suppress("UNCHECKED_CAST")
       val scoped =
-        component::class.java.declaredMethods.single { it.name == "getScoped" }.invoke(component) as Set<Scoped>
+        component::class.java.declaredMethods.single { it.name == "getScoped" }.invoke(component)
+          as Set<Scoped>
 
       assertThat(scoped).hasSize(1)
       assertThat(scoped.single()::class.java).isEqualTo(impl)
@@ -273,7 +276,8 @@ class ContributesBindingScopedProcessorTest {
 
       @Suppress("UNCHECKED_CAST")
       val scoped2 =
-        component2::class.java.declaredMethods.single { it.name == "getScoped" }.invoke(component2) as Set<Scoped>
+        component2::class.java.declaredMethods.single { it.name == "getScoped" }.invoke(component2)
+          as Set<Scoped>
 
       assertThat(scoped2).hasSize(1)
       assertThat(scoped2.single()::class.java).isEqualTo(impl2)
@@ -284,7 +288,9 @@ class ContributesBindingScopedProcessorTest {
     get() =
       classLoader.loadClass(
         "$APP_PLATFORM_LOOKUP_PACKAGE.$packageName." +
-          canonicalName.substringAfter("$packageName.").split(".").joinToString(separator = "") { it.capitalize() } +
+          canonicalName.substringAfter("$packageName.").split(".").joinToString(separator = "") {
+            it.capitalize()
+          } +
           "ScopedComponent"
       )
 
