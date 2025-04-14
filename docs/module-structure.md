@@ -10,7 +10,7 @@
     }
     ```
 
-## Dependency inversion in Kotlin code
+## Dependency inversion
 
 Dependency inversion means that high-level APIs don’t depend on low-level details and low-level details
 only import other high-level APIs. It significantly reduces coupling between components. Dependency
@@ -172,7 +172,7 @@ larger and larger over time and the many classes within it would have a low cohe
 longer roughly linear to the size of the module, because individual build steps such as Kotlin compilation
 can’t be parallelized.
 
-Instead, a similar approach to [dependency inversion in Kotlin code](module-structure.md#dependency-inversion-in-kotlin-code)
+Instead, a similar approach to [dependency inversion in Kotlin code](module-structure.md#dependency-inversion)
 is applied to modules. The shared package can be split into a public API and implementation sub-module:
 
 ```mermaid
@@ -207,7 +207,7 @@ In order to follow the dependency inversion principle correctly the most importa
 is that no other module but the final application module is allowed to depend on `:impl` modules. `:public`
 modules on the other hand are widely shared and can be imported by any other module.
 
-![Forbidden dependency](images/module-structure-forbidden-dep.png){ width="300" }
+![Forbidden dependency](images/module-structure-forbidden-dep.png){ width="600" }
 
 A library always comes with a single `:public` module for shared code. There can be zero, one or more `:impl`
 modules, e.g. when dependency inversion isn’t needed, then the `:impl` module is redundant. When the implementation
@@ -227,4 +227,4 @@ UI components or test helpers.
 
 Beyond `:public` and `:impl` modules, there are further optional module types:
 
-![Module types](images/module-structure-types.png){ width="300" }
+![Module types](images/module-structure-types.png){ width="600" }
