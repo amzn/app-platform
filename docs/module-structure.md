@@ -65,8 +65,8 @@ and `:navigation-app`.
 %%{init: {'themeCSS': '.label { font-family: monospace; }'}}%%
 graph TD
   delivery-platform["`:delivery-platform`"]
-  navigation-platform["`:navigation-platform`"]
   location["`:location`"]
+  navigation-platform["`:navigation-platform`"]
   delivery-app["`**:delivery-app**
   *DeliveryAppLocationProvider*`"]
   navigation-app["**`:navigation-app**
