@@ -238,3 +238,54 @@ Beyond `:public` and `:impl` modules, there are further optional module types:
 `:public` modules contain the code that should be shared and reused by other modules and libraries.
 APIs (interfaces) usually live in `:public` modules, but also code where dependency inversion isn’t applied
 such as static utilities, extension functions and UI components.
+
+### `:impl`
+
+`:impl` modules contain the concrete implementations of the API from `:public` modules. A library can have
+zero or more `:impl` modules. If a library contains multiple `:impl` modules, then they’re suffixed with a name,
+e.g. `:login:impl-amazon` and `:login:impl-google`.
+
+### `:internal`
+
+`:internal` modules are used when code should be shared between multiple `:impl` modules of the same library,
+but the code should not be exposed through the `:public` module. This code is *internal* to this library.
+
+### `:testing`
+
+`:testing` modules provide a mechanism to share utilities or fake implementations for tests with other libraries.
+`:testing` modules are allowed to be imported as test dependency by any other module type and are never added
+to the runtime classpath. Even its own `:public` module can reuse the code from the `:testing` module for its tests.
+
+### `:robots`
+
+`:*-robots` modules help implementing the robot pattern for UI tests and make them shareable. Robots must know
+about concrete implementations, therefore they usually depend on an `:impl` module, but don't expose this `:impl`
+module on the compile classpath. `:robot` modules are only imported and reused for UI tests and are never
+added as dependency to the runtime classpath of a module similar to `:testing` modules.
+
+### `:app`
+
+`:app` modules refer to the final application, where all feature implementations are imported and assembled
+as a single binary. Therefore, `:app` modules are allowed to depend on `:impl` modules of all imported libraries
+and features.
+
+#### Example
+
+A more complex dependency graph could look like this:
+
+![Module structure example](images/module-structure-example.png)
+
+This example highlights many of the more frequently used dependencies. Notice that the impl modules
+`:location:impl-delivery` and `:location:impl-navigation` both depend on the internal module `:location:internal`
+to share some implementations, but non-shared code lives in each `:impl` module. The `:impl` modules import
+application specific code `:delivery-app-platform:public` and `:navigation-app-platform:public` safely without
+leaking the code to the wrong app. Further, `:location:impl-navigation` imports and uses `:navigation:public`,
+but neither the other impl module `:location:impl-delivery` nor its public module `:location:public` need to
+know about this dependency or depend on it.
+
+The second library `:navigation:public`, which imports `:location:public`, reuses testing module `:location:testing`
+for its unit tests. This saves boilerplate to setup fake implementations of the shared APIs from `:location:public`
+and avoids using mocking frameworks (for more details regarding the testing strategy see Testing Strategy for Kotlin Multiplatform Projects).
+
+The app :navigation-app imports its specific impl module :location:impl-navigation. It also reuses the robots from the :location:impl-navigation-robots module for its UI tests, further reducing strong dependencies on concrete implementations and favoring reusability.
+
