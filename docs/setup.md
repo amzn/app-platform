@@ -2,8 +2,9 @@
 
 ## Gradle
 
-App Platform, its various features and dependencies are all configured through a Gradle plugin. All settings
-are opt-in
+App Platform, its various features and dependencies are all configured through a Gradle plugin. The various options
+are explained in more detail in many of the following sections.
+
 ```groovy
 plugins {
   id 'software.amazon.app.platform' version 'x.y.z'
@@ -30,7 +31,11 @@ appPlatform {
   enableModuleStructure true
 }
 ```
-The various options are explained in more detail in many of the following sections.
+
+!!! note
+
+    All settings of App Platform are optional and opt-in, e.g. you can use Molecule Presenters without enabling
+    the opinionated module structure. Compose UI can be enabled without using `kotlin-inject-anvil`.
 
 ## Snapshot
 
@@ -41,3 +46,8 @@ maven {
   url = 'https://aws.oss.sonatype.org/content/repositories/snapshots/'
 }
 ```
+
+!!! warning
+
+    Notice that the URL starts with `aws.oss.sonatype.org`. The `aws` subdomain is specific to Amazon and used
+    by App Platform.

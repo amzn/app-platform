@@ -51,11 +51,13 @@ markdown_extensions:
   - pymdownx.betterem:
       smart_enable: all
   - pymdownx.caret
+  - pymdownx.details
+  - pymdownx.emoji
   - pymdownx.inlinehilite
   - pymdownx.magiclink
   - pymdownx.smartsymbols
   - pymdownx.superfences
-  - pymdownx.emoji
+  - pymdownx.superfences
   - pymdownx.tabbed:
       alternate_style: true
   - tables
@@ -66,5 +68,6 @@ markdown_extensions:
 nav:
   - 'Introduction': index.md
   - 'Setup': setup.md
+  - 'Module Structure': module-structure.md
   - 'Changelog': changelog.md
   - 'Contributing': contributing.md
