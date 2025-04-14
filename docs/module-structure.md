@@ -77,3 +77,10 @@ graph TD
   location --> delivery-app
   location --> navigation-app
 ```
+
+However, this would be a bad approach from a modularization standpoint. The app modules would become
+larger and larger over time and the many classes within it would have a low cohesion level. Build times get
+longer roughly linear to the size of the module, because individual build steps such as Kotlin compilation
+can’t be parallelized.
+
+Instead, a similar approach to dependency inversion in Kotlin code is applied to modules. The shared package can be split into a public API and implementation sub-module:

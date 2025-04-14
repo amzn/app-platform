@@ -71,6 +71,7 @@ markdown_extensions:
 nav:
   - 'Introduction': index.md
   - 'Setup': setup.md
+  - 'Dependency Inversion': dependency-inversion.md
   - 'Module Structure': module-structure.md
   - 'Changelog': changelog.md
   - 'Contributing': contributing.md
