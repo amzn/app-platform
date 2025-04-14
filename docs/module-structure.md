@@ -314,6 +314,7 @@ appPlatform {
 ```
 
 With this setting enabled, several checks and features are enabled:
+
 * App Platform ensures that the Gradle module follows the naming convention, e.g. it's named `:public` or `:impl`.
 * Default dependencies are added, e.g. an `:impl` module imports its `:public` module by default, or `:impl-robots` imports its `:impl` module by default.
 * An [Android namespace](https://developer.android.com/build/configure-app-module#set-namespace) is set automatically if it hasn't been configured yet.
