@@ -205,6 +205,16 @@ class AndroidLocationProvider(
 
 !!! note
 
-    The `@ContributesBinding` annotation will generate a component interface with bindings for `LocationProvider`
-    and `Scoped`. The generated interface will be added automatically to the `AppScope`. No further manual step
+    The `@ContributesBinding` annotation will generate a component interface with bindings for `LocationProvider` (1)
+    and `Scoped` (2). The generated interface will be added automatically to the `AppScope`. No further manual step
     is needed.
+    { .annotate }
+
+    1.  ```kotlin
+        a b
+        ```
+    2.  ```kotlin
+        d e
+        ```
+
+    // TODO: generated code
