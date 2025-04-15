@@ -277,37 +277,55 @@ class AndroidLocationProvider(
 
 ??? example "Sample"
 
-    The root scope is usually created when the application is launched. The sample application creates its
-    root scope [here](https://github.com/amzn/app-platform/blob/main/sample/app/src/commonMain/kotlin/software/amazon/app/platform/sample/DemoApplication.kt).
-    This `Scope` is never destroyed and stays alive for the entire app lifetime.
-
-    The sample application has a child scope for the logged in user. This `Scope` is created during
-    [login](https://github.com/amzn/app-platform/blob/d6ba0eef2de5042944d20a8c77ecb99fbfef317a/sample/user/impl/src/commonMain/kotlin/software/amazon/app/platform/sample/user/UserManagerImpl.kt#L47-L52)
-    and [destroyed](https://github.com/amzn/app-platform/blob/d6ba0eef2de5042944d20a8c77ecb99fbfef317a/sample/user/impl/src/commonMain/kotlin/software/amazon/app/platform/sample/user/UserManagerImpl.kt#L68)
-    during logout.
+    Another example in the sample app is [`SessionTimeout`](https://github.com/amzn/app-platform/blob/main/sample/user/impl/src/commonMain/kotlin/software/amazon/app/platform/sample/user/SessionTimeout.kt).
+    This class is part of the `UserScope` and implements the `Scoped` interface. `onEnterScope()` will be called when
+    the user logs in and `onExitScope()` when the user logs out.
 
     ```kotlin
-    override fun login(userId: Long) {
-      ...
-      val userComponent = userComponentFactory.createUserComponent(user)
+    @Inject
+    @SingleIn(UserScope::class)
+    @ContributesBinding(UserScope::class)
+    class SessionTimeout(...) : Scoped {
 
-      val userScope =
-        rootScopeProvider.rootScope.buildChild("user-$userId") {
-          addDiComponent(userComponent)
-          addCoroutineScopeScoped(userComponent.userScopeCoroutineScopeScoped)
+      override fun onEnterScope(scope: Scope) {
+        // This job will be automatically canceled when the user logs out and the user scope is
+        // destroyed.
+        scope.launch {
+          while (userManager.user.value != null) {
+            ...
+          }
         }
 
-      ...
-
-      userScope.register(userComponent.userScopedInstances)
-    }
-
-    override fun logout() {
-      val currentUserScope = user.value?.scope
-      ...
-      currentUserScope?.destroy()
+        scope.launch {
+          ...
+        }
+      }
     }
     ```
+
+### `onExitScope`
+
+The convenience function `onExitScope` is handy when you want to create objects lazily within `onEnterScope()` and
+not create a property in the class itself. This callback notifies you when the `Scope` is destroyed similar to
+`onExitScope()`.
+
+```kotlin
+@Inject
+@SingleIn(AppScope::class)
+@ContributesBinding(AppScope::class)
+class MyClass(private val application: Application) : Scoped {
+  override fun onEnterScope(scope: Scope) {
+    val receiver = object : BroadcastReceiver()
+
+    application.registerReceiver(receiver, Intent())
+
+    scope.onExit {
+      // This function is invoked when the scope gets destroyed.
+      application.unregisterReceiver(receiver)
+    }
+  }
+}
+```
 
 ### Threading
 
@@ -348,4 +366,12 @@ session expires.
 The App Platform by default only provides app scope, which has to be manually created by each application as
 highlighted above.
 
-## `RootScopeProvider`
+??? example "Sample"
+
+    The sample application has a common class [DemoApplication](https://github.com/amzn/app-platform/blob/main/sample/app/src/commonMain/kotlin/software/amazon/app/platform/sample/DemoApplication.kt)
+    that is responsible for creating the app scope. The Android app instantiates `DemoApplication` in the
+    [`Application` class](https://github.com/amzn/app-platform/blob/f024cb1b5a89c93cfc9ae63d7e570432b8d52d8a/sample/app/src/androidMain/kotlin/software/amazon/app/platform/sample/AndroidApplication.kt#L19).
+    The iOS sample creates the `DemoApplication` in the [`UIApplicationDelegate`](https://github.com/amzn/app-platform/blob/f024cb1b5a89c93cfc9ae63d7e570432b8d52d8a/sample/iosApp/iosApp/iOSApp.swift#L6).
+    On Desktop `DemoApplication` is created part of the [`main()` function](https://github.com/amzn/app-platform/blob/f024cb1b5a89c93cfc9ae63d7e570432b8d52d8a/sample/app/src/desktopMain/kotlin/software/amazon/app/platform/sample/Main.kt#L8).
+
+### `RootScopeProvider`
