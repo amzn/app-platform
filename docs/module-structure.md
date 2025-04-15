@@ -317,5 +317,6 @@ With this setting enabled, several checks and features are enabled:
 
 * App Platform ensures that the Gradle module follows the naming convention, e.g. it's named `:public` or `:impl`.
 * Default dependencies are added, e.g. an `:impl` module imports its `:public` module by default, or `:impl-robots` imports its `:impl` module by default.
-* An [Android namespace](https://developer.android.com/build/configure-app-module#set-namespace) is set automatically if it hasn't been configured yet.
+* An [Android namespace](https://developer.android.com/build/configure-app-module#set-namespace) is set [automatically](https://github.com/amzn/app-platform/blob/2fa09a4df4cc4202f53e14abc472777f0316e04e/gradle-plugin/src/main/kotlin/software/amazon/app/platform/gradle/ModuleStructurePlugin.kt#L86-L106) if it hasn't been configured yet.
 * A Gradle task `:checkModuleStructureDependencies` is registered, which verifies that module structure dependency rules are followed. The `:check` Gradle task automatically depends on `:checkModuleStructureDependencies`.
+* A consistent API for an [`Project.artifactId`](https://github.com/amzn/app-platform/blob/main/gradle-plugin/src/main/kotlin/software/amazon/app/platform/gradle/ModuleStructurePlugin.kt#L125-L135) is available, e.g. for `:my-module:public` it would return `my-module-public`.
