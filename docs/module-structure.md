@@ -21,6 +21,12 @@
     }
     ```
 
+!!! example "Sample"
+
+    App Platform itself and the [sample app](https://github.com/amzn/app-platform/tree/main/sample) use the module
+    structure to separate APIs from implementations. The sample app highlights how we structure code and make use
+    of the various module types.
+
 ## Dependency inversion
 
 Dependency inversion means that high-level APIs don’t depend on low-level details and low-level details
@@ -321,6 +327,25 @@ With this setting enabled, several checks and features are enabled:
 * A Gradle task `:checkModuleStructureDependencies` is registered, which verifies that module structure dependency rules are followed. The `:check` Gradle task automatically depends on `:checkModuleStructureDependencies`.
 * A consistent API for an [`Project.artifactId`](https://github.com/amzn/app-platform/blob/main/gradle-plugin/src/main/kotlin/software/amazon/app/platform/gradle/ModuleStructurePlugin.kt#L125-L135) is available, e.g. for `:my-module:public` it would return `my-module-public`.
 
-## Sample
+??? example "Sample"
 
-TODO
+    The sample application doesn't set the Android namespace anywhere. Instead, it relies on the default from
+    App Platform, e.g. the `:sample:templates:impl` module uses this generated namespace for its `R` class:
+
+    ```kotlin
+    software.amazon.app.platform.sample.templates.impl.R
+    ```
+
+    App Platform uses the `Project.artifactId()` API for its own modules. Publishing using the
+    [Gradle Maven Publish Plugin](https://vanniktech.github.io/gradle-maven-publish-plugin/) is configured
+    [here](https://github.com/amzn/app-platform/blob/bb478b645c85266cc55eafa96207c252fbe31d97/buildSrc/src/main/kotlin/software/amazon/app/platform/gradle/buildsrc/SdkPlugin.kt#L16-L34).
+
+    ```kotlin
+    private fun mavenPublishing(project: Project) {
+      plugins.apply(Plugins.MAVEN_PUBLISH)
+
+      project.extensions
+        .getByType(MavenPublishBaseExtension::class.java)
+        .coordinates(artifactId = project.artifactId())
+    }
+    ```
