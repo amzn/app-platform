@@ -375,3 +375,26 @@ highlighted above.
     On Desktop `DemoApplication` is created part of the [`main()` function](https://github.com/amzn/app-platform/blob/f024cb1b5a89c93cfc9ae63d7e570432b8d52d8a/sample/app/src/desktopMain/kotlin/software/amazon/app/platform/sample/Main.kt#L8).
 
 ### `RootScopeProvider`
+
+[`RootScopeProvider`](https://github.com/amzn/app-platform/blob/main/scope/public/src/commonMain/kotlin/software/amazon/app/platform/scope/RootScopeProvider.kt),
+as the name suggests, gives access to the root `Scope`. Usually, this interface is implemented by the application
+object of the individual platform to get access to the root `Scope` from a platform context, e.g. on Android this is
+handy in an `Activity`:
+
+```kotlin
+class MainActivity : Activity() {
+
+  private val rootScopeProvider
+    get() = application as RootScopeProvider
+
+  ...
+}
+```
+
+??? example "Sample"
+
+    The sample application implements `RootScopeProvider` in the Android
+    [`Application` class](https://github.com/amzn/app-platform/blob/f024cb1b5a89c93cfc9ae63d7e570432b8d52d8a/sample/app/src/androidMain/kotlin/software/amazon/app/platform/sample/AndroidApplication.kt#L19)
+    and the iOS [`UIApplicationDelegate`](https://github.com/amzn/app-platform/blob/f024cb1b5a89c93cfc9ae63d7e570432b8d52d8a/sample/iosApp/iosApp/iOSApp.swift#L6).
+    On Desktop there is no concept of a singleton application object by default, but in the sample app we created an
+    equivalent with [`DesktopApp`](https://github.com/amzn/app-platform/blob/main/sample/app/src/desktopMain/kotlin/software/amazon/app/platform/sample/DesktopApp.kt).
