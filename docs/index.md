@@ -32,8 +32,8 @@ to recommended best practices.
 
 ### Module Structure
 
-The module structure helps to separate APIs from implementations. This prevents leaking implementation
-details, forces developers to think about strong APIs and reduces build times. Checks for the correct
+The [module structure](module-structure.md) helps to separate APIs from implementations. This prevents leaking
+implementation details, forces developers to think about strong APIs and reduces build times. Checks for the correct
 usage of the module structure are implemented in the Gradle plugin.
 
 ### Dependency Injection
