@@ -38,5 +38,9 @@ The App Platform provides the
 interface to implement this concept.
 
 ``` title="Scope"
---8<-- "https://github.com/amzn/app-platform/blob/main/scope/public/src/commonMain/kotlin/software/amazon/app/platform/scope/Scope.kt"
+--8<-- "../scope/public/src/commonMain/kotlin/software/amazon/app/platform/scope/Scope.kt"
+```
+
+``` title="Scope"
+--8<-- "scope/public/src/commonMain/kotlin/software/amazon/app/platform/scope/Scope.kt"
 ```
