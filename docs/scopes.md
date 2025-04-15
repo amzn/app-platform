@@ -85,6 +85,29 @@ rootScope.buildChild("user scope") {
     and [destroyed](https://github.com/amzn/app-platform/blob/d6ba0eef2de5042944d20a8c77ecb99fbfef317a/sample/user/impl/src/commonMain/kotlin/software/amazon/app/platform/sample/user/UserManagerImpl.kt#L68)
     during logout.
 
+    ```kotlin
+    override fun login(userId: Long) {
+      ...
+      val userComponent = userComponentFactory.createUserComponent(user)
+
+      val userScope =
+        rootScopeProvider.rootScope.buildChild("user-$userId") {
+          addDiComponent(userComponent)
+          addCoroutineScopeScoped(userComponent.userScopeCoroutineScopeScoped)
+        }
+
+      ...
+
+      userScope.register(userComponent.userScopedInstances)
+    }
+
+    override fun logout() {
+      val currentUserScope = user.value?.scope
+      ...
+      currentUserScope?.destroy()
+    }
+    ```
+
 Tests usually leverage the test scope, which comes with better defaults for services such as the coroutine scope:
 
 ```kotlin
