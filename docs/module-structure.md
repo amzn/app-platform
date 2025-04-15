@@ -320,3 +320,7 @@ With this setting enabled, several checks and features are enabled:
 * An [Android namespace](https://developer.android.com/build/configure-app-module#set-namespace) is set [automatically](https://github.com/amzn/app-platform/blob/2fa09a4df4cc4202f53e14abc472777f0316e04e/gradle-plugin/src/main/kotlin/software/amazon/app/platform/gradle/ModuleStructurePlugin.kt#L86-L106) if it hasn't been configured yet.
 * A Gradle task `:checkModuleStructureDependencies` is registered, which verifies that module structure dependency rules are followed. The `:check` Gradle task automatically depends on `:checkModuleStructureDependencies`.
 * A consistent API for an [`Project.artifactId`](https://github.com/amzn/app-platform/blob/main/gradle-plugin/src/main/kotlin/software/amazon/app/platform/gradle/ModuleStructurePlugin.kt#L125-L135) is available, e.g. for `:my-module:public` it would return `my-module-public`.
+
+## Sample
+
+TODO

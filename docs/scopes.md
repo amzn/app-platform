@@ -37,10 +37,56 @@ The App Platform provides the
 [Scope](https://github.com/amzn/app-platform/blob/main/scope/public/src/commonMain/kotlin/software/amazon/app/platform/scope/Scope.kt)
 interface to implement this concept.
 
-``` title="Scope"
---8<-- "../scope/public/src/commonMain/kotlin/software/amazon/app/platform/scope/Scope.kt"
+```kotlin title="Scope.kt"
+interface Scope {
+
+  val name: String
+  val parent: Scope?
+
+  fun buildChild(name: String, builder: (Builder.() -> Unit)? = null): Scope
+  fun children(): Set<Scope>
+
+  fun isDestroyed(): Boolean
+  fun destroy()
+
+  fun register(scoped: Scoped)
+  fun <T : Any> getService(key: String): T?
+}
 ```
 
-``` title="Scope"
---8<-- "scope/public/src/commonMain/kotlin/software/amazon/app/platform/scope/Scope.kt"
+## Creating a `Scope`
+
+A `Scope` is created through the builder function. The
+[Builder](https://github.com/amzn/app-platform/blob/274ff2261edb13127dbf0b20429fa42970d62cb8/scope/public/src/commonMain/kotlin/software/amazon/app/platform/scope/Scope.kt#L57)
+allows you to add services before the Scope is finalized:
+
+```kotlin
+val rootScope = Scope.buildRootScope {
+  addService("key", service)
+}
 ```
+
+Child scopes are created using the parent:
+
+```kotlin
+rootScope.buildChild("user scope") {
+  addService("child-service", childService)
+}
+```
+
+Tests usually leverage the test scope, which comes with better defaults for services such as the coroutine scope:
+
+```kotlin
+@Test
+fun `my test`() = runTest {
+  val scope = Scope.buildTestScope(this)
+}
+
+// Or
+@Test
+fun `my test`() = runTestWithScope { scope ->
+  // `scope` is equivalent to calling `Scope.buildTestScope(this)`.
+}
+```
+
+## Services
