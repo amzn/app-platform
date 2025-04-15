@@ -189,9 +189,9 @@ How the `Scoped` object is instantiated depends on the dependency injection fram
 With `kotlin-inject-anvil` for the app scope it would be:
 
 ```kotlin
-@Inject (1)
-@SingleIn(AppScope::class)
-@ContributesBinding(AppScope::class)
+@Inject // (1)!
+@SingleIn(AppScope::class) // (2)
+@ContributesBinding(AppScope::class) (3)
 class AndroidLocationProvider(
   ...
 ) : LocationProvider, Scoped {
@@ -202,3 +202,9 @@ class AndroidLocationProvider(
 1.  This annotation is required to support constructor injection.
 2.  This annotation ensures that there is only ever a single instance of `AndroidLocationProvider` in the `AppScope`.
 3.  This annotation ensures that when somebody injects `LocationProvider`, then they get the singleton instance of `AndroidLocationProvider`.
+
+!!! note
+
+    The `@ContributesBinding` annotation will generate a component interface with bindings for `LocationProvider`
+    and `Scoped`. The generated interface will be added automatically to the `AppScope`. No further manual step
+    is needed.
