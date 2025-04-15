@@ -415,6 +415,12 @@ By calling `appComponent.appScopedInstances` the DI framework instantiates all `
 `onEnterScope(scope)`. When calling `rootScope.destroy()` later at some point, then `onExitScope()` will be
 called for all `Scoped` instances.
 
+??? example "Sample"
+
+    The sample application implements this mechanism for the
+    [`AppScope`](https://github.com/amzn/app-platform/blob/6af11a7c555acbca1c887416c8e8a99107195d3b/sample/app/src/commonMain/kotlin/software/amazon/app/platform/sample/DemoApplication.kt#L31-L33)
+    and the [`UserScope`](https://github.com/amzn/app-platform/blob/6af11a7c555acbca1c887416c8e8a99107195d3b/sample/user/impl/src/commonMain/kotlin/software/amazon/app/platform/sample/user/UserManagerImpl.kt#L58-L60).
+
 ### `onExit`
 
 The convenience function `onExit` is handy when you want to create objects lazily within `onEnterScope()` and
