@@ -203,7 +203,7 @@ class AndroidLocationProvider(
 2.  This annotation ensures that there is only ever a single instance of `AndroidLocationProvider` in the `AppScope`.
 3.  This annotation ensures that when somebody injects `LocationProvider`, then they get the singleton instance of `AndroidLocationProvider`.
 
-!!! note
+??? note "`@ContributesBinding` will generate and contribute bindings"
 
     The `@ContributesBinding` annotation will generate a component interface with bindings for `LocationProvider` (1)
     and `Scoped` (2). The generated interface will be added automatically to the `AppScope`. No further manual step
@@ -244,3 +244,12 @@ Clean up routines in `onExitScope()` must be blocking, otherwise these tasks liv
 therefore may cause a leak (thread and memory) and potential race conditions. It’s strongly recommended not to
 launch any asynchronous work within `onExitScope()`. By the time `onExitScope()` is called, the coroutine
 scope provided by the `Scope` has been canceled already.
+
+## Hosting `Scopes`
+
+Scopes need to be remembered and must be accessible in order to get access to their services. Where to host scopes depends on what scopes are required and when they need to be created. Most apps have some form of an application scope, which is a singleton scope for the entire lifetime of the application. A natural place to host this scope for Android apps is within the Application class, for iOS apps within App struct or the main function for desktop applications.
+
+A user scope has a shorter lifecycle than the application scope, but usually lives longer than UI components. It is commonly hosted by a service object managing the login state. This scope is destroyed after the user session expires.
+
+The App Platform by default only provides app scope, which has to be manually created by each application as highlighted above.
+
