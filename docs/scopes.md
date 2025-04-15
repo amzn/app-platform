@@ -209,19 +209,19 @@ It is important to register this `CoroutineScope` in the created app `Scope` ins
 `CoroutineScope` in case the `AppScope` ever gets destroyed. The same applies to any child scope.
 
 ```kotlin
-@MergeComponent(AppScope::class)
 @SingleIn(AppScope::class)
+@MergeComponent(AppScope::class)
 interface AppComponent {
   /** The coroutine scope that runs as long as the app scope is alive. */
   @ForScope(AppScope::class) val appScopeCoroutineScopeScoped: CoroutineScopeScoped // (1)!
 }
 
 fun createAppScope(appComponent: AppComponent): Scope {
-    return Scope.buildRootScope {
-      addDiComponent(appComponent)
-      addCoroutineScopeScoped(appComponent.appScopeCoroutineScopeScoped)
-    }
+  return Scope.buildRootScope {
+    addDiComponent(appComponent)
+    addCoroutineScopeScoped(appComponent.appScopeCoroutineScopeScoped)
   }
+}
 ```
 
 1.  `CoroutineScopeScoped` wraps a `CoroutineScope` in a `Scoped` instance. In `onExitScope()` of this instance the
@@ -383,9 +383,37 @@ class AndroidLocationProvider(
     }
     ```
 
-### Registering `Scoped` instances
+### Registering `Scoped`
 
-TODO
+The dependency injection framework like `kotlin-inject-anvil` is only responsible for creating `Scoped` instances,
+but it doesn't automatically register them in the `Scope`. This has to be done whenever the `Scope` is created:
+
+```kotlin hl_lines="5 16"
+@SingleIn(AppScope::class)
+@MergeComponent(AppScope::class)
+interface AppComponent {
+  /** All [Scoped] instances part of the app scope. */
+  @ForScope(AppScope::class) val appScopedInstances: Set<Scoped>
+}
+
+fun createAppScope(appComponent: AppComponent): Scope {
+  val rootScope =
+    Scope.buildRootScope {
+      addDiComponent(appComponent)
+
+      addCoroutineScopeScoped(appComponent.appScopeCoroutineScopeScoped)
+    }
+
+  rootScope.register(appComponent.appScopedInstances)
+
+  return rootScope
+}
+```
+
+By calling `appComponent.appScopedInstances` the DI framework instantiates all `Scoped` instances part of the
+`AppScope`. The `rootScope.register(...)` call will register all of the `Scoped` instances and invoke
+`onEnterScope(scope)`. When calling `rootScope.destroy()` later at some point, then `onExitScope()` will be
+called for all `Scoped` instances.
 
 ### `onExit`
 
