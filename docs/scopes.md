@@ -194,6 +194,86 @@ rootScope.coroutineScope()
     injection framework usually it’s not needed to add custom services and it’s better to rely on dependency
     injection instead.
 
+### `CoroutineScope`
+
+It's strongly recommended to add a `CoroutineScope` to each each `Scope`. App Platform provides a `CoroutineScope`
+[by default for the `AppScope`](https://github.com/amzn/app-platform/blob/main/kotlin-inject/impl/src/commonMain/kotlin/software/amazon/app/platform/scope/coroutine/AppScopeCoroutineScopeComponent.kt).
+It is important to register this `CoroutineScope` in the created app `Scope` instance in order to cancel the
+`CoroutineScope` in case the `AppScope` ever gets destroyed. The same applies to any child scope.
+
+```kotlin
+@MergeComponent(AppScope::class)
+@SingleIn(AppScope::class)
+interface AppComponent {
+  /** The coroutine scope that runs as long as the app scope is alive. */
+  @ForScope(AppScope::class) val appScopeCoroutineScopeScoped: CoroutineScopeScoped // (1)!
+}
+
+fun createAppScope(appComponent: AppComponent): Scope {
+    return Scope.buildRootScope {
+      addDiComponent(appComponent)
+      addCoroutineScopeScoped(appComponent.appScopeCoroutineScopeScoped)
+    }
+  }
+```
+
+1.  `CoroutineScopeScoped` wraps a `CoroutineScope` in a `Scoped` instance. In `onExitScope()` of this instance the
+    `CoroutineScope` will be canceled.
+
+The `CoroutineScope` can be injected in classes and used to launch async work. A common pattern is to use the
+`onEnterScope()` function to launch coroutine jobs:
+
+```kotlin
+override fun onEnterScope(scope: Scope) {
+  // This job will be automatically canceled when the `scope` gets destroyed.
+  scope.launch { // (1)!
+    someFlow.collect {
+      ...
+    }
+  }
+}
+```
+
+1.  `scope.launch` is a convenience function for `scope.coroutineScope().launch`.
+
+Since the `CoroutineScope` is part of the `kotlin-inject-anvil` object graph, the `CoroutineScope` can be injected
+in the constructor as well:
+
+```
+@Inject
+@SingleIn(AppScope::class)
+class MyClass(@ForScope(AppScope::class) coroutineScope: CoroutineScope) {
+  init {
+    coroutineScope.launch {
+      ...
+    }
+  }
+}
+```
+
+!!! info
+
+    By default, the IO dispatcher is used for all launched jobs for the provided `CoroutineScope`.
+
+    In tests when using `Scope.buildTestScope()` or `runTestWithScope` the `backgroundScope` is from the `TestScope`
+    is used by default and added to `Scope` instance.
+
+Whenever a `CoroutineScope` is injected, a new child scope with its own `Job` is created. The prevents consumers
+from accidentally tearing down all running coroutines when canceling an injected `CoroutineScope`.
+
+```kotlin
+override fun onEnterScope(scope: Scope) {
+  val myCoroutineScope = scope.coroutineScope()
+
+  myCoroutineScope.launch { ... }
+  myCoroutineScope.launch { ... }
+
+  // This is safe to do and only cancels the two launched jobs and `myCoroutineScope`. It doesn't cancel the
+  // shared `CoroutineScope` hosted within the `scope` object.
+  myCoroutineScope.cancel()
+}
+```
+
 ## `Scoped`
 
 Service objects can tie themselves to the lifecycle of a scope by implementing the
@@ -303,9 +383,13 @@ class AndroidLocationProvider(
     }
     ```
 
-### `onExitScope`
+### Registering `Scoped` instances
 
-The convenience function `onExitScope` is handy when you want to create objects lazily within `onEnterScope()` and
+TODO
+
+### `onExit`
+
+The convenience function `onExit` is handy when you want to create objects lazily within `onEnterScope()` and
 not create a property in the class itself. This callback notifies you when the `Scope` is destroyed similar to
 `onExitScope()`.
 
@@ -339,9 +423,6 @@ To safely launch long running work or blocking tasks it’s recommended to use t
 
 ```kotlin
 override fun onEnterScope(scope: Scope) {
-  scope.coroutineScope().launch { ... }
-
-  // Or short
   scope.launch { ... }
 }
 ```
