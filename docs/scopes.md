@@ -196,6 +196,13 @@ rootScope.coroutineScope()
 
 ### `CoroutineScope`
 
+!!! info
+
+    By default, the IO dispatcher is used for all launched jobs for the provided `CoroutineScope`.
+
+    In tests when using `Scope.buildTestScope()` or `runTestWithScope` the `backgroundScope` is from the `TestScope`
+    is used by default and added to `Scope` instance.
+
 It's strongly recommended to add a `CoroutineScope` to each each `Scope`. App Platform provides a `CoroutineScope`
 [by default for the `AppScope`](https://github.com/amzn/app-platform/blob/main/kotlin-inject/impl/src/commonMain/kotlin/software/amazon/app/platform/scope/coroutine/AppScopeCoroutineScopeComponent.kt).
 It is important to register this `CoroutineScope` in the created app `Scope` instance in order to cancel the
@@ -239,7 +246,7 @@ override fun onEnterScope(scope: Scope) {
 Since the `CoroutineScope` is part of the `kotlin-inject-anvil` object graph, the `CoroutineScope` can be injected
 in the constructor as well:
 
-```
+```kotlin
 @Inject
 @SingleIn(AppScope::class)
 class MyClass(@ForScope(AppScope::class) coroutineScope: CoroutineScope) {
@@ -251,15 +258,9 @@ class MyClass(@ForScope(AppScope::class) coroutineScope: CoroutineScope) {
 }
 ```
 
-!!! info
-
-    By default, the IO dispatcher is used for all launched jobs for the provided `CoroutineScope`.
-
-    In tests when using `Scope.buildTestScope()` or `runTestWithScope` the `backgroundScope` is from the `TestScope`
-    is used by default and added to `Scope` instance.
-
-Whenever a `CoroutineScope` is injected, a new child scope with its own `Job` is created. The prevents consumers
-from accidentally tearing down all running coroutines when canceling an injected `CoroutineScope`.
+Whenever a `CoroutineScope` is injected, a new child `CoroutineScope` with its own `Job` is created (the parent `Job`
+points to the shared `CoroutineScope` `Job`). The prevents consumers from accidentally tearing down all running
+coroutines when canceling an injected `CoroutineScope`.
 
 ```kotlin
 override fun onEnterScope(scope: Scope) {
@@ -292,11 +293,10 @@ so service objects will be automatically created when their corresponding scope 
 when their scope is destroyed. This helps with loose coupling between our service objects. Implementing the `Scoped`
 interface is a detail, which doesn’t need to be exposed to the API layer:
 
-```kotlin
+```kotlin hl_lines="5 7"
 interface LocationProvider {
   val location: StateFlow<Location>
 }
-
 
 class AndroidLocationProvider(
   private val locationManager: LocationManager
