@@ -56,6 +56,7 @@ markdown_extensions:
   - pymdownx.inlinehilite
   - pymdownx.magiclink
   - pymdownx.smartsymbols
+  - pymdownx.snippets
   - pymdownx.superfences:
       custom_fences:
         - name: mermaid
@@ -72,5 +73,6 @@ nav:
   - 'Introduction': index.md
   - 'Setup': setup.md
   - 'Module Structure': module-structure.md
+  - 'Scopes': scopes.md
   - 'Changelog': changelog.md
   - 'Contributing': contributing.md
