@@ -205,21 +205,19 @@ class AndroidLocationProvider(
 
 ??? note "`@ContributesBinding` will generate and contribute bindings"
 
-    The `@ContributesBinding` annotation will generate a component interface with bindings for `LocationProvider` (1)
-    and `Scoped` (2). The generated interface will be added automatically to the `AppScope`. No further manual step
+    The `@ContributesBinding` annotation will generate a component interface with bindings for `LocationProvider`
+    and `Scoped`. The generated interface will be added automatically to the `AppScope`. No further manual step
     is needed.
-    { .annotate }
 
-    1.  ```kotlin
-        @Provides
-        public fun provideAndroidLocationProvider(androidLocationProvider: AndroidLocationProvider): LocationProvider = androidLocationProvider
-        ```
-    2.  ```kotlin
-        @Provides
-        @IntoSet
-        @ForScope(AppScope::class)
-        fun provideAndroidLocationProviderScoped(androidLocationProvider: AndroidLocationProvider): Scoped = androidLocationProvider
-        ```
+    ```kotlin
+    @Provides
+    public fun provideAndroidLocationProvider(androidLocationProvider: AndroidLocationProvider): LocationProvider = androidLocationProvider
+
+    @Provides
+    @IntoSet
+    @ForScope(AppScope::class)
+    fun provideAndroidLocationProviderScoped(androidLocationProvider: AndroidLocationProvider): Scoped = androidLocationProvider
+    ```
 
 ### Threading
 
