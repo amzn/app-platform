@@ -199,4 +199,6 @@ class AndroidLocationProvider(
 }
 ```
 
-1.  :man_raising_hand: I'm an annotation!
+1.  This annotation is required to support constructor injection.
+2.  This annotation ensures that there is only ever a single instance of `AndroidLocationProvider` in the `AppScope`.
+3.  This annotation ensures that when somebody injects `LocationProvider`, then they get the singleton instance of `AndroidLocationProvider`.
