@@ -304,3 +304,133 @@ class OnboardingPresenterImpl(
 
 This example shows how `AccountManager` holds state and is injected into multiple presenters instead of relying
 on presenter inputs.
+
+## Compose runtime
+
+One of the major benefits of using Compose through Molecule is how the framework turns reactive streams such as
+`Flow` and `StateFlow` into imperative code, which then becomes easier to understand, write and maintain.
+Composable functions have a lifecycle, they enter a composition (the presenter starts to be used) and leave
+a composition (the presenter is no longer used). Properties can be made reactive and trigger creating a
+new `Model` whenever they change.
+
+### Lifecycle
+
+This example contains two child presenters:
+
+```kotlin
+class OnboardingPresenterImpl(
+  private val lazyLoginPresenter: () -> LoginPresenter,
+  private val lazyRegistrationPresenter: () -> RegistrationPresenter,
+) : OnboardingPresenter {
+
+  @Composable
+  fun present(input: Unit): BaseModel {
+    ...
+    return if (mustRegister) {
+      val registrationPresenter = remember { lazyRegistrationPresenter() }
+      registrationPresenter.present(Unit)
+    } else {
+      val loginPresenter = remember { lazyLoginPresenter() }
+      loginPresenter.present(Unit)
+    }
+  }
+}
+```
+
+On the first composition, when `OnboardingPresenterImpl.present()` is called for the first time, the lifecycle of
+`OnboardingPresenterImpl` starts. Let’s assume `mustRegister` is true, then `RegistrationPresenter` gets called
+and its lifecycle starts as well. In the example when `mustRegister` switches to false, then `RegistrationPresenter`
+leaves the composition and its lifecycle ends. `LoginPresenter` enters the composition and its lifecycle starts.
+If the parent presenter of `OnboardingPresenterImpl` stops calling this presenter, then `OnboardingPresenterImpl`
+and `LoginPresenter` would leave composition and both of their lifecycles end.
+
+### State
+
+[Google’s guide](https://developer.android.com/develop/ui/compose/state) for state management is a good starting
+point. APIs most often used are [`remember()`](https://developer.android.com/reference/kotlin/androidx/compose/runtime/package-summary#remember(kotlin.Function0)),
+[`mutableStateOf()`](https://developer.android.com/reference/kotlin/androidx/compose/runtime/package-summary#mutableStateOf(kotlin.Any,androidx.compose.runtime.SnapshotMutationPolicy)),
+[`collectAsState()`](https://developer.android.com/reference/kotlin/androidx/compose/runtime/package-summary#(kotlinx.coroutines.flow.StateFlow).collectAsState(kotlin.coroutines.CoroutineContext))
+and [`produceState()`](https://developer.android.com/reference/kotlin/androidx/compose/runtime/package-summary#produceState(kotlin.Any,kotlin.coroutines.SuspendFunction1)).
+
+```kotlin
+@Composable
+fun present(input: Unit): Model {
+  var toggled: Boolean by remember { mutableStateOf(false) }
+
+  return Model(
+    text = if (toggled) "toggled" else "not toggled",
+    onEvent = onEvent {
+      when(it) {
+        is ToggleClicked -> toggled = !toggled
+      }
+    }
+  )
+}
+```
+
+In this example, whenever the Presenter receives the `ToggleClicked` event, then the state `toggled` changes.
+This triggers a recomposition in the Compose runtime and will call `present()` again to compute a new `Model`.
+
+`Flows` can easily be observed using `collectAsState()`:
+
+```kotlin hl_lines="10"
+interface AccountManager {
+  val currentAccount: StateFlow<Account>
+}
+
+class AmazonLoginPresenter(
+  private val accountManager: AccountManager
+): LoginPresenter {
+  @Composable
+  fun present(input: Unit): Model {
+    val account: Account by accountManager.currentAccount.collectAsState()
+    ...
+  }
+}
+```
+
+Whenever the `currentAccount` Flow emits a new `Account`, then the Compose runtime will trigger a recomposition
+and a new `Model` will be computed.
+
+### Side effects
+
+It’s recommended to read [Google’s guide](https://developer.android.com/jetpack/compose/side-effects). Since
+composable functions come with a lifecycle, async operations can safely be launched and get automatically torn
+down when the `Presenter` leaves the composition. Commonly used APIs are
+[`LaunchedEffect()`](https://developer.android.com/reference/kotlin/androidx/compose/runtime/package-summary#LaunchedEffect(kotlin.Any,kotlin.coroutines.SuspendFunction1)),
+[`DisposableEffect()`](https://developer.android.com/reference/kotlin/androidx/compose/runtime/package-summary#DisposableEffect(kotlin.Any,kotlin.Function1))
+and [`rememberCoroutineScope()`](https://developer.android.com/reference/kotlin/androidx/compose/runtime/package-summary#rememberCoroutineScope(kotlin.Function0)).
+
+```kotlin
+@Composable
+fun present(input: Unit): Model {
+  LaunchedEffect(key) {
+    // This is within a CoroutineScope and suspending functions can
+    // be called:
+    flowOf(1, 2, 3).collect { ... }
+  }
+}
+```
+
+If the `key` changes between compositions, then a new coroutine is launched and the previous one canceled. For more
+details see [here](https://developer.android.com/jetpack/compose/side-effects#launchedeffect).
+
+This is an example for how one would use `rememberCoroutineScope()`:
+
+```kotlin
+@Composable
+fun present(input: Unit): Model {
+  val coroutineScope = rememberCoroutineScope()
+
+  return Model(
+    onEvent = onEvent {
+      when(it) {
+        is OnClick -> coroutineScope.launch { ... }
+      }
+    }
+  )
+}
+```
+
+When the `Presenter` leaves composition, then all jobs launched by this coroutine scope get canceled. For more
+details see [here](https://developer.android.com/jetpack/compose/side-effects#remembercoroutinescope).
