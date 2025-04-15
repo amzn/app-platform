@@ -19,7 +19,10 @@ public open class JvmLibraryPlugin : Plugin<Project> {
   }
 
   private fun Project.configureKotlin() {
-    dependencies.add("api", dependencies.platform(libs.findLibrary("kotlin.bom").get().get().toString()))
+    dependencies.add(
+      "api",
+      dependencies.platform(libs.findLibrary("kotlin.bom").get().get().toString()),
+    )
 
     extensions.getByType(KotlinJvmProjectExtension::class.java).compilerOptions {
       allWarningsAsErrors.set(appPlatformBuildSrc.isKotlinWarningsAsErrors())
@@ -42,7 +45,10 @@ public open class JvmLibraryPlugin : Plugin<Project> {
 
   private fun Project.configureCoroutines() {
     dependencies.add("implementation", libs.findLibrary("coroutines.core").get().get().toString())
-    dependencies.add("testImplementation", libs.findLibrary("coroutines.test").get().get().toString())
+    dependencies.add(
+      "testImplementation",
+      libs.findLibrary("coroutines.test").get().get().toString(),
+    )
     dependencies.add("testImplementation", libs.findLibrary("turbine").get().get().toString())
   }
 }

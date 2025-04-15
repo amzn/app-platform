@@ -31,8 +31,11 @@ import software.amazon.app.platform.gradle.ModuleStructurePlugin.Companion.testi
  * ```
  */
 @Suppress("TooManyFunctions", "unused")
-public open class AppPlatformExtension @Inject constructor(objects: ObjectFactory, private val project: Project) {
-  private val enableKotlinInject: Property<Boolean> = objects.property(Boolean::class.java).convention(false)
+public open class AppPlatformExtension
+@Inject
+constructor(objects: ObjectFactory, private val project: Project) {
+  private val enableKotlinInject: Property<Boolean> =
+    objects.property(Boolean::class.java).convention(false)
 
   /** Adds KSP and kotlin-inject as dependency. */
   public fun enableKotlinInject(enabled: Boolean) {
@@ -49,7 +52,8 @@ public open class AppPlatformExtension @Inject constructor(objects: ObjectFactor
 
   internal fun isKotlinInjectEnabled(): Property<Boolean> = enableKotlinInject
 
-  private val enableMoleculePresenters: Property<Boolean> = objects.property(Boolean::class.java).convention(false)
+  private val enableMoleculePresenters: Property<Boolean> =
+    objects.property(Boolean::class.java).convention(false)
 
   /** Adds the Molecule Gradle plugin as dependency and gives access to `MoleculePresenter`. */
   public fun enableMoleculePresenters(enabled: Boolean) {
@@ -66,7 +70,8 @@ public open class AppPlatformExtension @Inject constructor(objects: ObjectFactor
 
   internal fun isMoleculeEnabled(): Property<Boolean> = enableMoleculePresenters
 
-  private val enableComposeUi: Property<Boolean> = objects.property(Boolean::class.java).convention(false)
+  private val enableComposeUi: Property<Boolean> =
+    objects.property(Boolean::class.java).convention(false)
 
   /** Adds necessary dependencies to use Compose Multiplatform with Renderers. */
   public fun enableComposeUi(enabled: Boolean) {
@@ -83,10 +88,12 @@ public open class AppPlatformExtension @Inject constructor(objects: ObjectFactor
 
   internal fun isComposeUiEnabled(): Property<Boolean> = enableComposeUi
 
-  private val addImplModuleDependencies: Property<Boolean> = objects.property(Boolean::class.java).convention(false)
+  private val addImplModuleDependencies: Property<Boolean> =
+    objects.property(Boolean::class.java).convention(false)
 
   /**
-   * Adds a dependency on all :impl modules. This is helpful for application modules that import all implementations.
+   * Adds a dependency on all :impl modules. This is helpful for application modules that import all
+   * implementations.
    */
   public fun addImplModuleDependencies(add: Boolean) {
     addImplModuleDependencies.set(add)
@@ -99,7 +106,8 @@ public open class AppPlatformExtension @Inject constructor(objects: ObjectFactor
 
   internal fun isAddImplModuleDependencies(): Property<Boolean> = addImplModuleDependencies
 
-  private val addPublicModuleDependencies: Property<Boolean> = objects.property(Boolean::class.java).convention(false)
+  private val addPublicModuleDependencies: Property<Boolean> =
+    objects.property(Boolean::class.java).convention(false)
 
   /** Adds dependencies on `:public` modules for the Presenters, Renderers and Scopes. */
   public fun addPublicModuleDependencies(add: Boolean) {
@@ -109,7 +117,8 @@ public open class AppPlatformExtension @Inject constructor(objects: ObjectFactor
 
   internal fun isAddPublicModuleDependencies(): Property<Boolean> = addPublicModuleDependencies
 
-  private val enableModuleStructure: Property<Boolean> = objects.property(Boolean::class.java).convention(false)
+  private val enableModuleStructure: Property<Boolean> =
+    objects.property(Boolean::class.java).convention(false)
 
   /** Sets up this module to use our recommended module structure and applies certain defaults. */
   public fun enableModuleStructure(enable: Boolean) {
@@ -139,19 +148,28 @@ private fun Project.enableKotlinInject() {
 
   // Disable this processor, because we implement our own version in order to support the
   // Scoped interface.
-  kspExtension.arg("software.amazon.lastmile.kotlin.inject.anvil.processor.ContributesBindingProcessor", "disabled")
+  kspExtension.arg(
+    "software.amazon.lastmile.kotlin.inject.anvil.processor.ContributesBindingProcessor",
+    "disabled",
+  )
 
   fun DependencyHandler.addKspProcessorDependencies(kspConfigurationName: String) {
     addProvider(
       kspConfigurationName,
       provider { "me.tatarka.inject:kotlin-inject-compiler-ksp:" + KOTLIN_INJECT_VERSION },
     )
-    add(kspConfigurationName, "$APP_PLATFORM_GROUP:kotlin-inject-contribute-public:" + APP_PLATFORM_VERSION)
+    add(
+      kspConfigurationName,
+      "$APP_PLATFORM_GROUP:kotlin-inject-contribute-public:" + APP_PLATFORM_VERSION,
+    )
     add(
       kspConfigurationName,
       "$APP_PLATFORM_GROUP:kotlin-inject-contribute-impl-code-generators:" + APP_PLATFORM_VERSION,
     )
-    add(kspConfigurationName, "software.amazon.lastmile.kotlin.inject.anvil:compiler:" + KOTLIN_INJECT_ANVIL_VERSION)
+    add(
+      kspConfigurationName,
+      "software.amazon.lastmile.kotlin.inject.anvil:compiler:" + KOTLIN_INJECT_ANVIL_VERSION,
+    )
   }
 
   plugins.withId(PluginIds.KOTLIN_MULTIPLATFORM) {
@@ -159,8 +177,13 @@ private fun Project.enableKotlinInject() {
       implementation("me.tatarka.inject:kotlin-inject-runtime:$KOTLIN_INJECT_VERSION")
       implementation("$APP_PLATFORM_GROUP:kotlin-inject-public:$APP_PLATFORM_VERSION")
       implementation("$APP_PLATFORM_GROUP:kotlin-inject-contribute-public:" + APP_PLATFORM_VERSION)
-      implementation("software.amazon.lastmile.kotlin.inject.anvil:runtime:" + KOTLIN_INJECT_ANVIL_VERSION)
-      implementation("software.amazon.lastmile.kotlin.inject.anvil:runtime-optional:" + KOTLIN_INJECT_ANVIL_VERSION)
+      implementation(
+        "software.amazon.lastmile.kotlin.inject.anvil:runtime:" + KOTLIN_INJECT_ANVIL_VERSION
+      )
+      implementation(
+        "software.amazon.lastmile.kotlin.inject.anvil:runtime-optional:" +
+          KOTLIN_INJECT_ANVIL_VERSION
+      )
     }
 
     kmpExtension.targets.configureEach { target ->
@@ -182,8 +205,14 @@ private fun Project.enableKotlinInject() {
   }
 
   plugins.withIds(PluginIds.KOTLIN_ANDROID, PluginIds.KOTLIN_JVM) {
-    dependencies.add("implementation", "$APP_PLATFORM_GROUP:kotlin-inject-public:$APP_PLATFORM_VERSION")
-    dependencies.add("implementation", "$APP_PLATFORM_GROUP:kotlin-inject-contribute-public:" + APP_PLATFORM_VERSION)
+    dependencies.add(
+      "implementation",
+      "$APP_PLATFORM_GROUP:kotlin-inject-public:$APP_PLATFORM_VERSION",
+    )
+    dependencies.add(
+      "implementation",
+      "$APP_PLATFORM_GROUP:kotlin-inject-contribute-public:" + APP_PLATFORM_VERSION,
+    )
     dependencies.add(
       "implementation",
       "software.amazon.lastmile.kotlin.inject.anvil:runtime:" + KOTLIN_INJECT_ANVIL_VERSION,
@@ -192,7 +221,10 @@ private fun Project.enableKotlinInject() {
       "implementation",
       "software.amazon.lastmile.kotlin.inject.anvil:runtime-optional:" + KOTLIN_INJECT_ANVIL_VERSION,
     )
-    dependencies.add("implementation", "me.tatarka.inject:kotlin-inject-runtime:" + KOTLIN_INJECT_VERSION)
+    dependencies.add(
+      "implementation",
+      "me.tatarka.inject:kotlin-inject-runtime:" + KOTLIN_INJECT_VERSION,
+    )
     dependencies.addKspProcessorDependencies("ksp")
   }
 }
@@ -214,9 +246,15 @@ private fun Project.enableMoleculePresenters() {
 
   plugins.withIds(PluginIds.KOTLIN_ANDROID, PluginIds.KOTLIN_JVM) {
     dependencies.add("implementation", "app.cash.molecule:molecule-runtime:$MOLECULE_VERSION")
-    dependencies.add("implementation", "$APP_PLATFORM_GROUP:presenter-molecule-public:$APP_PLATFORM_VERSION")
+    dependencies.add(
+      "implementation",
+      "$APP_PLATFORM_GROUP:presenter-molecule-public:$APP_PLATFORM_VERSION",
+    )
     testingSourceSets.forEach { sourceSetName ->
-      dependencies.add(sourceSetName, "$APP_PLATFORM_GROUP:presenter-molecule-testing:$APP_PLATFORM_VERSION")
+      dependencies.add(
+        sourceSetName,
+        "$APP_PLATFORM_GROUP:presenter-molecule-testing:$APP_PLATFORM_VERSION",
+      )
     }
   }
 }
@@ -230,10 +268,14 @@ private fun Project.enableComposeUi() {
       implementation(composeDependencies.foundation)
       implementation(composeDependencies.runtime)
 
-      implementation("$APP_PLATFORM_GROUP:renderer-compose-multiplatform-public:$APP_PLATFORM_VERSION")
+      implementation(
+        "$APP_PLATFORM_GROUP:renderer-compose-multiplatform-public:$APP_PLATFORM_VERSION"
+      )
 
       if (isRobotsModule()) {
-        implementation("$APP_PLATFORM_GROUP:robot-compose-multiplatform-public:$APP_PLATFORM_VERSION")
+        implementation(
+          "$APP_PLATFORM_GROUP:robot-compose-multiplatform-public:$APP_PLATFORM_VERSION"
+        )
       }
     }
   }
@@ -244,14 +286,20 @@ private fun Project.enableComposeUi() {
     android.buildFeatures.compose = true
 
     dependencies.add("implementation", "androidx.compose.runtime:runtime:$ANDROID_COMPOSE_VERSION")
-    dependencies.add("implementation", "androidx.compose.foundation:foundation:$ANDROID_COMPOSE_VERSION")
+    dependencies.add(
+      "implementation",
+      "androidx.compose.foundation:foundation:$ANDROID_COMPOSE_VERSION",
+    )
     dependencies.add(
       "implementation",
       "$APP_PLATFORM_GROUP:renderer-compose-multiplatform-public:$APP_PLATFORM_VERSION",
     )
 
     if (isRobotsModule()) {
-      dependencies.add("implementation", "$APP_PLATFORM_GROUP:robot-compose-multiplatform-public:$APP_PLATFORM_VERSION")
+      dependencies.add(
+        "implementation",
+        "$APP_PLATFORM_GROUP:robot-compose-multiplatform-public:$APP_PLATFORM_VERSION",
+      )
     }
   }
 

@@ -13,7 +13,6 @@ ktfmt {
     googleStyle()
     manageTrailingCommas.set(true)
     removeUnusedImports.set(true)
-    maxWidth.set(120)
 }
 
 gradlePlugin {

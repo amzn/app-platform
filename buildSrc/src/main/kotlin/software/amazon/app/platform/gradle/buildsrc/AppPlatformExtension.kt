@@ -12,8 +12,11 @@ import software.amazon.app.platform.gradle.buildsrc.KmpPlugin.Companion.enableMo
 import software.amazon.app.platform.gradle.buildsrc.SdkPlugin.publishSdk
 
 @Suppress("unused")
-public open class AppPlatformExtension @Inject constructor(objects: ObjectFactory, private val project: Project) {
-  private val enableCompose: Property<Boolean> = objects.property(Boolean::class.java).convention(false)
+public open class AppPlatformExtension
+@Inject
+constructor(objects: ObjectFactory, private val project: Project) {
+  private val enableCompose: Property<Boolean> =
+    objects.property(Boolean::class.java).convention(false)
 
   public fun enableCompose(enabled: Boolean) {
     enableCompose.set(enabled)
@@ -39,7 +42,8 @@ public open class AppPlatformExtension @Inject constructor(objects: ObjectFactor
 
   internal fun isDiEnabled(): Property<Boolean> = enableDi
 
-  private val enableMolecule: Property<Boolean> = objects.property(Boolean::class.java).convention(false)
+  private val enableMolecule: Property<Boolean> =
+    objects.property(Boolean::class.java).convention(false)
 
   public fun enableMolecule(enabled: Boolean) {
     enableMolecule.set(enabled)
@@ -52,7 +56,8 @@ public open class AppPlatformExtension @Inject constructor(objects: ObjectFactor
 
   internal fun isMoleculeEnabled(): Property<Boolean> = enableMolecule
 
-  private val enablePublishing: Property<Boolean> = objects.property(Boolean::class.java).convention(false)
+  private val enablePublishing: Property<Boolean> =
+    objects.property(Boolean::class.java).convention(false)
 
   public fun enablePublishing(enabled: Boolean) {
     enablePublishing.set(enabled)
@@ -68,7 +73,11 @@ public open class AppPlatformExtension @Inject constructor(objects: ObjectFactor
   private val kotlinWarningsAsErrors: Property<Boolean> =
     objects
       .property(Boolean::class.java)
-      .convention(project.provider { project.ci || project.gradle.taskGraph.hasTask("${project.path}:release") })
+      .convention(
+        project.provider {
+          project.ci || project.gradle.taskGraph.hasTask("${project.path}:release")
+        }
+      )
 
   public fun kotlinWarningsAsErrors(enabled: Boolean) {
     kotlinWarningsAsErrors.set(enabled)
@@ -77,7 +86,8 @@ public open class AppPlatformExtension @Inject constructor(objects: ObjectFactor
 
   internal fun isKotlinWarningsAsErrors(): Property<Boolean> = kotlinWarningsAsErrors
 
-  private val enableInstrumentedTests: Property<Boolean> = objects.property(Boolean::class.java).convention(false)
+  private val enableInstrumentedTests: Property<Boolean> =
+    objects.property(Boolean::class.java).convention(false)
 
   public fun enableInstrumentedTests(enabled: Boolean) {
     if (enableInstrumentedTests.get() == enabled) {

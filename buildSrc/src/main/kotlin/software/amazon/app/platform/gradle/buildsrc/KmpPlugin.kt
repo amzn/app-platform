@@ -40,7 +40,10 @@ public open class KmpPlugin : Plugin<Project> {
   private fun Project.configureCommonKotlin() {
     kmpExtension.applyDefaultHierarchyTemplate()
 
-    dependencies.add("commonMainApi", dependencies.platform(libs.findLibrary("kotlin.bom").get().get().toString()))
+    dependencies.add(
+      "commonMainApi",
+      dependencies.platform(libs.findLibrary("kotlin.bom").get().get().toString()),
+    )
 
     // Only for tests.
     kmpExtension.sourceSets
@@ -111,7 +114,9 @@ public open class KmpPlugin : Plugin<Project> {
       }
     }
 
-    releaseTask.configure { task -> task.dependsOn(allPlatforms().mapNotNull { it.unitTestTaskName }) }
+    releaseTask.configure { task ->
+      task.dependsOn(allPlatforms().mapNotNull { it.unitTestTaskName })
+    }
   }
 
   private fun Project.addExtraSourceSets() {
@@ -187,7 +192,9 @@ public open class KmpPlugin : Plugin<Project> {
         kmpExtension.sourceSets.getByName("commonMain").dependencies {
           implementation(libs.findLibrary("kotlin.inject.runtime").get().get().toString())
           implementation(libs.findLibrary("kotlin.inject.anvil.runtime").get().get().toString())
-          implementation(libs.findLibrary("kotlin.inject.anvil.runtime.optional").get().get().toString())
+          implementation(
+            libs.findLibrary("kotlin.inject.anvil.runtime.optional").get().get().toString()
+          )
           if (path != ":kotlin-inject:public") {
             implementation(project(":kotlin-inject:public"))
             if (!path.startsWith(":kotlin-inject-extensions:contribute:")) {
@@ -196,8 +203,14 @@ public open class KmpPlugin : Plugin<Project> {
           }
         }
       } else {
-        dependencies.add("implementation", libs.findLibrary("kotlin.inject.runtime").get().get().toString())
-        dependencies.add("implementation", libs.findLibrary("kotlin.inject.anvil.runtime").get().get().toString())
+        dependencies.add(
+          "implementation",
+          libs.findLibrary("kotlin.inject.runtime").get().get().toString(),
+        )
+        dependencies.add(
+          "implementation",
+          libs.findLibrary("kotlin.inject.anvil.runtime").get().get().toString(),
+        )
         dependencies.add(
           "implementation",
           libs.findLibrary("kotlin.inject.anvil.runtime.optional").get().get().toString(),
@@ -205,19 +218,31 @@ public open class KmpPlugin : Plugin<Project> {
         if (path != ":kotlin-inject:public") {
           dependencies.add("implementation", project(":kotlin-inject:public"))
           if (!path.startsWith(":kotlin-inject-extensions:contribute:")) {
-            dependencies.add("implementation", project(":kotlin-inject-extensions:contribute:public"))
+            dependencies.add(
+              "implementation",
+              project(":kotlin-inject-extensions:contribute:public"),
+            )
           }
         }
       }
 
       fun DependencyHandler.addKspProcessorDependencies(kspConfigurationName: String) {
         add(kspConfigurationName, libs.findLibrary("kotlin.inject.ksp").get().get().toString())
-        add(kspConfigurationName, libs.findLibrary("kotlin.inject.anvil.compiler").get().get().toString())
+        add(
+          kspConfigurationName,
+          libs.findLibrary("kotlin.inject.anvil.compiler").get().get().toString(),
+        )
 
         // Avoid creating a circular dependency.
-        if (path != ":kotlin-inject:public" && !path.startsWith(":kotlin-inject-extensions:contribute:")) {
+        if (
+          path != ":kotlin-inject:public" &&
+            !path.startsWith(":kotlin-inject-extensions:contribute:")
+        ) {
           add(kspConfigurationName, project(":kotlin-inject-extensions:contribute:public"))
-          add(kspConfigurationName, project(":kotlin-inject-extensions:contribute:impl-code-generators"))
+          add(
+            kspConfigurationName,
+            project(":kotlin-inject-extensions:contribute:impl-code-generators"),
+          )
         }
       }
 
@@ -307,7 +332,9 @@ public open class KmpPlugin : Plugin<Project> {
       if (ci) {
         afterEvaluate {
           tasks
-            .filter { task -> task.name.startsWith("kspKotlinIos") || task.name.startsWith("kspTestKotlinIos") }
+            .filter { task ->
+              task.name.startsWith("kspKotlinIos") || task.name.startsWith("kspTestKotlinIos")
+            }
             .forEach { task -> task.setOnlyIf { true } }
         }
       }

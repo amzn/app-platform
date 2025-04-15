@@ -17,7 +17,9 @@ internal fun PluginContainer.withIds(vararg pluginIds: String, action: (Plugin<*
 }
 
 internal fun Project.requireParent(): Project =
-  requireNotNull(parent) { "The parent project for a module enabling the module structure should not be null." }
+  requireNotNull(parent) {
+    "The parent project for a module enabling the module structure should not be null."
+  }
 
 internal val Project.isKmpModule: Boolean
   get() = plugins.hasPlugin(PluginIds.KOTLIN_MULTIPLATFORM)

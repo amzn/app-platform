@@ -27,7 +27,9 @@ public open class BasePlugin : Plugin<Project> {
 
   private fun Project.runTestsInHeadlessMode() {
     // Otherwise the java icon keeps popping up in the system tray while running tests.
-    tasks.withType(Test::class.java).configureEach { it.systemProperty("java.awt.headless", "true") }
+    tasks.withType(Test::class.java).configureEach {
+      it.systemProperty("java.awt.headless", "true")
+    }
   }
 
   private fun Project.configureLogOutput() {
@@ -53,7 +55,8 @@ public open class BasePlugin : Plugin<Project> {
         "${APP_PLATFORM_GROUP}:kotlin-inject-public" to ":kotlin-inject:public",
         "${APP_PLATFORM_GROUP}:kotlin-inject-contribute-impl-code-generators" to
           ":kotlin-inject-extensions:contribute:impl-code-generators",
-        "${APP_PLATFORM_GROUP}:kotlin-inject-contribute-public" to ":kotlin-inject-extensions:contribute:public",
+        "${APP_PLATFORM_GROUP}:kotlin-inject-contribute-public" to
+          ":kotlin-inject-extensions:contribute:public",
         "${APP_PLATFORM_GROUP}:kotlin-inject-impl" to ":kotlin-inject:impl",
         "${APP_PLATFORM_GROUP}:presenter-public" to ":presenter:public",
         "${APP_PLATFORM_GROUP}:presenter-molecule-public" to ":presenter-molecule:public",
@@ -61,9 +64,11 @@ public open class BasePlugin : Plugin<Project> {
         "${APP_PLATFORM_GROUP}:presenter-molecule-testing" to ":presenter-molecule:testing",
         "${APP_PLATFORM_GROUP}:renderer-public" to ":renderer:public",
         "${APP_PLATFORM_GROUP}:renderer-android-view-public" to ":renderer-android-view:public",
-        "${APP_PLATFORM_GROUP}:renderer-compose-multiplatform-public" to ":renderer-compose-multiplatform:public",
+        "${APP_PLATFORM_GROUP}:renderer-compose-multiplatform-public" to
+          ":renderer-compose-multiplatform:public",
         "${APP_PLATFORM_GROUP}:robot-public" to ":robot:public",
-        "${APP_PLATFORM_GROUP}:robot-compose-multiplatform-public" to ":robot-compose-multiplatform:public",
+        "${APP_PLATFORM_GROUP}:robot-compose-multiplatform-public" to
+          ":robot-compose-multiplatform:public",
         "${APP_PLATFORM_GROUP}:robot-internal-public" to ":robot-internal:public",
         "${APP_PLATFORM_GROUP}:scope-public" to ":scope:public",
         "${APP_PLATFORM_GROUP}:scope-testing" to ":scope:testing",
@@ -71,7 +76,8 @@ public open class BasePlugin : Plugin<Project> {
 
     plugins.withId(Plugins.MAVEN_PUBLISH) {
       check(path in substitutions.values) {
-        "Forgot to setup dependency substitution for $path. Add a mapping in the " + "substitution collection."
+        "Forgot to setup dependency substitution for $path. Add a mapping in the " +
+          "substitution collection."
       }
     }
 

@@ -269,6 +269,21 @@ jobs:
           name: test-results-${{ github.job }}
           path: ./**/build/reports/
 
+  module-structure-check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup
+        uses: ./.github/actions/setup-action
+        with:
+          gradle-encryption-key: ${{ secrets.GRADLE_ENCRYPTION_KEY }}
+
+      - name: Module Structure Check
+        run: ./gradlew checkModuleStructureDependencies --stacktrace --show-version --continue
+
   publish-maven-local:
     runs-on: ubuntu-latest
     timeout-minutes: 25

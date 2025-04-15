@@ -76,7 +76,8 @@ public abstract class ModuleStructureDependencyCheckTask : DefaultTask() {
   }
 
   private fun checkNoTestingImport() {
-    val forbiddenDependencies = moduleCompileClasspath.filter { it.moduleType == ModuleType.TESTING }
+    val forbiddenDependencies =
+      moduleCompileClasspath.filter { it.moduleType == ModuleType.TESTING }
 
     if (forbiddenDependencies.isNotEmpty()) {
       throw GradleException(
@@ -151,8 +152,10 @@ public abstract class ModuleStructureDependencyCheckTask : DefaultTask() {
 
       fun registerForConfiguration(taskSuffix: String, configuration: () -> Configuration) {
         val checkTask =
-          tasks.register("$baseTaskName${taskSuffix.capitalize()}", ModuleStructureDependencyCheckTask::class.java) {
-            task ->
+          tasks.register(
+            "$baseTaskName${taskSuffix.capitalize()}",
+            ModuleStructureDependencyCheckTask::class.java,
+          ) { task ->
             task.modulePath = path
             task.moduleCompileClasspath =
               configuration()
@@ -165,7 +168,9 @@ public abstract class ModuleStructureDependencyCheckTask : DefaultTask() {
                     }
 
                     is ProjectDependency -> {
-                      dependency.path.takeIf { it.moduleTypeFromProjectPath() != ModuleType.UNKNOWN }
+                      dependency.path.takeIf {
+                        it.moduleTypeFromProjectPath() != ModuleType.UNKNOWN
+                      }
                     }
 
                     else -> null
@@ -197,14 +202,19 @@ public abstract class ModuleStructureDependencyCheckTask : DefaultTask() {
 
             registerForConfiguration(
               taskSuffix = target.name,
-              configuration = { configurations.getByName(compilation.compileDependencyConfigurationName) },
+              configuration = {
+                configurations.getByName(compilation.compileDependencyConfigurationName)
+              },
             )
           }
         }
       }
 
       plugins.withId(PluginIds.KOTLIN_JVM) {
-        registerForConfiguration(taskSuffix = "jvm", configuration = { configurations.getByName("compileClasspath") })
+        registerForConfiguration(
+          taskSuffix = "jvm",
+          configuration = { configurations.getByName("compileClasspath") },
+        )
       }
     }
   }

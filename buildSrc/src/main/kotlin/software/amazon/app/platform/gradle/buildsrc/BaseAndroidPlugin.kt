@@ -19,7 +19,8 @@ public open class BaseAndroidPlugin : Plugin<Project> {
     when (android) {
       is LibraryExtension -> {
         android.lint.targetSdk = libs.findVersion("android.targetSdk").get().requiredVersion.toInt()
-        android.testOptions.targetSdk = libs.findVersion("android.targetSdk").get().requiredVersion.toInt()
+        android.testOptions.targetSdk =
+          libs.findVersion("android.targetSdk").get().requiredVersion.toInt()
         android.defaultConfig.multiDexEnabled = true
       }
 
@@ -69,12 +70,30 @@ public open class BaseAndroidPlugin : Plugin<Project> {
 
       android.testOptions.execution = "ANDROIDX_TEST_ORCHESTRATOR"
 
-      dependencies.add("androidTestUtil", libs.findLibrary("androidx.test.orchestrator").get().get().toString())
-      dependencies.add("androidTestImplementation", libs.findLibrary("androidx.test.runner").get().get().toString())
-      dependencies.add("androidTestImplementation", libs.findLibrary("androidx.test.rules").get().get().toString())
-      dependencies.add("androidTestImplementation", libs.findLibrary("androidx.test.junit").get().get().toString())
-      dependencies.add("androidTestImplementation", libs.findLibrary("kotlin.test").get().get().toString())
-      dependencies.add("androidTestImplementation", libs.findLibrary("assertk").get().get().toString())
+      dependencies.add(
+        "androidTestUtil",
+        libs.findLibrary("androidx.test.orchestrator").get().get().toString(),
+      )
+      dependencies.add(
+        "androidTestImplementation",
+        libs.findLibrary("androidx.test.runner").get().get().toString(),
+      )
+      dependencies.add(
+        "androidTestImplementation",
+        libs.findLibrary("androidx.test.rules").get().get().toString(),
+      )
+      dependencies.add(
+        "androidTestImplementation",
+        libs.findLibrary("androidx.test.junit").get().get().toString(),
+      )
+      dependencies.add(
+        "androidTestImplementation",
+        libs.findLibrary("kotlin.test").get().get().toString(),
+      )
+      dependencies.add(
+        "androidTestImplementation",
+        libs.findLibrary("assertk").get().get().toString(),
+      )
 
       @Suppress("UnstableApiUsage")
       android.testOptions.managedDevices.localDevices.create("emulator") {

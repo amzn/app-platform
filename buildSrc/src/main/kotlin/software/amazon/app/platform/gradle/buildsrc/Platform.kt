@@ -27,7 +27,8 @@ internal sealed interface Platform {
 
     override fun configurePlatform() {
       target.binaries.framework {
-        baseName = if (project.path == ":sample:app") "SampleApp" else project.safePathString.capitalize()
+        baseName =
+          if (project.path == ":sample:app") "SampleApp" else project.safePathString.capitalize()
         isStatic = project.isAppModule()
 
         if (project.isAppModule()) {
@@ -47,9 +48,15 @@ internal sealed interface Platform {
       }
 
       project.android.sourceSets.getByName("main").apply {
-        project.file("src/androidMain/AndroidManifest.xml").takeIf { it.exists() }?.let { manifest.srcFile(it) }
+        project
+          .file("src/androidMain/AndroidManifest.xml")
+          .takeIf { it.exists() }
+          ?.let { manifest.srcFile(it) }
         project.file("src/androidMain/res").takeIf { it.exists() }?.let { res.srcDirs(it) }
-        project.file("src/commonMain/resources").takeIf { it.exists() }?.let { resources.srcDirs(it) }
+        project
+          .file("src/commonMain/resources")
+          .takeIf { it.exists() }
+          ?.let { resources.srcDirs(it) }
       }
     }
   }
@@ -134,7 +141,11 @@ internal sealed interface Platform {
   companion object {
 
     private val projectsUsingCompose =
-      setOf(":renderer-compose-multiplatform:public", ":robot-compose-multiplatform:public", ":sample:")
+      setOf(
+        ":renderer-compose-multiplatform:public",
+        ":robot-compose-multiplatform:public",
+        ":sample:",
+      )
 
     fun Project.allPlatforms(): Set<Platform> = buildSet {
       // Always add Android. It's our most important platform and buildable in all

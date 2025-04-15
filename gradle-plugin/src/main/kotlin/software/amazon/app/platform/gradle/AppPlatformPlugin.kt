@@ -32,7 +32,8 @@ public open class AppPlatformPlugin : Plugin<Project> {
         "$APP_PLATFORM_GROUP:renderer-public:$APP_PLATFORM_VERSION",
         "$APP_PLATFORM_GROUP:scope-public:$APP_PLATFORM_VERSION",
       )
-    val testImplementationDependencies = setOf("$APP_PLATFORM_GROUP:scope-testing:$APP_PLATFORM_VERSION")
+    val testImplementationDependencies =
+      setOf("$APP_PLATFORM_GROUP:scope-testing:$APP_PLATFORM_VERSION")
     val robotDependencies = setOf("$APP_PLATFORM_GROUP:robot-public:$APP_PLATFORM_VERSION")
 
     plugins.withId(PluginIds.KOTLIN_MULTIPLATFORM) {
@@ -60,7 +61,10 @@ public open class AppPlatformPlugin : Plugin<Project> {
     }
 
     plugins.withIds(PluginIds.ANDROID_APP, PluginIds.ANDROID_LIBRARY) {
-      dependencies.add("implementation", "$APP_PLATFORM_GROUP:renderer-android-view-public:" + APP_PLATFORM_VERSION)
+      dependencies.add(
+        "implementation",
+        "$APP_PLATFORM_GROUP:renderer-android-view-public:" + APP_PLATFORM_VERSION,
+      )
 
       if (isAppModule()) {
         robotDependencies.forEach { dep -> dependencies.add("androidTestImplementation", dep) }
@@ -96,8 +100,8 @@ public open class AppPlatformPlugin : Plugin<Project> {
 
   public companion object {
     /**
-     * Returns the set of dependencies that need to be exported in a Framework for native targets in order to make App
-     * Platform work.
+     * Returns the set of dependencies that need to be exported in a Framework for native targets in
+     * order to make App Platform work.
      */
     public fun exportedDependencies(): Set<String> =
       setOf(

@@ -20,7 +20,11 @@ public open class ModuleStructurePlugin : Plugin<Project> {
   }
 
   private fun Project.addModuleStructureDependencies() {
-    plugins.withIds(PluginIds.KOTLIN_MULTIPLATFORM, PluginIds.KOTLIN_JVM, PluginIds.KOTLIN_ANDROID) {
+    plugins.withIds(
+      PluginIds.KOTLIN_MULTIPLATFORM,
+      PluginIds.KOTLIN_JVM,
+      PluginIds.KOTLIN_ANDROID,
+    ) {
       val parent = requireParent()
 
       // Nothing to add.
@@ -84,11 +88,11 @@ public open class ModuleStructurePlugin : Plugin<Project> {
   public companion object {
 
     /**
-     * Returns a consistent namespace for a Gradle module that has the recommended App Platform module structure in
-     * mind. It helps to avoid clashing namespaces across projects.
+     * Returns a consistent namespace for a Gradle module that has the recommended App Platform
+     * module structure in mind. It helps to avoid clashing namespaces across projects.
      *
-     * This value can be used as namespace for Android projects and gets automatically set when no other namespace is
-     * declared.
+     * This value can be used as namespace for Android projects and gets automatically set when no
+     * other namespace is declared.
      *
      * It requires that the `GROUP` property is set for the Gradle project.
      *
@@ -123,8 +127,8 @@ public open class ModuleStructurePlugin : Plugin<Project> {
     }
 
     /**
-     * Returns a consistent artifact ID for a Gradle module that has the recommended App Platform module structure in
-     * mind. This artifact ID should be used for publishing library modules.
+     * Returns a consistent artifact ID for a Gradle module that has the recommended App Platform
+     * module structure in mind. This artifact ID should be used for publishing library modules.
      *
      * It produces following results:
      * ```
@@ -146,7 +150,8 @@ public open class ModuleStructurePlugin : Plugin<Project> {
             }
           }
 
-          plugins.hasPlugin(PluginIds.KOTLIN_ANDROID) || plugins.hasPlugin(PluginIds.KOTLIN_JVM) -> {
+          plugins.hasPlugin(PluginIds.KOTLIN_ANDROID) ||
+            plugins.hasPlugin(PluginIds.KOTLIN_JVM) -> {
             add("testImplementation")
             if (moduleType.useTestDependenciesInMain) {
               add("implementation")
