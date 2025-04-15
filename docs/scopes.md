@@ -293,7 +293,7 @@ so service objects will be automatically created when their corresponding scope 
 when their scope is destroyed. This helps with loose coupling between our service objects. Implementing the `Scoped`
 interface is a detail, which doesn’t need to be exposed to the API layer:
 
-```kotlin hl_lines="5 7"
+```kotlin hl_lines="5 6 7"
 interface LocationProvider {
   val location: StateFlow<Location>
 }
@@ -398,6 +398,7 @@ not create a property in the class itself. This callback notifies you when the `
 @SingleIn(AppScope::class)
 @ContributesBinding(AppScope::class)
 class MyClass(private val application: Application) : Scoped {
+
   override fun onEnterScope(scope: Scope) {
     val receiver = object : BroadcastReceiver()
 
@@ -444,7 +445,7 @@ A user scope has a shorter lifecycle than the application scope, but usually liv
 It is commonly hosted by a service object managing the login state. This scope is destroyed after the user
 session expires.
 
-The App Platform by default only provides app scope, which has to be manually created by each application as
+App Platform by default only provides the `AppScope`, which has to be manually created by each application as
 highlighted above.
 
 ??? example "Sample"
@@ -458,7 +459,7 @@ highlighted above.
 ### `RootScopeProvider`
 
 [`RootScopeProvider`](https://github.com/amzn/app-platform/blob/main/scope/public/src/commonMain/kotlin/software/amazon/app/platform/scope/RootScopeProvider.kt),
-as the name suggests, gives access to the root `Scope`. Usually, this interface is implemented by the application
+as the name suggests, gives access to the root `Scope` ("AppScope"). Usually, this interface is implemented by the application
 object of the individual platform to get access to the root `Scope` from a platform context, e.g. on Android this is
 handy in an `Activity`:
 
