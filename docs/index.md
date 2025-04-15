@@ -47,14 +47,14 @@ injection. But this isn't enforced and can be changed (1).
 
 ### Scopes
 
-`Scopes` are essential in our architecture. They define the boundary our software components operate in.
-A scope is a space with a well-defined lifecycle that can be created and torn down. App Platform
+[`Scopes`]((module-scopes.md)) are essential in our architecture. They define the boundary our software components
+operate in. A scope is a space with a well-defined lifecycle that can be created and torn down. App Platform
 provides hooks to create your own scopes with easy callbacks, integration for dependency injection
 frameworks and `CoroutineScopes`.
 
 ### Presenters
 
-Presenters are implemented using [Molecule](https://github.com/cashapp/molecule). Writing business and
+[Presenters]((presenters.md)) are implemented using [Molecule](https://github.com/cashapp/molecule). Writing business and
 navigation logic using *Compose* is significantly easier than chaining `Flows`.
 
 ### UI

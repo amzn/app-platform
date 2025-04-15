@@ -75,5 +75,6 @@ nav:
   - 'Setup': setup.md
   - 'Module Structure': module-structure.md
   - 'Scopes': scopes.md
+  - 'Presenters': presenters.md
   - 'Changelog': changelog.md
   - 'Contributing': contributing.md
