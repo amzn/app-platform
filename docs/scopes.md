@@ -54,6 +54,11 @@ interface Scope {
 }
 ```
 
+??? example "Sample"
+
+    The root scope is usually created when the application is launched. The sample application creates its
+    root scope [here](sample/app/src/commonMain/kotlin/software/amazon/app/platform/sample/DemoApplication.kt).
+
 ## Creating a `Scope`
 
 A `Scope` is created through the builder function. The
@@ -245,9 +250,17 @@ scope provided by the `Scope` has been canceled already.
 
 ## Hosting `Scopes`
 
-Scopes need to be remembered and must be accessible in order to get access to their services. Where to host scopes depends on what scopes are required and when they need to be created. Most apps have some form of an application scope, which is a singleton scope for the entire lifetime of the application. A natural place to host this scope for Android apps is within the Application class, for iOS apps within App struct or the main function for desktop applications.
+Scopes need to be remembered and must be accessible in order to get access to their services. Where to host scopes
+depends on what scopes are required and when they need to be created. Most apps have some form of an application
+scope, which is a singleton scope for the entire lifetime of the application. A natural place to host this scope
+for Android apps is within the `Application` class, for iOS apps within `App` struct or the main function
+for desktop applications.
 
-A user scope has a shorter lifecycle than the application scope, but usually lives longer than UI components. It is commonly hosted by a service object managing the login state. This scope is destroyed after the user session expires.
+A user scope has a shorter lifecycle than the application scope, but usually lives longer than UI components.
+It is commonly hosted by a service object managing the login state. This scope is destroyed after the user
+session expires.
 
-The App Platform by default only provides app scope, which has to be manually created by each application as highlighted above.
+The App Platform by default only provides app scope, which has to be manually created by each application as
+highlighted above.
 
+## `RootScopeProvider`
