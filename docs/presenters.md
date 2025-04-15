@@ -77,8 +77,77 @@ an interface and there can be multiple implementations.
 Observers of the state of a `Presenter`, such as the UI layer, communicate back to the `Presenter` through events.
 Events are sent through a lambda in the `Model`, which the `Presenter` must provide:
 
+```kotlin hl_lines="16"
+interface LoginPresenter : MoleculePresenter<Unit, Model> {
 
+  sealed interface Event {
+    data object Logout : Event
 
+    data class ChangeName(
+      val newName: String,
+    ) : Event
+  }
+
+  sealed interface Model : BaseModel {
+    data object LoggedOut : Model
+
+    data class LoggedIn(
+      val user: User,
+      val onEvent: (Event) -> Unit,
+    ) : Model
+  }
+}
+```
+
+A concrete implementation of `LoginPresenter` could look like this:
+
+```kotlin
+@Inject
+@ContributesBinding(AppScope::class)
+class AmazonLoginPresenter : LoginPresenter {
+  @Composable
+  fun present(input: Unit): Model {
+    ..
+    return if (user != null) {
+      LoggedIn(
+        user = user,
+        onEvent = onEvent { event ->
+          when(event) {
+            is Logout -> ..
+            is ChangeName -> ..
+          }
+        }
+      )
+    } else {
+      LoggedOut
+    }
+  }
+}
+```
+
+!!! note
+
+    `MoleculePresenters` are never singletons. While they use `kotlin-inject-anvil` for constructor injection and
+    automatically bind the concrete implementation to an API using `@ContributesBinding`, they don't use the
+    `@SingleIn` annotation. `MoleculePresenters` manage their state in the `@Composable` function with the Compose
+    runtime. Therefore, it's strongly discouraged to have any class properties.
+
+!!! warning
+
+    Notice that the lambda for `onEvent` is wrapped in the [`onEvent` function](https://github.com/amzn/app-platform/blob/main/presenter-molecule/public/src/commonMain/kotlin/software/amazon/app/platform/presenter/molecule/OnEvent.kt).
+
+    ```kotlin hl_lines="1"
+    onEvent = onEvent { event ->
+      when(event) {
+        is Logout -> ..
+        is ChangeName -> ..
+      }
+    }
+    ```
+
+    This is important for `data classes` in order to preserve equality. Internally, the `onEvent` function creates
+    and reuses a separate lambda to ensure that `BaseModel` instances holding the same data are still considered
+    equal although the `onEvent` lambda has changed between compositions.
 
 
 Scopes define the boundary our software components operate in. A scope is a space with a well-defined lifecycle
