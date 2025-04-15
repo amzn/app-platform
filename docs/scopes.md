@@ -190,8 +190,8 @@ With `kotlin-inject-anvil` for the app scope it would be:
 
 ```kotlin
 @Inject // (1)!
-@SingleIn(AppScope::class) // (2)
-@ContributesBinding(AppScope::class) (3)
+@SingleIn(AppScope::class) // (2)!
+@ContributesBinding(AppScope::class) //(3)!
 class AndroidLocationProvider(
   ...
 ) : LocationProvider, Scoped {
