@@ -150,3 +150,53 @@ interface Scoped {
     fun onExitScope()
 }
 ```
+
+Usually, we rely on our dependency injection framework to instantiate all `Scoped` instances for a scope. By doing
+so service objects will be automatically created when their corresponding scope is created and receive a callback
+when their scope is destroyed. This helps with loose coupling between our service objects. Implementing the `Scoped`
+interface is a detail, which doesn’t need to be exposed to the API layer:
+
+```kotlin
+interface LocationProvider {
+  val location: StateFlow<Location>
+}
+
+
+class AndroidLocationProvider(
+  private val locationManager: LocationManager
+) : LocationProvider, Scoped {
+
+  private val _location = MutableStateFlow<Location>()
+  override val location get() = _location
+
+  override fun onEnterScope(scope: Scope) {
+    scope.launch {
+      // Observe location updates through LocationManager
+
+      val androidLocation = ...
+      _location.value = androidLocation
+    }
+  }
+}
+```
+
+!!! note
+
+    Note in the example that the concrete implementation class implements the `Scoped` interface and
+    not `LocationProvider`. Being lifecycle aware is an implementation detail.
+
+How the `Scoped` object is instantiated depends on the dependency injection framework and which scope to use.
+With `kotlin-inject-anvil` for the app scope it would be:
+
+```kotlin
+@Inject (1)
+@SingleIn(AppScope::class)
+@ContributesBinding(AppScope::class)
+class AndroidLocationProvider(
+  ...
+) : LocationProvider, Scoped {
+  ...
+}
+```
+
+1.  :man_raising_hand: I'm an annotation!
