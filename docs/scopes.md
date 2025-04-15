@@ -275,6 +275,40 @@ class AndroidLocationProvider(
     fun provideAndroidLocationProviderScoped(androidLocationProvider: AndroidLocationProvider): Scoped = androidLocationProvider
     ```
 
+??? example "Sample"
+
+    The root scope is usually created when the application is launched. The sample application creates its
+    root scope [here](https://github.com/amzn/app-platform/blob/main/sample/app/src/commonMain/kotlin/software/amazon/app/platform/sample/DemoApplication.kt).
+    This `Scope` is never destroyed and stays alive for the entire app lifetime.
+
+    The sample application has a child scope for the logged in user. This `Scope` is created during
+    [login](https://github.com/amzn/app-platform/blob/d6ba0eef2de5042944d20a8c77ecb99fbfef317a/sample/user/impl/src/commonMain/kotlin/software/amazon/app/platform/sample/user/UserManagerImpl.kt#L47-L52)
+    and [destroyed](https://github.com/amzn/app-platform/blob/d6ba0eef2de5042944d20a8c77ecb99fbfef317a/sample/user/impl/src/commonMain/kotlin/software/amazon/app/platform/sample/user/UserManagerImpl.kt#L68)
+    during logout.
+
+    ```kotlin
+    override fun login(userId: Long) {
+      ...
+      val userComponent = userComponentFactory.createUserComponent(user)
+
+      val userScope =
+        rootScopeProvider.rootScope.buildChild("user-$userId") {
+          addDiComponent(userComponent)
+          addCoroutineScopeScoped(userComponent.userScopeCoroutineScopeScoped)
+        }
+
+      ...
+
+      userScope.register(userComponent.userScopedInstances)
+    }
+
+    override fun logout() {
+      val currentUserScope = user.value?.scope
+      ...
+      currentUserScope?.destroy()
+    }
+    ```
+
 ### Threading
 
 Which thread is used for calling `onEnterScope()` and `onExitScope()` is an implementation detail of the scope

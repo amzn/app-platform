@@ -15,7 +15,6 @@ import software.amazon.app.platform.scope.coroutine.launch
 import software.amazon.lastmile.kotlin.inject.anvil.ContributesBinding
 import software.amazon.lastmile.kotlin.inject.anvil.SingleIn
 
-// Documentation, class is created on login
 /**
  * This class logs out the user after a certain delay.
  *
