@@ -54,11 +54,6 @@ interface Scope {
 }
 ```
 
-??? example "Sample"
-
-    The root scope is usually created when the application is launched. The sample application creates its
-    root scope [here](sample/app/src/commonMain/kotlin/software/amazon/app/platform/sample/DemoApplication.kt).
-
 ## Creating a `Scope`
 
 A `Scope` is created through the builder function. The
@@ -78,6 +73,17 @@ rootScope.buildChild("user scope") {
   addService("child-service", childService)
 }
 ```
+
+??? example "Sample"
+
+    The root scope is usually created when the application is launched. The sample application creates its
+    root scope [here](https://github.com/amzn/app-platform/blob/main/sample/app/src/commonMain/kotlin/software/amazon/app/platform/sample/DemoApplication.kt).
+    This `Scope` is never destroyed and stays alive for the entire app lifetime.
+
+    The sample application has a child scope for the logged in user. This `Scope` is created during
+    [login](https://github.com/amzn/app-platform/blob/d6ba0eef2de5042944d20a8c77ecb99fbfef317a/sample/user/impl/src/commonMain/kotlin/software/amazon/app/platform/sample/user/UserManagerImpl.kt#L47-L52)
+    and [destroyed](https://github.com/amzn/app-platform/blob/d6ba0eef2de5042944d20a8c77ecb99fbfef317a/sample/user/impl/src/commonMain/kotlin/software/amazon/app/platform/sample/user/UserManagerImpl.kt#L68)
+    during logout.
 
 Tests usually leverage the test scope, which comes with better defaults for services such as the coroutine scope:
 
