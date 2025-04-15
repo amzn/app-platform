@@ -90,3 +90,63 @@ fun `my test`() = runTestWithScope { scope ->
 ```
 
 ## Services
+
+A scope can host other objects like an object graph from dependency injection frameworks and a coroutine scope.
+The latter is especially helpful, because the coroutine scope can be canceled when our logical scope is destroyed
+and all pending operations are torn down. Connecting our scopes with the dependency injection components makes
+our dependency injection setup more flexible, because we’re in charge of instantiating components and can provide
+extra objects like a user ID to the object graph. When a scope is destroyed we release the dependency injection
+component and the memory can be reclaimed by the runtime. DI components and subcomponents form a tree, therefore
+subcomponents can inject all types that are provided by parent components. The strong recommendation is to align
+the component tree with the scope hierarchy.
+
+While a service can be obtained through the `getService()` function, a more frequent pattern is to rely on
+extension functions for stronger types. Similarly, an extension function on the `Builder` allows us to add a service
+to a `Scope`.
+
+```kotlin
+interface MyService
+
+private const val MY_SERVICE_KEY = "myService"
+
+fun Scope.Builder.addMyService(service: MyService) {
+  addService(MY_SERVICE_KEY, service)
+}
+
+fun Scope.myService(): MyService {
+  return checkNotNull(getService<MyService>(MY_SERVICE_KEY))
+}
+```
+
+The App Platform comes with a coroutine scope service and an integration for
+[kotlin-inject-anvil](https://github.com/amzn/kotlin-inject-anvil) as dependency injection framework.
+
+```kotlin
+val rootScope = Scope.buildRootScope {
+  addDiComponent(kotlinInjectComponent)
+  addCoroutineScopeScoped(coroutineScope)
+}
+
+// Obtain service.
+rootScope.diComponent<AbcComponent>()
+rootScope.coroutineScope()
+```
+
+!!! warning
+
+    `Scopes` through their service mechanism implement the service locator pattern. With the provided dependency
+    injection framework usually it’s not needed to add custom services and it’s better to rely on dependency
+    injection instead.
+
+## `Scoped`
+
+Service objects can tie themselves to the lifecycle of a scope by implementing the
+[`Scoped`](https://github.com/amzn/app-platform/blob/main/scope/public/src/commonMain/kotlin/software/amazon/app/platform/scope/Scoped.kt)
+interface:
+
+```kotlin
+interface Scoped {
+    fun onEnterScope(scope: Scope)
+    fun onExitScope()
+}
+```
