@@ -202,3 +202,105 @@ a regular function to compute their model and return it.
         ),
     )
     ```
+
+This concept allows us to implement model-driven navigation. By driving the entire UI layer through `Presenters` and
+emitted `Models` navigation becomes a first class API and testable. Imagine having a root presenter implementing a
+back stack that forwards the model of the top most presenter. When the user navigates to a new screen, then the
+root presenter would add a new presenter to the stack and provide its model object.
+
+```mermaid
+%%{init: {'themeCSS': '.label { font-family: monospace; }'}}%%
+graph TD
+  login["`Login presenter`"]
+  registration["`Register presenter`"]
+  onboarding["`Onboarding presenter`"]
+  delivery["`Delivery presenter`"]
+  settings["`Settings presenter`"]
+  root["`Root presenter`"]
+  ui["`UI Layer`"]
+
+  login --> onboarding
+  registration --> onboarding
+  onboarding --> root
+  delivery --> root
+  settings --> root
+  root --> ui
+
+  style ui stroke:#0f0
+```
+
+In the example above, the root presenter would forward the model of the onboarding, delivery or settings presenter
+to the UI layer. The onboarding presenter as shown in the code example can either call the login or registration
+presenter based on a condition. With Molecule calling a child presenter is as easy as invoking a function.
+
+## Parent child communication
+
+While the pattern isn’t used frequently, parent presenters can provide input to their child presenters. The
+returned model from the child presenter can be used further to change the control flow.
+
+```kotlin
+interface ChildPresenter : MoleculePresenter<Input, Model> {
+  data class Input(
+    val argument: String,
+  )
+}
+
+class ParentPresenterImpl(
+  private val lazyChildPresenter: () -> ChildPresenter
+) : ParentPresenter {
+
+  @Composable
+  fun present(input: Unit) {
+    val childPresenter = remember { lazyChildPresenter() }
+    val childModel = childPresenter.present(Input(argument = "abc"))
+
+    return if (childModel...) ...
+  }
+}
+```
+
+This mechanism is favored less, because it only allows for direct parent to child presenter interactions and
+becomes hard to manage for deeply nested hierarchies. More often a service object is injected instead, which
+is used by the multiple presenters:
+
+```kotlin hl_lines="8 12 20 25 28"
+interface AccountManager {
+  val currentAccount: StateFlow<Account>
+
+  fun mustRegister(): Boolean
+}
+
+class AmazonLoginPresenter(
+  private val accountManager: AccountManager
+): LoginPresenter {
+  @Composable
+  fun present(input: Unit): Model {
+    val account by accountManager.currentAccount.collectAsState()
+    ...
+  }
+}
+
+class OnboardingPresenterImpl(
+  private val lazyLoginPresenter: () -> LoginPresenter,
+  private val lazyRegistrationPresenter: () -> RegistrationPresenter,
+  private val accountManager: AccountManager,
+) : OnboardingPresenter {
+
+  @Composable
+  fun present(input: Unit): BaseModel {
+    val account by accountManager.currentAccount.collectAsState()
+    ...
+
+    return if (accountManager.mustRegister()) {
+      val registrationPresenter = remember { lazyRegistrationPresenter() }
+      registrationPresenter.present(Unit)
+    } else {
+      val loginPresenter = remember { lazyLoginPresenter() }
+      loginPresenter.present(Unit)
+    }
+  }
+}
+```
+
+This example shows how `AccountManager` holds state and is injected into multiple presenters instead of relying
+on presenter inputs.
