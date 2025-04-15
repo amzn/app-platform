@@ -211,10 +211,36 @@ class AndroidLocationProvider(
     { .annotate }
 
     1.  ```kotlin
-        a b
+        @Provides
+        public fun provideAndroidLocationProvider(androidLocationProvider: AndroidLocationProvider): LocationProvider = androidLocationProvider
         ```
     2.  ```kotlin
-        d e
+        @Provides
+        @IntoSet
+        @ForScope(AppScope::class)
+        fun provideAndroidLocationProviderScoped(androidLocationProvider: AndroidLocationProvider): Scoped = androidLocationProvider
         ```
 
-    // TODO: generated code
+### Threading
+
+Which thread is used for calling `onEnterScope()` and `onExitScope()` is an implementation detail of the scope
+owner when calling `scope.register(Scoped)`. Usually, the app scope is created as soon as possible when the
+application launches and therefore the main thread is used. Child scopes may use the main thread or a background
+thread.
+
+To safely launch long running work or blocking tasks it’s recommended to use the coroutine scope provided by the
+`Scope`:
+
+```kotlin
+override fun onEnterScope(scope: Scope) {
+  scope.coroutineScope().launch { ... }
+
+  // Or short
+  scope.launch { ... }
+}
+```
+
+Clean up routines in `onExitScope()` must be blocking, otherwise these tasks live longer than the `Scope` and
+therefore may cause a leak (thread and memory) and potential race conditions. It’s strongly recommended not to
+launch any asynchronous work within `onExitScope()`. By the time `onExitScope()` is called, the coroutine
+scope provided by the `Scope` has been canceled already.

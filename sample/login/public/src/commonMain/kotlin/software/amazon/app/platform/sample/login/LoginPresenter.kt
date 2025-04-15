@@ -1,7 +1,12 @@
 package software.amazon.app.platform.sample.login
 
+import me.tatarka.inject.annotations.Inject
 import software.amazon.app.platform.presenter.BaseModel
 import software.amazon.app.platform.presenter.molecule.MoleculePresenter
+import software.amazon.app.platform.scope.Scoped
+import software.amazon.lastmile.kotlin.inject.anvil.AppScope
+import software.amazon.lastmile.kotlin.inject.anvil.ContributesBinding
+import software.amazon.lastmile.kotlin.inject.anvil.SingleIn
 
 /** A presenter to render the login screen. */
 interface LoginPresenter : MoleculePresenter<Unit, LoginPresenter.Model> {
@@ -20,3 +25,11 @@ interface LoginPresenter : MoleculePresenter<Unit, LoginPresenter.Model> {
     data class Login(val userName: String) : Event
   }
 }
+
+interface LocationProvider
+
+@Inject // (1)!
+@SingleIn(AppScope::class) // (2)!
+@ContributesBinding(AppScope::class) //(3)!
+class AndroidLocationProvider(
+) : LocationProvider, Scoped
