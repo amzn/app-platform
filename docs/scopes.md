@@ -100,6 +100,28 @@ fun `my test`() = runTestWithScope { scope ->
 }
 ```
 
+??? example "Sample"
+
+    Classes implementing the `Scoped` interface usually make use of the `runTestWithScope` function in their tests.
+    Notice in [this sample](https://github.com/amzn/app-platform/blob/9fe3102900b9899d2ed9e78317a0e29d8ef40c37/sample/user/impl/src/commonTest/kotlin/software/amazon/app/platform/sample/user/SessionTimeoutTest.kt#L36-L48)
+    how `SessionTimeout`, which implements the `Scoped` interface, is registered in the `Scope`.
+
+    ```kotlin hl_lines="7"
+    @Test
+    fun `on timeout the user is logged out`() = runTestWithScope { scope ->
+      val userManager = FakeUserManager()
+      userManager.login(1L)
+
+      val sessionTimeout = SessionTimeout(userManager, FakeAnimationHelper)
+      scope.register(sessionTimeout)
+
+      assertThat(userManager.user.value).isNotNull()
+
+      advanceTimeBy(SessionTimeout.initialTimeout + 1.milliseconds)
+      assertThat(userManager.user.value).isNull()
+    }
+    ```
+
 ## Services
 
 A scope can host other objects like an object graph from dependency injection frameworks and a coroutine scope.
