@@ -200,8 +200,63 @@ class ConnectionRobot : Robot {
 
 [`Robot`](https://github.com/amzn/app-platform/blob/main/robot/public/src/commonMain/kotlin/software/amazon/app/platform/robot/Robot.kt).
 
-:   Extend
+:   Use this common interface for robots that don't interact with any UI, whether that's Compose Multiplatform or
+    Android Views. To obtain an instance of such a robot use the `robot<Type>()` function:
 
-[`RecyclerViewViewHolderRenderer`](https://github.com/amzn/app-platform/blob/main/renderer-android-view/public/src/androidMain/kotlin/software/amazon/app/platform/renderer/RecyclerViewViewHolderRenderer.kt)
+    ```kotlin
+    @Inject
+    @ContributesRobot(AppScope::class)
+    class MetricsRobot(
+      private val metricsService: FakeMetricsService
+    ) : Robot {
+      fun assertMetricTracked(metric: Metric) {
+        assertThat(metricsService.metrics).contains(metric)
+      }
+    }
 
-:   `RecyclerViewViewHolderRenderer` allows you to implement elements of a `RecyclerView` as a `Renderer`.
+    @Test
+    fun verify_analytics_event_tracked() {
+      ...
+      robot<MetricsRobot>().assertMetricTracked(..)
+    }
+    ```
+
+[`ComposeRobot`](https://github.com/amzn/app-platform/blob/main/robot-compose-multiplatform/public/src/commonMain/kotlin/software/amazon/app/platform/robot/ComposeRobot.kt)
+
+:   `ComposeRobot` should be used as parent type when the robot interacts with Compose UI elements. These robots need
+    access to a `SemanticsNodeInteractionsProvider` instance, which is for example provided by calling
+    `runComposeUiTest { ... }` within a test. To forward the `SemanticsNodeInteractionsProvider` instance to the robot
+    call `composeRobot<Type>()` instead of `robot<Type>()`.
+
+    !!! warning
+
+        Calling `robot<Type>()` for a `ComposeRobot` will result in a crash. Always use `composeRobot<Type>()` instead.
+
+    ```kotlin
+    @ContributesRobot(AppScope::class)
+    class LoginRobot : ComposeRobot() {
+
+      private val loginButtonNode
+        get() = compose.onNodeWithTag("loginButton")
+
+      /** Verify that login button is displayed. */
+      fun seeLoginButton() {
+        loginButtonNode.assertIsDisplayed()
+      }
+
+      /** Clicks the login button and starts the login process. */
+      fun clickLoginButton() {
+        loginButtonNode.performClick()
+      }
+    }
+
+    @Test
+    fun `sample test`() {
+      runComposeUiTest {
+        composeRobot<LoginRobot> {
+          seeLoginButton()
+          clickLoginButton()
+        }
+      }
+    }
+    ```
