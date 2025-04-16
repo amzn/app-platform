@@ -260,3 +260,88 @@ class ConnectionRobot : Robot {
       }
     }
     ```
+
+[`AndroidViewRobot`](https://github.com/amzn/app-platform/blob/main/robot/public/src/androidMain/kotlin/software/amazon/app/platform/robot/AndroidViewRobot.kt)
+
+:   `AndroidViewRobot` should be used as parent type when the robot interacts with Android Views.
+    To obtain an instance of such a robot use the `robot<Type>()` function:
+
+    ```kotlin
+    @ContributesRobot(AppScope::class)
+    class AndroidCounterRobot : AndroidViewRobot() {
+      fun seeCounterView() {
+        onView(withText(containsString("Counter: "))).check(matches(isDisplayed()))
+      }
+    }
+
+    @Test
+    fun counter_is_shown() {
+      robot<AndroidCounterRobot> {
+        seeCounterView()
+      }
+    }
+    ```
+
+`Robots` must be annotated with `@ContributesRobot` in order to find them during tests when using the `robot<Type>()`
+or `composeRobot<Type>()` function. The annotation makes sure that the robots are added to the `kotlin-inject-anvil`
+dependency graph.
+
+??? info "Generated code"
+
+    The `@ContributesRobot` annotation generates following code.
+
+    ```kotlin
+    @ContributesTo(AppScope::class)
+    public interface LoginRobotComponent {
+      public val loginRobot: LoginRobot
+
+      @Provides public fun provideLoginRobot(): LoginRobot = LoginRobot()
+
+      @Provides
+      @IntoMap
+      public fun provideLoginRobotIntoMap(
+        robot: () -> LoginRobot
+      ): Pair<KClass<out Robot>, () -> Robot> = LoginRobot::class to robot
+    }
+    ```
+
+If a `Robot` needs to inject other types such a fake implementations, then it needs to be additionally annotated with
+`@Inject`, e.g.
+
+```kotlin
+@Inject
+@ContributesRobot(AppScope::class)
+class MetricsRobot(
+  private val metricsService: FakeMetricsService
+) : Robot {
+  fun assertMetricTracked(metric: Metric) {
+    assertThat(metricsService.metrics).contains(metric)
+  }
+}
+```
+
+### `:*-robots` modules
+
+Similar to sharing fakes for unit tests by leveraging `:testing` modules, the module structure of App Platform
+provides [`:*-robots` modules](module-structure.md#robots) to share code for instrumented tests across projects.
+It’s strongly encouraged for features to create `:*-robots` modules and share robot implementations.
+
+??? example "Sample"
+
+    [`NavigationPresenterImpl`](https://github.com/amzn/app-platform/blob/main/sample/navigation/impl/src/commonMain/kotlin/software/amazon/app/platform/sample/navigation/NavigationPresenterImpl.kt)
+    is another example that highlights this principle.
+
+    [`UserPagePresenterImpl`](https://github.com/amzn/app-platform/blob/main/sample/user/impl/src/commonMain/kotlin/software/amazon/app/platform/sample/user/UserPagePresenterImpl.kt)
+    goes a step further. Its `BaseModel` is composed of two sub-models. The `listModel` is even an input for the
+    detail-presenter.
+
+    ```kotlin
+    val listModel = userPageListPresenter.present(UserPageListPresenter.Input(user))
+    return Model(
+      listModel = listModel,
+      detailModel =
+        userPageDetailPresenter.present(
+          UserPageDetailPresenter.Input(user, selectedAttribute = listModel.selectedIndex)
+        ),
+    )
+    ```
