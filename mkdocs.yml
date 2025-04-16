@@ -80,4 +80,6 @@ nav:
   - 'Renderer': renderer.md
   - 'Template': template.md
   - 'DI Framework': di.md
+  - 'Testing': testing.md
+  - 'FAQ': faq.md
   - 'Changelog': changelog.md
