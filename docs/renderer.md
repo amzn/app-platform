@@ -335,8 +335,10 @@ from Android Views to Compose UI by simply migrating renderers one by one.
 ## Unit tests
 
 `ComposeRenderer` can easily be tested as unit tests on Desktop and iOS. In particular tests for Desktop are helpful
-due to the fast build times. Testing `ComposeRenderer` or `ViewRenderer` for Android requires an Android device or
-emulator.
+due to the fast build times. Various fake `Models` can be passed to the `Renderer` and the UI state based on the
+model verified.
+
+Testing `ComposeRenderer` or `ViewRenderer` for Android requires an Android device or emulator.
 
 This test runs as a unit test on iOS and Desktop.
 

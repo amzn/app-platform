@@ -38,12 +38,12 @@ usage of the module structure are implemented in the Gradle plugin.
 
 ### Dependency Injection
 
-App Platform uses by default [kotlin-inject-anvil](https://github.com/amzn/kotlin-inject-anvil) for dependency
+App Platform uses by default [kotlin-inject-anvil](di.md) for dependency
 injection. But this isn't enforced and can be changed (1).
 { .annotate }
 
 1.  In the very first versions of App Platform, we at Amazon used [Dagger 2](https://dagger.dev/) and
-[Anvil](https://github.com/square/anvil). Later we migrated to *kotlin-inject-anvil*.
+[Anvil](https://github.com/square/anvil). Later we migrated to [kotlin-inject-anvil](https://github.com/amzn/kotlin-inject-anvil).
 
 ### Scopes
 
@@ -68,9 +68,10 @@ is fully supported out of the box. For Android there is seamless interop with An
 ### Testing
 
 Fakes for unit and device tests are essential and integral part of our architecture. There are many
-test helpers to setup fakes for core components such as `Scopes`. We like using [Turbine](https://github.com/cashapp/turbine/)
-for verifying the reactive behavior of our `Presenters`. Thanks to *Compose Multiplatform*, `Renderers` can be easily
-tested in isolation for iOS and Desktop.
+[test helpers](testing.md) to setup fakes for core components such as `Scopes`. We like using
+[Turbine](https://github.com/cashapp/turbine/) for verifying the reactive behavior of our `Presenters`.
+Thanks to *Compose Multiplatform*, `Renderers` [can be tested](renderer.md#unit-tests) in isolation for iOS
+and Desktop.
 
 ### Integration
 
