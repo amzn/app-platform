@@ -304,3 +304,17 @@ render.render(model)
 In this example the returned `Renderer` can be a `ComposeRenderer` or `ViewRenderer`, it would not matter and either
 the Compose UI or Android Views would be rendered on screen. With the seamless interop it becomes easier to migrate
 from Android Views to Compose UI by simply migrating renderers one by one.
+
+### `ViewRenderer` subtypes
+
+[`ViewBindingRenderer`](https://github.com/amzn/app-platform/blob/main/renderer-android-view/public/src/androidMain/kotlin/software/amazon/app/platform/renderer/ViewBindingRenderer.kt).
+
+:   View binding is supported out of the box using `ViewBindingRenderer`.
+
+[`RecyclerViewViewHolderRenderer`](https://github.com/amzn/app-platform/blob/main/renderer-android-view/public/src/androidMain/kotlin/software/amazon/app/platform/renderer/RecyclerViewViewHolderRenderer.kt)
+
+:   `RecyclerViewViewHolderRenderer` allows you to implement elements of a `RecyclerView` as a `Renderer`.
+
+
+
+
