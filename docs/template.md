@@ -143,3 +143,15 @@ interface ViewControllerComponent {
   val navigationPresenter: NavigationPresenter
 }
 ```
+
+## Unidirectional dataflow
+
+Templates complete the circle in our unidirectional dataflow pattern:
+
+![Unidirectional dataflow](images/unidirectional-dataflow.png){ width="600" }
+
+This diagram summarizes how models from child presenters bubble up ultimately to the template presenter. The template
+presenter wraps the models in a template, which is then handed off the rendering pipeline. `RendererFactory` finds
+the right renderers for the template and models and the content will be shown on screen by individual renderers. The
+circle repeats either when a renderer invokes a callback from the model and sends the event back to the presenter or
+another state change occurs within the the presenter tree.
