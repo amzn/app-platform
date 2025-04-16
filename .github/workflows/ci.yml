@@ -195,6 +195,27 @@ jobs:
           name: test-results-${{ github.job }}
           path: ./**/build/reports/
 
+  build-ios-sample-app:
+    runs-on: macos-latest-xlarge
+    timeout-minutes: 25
+
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup
+        uses: ./.github/actions/setup-action
+        with:
+          gradle-encryption-key: ${{ secrets.GRADLE_ENCRYPTION_KEY }}
+
+      # The command to build is executed by the Android Studio iOS app run action.
+      #
+      # The destination id was printed in the Github Action console
+      #
+      #   { platform:iOS Simulator, id:77D15A8A-0E47-4200-A192-A0C6311C808D, OS:18.2, name:iPhone SE (3rd generation) }
+      - name: Build swift
+        run: |
+          /usr/bin/xcodebuild -version
+          /usr/bin/xcodebuild -project sample/iosApp/iosApp.xcodeproj -scheme iosApp -configuration Debug OBJROOT=build/ios SYMROOT=build/ios -destination id=77D15A8A-0E47-4200-A192-A0C6311C808D -allowProvisioningDeviceRegistration -allowProvisioningUpdates
+
   binary-compatibility-check:
     runs-on: ubuntu-latest
     timeout-minutes: 25
