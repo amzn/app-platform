@@ -30,7 +30,7 @@ for [Compose Multiplatform](https://www.jetbrains.com/compose-multiplatform/) an
 for Android are used. App Platform doesn’t provide any other implementations for now, e.g. a SwiftUI or UIKit
 implementation for iOS is missing.
 
-```kotlin title="`ComposeRenderer`"
+```kotlin title="ComposeRenderer"
 @ContributesRenderer
 class LoginRenderer : ComposeRenderer<Model>() {
   @Composable
@@ -44,7 +44,7 @@ class LoginRenderer : ComposeRenderer<Model>() {
 }
 ```
 
-```kotlin title="`ViewRenderer`"
+```kotlin title="ViewRenderer"
 @ContributesRenderer
 class LoginRenderer : ViewRenderer<Model>() {
     private lateinit var textView: TextView
@@ -95,8 +95,12 @@ class ParentRenderer(
 }
 ```
 
-A `Renderer` sends events back to the `Presenter` through the `onEvent` lambda on a Model. The model and presenter
-from an earlier example looked like this:
+!!! note
+
+    Injecting concrete child `Renderers` is possible, but less common. More frequently `RendererFactory` is injected
+    to obtain a `Renderer` instance for a `Model`.
+
+A `Renderer` sends events back to the `Presenter` through the `onEvent` lambda on a Model.
 
 ```kotlin hl_lines="6"
 @ContributesRenderer
@@ -118,7 +122,7 @@ How `Renderers` are initialized depends on [`RendererFactory`](https://github.co
 which only responsibility is to create and cache `Renderers` based on the given model. App Platform comes with three
 different implementations:
 
-`ComposeRendererFactory`
+[`ComposeRendererFactory`](https://github.com/amzn/app-platform/blob/main/renderer-compose-multiplatform/public/src/commonMain/kotlin/software/amazon/app/platform/renderer/ComposeRendererFactory.kt)
 
 :   [`ComposeRendererFactory`](https://github.com/amzn/app-platform/blob/main/renderer-compose-multiplatform/public/src/commonMain/kotlin/software/amazon/app/platform/renderer/ComposeRendererFactory.kt)
     is an implementation for Compose Multiplatform and can be used on all supported platform. It can only create
