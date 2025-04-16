@@ -307,8 +307,21 @@ on presenter inputs.
 
 ## Launching
 
-`MoleculePresenters` can inject other presenters and call their `present()` function inline. But at some point it
-may be necessary to turn the `@Composable` functions into a `StateFlow` for consumption outside of Compose.
+`MoleculePresenters` can inject other presenters and call their `present()` function inline. If you are already in a
+composable UI context, then you can simply call the presenter to compute the model:
+
+```kotlin
+fun mainViewController(): UIViewController = ComposeUIViewController {
+  val presenter = remember { LoginPresenter() }
+  val model = presenter.present(Unit)
+  ...
+}
+```
+
+In this example the `LoginPresenter` model is computed from an iOS Compose Multiplatform function.
+
+In other scenarios a composable context may not be available and it's necessary to turn the `@Composable` functions
+into a `StateFlow` for consumption.
 
 [`MoleculeScope`](https://github.com/amzn/app-platform/blob/main/presenter-molecule/public/src/commonMain/kotlin/software/amazon/app/platform/presenter/molecule/MoleculeScope.kt)
 helps to turn a `MoleculePresenter` into a `Presenter`, which then exposes a `StateFlow`:
