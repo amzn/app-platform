@@ -331,3 +331,35 @@ from Android Views to Compose UI by simply migrating renderers one by one.
 [`RecyclerViewViewHolderRenderer`](https://github.com/amzn/app-platform/blob/main/renderer-android-view/public/src/androidMain/kotlin/software/amazon/app/platform/renderer/RecyclerViewViewHolderRenderer.kt)
 
 :   `RecyclerViewViewHolderRenderer` allows you to implement elements of a `RecyclerView` as a `Renderer`.
+
+## Unit tests
+
+`ComposeRenderer` can easily be tested as unit tests on Desktop and iOS. In particular tests for Desktop are helpful
+due to the fast build times. Testing `ComposeRenderer` or `ViewRenderer` for Android requires an Android device or
+emulator.
+
+This test runs as a unit test on iOS and Desktop.
+
+```kotlin
+class LoginRendererTest {
+
+  @Test
+  fun `the login button is rendered when not logging in`() {
+    runComposeUiTest {
+      setContent {
+        val renderer = LoginRenderer()
+        renderer.renderCompose(LoginPresenter.Model(loginInProgress = false, onEvent = {}))
+      }
+
+      onNodeWithTag("loginProgress").assertDoesNotExist()
+      onNodeWithTag("loginButton").assertIsDisplayed()
+    }
+  }
+}
+```
+
+??? example "Sample"
+
+    The sample app demonstrates this with the [`LoginRendererTest`](https://github.com/amzn/app-platform/blob/main/sample/login/impl/src/appleAndDesktopTest/kotlin/software/amazon/app/platform/sample/login/LoginRendererTest.kt).
+    To avoid duplicating the test in the `desktopTest` and `iosTest` source folders, the sample app has a custom
+    source set `appleAndDesktop`, which is a shared parent source set for `apple` and `desktop`.

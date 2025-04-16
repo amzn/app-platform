@@ -87,7 +87,7 @@ class IosLocationProvider(
 ) : LocationProvider
 ```
 
-Other common code can safely inject `LocationProvider`.
+Other common code within `commonMain` can safely inject and use `LocationProvider`.
 
 ## Injecting dependencies
 
