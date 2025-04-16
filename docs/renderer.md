@@ -275,3 +275,32 @@ class SampleRenderer(
   }
 }
 ```
+
+!!! note
+
+    Whenever a `Renderer` has an injected constructor parameter like `rendererFactory` in the sample above, then
+    the class must be annotated with `@Inject` in addition to `@ContributesRenderer`.
+
+## Android support
+
+Android Views are supported out of the box using `ViewRenderer`.
+
+### Compose interop
+
+If an Android app uses only Compose UI with `ComposeRenderer`, then it can use `ComposeRendererFactory` similar to
+iOS and Desktop to create `ComposeRenderer` instances. However, if interop with Android Views is needed, then
+`ComposeAndroidRendererFactory` must be used. `ComposeAndroidRendererFactory` makes it transparent which `Renderer`
+implementation is used and interop is seamless. A `ComposeRenderer` that has a child `ViewRenderer` wraps the Android
+view within a `AndroidView` composable function call. A `ViewRenderer` that has a child `ComposeRenderer` wraps the
+Compose UI within a `ComposeView` Android View.
+
+```kotlin
+val rendererFactory = ComposeAndroidRendererFactory(...)
+
+val renderer = rendererFactory.getRenderer(model)
+render.render(model)
+```
+
+In this example the returned `Renderer` can be a `ComposeRenderer` or `ViewRenderer`, it would not matter and either
+the Compose UI or Android Views would be rendered on screen. With the seamless interop it becomes easier to migrate
+from Android Views to Compose UI by simply migrating renderers one by one.
