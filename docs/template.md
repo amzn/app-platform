@@ -117,3 +117,29 @@ class ComposeSampleAppTemplateRenderer(
   }
 }
 ```
+
+### Consuming `Templates`
+
+On the API level `Templates` are regular `Models`, with a regular `Presenter` and `Renderer`. Therefore, they
+require no special treatment and the regular `RendererFactory` can be used:
+
+```kotlin
+fun mainViewController(rootScopeProvider: RootScopeProvider): UIViewController =
+  ComposeUIViewController {
+    val factory = remember { ComposeRendererFactory(rootScopeProvider = rootScopeProvider) }
+
+    val templatePresenter = remember {
+      val component = rootScopeProvider.rootScope.diComponent<ViewControllerComponent>()
+      component.factory.createSampleAppTemplatePresenter(component.navigationPresenter)
+    }
+
+    val template = templatePresenter.present(Unit)
+    factory.getComposeRenderer(template).renderCompose(template)
+  }
+
+@ContributesTo(AppScope::class)
+interface ViewControllerComponent {
+  val factory: SampleAppTemplatePresenter.Factory
+  val navigationPresenter: NavigationPresenter
+}
+```
