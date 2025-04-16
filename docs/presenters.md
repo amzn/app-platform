@@ -355,6 +355,24 @@ val stateFlow = moleculeScope
     }
     ```
 
+!!! info
+
+    By default `MoleculeScope` uses the main thread for running presenters and
+    [`RecompositionMode.ContextClock`](https://github.com/cashapp/molecule/blob/trunk/molecule-runtime/src/commonMain/kotlin/app/cash/molecule/RecompositionMode.kt),
+    meaning a new model is produced only once per UI frame and further changes are conflated.
+
+    This behavior can be changed by creating a custom `MoleculeScope`, e.g. tests make use of this:
+
+    ```kotlin
+    fun TestScope.moleculeScope(
+      coroutineContext: CoroutineContext = EmptyCoroutineContext
+    ): MoleculeScope {
+      val scope = backgroundScope + CoroutineName("TestMoleculeScope") + coroutineContext
+
+      return MoleculeScope(scope, RecompositionMode.Immediate)
+    }
+    ```
+
 ## Testing
 
 A [`test()`](https://github.com/amzn/app-platform/blob/main/presenter-molecule/testing/src/commonMain/kotlin/software/amazon/app/platform/presenter/molecule/TestPresenter.kt)
@@ -514,5 +532,3 @@ fun present(input: Unit): Model {
 
 When the `Presenter` leaves composition, then all jobs launched by this coroutine scope get canceled. For more
 details see [here](https://developer.android.com/jetpack/compose/side-effects#remembercoroutinescope).
-
-## Threading
