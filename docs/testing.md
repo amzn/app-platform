@@ -12,6 +12,19 @@ are functioning and tests don’t need to be repeated.
 
 ![Testing pyramid](images/testing-pyramid.png){ width="400" }
 
+!!! info "Instrumented tests"
+
+    The sample application implements instrumented tests for two screens and navigates between the tests. The
+    [tests for Desktop](https://github.com/amzn/app-platform/blob/main/sample/app/src/desktopTest/kotlin/software/amazon/app/platform/sample/LoginUiTest.kt)
+    highlight how templates are rendered and robots are used for verification. It also sets up a `kotlin-inject-anvil`
+    [`TestAppComponent`](https://github.com/amzn/app-platform/blob/main/sample/app/src/desktopTest/kotlin/software/amazon/app/platform/sample/TestDesktopAppComponent.kt),
+    which replaces the main `AppComponent`.
+
+    The same UI test is [implemented for Android](https://github.com/amzn/app-platform/blob/main/sample/app/src/androidInstrumentedTest/kotlin/software/amazon/app/platform/sample/AndroidLoginUiTest.kt).
+    The Android tests reuse the same robots for verification and set up a
+    [`TestAppComponent`](https://github.com/amzn/app-platform/blob/main/sample/app/src/androidInstrumentedTest/kotlin/software/amazon/app/platform/sample/TestAndroidAppComponent.kt)
+    in a similar way.
+
 ## Fakes
 
 Unit tests build the foundation of the testing pyramid. They verify the smallest components of our app, which
@@ -328,20 +341,6 @@ It’s strongly encouraged for features to create `:*-robots` modules and share 
 
 ??? example "Sample"
 
-    [`NavigationPresenterImpl`](https://github.com/amzn/app-platform/blob/main/sample/navigation/impl/src/commonMain/kotlin/software/amazon/app/platform/sample/navigation/NavigationPresenterImpl.kt)
-    is another example that highlights this principle.
-
-    [`UserPagePresenterImpl`](https://github.com/amzn/app-platform/blob/main/sample/user/impl/src/commonMain/kotlin/software/amazon/app/platform/sample/user/UserPagePresenterImpl.kt)
-    goes a step further. Its `BaseModel` is composed of two sub-models. The `listModel` is even an input for the
-    detail-presenter.
-
-    ```kotlin
-    val listModel = userPageListPresenter.present(UserPageListPresenter.Input(user))
-    return Model(
-      listModel = listModel,
-      detailModel =
-        userPageDetailPresenter.present(
-          UserPageDetailPresenter.Input(user, selectedAttribute = listModel.selectedIndex)
-        ),
-    )
-    ```
+    The sample application comes with two robot implementations [`LoginRobot`](https://github.com/amzn/app-platform/blob/main/sample/login/impl-robots/src/commonMain/kotlin/software/amazon/app/platform/sample/login/LoginRobot.kt)
+    and [`UserPageRobot`](https://github.com/amzn/app-platform/blob/main/sample/user/impl-robots/src/commonMain/kotlin/software/amazon/app/platform/sample/user/UserPageRobot.kt),
+    each living in its feature specific `:robots` module.
