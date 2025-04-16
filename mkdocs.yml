@@ -74,7 +74,8 @@ nav:
   - 'Introduction': index.md
   - 'Setup': setup.md
   - 'Module Structure': module-structure.md
-  - 'Scopes': scopes.md
-  - 'Presenters': presenters.md
+  - 'Scope': scope.md
+  - 'Presenter': presenter.md
+  - 'Renderer': renderer.md
   - 'Changelog': changelog.md
   - 'Contributing': contributing.md

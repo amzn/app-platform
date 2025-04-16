@@ -1,4 +1,4 @@
-# Scopes
+# Scope
 
 !!! note
 
