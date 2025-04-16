@@ -30,7 +30,7 @@ for [Compose Multiplatform](https://www.jetbrains.com/compose-multiplatform/) an
 for Android are used. App Platform doesn’t provide any other implementations for now, e.g. a SwiftUI or UIKit
 implementation for iOS is missing.
 
-```kotlin title="ComposeRenderer sample"
+```kotlin title="`ComposeRenderer`"
 @ContributesRenderer
 class LoginRenderer : ComposeRenderer<Model>() {
   @Composable
@@ -44,7 +44,7 @@ class LoginRenderer : ComposeRenderer<Model>() {
 }
 ```
 
-```kotlin title="ViewRenderer sample"
+```kotlin title="`ViewRenderer`"
 @ContributesRenderer
 class LoginRenderer : ViewRenderer<Model>() {
     private lateinit var textView: TextView
@@ -255,3 +255,7 @@ class MainActivity : ComponentActivity() {
 ```
 
 ### Injecting `RendererFactory`
+
+The `RendererFactory` is provided in the `RendererComponent`, meaning it can be injected by any `Renderer`. This
+allows you to create child renderers without knowing the concrete type of the model and injecting the child
+renderers ahead of time:
