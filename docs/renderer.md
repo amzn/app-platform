@@ -64,6 +64,20 @@ class LoginRenderer : ViewRenderer<Model>() {
 }
 ```
 
+!!! warning
+
+    Note that `ComposeRenderer` like `ViewRenderer` implements the common `Renderer` interface, but calling the
+    `render(model)` function [is an error](https://github.com/amzn/app-platform/blob/39b30e35f5fcd04c8265e19c23c36bdda39fd803/renderer-compose-multiplatform/public/src/commonMain/kotlin/software/amazon/app/platform/renderer/ComposeRenderer.kt#L52-L58).
+    Instead, `ComposeRenderer` defines its own function to preserve the composable context:
+
+    ```kotlin
+    @Composable
+    fun renderCompose(model: ModelT)
+    ```
+
+    In practice this is less of a concern, because the `render(model)` function is deprecated and hidden and callers
+    only see the `renderCompose(model)` function.
+
 Renderers are composable and can build hierarchies similar to `Presenters`. The parent renderer is responsible for
 calling `render()` on the child renderer:
 
@@ -123,5 +137,121 @@ different implementations:
     is only suitable for Android when using `ComposeRenderer` together with `ViewRenderer`. The factory wraps the
     Renderers for seamless interop.
 
-All implementations rely on our dependency injection framework kotlin-inject-anvil to discover and initialize
-renderers.
+### `@ContributesRenderer`
+
+All factory implementations rely on the dependency injection framework kotlin-inject-anvil to discover and initialize
+renderers. When the factory is created, it builds the `RendererComponent`, which parent is the app component.
+The `RendererComponent` lazily provides all renderers using the multibindings feature. To participate in the lookup,
+renderers must tell kotlin-inject-anvil which models they can render. This is done through a component interface,
+which automatically gets generated and added to the renderer scope by using the
+[`@ContributesRenderer` annotation](https://github.com/amzn/app-platform/blob/main/kotlin-inject-extensions/contribute/public/src/commonMain/kotlin/software/amazon/app/platform/inject/ContributesRenderer.kt).
+
+Which `Model` type is used for the binding is determined based on the super type. In the following example
+`LoginPresenter.Model` is used.
+
+```kotlin
+@ContributesRenderer
+class LoginRenderer : ComposeRenderer<LoginPresenter.Model>()
+```
+
+??? info "Generated code"
+
+    The `@ContributesRenderer` annotation generates following code.
+
+    ```kotlin
+    @ContributesTo(RendererScope::class)
+    interface LoginRendererComponent {
+      @Provides
+      public fun provideSoftwareAmazonAppPlatformSampleLoginLoginRenderer(): LoginRenderer = LoginRenderer()
+
+      @Provides
+      @IntoMap
+      public fun provideSoftwareAmazonAppPlatformSampleLoginLoginRendererLoginPresenterModel(renderer: () -> LoginRenderer): Pair<KClass<out BaseModel>, () -> Renderer<*>> = LoginPresenter.Model::class to renderer
+
+      @Provides
+      @IntoMap
+      @ForScope(scope = RendererScope::class)
+      public fun provideSoftwareAmazonAppPlatformSampleLoginLoginRendererLoginPresenterModelKey(): Pair<KClass<out BaseModel>, KClass<out Renderer<*>>> = LoginPresenter.Model::class to LoginRenderer::class
+    }
+    ```
+
+### Creating `RendererFactory`
+
+The `RendererFactory` should be created and cached in the platform specific UI context, e.g. an Android `Activity` or
+iOS `UIViewController`.
+
+```kotlin title="Compose Multiplatform"
+fun mainViewController(rootScopeProvider: RootScopeProvider): UIViewController =
+  ComposeUIViewController {
+    // Only a single factory is needed.
+    val rendererFactory = remember { ComposeRendererFactory(rootScopeProvider) }
+    ...
+  }
+```
+
+```kotlin title="Android Activity"
+class MainActivity : ComponentActivity() {
+
+  override fun onCreate(savedInstanceState: Bundle?) {
+    super.onCreate(savedInstanceState)
+    setContentView(R.layout.activity_main)
+
+    val rendererFactory =
+      ComposeAndroidRendererFactory(
+        rootScopeProvider = application as RootScopeProvider,
+        activity = this,
+        parent = findViewById(R.id.main_container),
+      )
+    ...
+  }
+}
+```
+
+### Creating `Renderers`
+
+Based on a `Model` instance or `Model` type a `RendererFactory` can create a new `Renderer` instance. The
+`getRenderer()` function creates a `Renderer` only once and caches the instance after that. This makes the caller side
+simpler. Whenever a new `Model` is available get the `Renderer` for the `Model` and render the content on screen.
+
+```kotlin title="Compose Multiplatform"
+fun mainViewController(rootScopeProvider: RootScopeProvider): UIViewController =
+  ComposeUIViewController {
+    // Only a single factory is needed.
+    val rendererFactory = remember { ComposeRendererFactory(rootScopeProvider) }
+
+    val model = presenter.present(Unit)
+
+    val renderer = factory.getRenderer(model::class)
+    renderer.renderCompose(model)
+  }
+```
+
+!!! note
+
+    Note that `getRenderer()` for `ComposeRendererFactory` returns a `ComposeRenderer`. For a `ComposeRenderer` the
+    `renderCompose(model)` function must be called and not `render(model)`.
+
+```kotlin title="Android Activity"
+class MainActivity : ComponentActivity() {
+
+  override fun onCreate(savedInstanceState: Bundle?) {
+    super.onCreate(savedInstanceState)
+    setContentView(R.layout.activity_main)
+
+    val rendererFactory = ComposeAndroidRendererFactory(...)
+    val models: StateFlow<Model> = ...
+    ...
+
+    lifecycleScope.launch {
+      repeatOnLifecycle(Lifecycle.State.STARTED) {
+        models.collect { model ->
+          val renderer = rendererFactory.getRenderer(model)
+          renderer.render(model)
+        }
+      }
+    }
+  }
+}
+```
+
+### Injecting `RendererFactory`
