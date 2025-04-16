@@ -305,6 +305,86 @@ class OnboardingPresenterImpl(
 This example shows how `AccountManager` holds state and is injected into multiple presenters instead of relying
 on presenter inputs.
 
+## Launching
+
+`MoleculePresenters` can inject other presenters and call their `present()` function inline. But at some point it
+may be necessary to turn the `@Composable` functions into a `StateFlow` for consumption outside of Compose.
+
+[`MoleculeScope`](https://github.com/amzn/app-platform/blob/main/presenter-molecule/public/src/commonMain/kotlin/software/amazon/app/platform/presenter/molecule/MoleculeScope.kt)
+helps to turn a `MoleculePresenter` into a `Presenter`, which then exposes a `StateFlow`:
+
+```kotlin
+val stateFlow = moleculeScope
+  .launchMoleculePresenter(
+    presenter = myPresenter,
+    input = Unit,
+  )
+  .model
+```
+
+!!! warning
+
+    `MoleculeScope` wraps a `CoroutineScope`. The presenter keeps running, recomposing and producing new models
+    until the `MoleculeScope` is canceled. If the `MoleculeScope` is never canceled, then presenters leak and will
+    cause issues later.
+
+    Use [`MoleculeScopeFactory`](https://github.com/amzn/app-platform/blob/main/presenter-molecule/public/src/commonMain/kotlin/software/amazon/app/platform/presenter/molecule/MoleculeScopeFactory.kt)
+    to create a new `MoleculeScope` instance and call `cancel()` when you don't need it anymore.
+
+    On Android an implementation using `ViewModels` may look like this:
+
+    ```kotlin
+    class MainActivityViewModel(
+      moleculeScopeFactory: MoleculeScopeFactory,
+      myPresenter: MyPresenter,
+    ) : ViewModel() {
+
+      private val moleculeScope = moleculeScopeFactory.createMoleculeScope()
+
+      // Expose the models for consumption.
+      val models = moleculeScope
+        .launchMoleculePresenter(
+          presenter = myPresenter,
+          input = Unit
+        )
+        .models
+
+      override fun onCleared() {
+        moleculeScope.cancel()
+      }
+    }
+    ```
+
+## Testing
+
+A [`test()`](https://github.com/amzn/app-platform/blob/main/presenter-molecule/testing/src/commonMain/kotlin/software/amazon/app/platform/presenter/molecule/TestPresenter.kt)
+utility function is provided to make testing `MoleculePresenters` easy using the [Turbine](https://github.com/cashapp/turbine/)
+library:
+
+```kotlin
+class LoginPresenterImplTest {
+
+  @Test
+  fun `after 1 second the user is logged in after pressing the login button`() = runTest {
+    val userManager = FakeUserManager()
+
+    LoginPresenterImpl(userManager).test(this) {
+      val firstModel = awaitItem()
+      ...
+    }
+  }
+}
+```
+
+The `test()` function uses the `TestScope.backgroundScope` to run the presenter.
+
+??? example "Sample"
+
+    The sample application implements multiple tests for its presenters, e.g.
+    [`LoginPresenterImplTest`](https://github.com/amzn/app-platform/blob/main/sample/login/impl/src/commonTest/kotlin/software/amazon/app/platform/sample/login/LoginPresenterImplTest.kt),
+    [`NavigationPresenterImplTest`](https://github.com/amzn/app-platform/blob/main/sample/navigation/impl/src/commonTest/kotlin/software/amazon/app/platform/sample/navigation/NavigationPresenterImplTest.kt)
+    and [`UserPagePresenterImplTest`](https://github.com/amzn/app-platform/blob/main/sample/user/impl/src/commonTest/kotlin/software/amazon/app/platform/sample/user/UserPagePresenterImplTest.kt).
+
 ## Compose runtime
 
 One of the major benefits of using Compose through Molecule is how the framework turns reactive streams such as
@@ -434,3 +514,5 @@ fun present(input: Unit): Model {
 
 When the `Presenter` leaves composition, then all jobs launched by this coroutine scope get canceled. For more
 details see [here](https://developer.android.com/jetpack/compose/side-effects#remembercoroutinescope).
+
+## Threading
