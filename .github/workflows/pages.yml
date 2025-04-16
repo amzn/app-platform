@@ -34,7 +34,6 @@ jobs:
           python-version: 3.9
       - run: |
           cp CHANGELOG.md docs/changelog.md
-          cp CONTRIBUTING.md docs/contributing.md
       - run: pip install mkdocs-material
       - run: mkdocs gh-deploy --config-file mkdocs.yml --force
 

@@ -79,5 +79,5 @@ nav:
   - 'Presenter': presenter.md
   - 'Renderer': renderer.md
   - 'Template': template.md
+  - 'DI Framework': di.md
   - 'Changelog': changelog.md
-  - 'Contributing': contributing.md
