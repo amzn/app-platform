@@ -63,7 +63,7 @@ public open class AppPlatformPlugin : Plugin<Project> {
     plugins.withIds(PluginIds.ANDROID_APP, PluginIds.ANDROID_LIBRARY) {
       dependencies.add(
         "implementation",
-        "$APP_PLATFORM_GROUP:renderer-android-view-public:" + APP_PLATFORM_VERSION,
+        "$APP_PLATFORM_GROUP:renderer-android-view-public:$APP_PLATFORM_VERSION",
       )
 
       if (isAppModule()) {
