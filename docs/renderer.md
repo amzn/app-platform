@@ -124,22 +124,19 @@ different implementations:
 
 [`ComposeRendererFactory`](https://github.com/amzn/app-platform/blob/main/renderer-compose-multiplatform/public/src/commonMain/kotlin/software/amazon/app/platform/renderer/ComposeRendererFactory.kt)
 
-:   [`ComposeRendererFactory`](https://github.com/amzn/app-platform/blob/main/renderer-compose-multiplatform/public/src/commonMain/kotlin/software/amazon/app/platform/renderer/ComposeRendererFactory.kt)
-    is an implementation for Compose Multiplatform and can be used on all supported platform. It can only create
-    instances of `ComposeRenderer`.
+:   `ComposeRendererFactory` is an implementation for Compose Multiplatform and can be used on all supported
+    platforms. It can only create instances of `ComposeRenderer`.
 
-`AndroidRendererFactory`
+[`AndroidRendererFactory`](https://github.com/amzn/app-platform/blob/main/renderer-android-view/public/src/androidMain/kotlin/software/amazon/app/platform/renderer/AndroidRendererFactory.kt)
 
-:   [`AndroidRendererFactory`](https://github.com/amzn/app-platform/blob/main/renderer-android-view/public/src/androidMain/kotlin/software/amazon/app/platform/renderer/AndroidRendererFactory.kt)
-    is only suitable for Android. It can be used to create `ViewRenderer` instances and its subtypes. It does not
-    support `ComposeRenderer`. Use `ComposeAndroidRendererFactory` if you need to mix and match `ViewRenderer` with
-    `ComposeRenderer`.
+:   `AndroidRendererFactory` is only suitable for Android. It can be used to create `ViewRenderer` instances and its
+    subtypes. It does not support `ComposeRenderer`. Use `ComposeAndroidRendererFactory` if you need to mix and
+    match `ViewRenderer` with `ComposeRenderer`.
 
-`ComposeAndroidRendererFactory`
+[`ComposeAndroidRendererFactory`](https://github.com/amzn/app-platform/blob/main/renderer-compose-multiplatform/public/src/androidMain/kotlin/software/amazon/app/platform/renderer/ComposeAndroidRendererFactory.kt)
 
-:   [`ComposeAndroidRendererFactory`](https://github.com/amzn/app-platform/blob/main/renderer-compose-multiplatform/public/src/androidMain/kotlin/software/amazon/app/platform/renderer/ComposeAndroidRendererFactory.kt)
-    is only suitable for Android when using `ComposeRenderer` together with `ViewRenderer`. The factory wraps the
-    Renderers for seamless interop.
+:   `ComposeAndroidRendererFactory` is only suitable for Android when using `ComposeRenderer` together with
+    `ViewRenderer`. The factory wraps the Renderers for seamless interop.
 
 ### `@ContributesRenderer`
 
@@ -181,10 +178,10 @@ class LoginRenderer : ComposeRenderer<LoginPresenter.Model>()
 
 ### Creating `RendererFactory`
 
-The `RendererFactory` should be created and cached in the platform specific UI context, e.g. an Android `Activity` or
-iOS `UIViewController`.
+The `RendererFactory` should be created and cached in the platform specific UI context, e.g. an iOS `UIViewController`
+or Android `Activity`.
 
-```kotlin title="Compose Multiplatform"
+```kotlin title="iOS Compose Multiplatform"
 fun mainViewController(rootScopeProvider: RootScopeProvider): UIViewController =
   ComposeUIViewController {
     // Only a single factory is needed.
@@ -217,7 +214,7 @@ Based on a `Model` instance or `Model` type a `RendererFactory` can create a new
 `getRenderer()` function creates a `Renderer` only once and caches the instance after that. This makes the caller side
 simpler. Whenever a new `Model` is available get the `Renderer` for the `Model` and render the content on screen.
 
-```kotlin title="Compose Multiplatform"
+```kotlin title="iOS Compose Multiplatform"
 fun mainViewController(rootScopeProvider: RootScopeProvider): UIViewController =
   ComposeUIViewController {
     // Only a single factory is needed.
@@ -225,7 +222,7 @@ fun mainViewController(rootScopeProvider: RootScopeProvider): UIViewController =
 
     val model = presenter.present(Unit)
 
-    val renderer = factory.getRenderer(model::class)
+    val renderer = factory.getComposeRenderer(model)
     renderer.renderCompose(model)
   }
 ```
@@ -263,3 +260,18 @@ class MainActivity : ComponentActivity() {
 The `RendererFactory` is provided in the `RendererComponent`, meaning it can be injected by any `Renderer`. This
 allows you to create child renderers without knowing the concrete type of the model and injecting the child
 renderers ahead of time:
+
+```kotlin
+@Inject
+@ContributesRenderer
+class SampleRenderer(
+  private val rendererFactory: RendererFactory
+) : ComposeRenderer<Model>() {
+
+  @Composable
+  override fun Compose(model: Model) {
+    val childRenderer = rendererFactory.getComposeRenderer(model.childModel)
+    childRenderer.renderCompose(model.childModel)
+  }
+}
+```

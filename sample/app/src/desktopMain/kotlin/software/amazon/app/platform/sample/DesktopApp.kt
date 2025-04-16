@@ -5,6 +5,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import software.amazon.app.platform.renderer.ComposeRendererFactory
+import software.amazon.app.platform.renderer.getComposeRenderer
 import software.amazon.app.platform.scope.RootScopeProvider
 import software.amazon.app.platform.scope.Scope
 import software.amazon.app.platform.scope.di.diComponent
@@ -34,7 +35,7 @@ class DesktopApp(private val component: (RootScopeProvider) -> AppComponent) : R
 
     val factory = remember { ComposeRendererFactory(demoApplication) }
 
-    val renderer = factory.getRenderer(template::class)
+    val renderer = factory.getComposeRenderer(template)
     renderer.renderCompose(template)
   }
 
