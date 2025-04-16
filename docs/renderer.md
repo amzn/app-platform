@@ -12,7 +12,7 @@
     }
     ```
 
-## Built-in Renderer
+## Renderer basics
 
 A [`Renderer`](https://github.com/amzn/app-platform/blob/main/renderer/public/src/commonMain/kotlin/software/amazon/app/platform/renderer/Renderer.kt)
 is the counterpart to a `Presenter`. It consumes `Models` and turns them into UI, which is shown on screen.
@@ -31,11 +31,12 @@ for Android are used. App Platform doesn’t provide any other implementations f
 implementation for iOS is missing.
 
 ```kotlin title="ComposeRenderer sample"
+@ContributesRenderer
 class LoginRenderer : ComposeRenderer<Model>() {
   @Composable
   override fun Compose(model: Model) {
     if (model.loginInProgress) {
-      CircularProgressIndicator(modifier = Modifier.width(64.dp).testTag("loginProgress"))
+      CircularProgressIndicator()
     } else {
       Text("Login")
     }
@@ -44,6 +45,7 @@ class LoginRenderer : ComposeRenderer<Model>() {
 ```
 
 ```kotlin title="ViewRenderer sample"
+@ContributesRenderer
 class LoginRenderer : ViewRenderer<Model>() {
     private lateinit var textView: TextView
 
@@ -59,5 +61,39 @@ class LoginRenderer : ViewRenderer<Model>() {
     override fun renderModel(model: Model) {
         textView.text = "Login"
     }
+}
+```
+
+Renderers are composable and can build hierarchies similar to `Presenters`. The parent renderer is responsible for
+calling `render()` on the child renderer:
+
+```kotlin
+data class ParentModel(
+  val childModel: ChildModel
+): BaseModel
+
+class ParentRenderer(
+  private val childRenderer: ChildRenderer
+): Renderer<ParentModel> {
+  override fun render(model: ParentModel) {
+    childRenderer.render(model.childModel)
+  }
+}
+```
+
+A `Renderer` sends events back to the `Presenter` through the `onEvent` lambda on a Model. The model and presenter
+from an earlier example looked like this:
+
+```kotlin hl_lines="6"
+@ContributesRenderer
+class LoginRenderer : ComposeRenderer<Model>() {
+  @Composable
+  override fun Compose(model: Model) {
+    Button(
+      onClick = { model.onEvent(LoginPresenter.Event.Login("Demo")) },
+    ) {
+      Text("Login")
+    }
+  }
 }
 ```
