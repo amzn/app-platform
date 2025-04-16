@@ -1,18 +1,15 @@
 # Testing
 
-!!! note
+A fundamental design pattern to make testing effective is dependency inversion, which means that high-level
+APIs don’t depend on low-level details and low-level details only import other high-level APIs.
+It significantly reduces coupling between components.
 
-    App Platform has a generic `Renderer` interface that can be used for multiple UI layer implementations.
-    Compose Multiplatform and Android Views are stable and supported out of the box. However, Compose Multiplatform is
-    an opt-in feature through the Gradle DSL and must be explicitly enabled. The default value is `false`.
+App Platform implements the pattern in its [module structure](module-structure.md#gradle-modules) and in
+[Kotlin code](module-structure.md#kotlin-code). By relying on dependency inversion, we decouple projects from
+their dependencies and enable testing in isolation. This approach is important for unit tests, instrumented tested
+and integration tests. These three types of tests rely on a chain of trust, where we assume that dependencies
+are functioning and tests don’t need to be repeated.
 
-    ```groovy
-    appPlatform {
-      enableComposeUi true
-    }
-    ```
+![Testing pyramid](images/testing-pyramid.png){ width="400" }
 
-## Renderer basics
-
-A [`Renderer`](https://github.com/amzn/app-platform/blob/main/renderer/public/src/commonMain/kotlin/software/amazon/app/platform/renderer/Renderer.kt)
-is the counterpart to a `Presenter`. It consumes `Models` and turns them into UI, which is shown on screen.
+## Unit tests
