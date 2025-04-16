@@ -344,3 +344,24 @@ It’s strongly encouraged for features to create `:*-robots` modules and share 
     The sample application comes with two robot implementations [`LoginRobot`](https://github.com/amzn/app-platform/blob/main/sample/login/impl-robots/src/commonMain/kotlin/software/amazon/app/platform/sample/login/LoginRobot.kt)
     and [`UserPageRobot`](https://github.com/amzn/app-platform/blob/main/sample/user/impl-robots/src/commonMain/kotlin/software/amazon/app/platform/sample/user/UserPageRobot.kt),
     each living in its feature specific `:robots` module.
+
+## Mocks
+
+**Which mocking framework is recommended?**
+
+None.
+
+Mocking frameworks in general are discouraged and the downside outweigh the little conveniences they offer.
+By following the principle of dependency inversion we can easily avoid using mocking frameworks and implement
+fakes instead. There are many good resources available describing the advantages of fakes over mocking framework.
+We recommend reading the provided resources in-order:
+
+* [AndroidX](https://github.com/androidx/androidx/blob/acb603e0857476b17e605fd1384c1f45e7991665/docs/api_guidelines/testing.md) strongly discourages mocking frameworks and banned them from new code. This guide explains in more detail their reasoning and it resonates well.
+* [Google engineers](https://abseil.io/resources/swe-book/html/ch13.html) compare test doubles and give excellent advice for how to fake dependencies (this article is longer, but it’s likely the best one available).
+* [developer.android.com](https://developer.android.com/training/testing/fundamentals/test-doubles#types) prefers fakes over mocks for test doubles: “Fakes don't require a mocking framework and are lightweight. They are preferred.”
+* [CashApp](https://www.billjings.net/posts/title/fakes-are-great-but-mocks-i-hate/?up=technical) banned mocking frameworks in the Android codebase, because mocks are a maintenance burden.
+* [Ryan Harter](https://ryanharter.com/blog/2020/06/replacing-mocks/) calls out easy traps when using mocks.
+* [Pravin Sonawane](https://medium.com/@june.pravin/mocking-is-not-practical-use-fakes-e30cc6eaaf4e) makes similar arguments and highlights how mocks encourage testing the “how” rather than focusing on the “what” (inputs and outputs).
+* Google blog [Don’t overuse mocks](https://testing.googleblog.com/2013/05/testing-on-toilet-dont-overuse-mocks.html) highlights some downsides of mocks and presents real or fake implementations as alternative.
+
+
