@@ -112,3 +112,96 @@ This avoids duplication.
     ```
 
 ## Robots
+
+Test [`Robots`](https://jakewharton.com/testing-robots/) are an abstraction between test interactions and the
+underlying implementation. Imagine several tests clicking the *Logout* button use the label to find the UI element
+on the screen. If the copy changes from *Logout* to *Sign out*, then all these tests would need to be updated.
+That is tedious and makes tests harder to maintain. A test robot would hide how the *Logout* button can be found
+on screen and only provides an option for the necessary interaction:
+
+```kotlin
+class LogoutRobot : Robot {
+  fun clickLogoutButton() { .. }
+}
+```
+
+Test [`Robots`](https://github.com/amzn/app-platform/blob/main/robot/public/src/commonMain/kotlin/software/amazon/app/platform/robot/Robot.kt)
+are not limited to UI interactions such as verifying UI elements are shown or hidden and invoking
+actions on them. They can also be used to change fake implementations or make assertions on them. Imagine a
+robot toggling network connectivity. Tests do not interact with fake implementations directly similar to them
+not interacting with UI elements directly.
+
+```kotlin
+class NetworkRobot : Robot {
+  var networkEnabled: Boolean
+  var connectivity: Connectivity
+
+  var throwErrorOnSendingRequest: Boolean = false
+
+  enum class Connectivity {
+    LTE, 3G, WIFI, ...
+  }
+}
+```
+
+Another use case is verifying metrics and analytics events. In instrumented tests we’d use a fake metrics
+implementation rather than sending events to our backend system. The robot would interact with the fake
+implementation and make assertions:
+
+```kotlin
+class FakeMetricsService : MetricsService {
+  val metrics: List<Metric>
+}
+
+class MetricsRobot : Robot {
+  private val service: FakeMetricsService ...
+
+  fun assertMetricTracked(metric: Metric) {
+    assertThat(service.metrics).contains(metric)
+  }
+}
+```
+
+Fake implementations and test robots help verifying interactions with hardware or devices that are not available
+during an instrumented test run. For example, interactions with other devices can be simulated using a fake
+connection.
+
+```kotlin
+interface WebSocketConnection {
+  suspend fun send(message: ByteArray)
+}
+
+class FakeWebSocketConnection : WebSocketConnection {
+  var throwError: Boolean
+
+  override suspend fun send(message: ByteArray) {
+    if (throwError) {
+      throw Exception("..."
+    } else {
+      trackMessage(message)
+    }
+  }
+}
+
+class ConnectionRobot : Robot {
+  private val webSocketConnection: FakeWebSocketConnection
+
+  fun sendingMessageFails() {
+    webSocketConnection.throwError = true
+  }
+
+  fun sendingMessageSucceeds() {
+    webSocketConnection.throwError = false
+  }
+}
+```
+
+### Robot types
+
+[`Robot`](https://github.com/amzn/app-platform/blob/main/robot/public/src/commonMain/kotlin/software/amazon/app/platform/robot/Robot.kt).
+
+:   Extend
+
+[`RecyclerViewViewHolderRenderer`](https://github.com/amzn/app-platform/blob/main/renderer-android-view/public/src/androidMain/kotlin/software/amazon/app/platform/renderer/RecyclerViewViewHolderRenderer.kt)
+
+:   `RecyclerViewViewHolderRenderer` allows you to implement elements of a `RecyclerView` as a `Renderer`.
