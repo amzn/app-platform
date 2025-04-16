@@ -34,12 +34,12 @@ Circuit shares certain aspects with App Platform in regards to implementing the 
 e.g. presenters and decoupling UI. How `Screens` with Circuit work vs how App Platform relies on composing presenters
 and renderers is different.
 
-!!! note "Help needed"
-
-    Help from the community for a more in-depth comparison is needed.
-
 App Platform goes further and has feature that Circuit doesn't provide, e.g. the module structure, the strong
 emphasis on fakes and robots.
 
 At Amazon we built App Platform months before Circuit was released in 2022 and at this point there was no reason for
 us to migrate off of App Platform and to Circuit.
+
+!!! note "Help needed"
+
+    Help from the community for a more in-depth comparison is needed.
