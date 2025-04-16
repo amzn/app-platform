@@ -80,9 +80,35 @@ fakes for APIs and share them with consumers. The [App Platform module structure
 is encouraged to use this structure:
 
 ```
-:location-provider:public  src/commonMain/kotlin/.../LocationProvider.kt
-:location-provider:testing src/commonMain/kotlin/.../FakeLocationProvider.kt
+:location-provider:public   src/commonMain/kotlin/.../LocationProvider.kt
+:location-provider:testing  src/commonMain/kotlin/.../FakeLocationProvider.kt
 ```
 
 The owner of `RoutingRepository` can import `:location-provider:testing` and reuse the provided fake in tests.
 This avoids duplication.
+
+??? example "Sample"
+
+    The sample app uses `:testing` modules to implement and share fakes across modules, e.g.
+    [`:sample:user:testing`](https://github.com/amzn/app-platform/tree/main/sample/user/testing). In other modules
+    fakes are created next to the tests ad-hoc, e.g. [`FakeUserPagePresenter`](https://github.com/amzn/app-platform/blob/7ad00b1199bf150230dc34d7c37967c4a0fa1708/sample/navigation/impl/src/commonTest/kotlin/software/amazon/app/platform/sample/navigation/NavigationPresenterImplTest.kt#L51-L58)
+    and [`FakeAnimationHelper`](https://github.com/amzn/app-platform/blob/main/sample/user/impl/src/commonTest/kotlin/software/amazon/app/platform/sample/user/FakeAnimationHelper.kt).
+
+    ```kotlin
+    private class FakeUserPagePresenter : UserPagePresenter {
+      @Composable
+      override fun present(input: Unit): UserPagePresenter.Model =
+        UserPagePresenter.Model(
+          listModel = object : BaseModel {},
+          detailModel = object : BaseModel {},
+        )
+    }
+    ```
+
+    ```kotlin
+    object FakeAnimationHelper : AnimationHelper {
+      override fun isAnimationsEnabled(): Boolean = true
+    }
+    ```
+
+## Robots
