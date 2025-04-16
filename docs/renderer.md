@@ -97,3 +97,31 @@ class LoginRenderer : ComposeRenderer<Model>() {
   }
 }
 ```
+
+## `RendererFactory`
+
+How `Renderers` are initialized depends on [`RendererFactory`](https://github.com/amzn/app-platform/blob/main/renderer/public/src/commonMain/kotlin/software/amazon/app/platform/renderer/RendererFactory.kt),
+which only responsibility is to create and cache `Renderers` based on the given model. App Platform comes with three
+different implementations:
+
+`ComposeRendererFactory`
+
+:   [`ComposeRendererFactory`](https://github.com/amzn/app-platform/blob/main/renderer-compose-multiplatform/public/src/commonMain/kotlin/software/amazon/app/platform/renderer/ComposeRendererFactory.kt)
+    is an implementation for Compose Multiplatform and can be used on all supported platform. It can only create
+    instances of `ComposeRenderer`.
+
+`AndroidRendererFactory`
+
+:   [`AndroidRendererFactory`](https://github.com/amzn/app-platform/blob/main/renderer-android-view/public/src/androidMain/kotlin/software/amazon/app/platform/renderer/AndroidRendererFactory.kt)
+    is only suitable for Android. It can be used to create `ViewRenderer` instances and its subtypes. It does not
+    support `ComposeRenderer`. Use `ComposeAndroidRendererFactory` if you need to mix and match `ViewRenderer` with
+    `ComposeRenderer`.
+
+`ComposeAndroidRendererFactory`
+
+:   [`ComposeAndroidRendererFactory`](https://github.com/amzn/app-platform/blob/main/renderer-compose-multiplatform/public/src/androidMain/kotlin/software/amazon/app/platform/renderer/ComposeAndroidRendererFactory.kt)
+    is only suitable for Android when using `ComposeRenderer` together with `ViewRenderer`. The factory wraps the
+    Renderers for seamless interop.
+
+All implementations rely on our dependency injection framework kotlin-inject-anvil to discover and initialize
+renderers.

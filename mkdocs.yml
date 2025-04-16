@@ -46,6 +46,7 @@ markdown_extensions:
   - codehilite:
       guess_lang: false
   - footnotes
+  - def_list
   - meta
   - toc:
       permalink: true
