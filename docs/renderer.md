@@ -116,6 +116,12 @@ class LoginRenderer : ComposeRenderer<Model>() {
 }
 ```
 
+??? example "Sample"
+
+    The sample app implements multiple `ComposeRenderers`, e.g. [`LoginRenderer`](https://github.com/amzn/app-platform/blob/main/sample/login/impl/src/commonMain/kotlin/software/amazon/app/platform/sample/login/LoginRenderer.kt),
+    [`UserPageListRenderer`](https://github.com/amzn/app-platform/blob/main/sample/user/impl/src/commonMain/kotlin/software/amazon/app/platform/sample/user/UserPageListRenderer.kt)
+    and [`UserPageDetailRenderer`](https://github.com/amzn/app-platform/blob/main/sample/user/impl/src/commonMain/kotlin/software/amazon/app/platform/sample/user/UserPageDetailRenderer.kt).
+
 ## `RendererFactory`
 
 How `Renderers` are initialized depends on [`RendererFactory`](https://github.com/amzn/app-platform/blob/main/renderer/public/src/commonMain/kotlin/software/amazon/app/platform/renderer/RendererFactory.kt),
@@ -208,6 +214,12 @@ class MainActivity : ComponentActivity() {
 }
 ```
 
+??? example "Sample"
+
+    The sample app uses `ComposeAndroidRendererFactory` in [Android application](https://github.com/amzn/app-platform/blob/083fd808b539e36f3ab633f82d6ee2294d432c61/sample/app/src/androidMain/kotlin/software/amazon/app/platform/sample/MainActivity.kt#L30-L35)
+    and `ComposeRendererFactory` for [iOS](https://github.com/amzn/app-platform/blob/083fd808b539e36f3ab633f82d6ee2294d432c61/sample/app/src/iosMain/kotlin/software/amazon/app/platform/sample/MainViewController.kt#L40)
+    and [Desktop](https://github.com/amzn/app-platform/blob/083fd808b539e36f3ab633f82d6ee2294d432c61/sample/app/src/desktopMain/kotlin/software/amazon/app/platform/sample/DesktopApp.kt#L36).
+
 ### Creating `Renderers`
 
 Based on a `Model` instance or `Model` type a `RendererFactory` can create a new `Renderer` instance. The
@@ -276,6 +288,11 @@ class SampleRenderer(
 }
 ```
 
+??? example "Sample"
+
+    The sample app injects `RendererFactory` in [`ComposeSampleAppTemplateRenderer`](https://github.com/amzn/app-platform/blob/main/sample/templates/impl/src/commonMain/kotlin/software/amazon/app/platform/sample/template/ComposeSampleAppTemplateRenderer.kt)
+    to create `Renderers` dynamically for unknown `Model` types. There is also an [Android sample implementation](https://github.com/amzn/app-platform/blob/main/sample/templates/impl/src/androidMain/kotlin/software/amazon/app/platform/sample/template/AndroidSampleAppTemplateRenderer.kt).
+
 !!! note
 
     Whenever a `Renderer` has an injected constructor parameter like `rendererFactory` in the sample above, then
@@ -314,7 +331,3 @@ from Android Views to Compose UI by simply migrating renderers one by one.
 [`RecyclerViewViewHolderRenderer`](https://github.com/amzn/app-platform/blob/main/renderer-android-view/public/src/androidMain/kotlin/software/amazon/app/platform/renderer/RecyclerViewViewHolderRenderer.kt)
 
 :   `RecyclerViewViewHolderRenderer` allows you to implement elements of a `RecyclerView` as a `Renderer`.
-
-
-
-

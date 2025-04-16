@@ -78,5 +78,6 @@ nav:
   - 'Scope': scope.md
   - 'Presenter': presenter.md
   - 'Renderer': renderer.md
+  - 'Template': template.md
   - 'Changelog': changelog.md
   - 'Contributing': contributing.md
