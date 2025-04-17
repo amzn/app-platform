@@ -1,5 +1,6 @@
 package software.amazon.app.platform.sample.user
 
+import androidx.compose.animation.AnimatedContent
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -24,12 +25,14 @@ class UserPageDetailRenderer : ComposeRenderer<Model>() {
     Column(modifier = Modifier.fillMaxWidth().fillMaxHeight()) {
       LinearProgressIndicator(progress = model.timeoutProgress, modifier = Modifier.fillMaxWidth())
 
-      Text(
-        text = model.text,
-        style = MaterialTheme.typography.h6,
-        textAlign = TextAlign.Center,
-        modifier = Modifier.fillMaxWidth().padding(16.dp),
-      )
+      AnimatedContent(targetState = model.text) { text ->
+        Text(
+          text = text,
+          style = MaterialTheme.typography.h6,
+          textAlign = TextAlign.Center,
+          modifier = Modifier.fillMaxWidth().padding(16.dp),
+        )
+      }
     }
   }
 }
