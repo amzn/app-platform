@@ -1,6 +1,5 @@
 package software.amazon.app.platform.gradle.buildsrc
 
-import com.google.devtools.ksp.KspExperimental
 import com.google.devtools.ksp.gradle.KspExtension
 import com.google.devtools.ksp.gradle.KspTask
 import com.ncorti.ktfmt.gradle.KtfmtExtension
@@ -179,8 +178,6 @@ public open class KmpPlugin : Plugin<Project> {
         "software.amazon.lastmile.kotlin.inject.anvil.processor." + "ContributesBindingProcessor",
         "disabled",
       )
-
-      @OptIn(KspExperimental::class) kspExtension.useKsp2.set(false)
 
       tasks.withType(KspTask::class.java).configureEach { kspTask ->
         if (kspTask is KotlinCompile) {

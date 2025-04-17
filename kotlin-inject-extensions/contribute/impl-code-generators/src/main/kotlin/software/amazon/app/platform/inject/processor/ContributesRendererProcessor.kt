@@ -116,7 +116,21 @@ internal class ContributesRendererProcessor(
     }
 
     val includeSealedSubtypes =
-      clazz.getAnnotationsByType(ContributesRenderer::class).single().includeSealedSubtypes
+      try {
+        clazz.getAnnotationsByType(ContributesRenderer::class).single().includeSealedSubtypes
+      } catch (_: NoSuchElementException) {
+        /*
+        Caused by: java.util.NoSuchElementException: Collection contains no element matching the predicate.
+          at com.google.devtools.ksp.UtilsKt.createInvocationHandler$lambda$8(utils.kt:591)
+          at jdk.proxy105/jdk.proxy105.$Proxy1029.includeSealedSubtypes(Unknown Source)
+          at software.amazon.app.platform.inject.processor.ContributesRendererProcessor.generateComponentInterface(ContributesRendererProcessor.kt:120)
+
+        We're seeing this exception when trying to read 'includeSealedSubtypes' for an annotation
+        where the value is not declared, e.g. '@ContributesRenderer' (without any arguments).
+        This happens only on iOS for some reason. Fallback to the default value 'true'.
+         */
+        true
+      }
 
     val allModels =
       if (includeSealedSubtypes) {

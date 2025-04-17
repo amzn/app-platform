@@ -100,8 +100,15 @@ jobs:
           path: ./**/build/reports/
 
   test-jvm-modules:
+    name: test-jvm-modules (KSP2=${{ matrix.use-ksp2 }})
+
     runs-on: ubuntu-latest
     timeout-minutes: 25
+
+    strategy:
+      fail-fast: false
+      matrix:
+        use-ksp2: [ true, false ]
 
     steps:
       - uses: actions/checkout@v4
@@ -112,13 +119,13 @@ jobs:
           gradle-encryption-key: ${{ secrets.GRADLE_ENCRYPTION_KEY }}
 
       - name: Test
-        run: ./gradlew :kotlin-inject-extensions:contribute:impl-code-generators:test --stacktrace --show-version --continue
+        run: ./gradlew :kotlin-inject-extensions:contribute:impl-code-generators:test --stacktrace --show-version --continue -Pksp.useKSP2=${{ matrix.use-ksp2 }}
 
       - name: Upload Test Results
         uses: actions/upload-artifact@v4
         if: ${{ failure() }}
         with:
-          name: test-results-${{ github.job }}
+          name: test-results-${{ github.job }}-${{ matrix.use-ksp2 }}
           path: ./**/build/reports/
 
   test-emulator-renderer-android-view:

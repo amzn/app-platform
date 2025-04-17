@@ -2,6 +2,7 @@
 
 package software.amazon.app.platform.inject
 
+import app_platform.kotlin_inject_extensions.contribute.impl_code_generators.TestBuildConfig.USE_KSP_2
 import assertk.assertThat
 import com.google.devtools.ksp.processing.SymbolProcessorProvider
 import com.tschuchort.compiletesting.JvmCompilationResult
@@ -32,7 +33,7 @@ class Compilation internal constructor(val kotlinCompilation: KotlinCompilation)
 
     processorsConfigured = true
 
-    val useKsp2 = false
+    val useKsp2 = USE_KSP_2
 
     if (!useKsp2) {
       kotlinCompilation.languageVersion = "1.9"

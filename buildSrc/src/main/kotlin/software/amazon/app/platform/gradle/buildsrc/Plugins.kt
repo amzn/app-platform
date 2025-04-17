@@ -5,7 +5,6 @@ internal object Plugins {
   const val ANDROID_LIBRARY = "com.android.library"
   const val APP_PLATFORM = "software.amazon.app.platform"
   const val BINARY_COMPAT_VALIDATOR = "org.jetbrains.kotlinx.binary-compatibility-validator"
-  const val BUILD_CONFIG = "com.github.gmazzo.buildconfig"
   const val COMPOSE_COMPILER = "org.jetbrains.kotlin.plugin.compose"
   const val COMPOSE_MULTIPLATFORM = "org.jetbrains.compose"
   const val DETEKT = "io.gitlab.arturbosch.detekt"
