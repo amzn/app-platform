@@ -9,6 +9,7 @@ android-targetSdk = "36"
 androidx-activity = "1.8.0"
 androidx-constraintlayout = "2.1.4"
 androidx-core = "1.10.1"
+androidx-lint-gradle = "1.0.0-alpha03"
 androidx-test = "1.4.0"
 androidx-test-espresso = "3.3.0"
 androidx-test-junit = "1.1.5"
@@ -48,6 +49,7 @@ android-gradle-plugin-api = { module = "com.android.tools.build:gradle-api", ver
 androidx-activity = { module = "androidx.activity:activity-ktx", version.ref = "androidx-activity" }
 androidx-constraintlayout = { module = "androidx.constraintlayout:constraintlayout", version.ref = "androidx-constraintlayout" }
 androidx-core = { module = "androidx.core:core-ktx", version.ref = "androidx-core" }
+androidx-lint-gradle = {  module = "androidx.lint:lint-gradle", version.ref = "androidx-lint-gradle" }
 androidx-test-espresso = { module = "androidx.test.espresso:espresso-core", version.ref = "androidx-test-espresso" }
 androidx-test-junit = { module = "androidx.test.ext:junit", version.ref = "androidx-test-junit" }
 androidx-test-monitor = { module = "androidx.test:monitor", version.ref = "androidx-test" }
@@ -105,6 +107,7 @@ viewbinding-agp = { module = "androidx.databinding:viewbinding", version.ref = "
 [plugins]
 android-app = { id = "com.android.application", version.ref = "agp" }
 android-library = { id = "com.android.library", version.ref = "agp" }
+android-lint = { id = "com.android.lint", version.ref = "agp" }
 app-platform = { id = "software.amazon.app.platform" }
 build-config = { id = "com.github.gmazzo.buildconfig", version.ref = "build-config" }
 detekt = { id = "io.gitlab.arturbosch.detekt", version.ref = "detekt" }

@@ -31,7 +31,8 @@ public open class ModuleStructurePlugin : Plugin<Project> {
       if (isPublicModule()) return@withIds
 
       fun addPublicModule() {
-        val publicModule = findProject("${parent.path}:public")
+        // this is ok because no properties within publicModule are accessed
+        @Suppress("GradleProjectIsolation") val publicModule = findProject("${parent.path}:public")
         if (publicModule != null) {
           if (isKmpModule) {
             dependencies.add("commonMainApi", publicModule)
@@ -62,6 +63,7 @@ public open class ModuleStructurePlugin : Plugin<Project> {
           // dependency is chosen rather than an "api" dependency. The goal of the a
           // robots module to hide all details of the :impl module and only expose
           // abstractions with the help of robots.
+          @Suppress("GradleProjectIsolation") // no properties within project are accessed
           findProject(path.substringBefore("-robots"))
             ?.takeIf { it.isImplModule() }
             ?.let { implModule ->
@@ -109,17 +111,19 @@ public open class ModuleStructurePlugin : Plugin<Project> {
      */
     public fun Project.namespace(): String {
       val group =
-        checkNotNull(findProperty("GROUP")) {
+        providers.gradleProperty("GROUP").let {
+          check(it.isPresent) {
             "Couldn't find the GROUP property for this project. Make sure you define " +
               "a group in the project's gradle.properties file, e.g. `GROUP=" +
               "software.amazon.abc`."
           }
-          .toString()
+          return@let it.get()
+        }
 
       val path =
         when {
-          isPublicModule() -> checkNotNull(parent).path
-          isAnyPublicModule() && isRobotsModule() -> "${checkNotNull(parent).path}:robots"
+          isPublicModule() -> requireParent().path
+          isAnyPublicModule() && isRobotsModule() -> "${requireParent().path}:robots"
           else -> path
         }
 
