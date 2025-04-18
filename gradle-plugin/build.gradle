@@ -7,6 +7,7 @@ plugins {
     alias libs.plugins.maven.publish
     alias libs.plugins.detekt
     alias libs.plugins.kotlinx.binaryCompatibilityValidator
+    alias libs.plugins.android.lint
 }
 
 ktfmt {
@@ -60,6 +61,8 @@ dependencies {
     // compileOnly, because not every consumer of this Gradle plugin will use KMP. All usages
     // are guarded by checks when the plugin is applied.
     compileOnly libs.kotlin.multiplatform.gradle.plugin
+
+    lintChecks libs.androidx.lint.gradle
 }
 
 java {

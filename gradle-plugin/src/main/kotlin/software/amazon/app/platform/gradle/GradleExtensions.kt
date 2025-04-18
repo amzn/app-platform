@@ -8,6 +8,7 @@ import org.gradle.api.Project
 import org.gradle.api.Task
 import org.gradle.api.UnknownTaskException
 import org.gradle.api.plugins.PluginContainer
+import org.gradle.api.project.IsolatedProject
 import org.gradle.api.tasks.TaskContainer
 import org.jetbrains.compose.ComposePlugin
 import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
@@ -16,10 +17,14 @@ internal fun PluginContainer.withIds(vararg pluginIds: String, action: (Plugin<*
   pluginIds.forEach { id -> withId(id) { action(it) } }
 }
 
-internal fun Project.requireParent(): Project =
+// This is OK because no properties within parent are accessed
+// https://github.com/gradle/gradle/issues/33198
+@Suppress("GradleProjectIsolation")
+internal fun Project.requireParent(): IsolatedProject =
   requireNotNull(parent) {
-    "The parent project for a module enabling the module structure should not be null."
-  }
+      "The parent project for a module enabling the module structure should not be null."
+    }
+    .isolated
 
 internal val Project.isKmpModule: Boolean
   get() = plugins.hasPlugin(PluginIds.KOTLIN_MULTIPLATFORM)

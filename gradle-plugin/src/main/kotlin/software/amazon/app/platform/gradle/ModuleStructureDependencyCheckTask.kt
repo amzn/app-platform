@@ -196,9 +196,9 @@ public abstract class ModuleStructureDependencyCheckTask : DefaultTask() {
           // We register Android above.
           if (target.name == "android") return@configureEach
 
-          target.compilations.all all2@{ compilation ->
+          target.compilations.configureEach configureEach2@{ compilation ->
             // We only care about main.
-            if (compilation.name != "main") return@all2
+            if (compilation.name != "main") return@configureEach2
 
             registerForConfiguration(
               taskSuffix = target.name,
