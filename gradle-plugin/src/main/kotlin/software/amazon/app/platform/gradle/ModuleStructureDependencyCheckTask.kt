@@ -7,12 +7,14 @@ import org.gradle.api.Project
 import org.gradle.api.artifacts.Configuration
 import org.gradle.api.artifacts.ExternalDependency
 import org.gradle.api.artifacts.ProjectDependency
+import org.gradle.api.tasks.CacheableTask
 import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.Optional
 import org.gradle.api.tasks.OutputFile
 import org.gradle.api.tasks.TaskAction
 
 /** Checks that our module structure dependency rules are followed. */
+@CacheableTask
 public abstract class ModuleStructureDependencyCheckTask : DefaultTask() {
 
   /** The path of this module, e.g. `:presenter:public`. */

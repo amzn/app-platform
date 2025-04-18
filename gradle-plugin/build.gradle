@@ -76,6 +76,10 @@ kotlin {
     explicitApi()
 }
 
+tasks.withType(ValidatePlugins).configureEach {
+    it.enableStricterValidation = true
+}
+
 tasks.withType(io.gitlab.arturbosch.detekt.Detekt).configureEach {
     it.jvmTarget = libs.versions.jvm.compatibility.get()
     it.setSource(layout.files("src"))
