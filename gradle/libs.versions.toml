@@ -1,5 +1,5 @@
 [versions]
-agp = "8.9.1"
+agp = "8.9.2"
 android-compileSdk = "36"
 # https://developer.android.com/jetpack/androidx/releases/compose-ui
 # https://maven.google.com/web/index.html#androidx.compose.ui:ui
