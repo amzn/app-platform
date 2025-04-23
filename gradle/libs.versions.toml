@@ -3,7 +3,7 @@ agp = "8.9.2"
 android-compileSdk = "36"
 # https://developer.android.com/jetpack/androidx/releases/compose-ui
 # https://maven.google.com/web/index.html#androidx.compose.ui:ui
-android-compose-version = "1.7.8"
+android-compose-version = "1.8.0"
 android-minSdk = "21"
 android-targetSdk = "36"
 #noinspection GradleDependency
@@ -68,7 +68,6 @@ auto-service-annotations = { module = "com.google.auto.service:auto-service-anno
 auto-service-ksp = { module = "dev.zacsweers.autoservice:auto-service-ksp", version.ref = "auto-service-ksp" }
 build-config-gradle-plugin = { module = "com.github.gmazzo.buildconfig:plugin", version.ref = "build-config" }
 compose-gradle-plugin = { module = "org.jetbrains.compose:compose-gradle-plugin", version.ref = "compose-plugin" }
-compose-material = { module = "androidx.compose.material:material", version.ref = "android-compose-version" }
 compose-ui-test-junit4 = { module = "androidx.compose.ui:ui-test-junit4", version.ref = "android-compose-version" }
 compose-ui-test-junit4-android = { module = "androidx.compose.ui:ui-test-junit4-android", version.ref = "android-compose-version" }
 compose-ui-test-manifest = { module = "androidx.compose.ui:ui-test-manifest", version.ref = "android-compose-version" }

@@ -8,7 +8,7 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.activity.ComponentActivity
 import androidx.compose.foundation.layout.Column
-import androidx.compose.material.Text
+import androidx.compose.foundation.text.BasicText
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
@@ -30,10 +30,6 @@ import assertk.assertions.isInstanceOf
 import assertk.assertions.isNull
 import assertk.assertions.isSameInstanceAs
 import assertk.assertions.messageContains
-import kotlin.collections.Map
-import kotlin.collections.mapOf
-import kotlin.collections.single
-import kotlin.jvm.java
 import kotlin.reflect.KClass
 import org.junit.After
 import org.junit.Before
@@ -316,7 +312,7 @@ class ComposeAndroidRendererFactoryDeviceTest {
     @Composable
     override fun Compose(model: ComposeModel) {
       Column {
-        Text(text = "Compose test: ${model.value}", modifier = Modifier.testTag("testCompose"))
+        BasicText(text = "Compose test: ${model.value}", modifier = Modifier.testTag("testCompose"))
 
         if (model.viewModel != null) {
           val renderer = rendererFactory.getComposeRenderer(model.viewModel)
