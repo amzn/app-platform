@@ -221,7 +221,10 @@ jobs:
       - name: Build swift
         run: |
           /usr/bin/xcodebuild -version
-          /usr/bin/xcodebuild -project sample/iosApp/iosApp.xcodeproj -scheme iosApp -configuration Debug OBJROOT=build/ios SYMROOT=build/ios -destination id=77D15A8A-0E47-4200-A192-A0C6311C808D -allowProvisioningDeviceRegistration -allowProvisioningUpdates
+          /usr/bin/xcrun simctl list devices
+          export DESTINATION_DEVICE=`/usr/bin/xcrun simctl list devices | grep -A 1 "iOS 18.2" | grep -oE '\([0-9A-F-]+\)' | head -1 | tr -d '()'`
+          echo "Using simulator $DESTINATION_DEVICE"
+          /usr/bin/xcodebuild -project sample/iosApp/iosApp.xcodeproj -scheme iosApp -configuration Debug OBJROOT=build/ios SYMROOT=build/ios -destination id=$DESTINATION_DEVICE -allowProvisioningDeviceRegistration -allowProvisioningUpdates
 
   binary-compatibility-check:
     runs-on: ubuntu-latest
