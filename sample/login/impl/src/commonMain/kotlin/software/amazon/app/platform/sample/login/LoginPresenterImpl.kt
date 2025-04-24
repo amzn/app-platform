@@ -10,7 +10,6 @@ import kotlin.random.Random
 import kotlin.time.Duration.Companion.seconds
 import kotlinx.coroutines.delay
 import me.tatarka.inject.annotations.Inject
-import software.amazon.app.platform.presenter.molecule.onEvent
 import software.amazon.app.platform.sample.login.LoginPresenter.Model
 import software.amazon.app.platform.sample.user.UserManager
 import software.amazon.lastmile.kotlin.inject.anvil.AppScope
@@ -33,16 +32,12 @@ class LoginPresenterImpl(private val userManager: UserManager) : LoginPresenter 
       }
     }
 
-    return Model(
-      loginInProgress = loginInProgress,
-      onEvent =
-        onEvent {
-          when (it) {
-            is LoginPresenter.Event.Login -> {
-              loginInProgress = true
-            }
-          }
-        },
-    )
+    return Model(loginInProgress = loginInProgress) {
+      when (it) {
+        is LoginPresenter.Event.Login -> {
+          loginInProgress = true
+        }
+      }
+    }
   }
 }

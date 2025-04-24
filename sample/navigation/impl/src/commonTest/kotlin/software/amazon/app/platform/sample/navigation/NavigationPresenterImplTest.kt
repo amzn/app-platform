@@ -6,7 +6,6 @@ import assertk.assertions.isInstanceOf
 import kotlin.test.Test
 import kotlinx.coroutines.test.runTest
 import software.amazon.app.platform.presenter.BaseModel
-import software.amazon.app.platform.presenter.molecule.onEvent
 import software.amazon.app.platform.presenter.molecule.test
 import software.amazon.app.platform.sample.login.LoginPresenter
 import software.amazon.app.platform.sample.user.FakeUserManager
@@ -45,7 +44,7 @@ class NavigationPresenterImplTest {
   private class FakeLoginPresenter : LoginPresenter {
     @Composable
     override fun present(input: Unit): LoginPresenter.Model =
-      LoginPresenter.Model(loginInProgress = false, onEvent = onEvent {})
+      LoginPresenter.Model(loginInProgress = false) {}
   }
 
   private class FakeUserPagePresenter : UserPagePresenter {

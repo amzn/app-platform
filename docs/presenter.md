@@ -109,15 +109,12 @@ class AmazonLoginPresenter : LoginPresenter {
   fun present(input: Unit): Model {
     ..
     return if (user != null) {
-      LoggedIn(
-        user = user,
-        onEvent = onEvent { event ->
-          when(event) {
-            is Logout -> ..
-            is ChangeName -> ..
-          }
+      LoggedIn(user = user) { event ->
+        when (event) {
+          is Logout -> ..
+          is ChangeName -> ..
         }
-      )
+      }
     } else {
       LoggedOut
     }
@@ -131,23 +128,6 @@ class AmazonLoginPresenter : LoginPresenter {
     automatically bind the concrete implementation to an API using `@ContributesBinding`, they don't use the
     `@SingleIn` annotation. `MoleculePresenters` manage their state in the `@Composable` function with the Compose
     runtime. Therefore, it's strongly discouraged to have any class properties.
-
-!!! warning
-
-    Notice that the lambda for `onEvent` is wrapped in the [`onEvent` function](https://github.com/amzn/app-platform/blob/main/presenter-molecule/public/src/commonMain/kotlin/software/amazon/app/platform/presenter/molecule/OnEvent.kt).
-
-    ```kotlin hl_lines="1"
-    onEvent = onEvent { event ->
-      when(event) {
-        is Logout -> ..
-        is ChangeName -> ..
-      }
-    }
-    ```
-
-    This is important for `data classes` in order to preserve equality. Internally, the `onEvent` function creates
-    and reuses a separate lambda to ensure that `BaseModel` instances holding the same data are still considered
-    equal although the `onEvent` lambda has changed between compositions.
 
 ## Model driven navigation
 
@@ -470,12 +450,11 @@ fun present(input: Unit): Model {
 
   return Model(
     text = if (toggled) "toggled" else "not toggled",
-    onEvent = onEvent {
-      when(it) {
-        is ToggleClicked -> toggled = !toggled
-      }
+  ) {
+    when (it) {
+      is ToggleClicked -> toggled = !toggled
     }
-  )
+  }
 }
 ```
 
@@ -533,13 +512,11 @@ This is an example for how one would use `rememberCoroutineScope()`:
 fun present(input: Unit): Model {
   val coroutineScope = rememberCoroutineScope()
 
-  return Model(
-    onEvent = onEvent {
-      when(it) {
-        is OnClick -> coroutineScope.launch { ... }
-      }
+  return Model() {
+    when (it) {
+      is OnClick -> coroutineScope.launch { ... }
     }
-  )
+  }
 }
 ```
 

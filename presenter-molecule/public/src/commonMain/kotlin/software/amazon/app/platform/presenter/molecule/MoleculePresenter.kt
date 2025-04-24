@@ -37,9 +37,7 @@ import software.amazon.app.platform.presenter.Presenter
  * ```
  *
  * If a consumer like the UI layer should be able to send events back to the presenter, then the
- * [BaseModel] implementation typically has an `onEvent` callback lambda as last parameter. To
- * preserve equality checks of [BaseModel] instances, it's strongly recommended to wrap the lambda
- * with [onEvent]:
+ * [BaseModel] implementation typically has an `onEvent` callback lambda as last parameter:
  * ```
  * @Inject
  * class MyPresenter : MoleculePresenter<Unit, Model> {
@@ -49,17 +47,14 @@ import software.amazon.app.platform.presenter.Presenter
  *         var myData by remember { mutableStateOf("") }
  *
  *         ...
- *         return Model(
- *             ...,
- *             onEvent = onEvent { event ->
- *                 when (event) {
- *                     is MyEvent -> {
- *                         // This will trigger recomposition and a new Model will be produced.
- *                         myData = event.moreData
- *                     }
+ *         return Model(...) { event ->
+ *             when (event) {
+ *                 is MyEvent -> {
+ *                     // This will trigger recomposition and a new Model will be produced.
+ *                     myData = event.moreData
  *                 }
  *             }
- *         )
+ *         }
  *     }
  *
  *     data class Model(

@@ -37,6 +37,7 @@ import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.yield
 import software.amazon.app.platform.presenter.BaseModel
 
+@Suppress("DEPRECATION")
 @OptIn(ExperimentalCoroutinesApi::class)
 class OnEventTest {
 
@@ -325,7 +326,7 @@ class OnEventTest {
       BaseModel
 
     sealed interface Event {
-      object AnyEvent : Event
+      data object AnyEvent : Event
     }
   }
 
@@ -347,7 +348,7 @@ class OnEventTest {
     data class Model(val onEventInvoked: Int, val onEvent: (Event) -> Unit) : BaseModel
 
     sealed interface Event {
-      object AnyEvent : Event
+      data object AnyEvent : Event
     }
   }
 

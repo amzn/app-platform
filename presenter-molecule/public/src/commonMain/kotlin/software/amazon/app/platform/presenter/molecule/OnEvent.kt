@@ -53,6 +53,7 @@ import software.amazon.app.platform.presenter.BaseModel
  */
 @Suppress("unused", "UnusedReceiverParameter")
 @Composable
+@Deprecated("This function isn't needed anymore and can be removed")
 public fun <EventT : Any> MoleculePresenter<*, *>.onEvent(
   handler: @DisallowComposableCalls suspend (EventT) -> Unit
 ): (EventT) -> Unit {

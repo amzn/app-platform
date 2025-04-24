@@ -20,7 +20,7 @@ class LoginRendererTest {
     runComposeUiTest {
       setContent {
         val renderer = LoginRenderer()
-        renderer.renderCompose(LoginPresenter.Model(loginInProgress = false, onEvent = {}))
+        renderer.renderCompose(LoginPresenter.Model(loginInProgress = false) {})
       }
 
       onNodeWithTag("loginProgress").assertDoesNotExist()
@@ -33,7 +33,7 @@ class LoginRendererTest {
     runComposeUiTest {
       setContent {
         val renderer = LoginRenderer()
-        renderer.renderCompose(LoginPresenter.Model(loginInProgress = true, onEvent = {}))
+        renderer.renderCompose(LoginPresenter.Model(loginInProgress = true) {})
       }
 
       onNodeWithTag("loginProgress").assertIsDisplayed()

@@ -8,7 +8,6 @@ import androidx.compose.runtime.setValue
 import me.tatarka.inject.annotations.Inject
 import software.amazon.app.platform.presenter.BaseModel
 import software.amazon.app.platform.presenter.molecule.MoleculePresenter
-import software.amazon.app.platform.presenter.molecule.onEvent
 import software.amazon.app.platform.sample.user.UserPageListPresenter.Input
 import software.amazon.app.platform.sample.user.UserPageListPresenter.Model
 
@@ -26,16 +25,14 @@ class UserPageListPresenter(private val sessionTimeout: SessionTimeout) :
       userId = user.userId,
       attributeKeys = user.attributes.map { it.key },
       selectedIndex = selectedIndex,
-      onEvent =
-        onEvent {
-          when (it) {
-            is Event.ItemSelected -> {
-              sessionTimeout.resetTimeout()
-              selectedIndex = it.index
-            }
-          }
-        },
-    )
+    ) {
+      when (it) {
+        is Event.ItemSelected -> {
+          sessionTimeout.resetTimeout()
+          selectedIndex = it.index
+        }
+      }
+    }
   }
 
   /** The state of the list pane. */
