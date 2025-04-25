@@ -12,10 +12,11 @@ import com.google.devtools.ksp.symbol.KSNode
 import com.google.devtools.ksp.symbol.KSType
 import com.google.devtools.ksp.symbol.KSTypeAlias
 import com.google.devtools.ksp.symbol.Visibility
-import com.squareup.kotlinpoet.ClassName
+import com.squareup.kotlinpoet.asClassName
 import kotlin.reflect.KClass
 import me.tatarka.inject.annotations.Inject
 import me.tatarka.inject.annotations.Scope
+import software.amazon.app.platform.scope.Scoped
 
 @Suppress("TooManyFunctions")
 internal interface ContextAware {
@@ -31,10 +32,10 @@ internal interface ContextAware {
     get() = Scope::class.requireQualifiedName()
 
   val scopedFqName
-    get() = "software.amazon.app.platform.scope.Scoped"
+    get() = Scoped::class.requireQualifiedName()
 
   val scopedClassName
-    get() = ClassName("software.amazon.app.platform.scope", "Scoped")
+    get() = Scoped::class.asClassName()
 
   fun <T : Any> requireNotNull(value: T?, symbol: KSNode?, lazyMessage: () -> String): T {
     if (value == null) {
