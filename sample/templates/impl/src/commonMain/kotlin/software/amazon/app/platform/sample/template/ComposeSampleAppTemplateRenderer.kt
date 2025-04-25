@@ -1,7 +1,11 @@
 package software.amazon.app.platform.sample.template
 
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.safeDrawing
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import me.tatarka.inject.annotations.Inject
@@ -24,9 +28,11 @@ class ComposeSampleAppTemplateRenderer(private val rendererFactory: RendererFact
 
   @Composable
   override fun Compose(model: SampleAppTemplate) {
-    when (model) {
-      is SampleAppTemplate.FullScreenTemplate -> FullScreen(model)
-      is SampleAppTemplate.ListDetailTemplate -> ListDetail(model)
+    Box(Modifier.windowInsetsPadding(WindowInsets.safeDrawing)) {
+      when (model) {
+        is SampleAppTemplate.FullScreenTemplate -> FullScreen(model)
+        is SampleAppTemplate.ListDetailTemplate -> ListDetail(model)
+      }
     }
   }
 
