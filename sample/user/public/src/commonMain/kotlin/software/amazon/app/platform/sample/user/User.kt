@@ -16,6 +16,14 @@ interface User {
    */
   val scope: Scope
 
-  /** A [key] [value] pair of user specific data. */
-  data class Attribute(val key: String, val value: String)
+  /**
+   * A [key] [value] pair of user specific data. [metadata] is true when the element should not be
+   * shown on screen.
+   */
+  data class Attribute(val key: String, val value: String, val metadata: Boolean = false) {
+    companion object {
+      /** Key for the picture attribute. */
+      const val PICTURE_KEY = "picture"
+    }
+  }
 }

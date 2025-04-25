@@ -1,9 +1,12 @@
 package software.amazon.app.platform.sample.user
 
+import app_platform.sample.user.impl.generated.resources.Res
+import app_platform.sample.user.impl.generated.resources.allDrawableResources
 import kotlin.random.Random
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import me.tatarka.inject.annotations.Inject
+import org.jetbrains.compose.resources.ExperimentalResourceApi
 import software.amazon.app.platform.scope.RootScopeProvider
 import software.amazon.app.platform.scope.coroutine.addCoroutineScopeScoped
 import software.amazon.app.platform.scope.di.addDiComponent
@@ -39,6 +42,7 @@ class UserManagerImpl(
             User.Attribute("First Name", firstName()),
             User.Attribute("Last Name", lastName()),
             User.Attribute("Age", age()),
+            User.Attribute(User.Attribute.PICTURE_KEY, profilePicture(), metadata = true),
           ),
       )
 
@@ -79,5 +83,11 @@ class UserManagerImpl(
   @Suppress("MagicNumber")
   private fun age(): String {
     return Random.nextInt(100).toString()
+  }
+
+  @OptIn(ExperimentalResourceApi::class)
+  private fun profilePicture(): String {
+    val keys = Res.allDrawableResources.keys.toList()
+    return if (Random.nextBoolean()) keys[0] else keys[1]
   }
 }

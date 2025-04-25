@@ -20,6 +20,7 @@ class UserPageDetailPresenter(private val sessionTimeout: SessionTimeout) :
 
     return Model(
       text = input.user.attributes[input.selectedAttribute].value,
+      pictureKey = input.user.attributes.single { it.key == User.Attribute.PICTURE_KEY }.value,
       timeoutProgress = (timeout / SessionTimeout.initialTimeout).toFloat(),
     )
   }
@@ -28,6 +29,8 @@ class UserPageDetailPresenter(private val sessionTimeout: SessionTimeout) :
   data class Model(
     /** The text rendered on screen. Usually, refers to the selected user attribute. */
     val text: String,
+    /** The profile picture ID loaded from the resources. */
+    val pictureKey: String,
     /** The progress until when current user is logged out. The value is between [0, 1]. */
     val timeoutProgress: Float,
   ) : BaseModel

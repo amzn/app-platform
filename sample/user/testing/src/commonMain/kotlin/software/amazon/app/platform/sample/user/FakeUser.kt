@@ -9,7 +9,8 @@ import software.amazon.app.platform.scope.Scope
  */
 class FakeUser(
   override val userId: Long = 1L,
-  override val attributes: List<User.Attribute> = listOf(fakeAttribute1, fakeAttribute2),
+  override val attributes: List<User.Attribute> =
+    listOf(fakeAttribute1, fakeAttribute2, fakePicture),
   override val scope: Scope = Scope.buildRootScope(),
 ) : User {
   companion object {
@@ -18,5 +19,8 @@ class FakeUser(
 
     /** Fake attribute in tests that is added by default to a [FakeUser] unless overridden. */
     val fakeAttribute2 = User.Attribute("Key2", "Value2")
+
+    /** Fake attribute in tests that is added by default to a [FakeUser] unless overridden. */
+    val fakePicture = User.Attribute(User.Attribute.PICTURE_KEY, "picture", metadata = true)
   }
 }

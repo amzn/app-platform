@@ -20,6 +20,7 @@ dependencies {
 
 compose {
     dependencies {
+        commonMainImplementation dependencies.components.resources
         commonMainImplementation dependencies.material
     }
 }

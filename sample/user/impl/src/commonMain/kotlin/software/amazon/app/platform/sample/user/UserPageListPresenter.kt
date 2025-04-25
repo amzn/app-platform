@@ -23,7 +23,7 @@ class UserPageListPresenter(private val sessionTimeout: SessionTimeout) :
 
     return Model(
       userId = user.userId,
-      attributeKeys = user.attributes.map { it.key },
+      attributeKeys = user.attributes.filterNot { it.metadata }.map { it.key },
       selectedIndex = selectedIndex,
     ) {
       when (it) {
