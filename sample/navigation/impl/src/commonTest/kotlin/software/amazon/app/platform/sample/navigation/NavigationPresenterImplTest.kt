@@ -50,9 +50,9 @@ class NavigationPresenterImplTest {
   private class FakeUserPagePresenter : UserPagePresenter {
     @Composable
     override fun present(input: Unit): UserPagePresenter.Model =
-      UserPagePresenter.Model(
-        listModel = object : BaseModel {},
-        detailModel = object : BaseModel {},
-      )
+      object : UserPagePresenter.Model {
+        override val listModel: BaseModel = object : BaseModel {}
+        override val detailModel: BaseModel = object : BaseModel {}
+      }
   }
 }

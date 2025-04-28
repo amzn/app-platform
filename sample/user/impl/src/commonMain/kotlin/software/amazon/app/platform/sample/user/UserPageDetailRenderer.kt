@@ -2,9 +2,13 @@ package software.amazon.app.platform.sample.user
 
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.CircleShape
@@ -12,9 +16,11 @@ import androidx.compose.material.LinearProgressIndicator
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import app_platform.sample.user.impl.generated.resources.Res
@@ -26,12 +32,21 @@ import software.amazon.app.platform.renderer.ComposeRenderer
 import software.amazon.app.platform.sample.user.UserPageDetailPresenter.Model
 
 /** Renders the content for [UserPageDetailPresenter] on screen using Compose Multiplatform. */
+@OptIn(ExperimentalResourceApi::class)
 @ContributesRenderer
 class UserPageDetailRenderer : ComposeRenderer<Model>() {
 
-  @OptIn(ExperimentalResourceApi::class)
   @Composable
   override fun Compose(model: Model) {
+    if (model.showPictureFullscreen) {
+      ProfilePicture(model)
+    } else {
+      ProfileDetails(model)
+    }
+  }
+
+  @Composable
+  private fun ProfileDetails(model: Model) {
     Column(modifier = Modifier.fillMaxWidth().fillMaxHeight()) {
       LinearProgressIndicator(progress = model.timeoutProgress, modifier = Modifier.fillMaxWidth())
 
@@ -48,7 +63,8 @@ class UserPageDetailRenderer : ComposeRenderer<Model>() {
               spotColor = MaterialTheme.colors.primary,
             )
             .clip(CircleShape) // clip to the circle shape
-            .border(2.dp, MaterialTheme.colors.primary, CircleShape),
+            .clickable { model.onEvent(UserPageDetailPresenter.Event.ProfilePictureClick) }
+            .border(2.dp, MaterialTheme.colors.primary, shape = CircleShape),
       )
 
       AnimatedContent(targetState = model.text) { text ->
@@ -59,6 +75,20 @@ class UserPageDetailRenderer : ComposeRenderer<Model>() {
           modifier = Modifier.fillMaxWidth().padding(16.dp),
         )
       }
+    }
+  }
+
+  @Composable
+  private fun ProfilePicture(model: Model) {
+    Row(Modifier.background(Color.Black).fillMaxSize()) {
+      Image(
+        painter = painterResource(Res.allDrawableResources.getValue(model.pictureKey)),
+        contentDescription = "Profile picture",
+        modifier =
+          Modifier.clickable { model.onEvent(UserPageDetailPresenter.Event.ProfilePictureClick) }
+            .align(Alignment.CenterVertically)
+            .clip(CircleShape),
+      )
     }
   }
 }

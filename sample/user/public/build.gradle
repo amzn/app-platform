@@ -12,7 +12,3 @@ appPlatform {
     enableModuleStructure true
     enableMoleculePresenters true
 }
-
-dependencies {
-    commonMainImplementation project(':sample:templates:public')
-}
