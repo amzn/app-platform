@@ -22,6 +22,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import app_platform.sample.user.impl.generated.resources.Res
@@ -59,6 +60,7 @@ class UserPageDetailRenderer : ComposeRenderer<Model>() {
           contentDescription = "Profile picture",
           modifier =
             Modifier.padding(start = 64.dp, top = 16.dp, end = 64.dp)
+              .testTag("profilePicture")
               .sharedElement(
                 rememberSharedContentState(key = PROFILE_PICTURE_KEY),
                 animatedVisibilityScope = checkNotNull(LocalAnimatedVisibilityScope.current),
@@ -97,6 +99,7 @@ class UserPageDetailRenderer : ComposeRenderer<Model>() {
           contentDescription = "Profile picture",
           modifier =
             Modifier.clickable { model.onEvent(UserPageDetailPresenter.Event.ProfilePictureClick) }
+              .testTag("profilePicture")
               .align(Alignment.CenterVertically)
               .sharedElement(
                 rememberSharedContentState(key = PROFILE_PICTURE_KEY),

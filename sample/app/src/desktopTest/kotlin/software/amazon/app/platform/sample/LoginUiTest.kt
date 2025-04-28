@@ -40,14 +40,28 @@ class LoginUiTest {
   }
 
   @Test
-  fun `a user logs in`(): Unit = runRobotTest {
+  fun `a user logs in and opens the profile picture`(): Unit = runRobotTest {
     composeRobot<LoginRobot> {
       seeLoginButton()
       clickLoginButton()
     }
 
     waitUntilCatching("login finished", timeout = 2.seconds) {
-      composeRobot<UserPageRobot> { seeUserId() }
+      composeRobot<UserPageRobot> {
+        seeUserId()
+        seeProfilePicture(fullScreen = false)
+      }
+    }
+
+    // Note that this code doesn't run within the `waitUntilCatching` on purpose. The code
+    // above waits until we're logged in and retries the operation until the UI displayed. The
+    // operations below should not be retried.
+    composeRobot<UserPageRobot> {
+      clickProfilePicture()
+      seeProfilePicture(fullScreen = true)
+
+      clickProfilePicture()
+      seeProfilePicture(fullScreen = false)
     }
   }
 
