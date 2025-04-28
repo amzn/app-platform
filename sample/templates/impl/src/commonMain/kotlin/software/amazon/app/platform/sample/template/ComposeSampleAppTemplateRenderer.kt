@@ -1,5 +1,8 @@
 package software.amazon.app.platform.sample.template
 
+import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.ExperimentalSharedTransitionApi
+import androidx.compose.animation.SharedTransitionLayout
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -7,6 +10,7 @@ import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Modifier
 import me.tatarka.inject.annotations.Inject
 import software.amazon.app.platform.inject.ContributesRenderer
@@ -15,12 +19,15 @@ import software.amazon.app.platform.renderer.ComposeRenderer
 import software.amazon.app.platform.renderer.Renderer
 import software.amazon.app.platform.renderer.RendererFactory
 import software.amazon.app.platform.renderer.getComposeRenderer
+import software.amazon.app.platform.sample.template.animation.LocalAnimatedVisibilityScope
+import software.amazon.app.platform.sample.template.animation.LocalSharedTransitionScope
 
 /**
  * A Compose renderer implementation for templates used in the sample application.
  *
  * [rendererFactory] is used to get the [Renderer] for the [BaseModel] wrapped in the template.
  */
+@OptIn(ExperimentalSharedTransitionApi::class)
 @Inject
 @ContributesRenderer
 class ComposeSampleAppTemplateRenderer(private val rendererFactory: RendererFactory) :
@@ -29,9 +36,30 @@ class ComposeSampleAppTemplateRenderer(private val rendererFactory: RendererFact
   @Composable
   override fun Compose(model: SampleAppTemplate) {
     Box(Modifier.windowInsetsPadding(WindowInsets.safeDrawing)) {
-      when (model) {
-        is SampleAppTemplate.FullScreenTemplate -> FullScreen(model)
-        is SampleAppTemplate.ListDetailTemplate -> ListDetail(model)
+      // Wrap all the the UI in a SharedTransitionLayout and AnimatedContent to support
+      // shared element transitions across template updates. The scopes are exposed through
+      // composition locals as suggested here:
+      // https://developer.android.com/develop/ui/compose/animation/shared-elements#understand-scopes
+      SharedTransitionLayout {
+        CompositionLocalProvider(LocalSharedTransitionScope provides this) {
+          AnimatedContent(
+            targetState = model,
+            label = "Top level AnimatedContent",
+            contentKey = { template ->
+              // Use the key from AnimationContentKey as indicator when content has changed
+              // that needs to be animated. If this key is doesn't change (the default behavior),
+              // then no animation occurs.
+              template.contentKey
+            },
+          ) { template ->
+            CompositionLocalProvider(LocalAnimatedVisibilityScope provides this) {
+              when (template) {
+                is SampleAppTemplate.FullScreenTemplate -> FullScreen(template)
+                is SampleAppTemplate.ListDetailTemplate -> ListDetail(template)
+              }
+            }
+          }
+        }
       }
     }
   }

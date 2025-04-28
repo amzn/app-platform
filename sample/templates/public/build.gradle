@@ -8,6 +8,7 @@ plugins {
 }
 
 appPlatform {
+    enableComposeUi true
     enableKotlinInject true
     enableModuleStructure true
     enableMoleculePresenters true

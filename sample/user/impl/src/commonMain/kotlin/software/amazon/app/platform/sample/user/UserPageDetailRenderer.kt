@@ -1,6 +1,7 @@
 package software.amazon.app.platform.sample.user
 
 import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -29,10 +30,12 @@ import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource
 import software.amazon.app.platform.inject.ContributesRenderer
 import software.amazon.app.platform.renderer.ComposeRenderer
+import software.amazon.app.platform.sample.template.animation.LocalAnimatedVisibilityScope
+import software.amazon.app.platform.sample.template.animation.LocalSharedTransitionScope
 import software.amazon.app.platform.sample.user.UserPageDetailPresenter.Model
 
 /** Renders the content for [UserPageDetailPresenter] on screen using Compose Multiplatform. */
-@OptIn(ExperimentalResourceApi::class)
+@OptIn(ExperimentalResourceApi::class, ExperimentalSharedTransitionApi::class)
 @ContributesRenderer
 class UserPageDetailRenderer : ComposeRenderer<Model>() {
 
@@ -50,45 +53,63 @@ class UserPageDetailRenderer : ComposeRenderer<Model>() {
     Column(modifier = Modifier.fillMaxWidth().fillMaxHeight()) {
       LinearProgressIndicator(progress = model.timeoutProgress, modifier = Modifier.fillMaxWidth())
 
-      Image(
-        painter = painterResource(Res.allDrawableResources.getValue(model.pictureKey)),
-        contentDescription = "Profile picture",
-        modifier =
-          Modifier.padding(start = 64.dp, top = 16.dp, end = 64.dp)
-            .shadow(
-              elevation = 16.dp,
-              shape = CircleShape,
-              clip = false,
-              ambientColor = MaterialTheme.colors.primary,
-              spotColor = MaterialTheme.colors.primary,
-            )
-            .clip(CircleShape) // clip to the circle shape
-            .clickable { model.onEvent(UserPageDetailPresenter.Event.ProfilePictureClick) }
-            .border(2.dp, MaterialTheme.colors.primary, shape = CircleShape),
-      )
-
-      AnimatedContent(targetState = model.text) { text ->
-        Text(
-          text = text,
-          style = MaterialTheme.typography.h6,
-          textAlign = TextAlign.Center,
-          modifier = Modifier.fillMaxWidth().padding(16.dp),
+      with(checkNotNull(LocalSharedTransitionScope.current)) {
+        Image(
+          painter = painterResource(Res.allDrawableResources.getValue(model.pictureKey)),
+          contentDescription = "Profile picture",
+          modifier =
+            Modifier.padding(start = 64.dp, top = 16.dp, end = 64.dp)
+              .sharedElement(
+                rememberSharedContentState(key = PROFILE_PICTURE_KEY),
+                animatedVisibilityScope = checkNotNull(LocalAnimatedVisibilityScope.current),
+                clipInOverlayDuringTransition = OverlayClip(CircleShape),
+              )
+              .shadow(
+                elevation = 16.dp,
+                shape = CircleShape,
+                clip = false,
+                ambientColor = MaterialTheme.colors.primary,
+                spotColor = MaterialTheme.colors.primary,
+              )
+              .clip(CircleShape) // clip to the circle shape
+              .clickable { model.onEvent(UserPageDetailPresenter.Event.ProfilePictureClick) }
+              .border(2.dp, MaterialTheme.colors.primary, shape = CircleShape),
         )
+
+        AnimatedContent(targetState = model.text) { text ->
+          Text(
+            text = text,
+            style = MaterialTheme.typography.h6,
+            textAlign = TextAlign.Center,
+            modifier = Modifier.fillMaxWidth().padding(16.dp),
+          )
+        }
       }
     }
   }
 
   @Composable
   private fun ProfilePicture(model: Model) {
-    Row(Modifier.background(Color.Black).fillMaxSize()) {
-      Image(
-        painter = painterResource(Res.allDrawableResources.getValue(model.pictureKey)),
-        contentDescription = "Profile picture",
-        modifier =
-          Modifier.clickable { model.onEvent(UserPageDetailPresenter.Event.ProfilePictureClick) }
-            .align(Alignment.CenterVertically)
-            .clip(CircleShape),
-      )
+    with(checkNotNull(LocalSharedTransitionScope.current)) {
+      Row(Modifier.background(Color.Black).fillMaxSize()) {
+        Image(
+          painter = painterResource(Res.allDrawableResources.getValue(model.pictureKey)),
+          contentDescription = "Profile picture",
+          modifier =
+            Modifier.clickable { model.onEvent(UserPageDetailPresenter.Event.ProfilePictureClick) }
+              .align(Alignment.CenterVertically)
+              .sharedElement(
+                rememberSharedContentState(key = PROFILE_PICTURE_KEY),
+                animatedVisibilityScope = checkNotNull(LocalAnimatedVisibilityScope.current),
+                clipInOverlayDuringTransition = OverlayClip(CircleShape),
+              )
+              .clip(CircleShape),
+        )
+      }
     }
+  }
+
+  private companion object {
+    const val PROFILE_PICTURE_KEY = "profile-picture"
   }
 }

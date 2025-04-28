@@ -2,14 +2,19 @@ package software.amazon.app.platform.sample.template
 
 import software.amazon.app.platform.presenter.BaseModel
 import software.amazon.app.platform.presenter.template.Template
+import software.amazon.app.platform.sample.template.animation.AnimationContentKey
+import software.amazon.app.platform.sample.template.animation.AnimationContentKey.Companion.contentKey
 
 /** All [Template]s implemented in the sample application. */
-sealed interface SampleAppTemplate : Template {
+sealed interface SampleAppTemplate : Template, AnimationContentKey {
   /** A template that hosts a single model, which should rendered as full-screen element. */
   data class FullScreenTemplate(
     /** The model to be rendered fullscreen. */
     val model: BaseModel
-  ) : SampleAppTemplate
+  ) : SampleAppTemplate {
+    override val contentKey: Int
+      get() = model.contentKey
+  }
 
   /**
    * A template that hosts two models, these can be rendered in different configurations, at the
@@ -28,5 +33,10 @@ sealed interface SampleAppTemplate : Template {
      * meant to be used to show more detailed information.
      */
     val detail: BaseModel,
-  ) : SampleAppTemplate
+  ) : SampleAppTemplate {
+    override val contentKey: Int
+      // Multiply by 31 to avoid collisions in the sum, e.g. when list changes from 0 to 1 and
+      // detail changes from 1 to 0 at teh same time.
+      get() = list.contentKey * 31 + detail.contentKey
+  }
 }

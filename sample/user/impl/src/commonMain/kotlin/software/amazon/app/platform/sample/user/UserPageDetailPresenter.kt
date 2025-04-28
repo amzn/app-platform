@@ -9,6 +9,7 @@ import androidx.compose.runtime.setValue
 import me.tatarka.inject.annotations.Inject
 import software.amazon.app.platform.presenter.BaseModel
 import software.amazon.app.platform.presenter.molecule.MoleculePresenter
+import software.amazon.app.platform.sample.template.animation.AnimationContentKey
 import software.amazon.app.platform.sample.user.UserPageDetailPresenter.Input
 import software.amazon.app.platform.sample.user.UserPageDetailPresenter.Model
 
@@ -49,7 +50,10 @@ class UserPageDetailPresenter(private val sessionTimeout: SessionTimeout) :
     val showPictureFullscreen: Boolean,
     /** Callback to send events back to the presenter. */
     val onEvent: (Event) -> Unit,
-  ) : BaseModel
+  ) : BaseModel, AnimationContentKey {
+    override val contentKey: Int =
+      if (showPictureFullscreen) 1 else AnimationContentKey.DEFAULT_CONTENT_KEY
+  }
 
   /** All events that [UserPageDetailPresenter] can process. */
   sealed interface Event {

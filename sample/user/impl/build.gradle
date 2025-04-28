@@ -15,7 +15,7 @@ appPlatform {
 }
 
 dependencies {
-    commonMainImplementation project(':sample:templates:public')
+    commonMainApi project(':sample:templates:public')
     commonTestImplementation project(':sample:user:testing')
 }
 
