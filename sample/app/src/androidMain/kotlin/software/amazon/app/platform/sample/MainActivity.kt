@@ -2,15 +2,13 @@ package software.amazon.app.platform.sample
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
+import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
-import kotlinx.coroutines.launch
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import software.amazon.app.platform.renderer.ComposeAndroidRendererFactory
-import software.amazon.app.platform.renderer.getRenderer
-import software.amazon.app.platform.sample.app.R
+import software.amazon.app.platform.renderer.getComposeRenderer
 import software.amazon.app.platform.scope.RootScopeProvider
 
 /**
@@ -28,22 +26,14 @@ class MainActivity : ComponentActivity() {
     super.onCreate(savedInstanceState)
     enableEdgeToEdge()
 
-    setContentView(R.layout.activity_main)
-
     val rendererFactory =
-      ComposeAndroidRendererFactory(
-        rootScopeProvider = rootScopeProvider,
-        activity = this,
-        parent = findViewById(R.id.main_container),
-      )
+      ComposeAndroidRendererFactory.createForComposeUi(rootScopeProvider = rootScopeProvider)
 
-    lifecycleScope.launch {
-      repeatOnLifecycle(Lifecycle.State.STARTED) {
-        viewModel.templates.collect { template ->
-          val renderer = rendererFactory.getRenderer(template)
-          renderer.render(template)
-        }
-      }
+    setContent {
+      val template by viewModel.templates.collectAsState()
+
+      val renderer = rendererFactory.getComposeRenderer(template)
+      renderer.renderCompose(template)
     }
   }
 }

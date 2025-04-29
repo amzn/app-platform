@@ -2,10 +2,13 @@ public abstract interface class software/amazon/app/platform/renderer/BaseCompos
 	public abstract fun renderCompose (Lsoftware/amazon/app/platform/presenter/BaseModel;Landroidx/compose/runtime/Composer;I)V
 }
 
-public final class software/amazon/app/platform/renderer/ComposeAndroidRendererFactory : software/amazon/app/platform/renderer/AndroidRendererFactory {
-	public static final field $stable I
-	public fun <init> (Lsoftware/amazon/app/platform/scope/RootScopeProvider;Landroid/app/Activity;Landroid/view/ViewGroup;)V
-	public fun createRenderer (Lkotlin/reflect/KClass;)Lsoftware/amazon/app/platform/renderer/Renderer;
+public abstract interface class software/amazon/app/platform/renderer/ComposeAndroidRendererFactory : software/amazon/app/platform/renderer/RendererFactory {
+	public static final field Companion Lsoftware/amazon/app/platform/renderer/ComposeAndroidRendererFactory$Companion;
+}
+
+public final class software/amazon/app/platform/renderer/ComposeAndroidRendererFactory$Companion {
+	public final fun createForAndroidViews (Lsoftware/amazon/app/platform/scope/RootScopeProvider;Landroid/app/Activity;Landroid/view/ViewGroup;)Lsoftware/amazon/app/platform/renderer/ComposeAndroidRendererFactory;
+	public final fun createForComposeUi (Lsoftware/amazon/app/platform/scope/RootScopeProvider;)Lsoftware/amazon/app/platform/renderer/ComposeAndroidRendererFactory;
 }
 
 public abstract class software/amazon/app/platform/renderer/ComposeRenderer : software/amazon/app/platform/renderer/BaseComposeRenderer, software/amazon/app/platform/renderer/Renderer {

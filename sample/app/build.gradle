@@ -33,7 +33,7 @@ dependencies {
     commonMainImplementation project(':sample:templates:impl')
     commonMainImplementation project(':sample:user:impl')
 
-    androidMainImplementation libs.androidx.activity
+    androidMainImplementation libs.androidx.activity.compose
 
     desktopTestImplementation project(':robot-compose-multiplatform:public')
     desktopTestImplementation project(':sample:login:impl-robots')

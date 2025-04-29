@@ -4,7 +4,6 @@ import android.app.Activity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.FrameLayout
 import androidx.compose.runtime.Composable
 import assertk.assertFailure
 import assertk.assertThat
@@ -48,10 +47,7 @@ class ComposeAndroidRendererFactoryTest {
   }
 
   private fun TestScope.factory(): ComposeAndroidRendererFactory {
-    val activity = Activity()
-    val viewGroup = FrameLayout(activity)
-
-    return ComposeAndroidRendererFactory(rootScopeProvider(), activity, viewGroup)
+    return ComposeAndroidRendererFactory.createForComposeUi(rootScopeProvider())
   }
 
   private fun TestScope.rootScopeProvider(): RootScopeProvider {

@@ -7,9 +7,11 @@ import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.activity.ComponentActivity
+import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.text.BasicText
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.test.ExperimentalTestApi
@@ -31,6 +33,7 @@ import assertk.assertions.isNull
 import assertk.assertions.isSameInstanceAs
 import assertk.assertions.messageContains
 import kotlin.reflect.KClass
+import kotlinx.coroutines.flow.MutableStateFlow
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule
@@ -45,7 +48,7 @@ class ComposeAndroidRendererFactoryDeviceTest {
   @get:Rule val composeTestRule = AndroidComposeTestRule(activityRule, ::getActivityFromTestRule)
 
   private lateinit var activity: TestActivity
-  private lateinit var factory: ComposeAndroidRendererFactory
+  private lateinit var factory: RendererFactory
 
   private var createdRenderers = 0
 
@@ -60,7 +63,7 @@ class ComposeAndroidRendererFactoryDeviceTest {
       activity.setContentView(container)
 
       factory =
-        ComposeAndroidRendererFactory(
+        ComposeAndroidRendererFactory.createForAndroidViews(
           rootScopeProvider = testApplication,
           activity = activity,
           parent = container,
@@ -96,6 +99,30 @@ class ComposeAndroidRendererFactoryDeviceTest {
   }
 
   @Test
+  fun a_compose_renderer_renders_content_on_screen_in_compose_ui_as_parent() {
+    // Notice that this test overrides the factory and uses Compose UI as entry point
+    // instead of Android Views as the other tests.
+    factory = ComposeAndroidRendererFactory.createForComposeUi(testApplication)
+
+    val composeModels = MutableStateFlow<ComposeModel?>(null)
+    composeTestRule.runOnUiThread {
+      activity.setContent {
+        val composeModel = composeModels.collectAsState().value
+        if (composeModel != null) {
+          factory.getComposeRenderer(composeModel).renderCompose(composeModel)
+        }
+      }
+    }
+
+    repeat(10) {
+      composeModels.value = ComposeModel(it)
+      composeTestRule.onNodeWithTag("testCompose").assertTextEquals("Compose test: $it")
+    }
+
+    assertThat(createdRenderers).isEqualTo(1)
+  }
+
+  @Test
   fun a_view_renderer_renders_content_on_screen() {
     repeat(10) {
       composeTestRule.runOnUiThread {
@@ -106,6 +133,52 @@ class ComposeAndroidRendererFactoryDeviceTest {
     }
 
     assertThat(createdRenderers).isEqualTo(1)
+  }
+
+  @Test
+  fun a_view_renderer_renders_content_on_screen_in_compose_ui_as_parent() {
+    // Notice that this test overrides the factory and uses Compose UI as entry point
+    // instead of Android Views as the other tests.
+    factory = ComposeAndroidRendererFactory.createForComposeUi(testApplication)
+
+    val viewModels = MutableStateFlow<ViewModel?>(null)
+    composeTestRule.runOnUiThread {
+      activity.setContent {
+        val viewModel = viewModels.collectAsState().value
+        if (viewModel != null) {
+          factory.getComposeRenderer(viewModel).renderCompose(viewModel)
+        }
+      }
+    }
+
+    repeat(10) {
+      viewModels.value = ViewModel(it)
+
+      waitForRenderPass()
+
+      assertThat(activity.testView.text.toString()).isEqualTo("View test: $it")
+    }
+
+    assertThat(createdRenderers).isEqualTo(1)
+  }
+
+  @Test
+  fun a_renderer_cannot_render_android_views_without_a_parent_view_when_compose_is_expected() {
+    // Notice that this test overrides the factory and uses Compose UI as entry point
+    // instead of Android Views as the other tests.
+    factory = ComposeAndroidRendererFactory.createForComposeUi(testApplication)
+
+    composeTestRule.runOnUiThread {
+      activity.setContent {
+        assertFailure {
+            val viewModel = ViewModel(1)
+            factory.getRenderer(viewModel).render(viewModel)
+          }
+          .messageContains(
+            "Tried to call render() on an AndroidViewRenderer without a parent view."
+          )
+      }
+    }
   }
 
   @Test
@@ -159,6 +232,32 @@ class ComposeAndroidRendererFactoryDeviceTest {
         val composeModel = ComposeModel(it, viewModel = ViewModel(it + 1))
         factory.getRenderer(composeModel).render(composeModel)
       }
+
+      composeTestRule.onNodeWithTag("testCompose").assertTextEquals("Compose test: $it")
+      assertThat(activity.testView.text.toString()).isEqualTo("View test: ${it + 1}")
+    }
+
+    assertThat(createdRenderers).isEqualTo(2)
+  }
+
+  @Test
+  fun a_compose_renderer_can_embed_a_view_renderer_in_compose_ui_as_parent() {
+    // Notice that this test overrides the factory and uses Compose UI as entry point
+    // instead of Android Views as the other tests.
+    factory = ComposeAndroidRendererFactory.createForComposeUi(testApplication)
+
+    val composeModels = MutableStateFlow<ComposeModel?>(null)
+    composeTestRule.runOnUiThread {
+      activity.setContent {
+        val composeModel = composeModels.collectAsState().value
+        if (composeModel != null) {
+          factory.getComposeRenderer(composeModel).renderCompose(composeModel)
+        }
+      }
+    }
+
+    repeat(10) {
+      composeModels.value = ComposeModel(it, viewModel = ViewModel(it + 1))
 
       composeTestRule.onNodeWithTag("testCompose").assertTextEquals("Compose test: $it")
       assertThat(activity.testView.text.toString()).isEqualTo("View test: ${it + 1}")
@@ -253,6 +352,11 @@ class ComposeAndroidRendererFactoryDeviceTest {
 
   private fun ViewGroup.getChildViewGroupAt(index: Int): ViewGroup = getChildAt(index) as ViewGroup
 
+  private fun waitForRenderPass() {
+    // This ensures that rendering finished when Android Views are involved.
+    composeTestRule.onNodeWithTag("any").assertDoesNotExist()
+  }
+
   private data class ViewModel(
     val value: Int,
     val composeModel: ComposeModel? = null,
@@ -281,11 +385,11 @@ class ComposeAndroidRendererFactoryDeviceTest {
       layoutInflater: LayoutInflater,
       initialModel: ViewModel,
     ): View =
-      LinearLayout(activity).also {
-        container = it
+      LinearLayout(activity).also { layout ->
+        container = layout
         textView = TextView(activity).also { it.tag = "testView" }
 
-        it.addView(textView)
+        layout.addView(textView)
       }
 
     override fun renderModel(model: ViewModel) {

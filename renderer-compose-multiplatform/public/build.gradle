@@ -18,6 +18,7 @@ dependencies {
 
     commonTestImplementation project(':scope:testing')
 
+    androidTestImplementation libs.androidx.activity.compose
     androidTestImplementation libs.compose.ui.test.junit4
     androidTestImplementation libs.compose.ui.test.junit4.android
     androidTestImplementation libs.compose.ui.test.manifest

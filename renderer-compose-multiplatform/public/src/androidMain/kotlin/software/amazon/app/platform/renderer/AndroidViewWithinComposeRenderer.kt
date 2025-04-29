@@ -27,7 +27,16 @@ internal class AndroidViewWithinComposeRenderer<in ModelT : BaseModel>(
   }
 
   override fun render(model: ModelT) {
-    androidRenderer.render(model)
+    try {
+      androidRenderer.render(model)
+    } catch (e: UninitializedPropertyAccessException) {
+      throw IllegalStateException(
+        "Tried to call render() on an AndroidViewRenderer without a parent view. This usually " +
+          "only happens when an AndroidViewRenderer is embedded in Compose UI. Call " +
+          "renderCompose() instead.",
+        e,
+      )
+    }
   }
 
   @Suppress("ComposableNaming")
