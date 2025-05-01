@@ -41,7 +41,7 @@ kotlin-inject-anvil = "0.1.4"
 kotlin-poet = "2.1.0"
 kotlinx-binaryCompatibilityValidator = "0.17.0"
 ktfmt-gradle = "0.22.0"
-ksp = "2.1.20-2.0.0"
+ksp = "2.1.20-2.0.1"
 maven-publish = "0.31.0"
 molecule = "2.0.0"
 #noinspection GradleDependency

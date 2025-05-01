@@ -30,8 +30,6 @@ public open class KmpPlugin : Plugin<Project> {
     target.configureTests()
     target.configureDetekt()
 
-    target.plugins.withId(Plugins.KSP) { target.patchIosKspForCi() }
-
     target.addExtraSourceSets()
     target.configureHierarchyPlugin()
   }
@@ -316,25 +314,6 @@ public open class KmpPlugin : Plugin<Project> {
       }
 
       releaseTask.configure { releaseTask -> releaseTask.dependsOn("detekt") }
-    }
-
-    fun Project.patchIosKspForCi() {
-      // TODO: Remove this workaround once https://github.com/google/ksp/issues/2243
-      //  is resolved.
-      //
-      // KSP disables its tasks, when the platform is not supported by the host. However,
-      // we enable the experimental feature kotlin.native.enableKlibsCrossCompilation=true in
-      // order to build and test iOS libraries on Linux machines. KSP doesn't know about this
-      // setting, so we have to enable the KSP tasks for iOS again.
-      if (ci) {
-        afterEvaluate {
-          tasks
-            .filter { task ->
-              task.name.startsWith("kspKotlinIos") || task.name.startsWith("kspTestKotlinIos")
-            }
-            .forEach { task -> task.setOnlyIf { true } }
-        }
-      }
     }
 
     private val Project.testingSourceSets
