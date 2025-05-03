@@ -1,6 +1,5 @@
 plugins {
     id 'software.amazon.app.platform.lib'
-    alias libs.plugins.kotlin.atomicfu
 }
 
 appPlatformBuildSrc {
@@ -11,11 +10,4 @@ appPlatformBuildSrc {
 dependencies {
     commonMainApi project(':presenter:public')
     commonTestImplementation project(':presenter-molecule:testing')
-
-    // Add the dependency manually, because we've seen this error in downstream projects:
-    //
-    // java.lang.NoClassDefFoundError: kotlinx/atomicfu/AtomicFU
-    //
-    // This dependency is not exposed on the compile classpath by design.
-    commonMainImplementation libs.kotlin.atomicfu
 }

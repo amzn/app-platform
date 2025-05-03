@@ -25,10 +25,6 @@ public final class software/amazon/app/platform/presenter/molecule/MoleculeScope
 	public static synthetic fun createMoleculeScopeFromCoroutineScope$default (Lsoftware/amazon/app/platform/presenter/molecule/MoleculeScopeFactory;Lkotlinx/coroutines/CoroutineScope;Lkotlin/coroutines/CoroutineContext;ILjava/lang/Object;)Lsoftware/amazon/app/platform/presenter/molecule/MoleculeScope;
 }
 
-public final class software/amazon/app/platform/presenter/molecule/OnEventKt {
-	public static final fun onEvent (Lsoftware/amazon/app/platform/presenter/molecule/MoleculePresenter;Lkotlin/jvm/functions/Function2;Landroidx/compose/runtime/Composer;I)Lkotlin/jvm/functions/Function1;
-}
-
 public final class software/amazon/app/platform/presenter/molecule/ReturningCompositionLocalProviderKt {
 	public static final fun returningCompositionLocalProvider ([Landroidx/compose/runtime/ProvidedValue;Lkotlin/jvm/functions/Function2;Landroidx/compose/runtime/Composer;I)Lsoftware/amazon/app/platform/presenter/BaseModel;
 }
