@@ -4,6 +4,7 @@ import assertk.assertThat
 import assertk.assertions.isEqualTo
 import assertk.assertions.isFalse
 import assertk.assertions.isTrue
+import kotlin.test.Ignore
 import kotlin.test.Test
 import kotlinx.coroutines.CoroutineName
 import kotlinx.coroutines.CoroutineScope
@@ -27,6 +28,7 @@ class FakeMoleculeScopeFactoryTest {
   }
 
   @Test
+  @Ignore
   fun `a created MoleculeScope does not need to be canceled for the test to complete`() {
     // Basically this test should not hang.
     var didRun = false

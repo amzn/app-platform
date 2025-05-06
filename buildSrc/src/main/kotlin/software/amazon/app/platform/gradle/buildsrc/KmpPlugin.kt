@@ -63,9 +63,14 @@ public open class KmpPlugin : Plugin<Project> {
             // compilation only code from one module is found.
             //
             // There is currently no DSL to set the KLib name. For more details see
-            // https://youtrack.jetbrains.com/issue/KT-38719.
-            freeCompilerArgs.add("-module-name")
-            freeCompilerArgs.add("$safePathString.${compilation.compilationName}")
+            // https://youtrack.jetbrains.com/issue/KT-38719
+            // https://youtrack.jetbrains.com/issue/KT-38892
+            if (target.targetName != "js" && target.targetName != "wasmJs") {
+              // Note this doesn't work on JS/WASMJS yet due to
+              // https://youtrack.jetbrains.com/issue/KT-71362
+              freeCompilerArgs.add("-module-name")
+              freeCompilerArgs.add("$safePathString.${compilation.compilationName}")
+            }
 
             extraWarnings.set(true)
 

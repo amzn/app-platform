@@ -24,6 +24,7 @@ public open class AppPlugin : Plugin<Project> {
     target.configureAndroidSettings()
     target.makeSingleVariant()
     target.addDependencies()
+    target.wasm()
 
     target.plugins.withId(Plugins.COMPOSE_MULTIPLATFORM) { target.configureDesktopApp() }
   }
@@ -40,6 +41,33 @@ public open class AppPlugin : Plugin<Project> {
         variant.enable = false
       }
     }
+  }
+
+  private fun Project.wasm() {
+    //devServer
+    //     wasmJs {
+    //        moduleName = "composeApp"
+    //        browser {
+    //            val rootDirPath = project.rootDir.path
+    //            val projectDirPath = project.projectDir.path
+    //            commonWebpackConfig {
+    //                outputFileName = "composeApp.js"
+    //                devServer = (devServer ?: KotlinWebpackConfig.DevServer()).apply {
+    //                    static = (static ?: mutableListOf()).apply {
+    //                        // Serve sources to debug inside browser
+    //                        add(rootDirPath)
+    //                        add(projectDirPath)
+    //                    }
+    //                }
+    //            }
+    //        }
+    //        binaries.executable()
+    //    }
+//    kmpExtension.wasmJs {
+//      it.browser {
+//        it.
+//      }
+//    }
   }
 
   private fun Project.addDependencies() {

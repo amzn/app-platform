@@ -2,7 +2,6 @@ package software.amazon.app.platform.scope.coroutine
 
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.IO
 import me.tatarka.inject.annotations.Provides
 import software.amazon.lastmile.kotlin.inject.anvil.AppScope
 import software.amazon.lastmile.kotlin.inject.anvil.ContributesTo
@@ -13,7 +12,7 @@ public interface CoroutineDispatcherComponent {
   /** Provides the IO dispatcher in the dependency graph. */
   @Provides
   @IoCoroutineDispatcher
-  public fun provideIoCoroutineDispatcher(): CoroutineDispatcher = Dispatchers.IO
+  public fun provideIoCoroutineDispatcher(): CoroutineDispatcher = Dispatchers.Default
 
   /** Provides the default dispatcher in the dependency graph. */
   @Provides

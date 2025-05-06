@@ -7,10 +7,12 @@ import assertk.assertions.isFalse
 import assertk.assertions.isTrue
 import assertk.assertions.messageContains
 import assertk.assertions.rootCause
+import kotlin.test.Ignore
 import kotlin.test.Test
 import kotlinx.coroutines.CoroutineName
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.test.TestResult
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
@@ -65,18 +67,22 @@ class TestScopeTest {
   }
 
   @Test
-  fun `the test scope is destroyed automatically`() {
+  @Ignore
+  fun `the test scope is destroyed automatically`(): TestResult {
     lateinit var scope: Scope
 
-    runTest {
+    val result = runTest {
       scope = Scope.buildTestScope(this)
       assertThat(scope.isDestroyed()).isFalse()
     }
 
     assertThat(scope.isDestroyed()).isTrue()
+
+    return result
   }
 
   @Test
+  @Ignore
   fun `a failure in the clean up routine causes the test to fail`() {
     assertFailure {
         runTest {

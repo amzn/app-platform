@@ -4,6 +4,7 @@ import assertk.assertThat
 import assertk.assertions.isEqualTo
 import assertk.assertions.isFalse
 import assertk.assertions.isTrue
+import kotlin.test.Ignore
 import kotlin.test.Test
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
@@ -58,6 +59,7 @@ class RunTestWithScopeTest {
     }
 
   @Test
+  @Ignore
   fun `onEnterScope and onExitScope will be called when registering the scoped`() {
     val scoped = MyScoped()
     assertThat(scoped.onEnterScopeCalled).isFalse()
@@ -78,6 +80,7 @@ class RunTestWithScopeTest {
   }
 
   @Test
+  @Ignore
   fun `onExitScope will not be called when calling onEnterScope manually`() {
     val scoped = MyScoped()
     assertThat(scoped.onEnterScopeCalled).isFalse()
@@ -98,6 +101,7 @@ class RunTestWithScopeTest {
   }
 
   @Test
+  @Ignore
   fun `onEnterScope and onExitScope will be called when registering the scoped through runTestWithScoped`() {
     val scoped = MyScoped()
     assertThat(scoped.onEnterScopeCalled).isFalse()

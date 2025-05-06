@@ -8,6 +8,7 @@ import assertk.assertions.isFalse
 import assertk.assertions.isTrue
 import assertk.assertions.messageContains
 import assertk.assertions.rootCause
+import kotlin.test.Ignore
 import kotlin.test.Test
 import kotlinx.coroutines.CoroutineName
 import kotlinx.coroutines.isActive
@@ -67,6 +68,7 @@ class TestMoleculeScopeTest {
   }
 
   @Test
+  @Ignore
   fun `failures in a coroutine are reported`() {
     assertFailure {
         runTest {

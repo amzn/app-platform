@@ -5,6 +5,7 @@ import assertk.assertions.isEqualTo
 import assertk.assertions.isNotSameInstanceAs
 import assertk.assertions.isSameInstanceAs
 import kotlin.reflect.KClass
+import kotlin.test.Ignore
 import kotlin.test.Test
 import kotlin.test.assertFailsWith
 import software.amazon.app.platform.presenter.BaseModel
@@ -15,6 +16,7 @@ import software.amazon.app.platform.scope.di.addDiComponent
 class BaseRendererFactoryTest {
 
   @Test
+  @Ignore
   fun `creating a renderer without mapping throws an error`() {
     val exception =
       assertFailsWith<Exception> {

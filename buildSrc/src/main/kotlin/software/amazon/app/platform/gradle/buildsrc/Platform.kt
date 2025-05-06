@@ -38,6 +38,19 @@ internal sealed interface Platform {
     }
   }
 
+  private class Wasm(private val project: Project) : Platform {
+    override val unitTestTaskName: String? = null
+
+    override fun configurePlatform() {
+      @Suppress("OPT_IN_USAGE")
+      project.kmpExtension.wasmJs {
+        browser {
+          outputModuleName.set(project.safePathString)
+        }
+      }
+    }
+  }
+
   private class AndroidPlatform(private val project: Project) : Platform {
 
     override val unitTestTaskName: String = "testDebugUnitTest"
@@ -151,6 +164,11 @@ internal sealed interface Platform {
       // Always add Android. It's our most important platform and buildable in all
       // environments (locally and CI)
       add(AndroidPlatform(project = this@allPlatforms))
+
+      // TODO
+      if (path == ":scope:public") {
+      }
+      add(Wasm(project = this@allPlatforms))
 
       // Android-only modules have "android" in their name and don't need other
       // platforms.

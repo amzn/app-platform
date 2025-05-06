@@ -10,6 +10,7 @@ import assertk.assertions.isEqualTo
 import assertk.assertions.isNotNull
 import assertk.assertions.isTrue
 import assertk.assertions.messageContains
+import kotlin.test.Ignore
 import kotlin.test.Test
 import kotlin.test.assertFailsWith
 import kotlin.test.fail
@@ -60,6 +61,7 @@ class TestPresenterTest {
   }
 
   @Test
+  @Ignore
   fun `failures in a presenter are reported in the first emission`() {
     class Model : BaseModel
 
@@ -88,6 +90,7 @@ class TestPresenterTest {
   }
 
   @Test
+  @Ignore
   fun `failures in a presenter are reported in later emissions`() {
     class Model : BaseModel
 

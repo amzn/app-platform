@@ -15,7 +15,6 @@ import kotlin.test.assertFailsWith
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.IO
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -74,7 +73,7 @@ class LaunchMoleculePresenterTest {
 
   @Test
   fun `launching a presenter on a canceled scope throws an error`() = runTest {
-    val coroutineScope = CoroutineScope(Dispatchers.IO)
+    val coroutineScope = CoroutineScope(Dispatchers.Default)
     coroutineScope.cancel()
     assertThat(coroutineScope.isActive).isFalse()
 
