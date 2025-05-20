@@ -1,11 +1,13 @@
 package software.amazon.app.platform.sample.user
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import kotlin.time.Duration
 import me.tatarka.inject.annotations.Inject
 import software.amazon.app.platform.presenter.BaseModel
 import software.amazon.app.platform.presenter.molecule.MoleculePresenter
@@ -20,14 +22,19 @@ class UserPageDetailPresenter(private val sessionTimeout: SessionTimeout) :
 
   @Composable
   override fun present(input: Input): Model {
-    val timeout by sessionTimeout.sessionTimeout.collectAsState()
-
     var showPictureFullscreen by remember { mutableStateOf(false) }
+
+    val timeoutProgress =
+      produceState(getSessionTimeoutProgress(sessionTimeout.sessionTimeout.value)) {
+        sessionTimeout.sessionTimeout.collect { timeout ->
+          value = getSessionTimeoutProgress(timeout)
+        }
+      }
 
     return Model(
       text = input.user.attributes[input.selectedAttribute].value,
       pictureKey = input.user.attributes.single { it.key == User.Attribute.PICTURE_KEY }.value,
-      timeoutProgress = (timeout / SessionTimeout.initialTimeout).toFloat(),
+      timeoutProgress = timeoutProgress,
       showPictureFullscreen = showPictureFullscreen,
     ) {
       when (it) {
@@ -38,14 +45,29 @@ class UserPageDetailPresenter(private val sessionTimeout: SessionTimeout) :
     }
   }
 
+  private fun getSessionTimeoutProgress(timeout: Duration): Float {
+    return (timeout / SessionTimeout.initialTimeout).toFloat()
+  }
+
   /** The state of the detail pane. */
   data class Model(
     /** The text rendered on screen. Usually, refers to the selected user attribute. */
     val text: String,
     /** The profile picture ID loaded from the resources. */
     val pictureKey: String,
-    /** The progress until when current user is logged out. The value is between [0, 1]. */
-    val timeoutProgress: Float,
+    /**
+     * The progress until when current user is logged out. The value is between [0, 1].
+     *
+     * Note that this property is a composable [State]. Updates of this value are not propagated
+     * through a new [Model] and consumers must observe the value directly instead. In a Compose UI
+     * layer this is trivial, because the Compose runtime does this automatically.
+     *
+     * Using this approach for the timeout is much more efficient, because the value changes every
+     * 10 milliseconds and going through the whole presenter tree to compute a new model and
+     * updating all renderers adds a lot of load. With this approach only the necessary Composable
+     * UI element is updated.
+     */
+    val timeoutProgress: State<Float>,
     /** If this value is true, then the profile picture is shown in full screen. */
     val showPictureFullscreen: Boolean,
     /** Callback to send events back to the presenter. */

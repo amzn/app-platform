@@ -27,7 +27,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import app_platform.sample.user.impl.generated.resources.Res
 import app_platform.sample.user.impl.generated.resources.allDrawableResources
-import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource
 import software.amazon.app.platform.inject.ContributesRenderer
 import software.amazon.app.platform.renderer.ComposeRenderer
@@ -36,7 +35,7 @@ import software.amazon.app.platform.sample.template.animation.LocalSharedTransit
 import software.amazon.app.platform.sample.user.UserPageDetailPresenter.Model
 
 /** Renders the content for [UserPageDetailPresenter] on screen using Compose Multiplatform. */
-@OptIn(ExperimentalResourceApi::class, ExperimentalSharedTransitionApi::class)
+@OptIn(ExperimentalSharedTransitionApi::class)
 @ContributesRenderer
 class UserPageDetailRenderer : ComposeRenderer<Model>() {
 
@@ -52,7 +51,10 @@ class UserPageDetailRenderer : ComposeRenderer<Model>() {
   @Composable
   private fun ProfileDetails(model: Model) {
     Column(modifier = Modifier.fillMaxWidth().fillMaxHeight()) {
-      LinearProgressIndicator(progress = model.timeoutProgress, modifier = Modifier.fillMaxWidth())
+      LinearProgressIndicator(
+        progress = model.timeoutProgress.value,
+        modifier = Modifier.fillMaxWidth(),
+      )
 
       with(checkNotNull(LocalSharedTransitionScope.current)) {
         Image(

@@ -62,16 +62,18 @@ class UserPagePresenterImplTest {
       )
 
     presenter.test(this) {
-      assertThat((awaitItem().detailModel as UserPageDetailPresenter.Model).timeoutProgress)
-        .isEqualTo(1f)
+      val model = awaitItem().detailModel as UserPageDetailPresenter.Model
+      assertThat(model.timeoutProgress.value).isEqualTo(1f)
 
       advanceTimeBy(SessionTimeout.initialTimeout / 2)
       runCurrent()
 
-      assertThat(
-          (expectMostRecentItem().detailModel as UserPageDetailPresenter.Model).timeoutProgress
-        )
-        .isEqualTo(0.5f)
+      // This is important. This test only modifies the value for timeoutProgress.
+      // This property is a composable `State` and therefore changes aren't propagated
+      // through Model updates, but instead the property must be observed.
+      expectNoEvents()
+
+      assertThat(model.timeoutProgress.value).isEqualTo(0.5f)
     }
   }
 }
