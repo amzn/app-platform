@@ -6,6 +6,8 @@
 
 ### Changed
 
+* Snapshots are now published to the Central Portal Snapshots repository at https://central.sonatype.com/repository/maven-snapshots/.
+
 ### Deprecated
 
 ### Removed
@@ -15,6 +17,7 @@
 ### Security
 
 ### Other Notes & Contributions
+
 
 ## [0.0.2] - 2025-05-02
 
