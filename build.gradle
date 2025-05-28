@@ -1,3 +1,34 @@
  plugins {
      id 'software.amazon.app.platform.root'
  }
+
+dependencies {
+    kover(project(":kotlin-inject:impl"))
+    kover(project(":kotlin-inject:public"))
+    kover(project(":kotlin-inject-extensions:contribute:impl-code-generators"))
+    kover(project(":kotlin-inject-extensions:contribute:public"))
+    kover(project(":presenter:public"))
+    kover(project(":presenter-molecule:impl"))
+    kover(project(":presenter-molecule:public"))
+    kover(project(":presenter-molecule:testing"))
+    kover(project(":renderer:public"))
+    kover(project(":renderer-android-view:public"))
+    kover(project(":renderer-compose-multiplatform:public"))
+    kover(project(":robot:public"))
+    kover(project(":robot-compose-multiplatform:public"))
+    kover(project(":robot-internal:public"))
+    kover(project(":sample:app"))
+    kover(project(":sample:login:impl"))
+    kover(project(":sample:login:impl-robots"))
+    kover(project(":sample:login:public"))
+    kover(project(":sample:navigation:impl"))
+    kover(project(":sample:navigation:public"))
+    kover(project(":sample:templates:impl"))
+    kover(project(":sample:templates:public"))
+    kover(project(":sample:user:impl"))
+    kover(project(":sample:user:impl-robots"))
+    kover(project(":sample:user:public"))
+    kover(project(":sample:user:testing"))
+    kover(project(":scope:public"))
+    kover(project(":scope:testing"))
+}

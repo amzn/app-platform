@@ -375,3 +375,33 @@ jobs:
         with:
           name: test-results-${{ github.job }}
           path: ./**/build/reports/
+
+  code-coverage:
+    runs-on: ubuntu-latest
+    needs:
+      - test-android
+      - test-desktop
+      - test-jvm-modules
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup
+        uses: ./.github/actions/setup-action
+        with:
+          gradle-encryption-key: ${{ secrets.GRADLE_ENCRYPTION_KEY }}
+
+      - name: Generate Kover Reports
+        run: ./gradlew koverXmlReport koverHtmlReport --stacktrace --show-version
+
+      - name: Upload Kover XML Report
+        uses: actions/upload-artifact@v4
+        with:
+          name: kover-xml-report
+          path: build/reports/kover/report.xml
+
+      - name: Upload Kover HTML Report
+        uses: actions/upload-artifact@v4
+        with:
+          name: kover-html-report
+          path: build/reports/kover/html
