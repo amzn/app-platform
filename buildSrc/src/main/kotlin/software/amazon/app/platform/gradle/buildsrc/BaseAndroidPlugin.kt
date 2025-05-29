@@ -2,15 +2,23 @@ package software.amazon.app.platform.gradle.buildsrc
 
 import com.android.build.api.dsl.ApplicationExtension
 import com.android.build.api.dsl.LibraryExtension
+import com.android.build.api.dsl.Lint
+import com.android.build.api.dsl.androidLibrary
 import org.gradle.api.Plugin
 import org.gradle.api.Project
+import software.amazon.app.platform.gradle.buildsrc.KmpPlugin.Companion.kmpExtension
+import software.amazon.app.platform.gradle.isAppModule
 
 public open class BaseAndroidPlugin : Plugin<Project> {
   override fun apply(target: Project) {
-    target.configureAndroid()
+    if (target.isAppModule()) {
+      target.configureAndroidApp()
+    } else {
+      target.configureAndroidLibrary()
+    }
   }
 
-  private fun Project.configureAndroid() {
+  private fun Project.configureAndroidApp() {
     val android = android
 
     android.compileSdk = libs.findVersion("android.compileSdk").get().requiredVersion.toInt()
@@ -31,7 +39,7 @@ public open class BaseAndroidPlugin : Plugin<Project> {
 
           applicationId = "software.amazon.app.platform.demo"
           versionCode = 1
-          versionName = this@configureAndroid.versionName
+          versionName = this@configureAndroidApp.versionName
         }
       }
     }
@@ -48,12 +56,38 @@ public open class BaseAndroidPlugin : Plugin<Project> {
     }
 
     android.lint {
+      applyLintConfiguration(this)
+    }
+
+    releaseTask.configure { it.dependsOn("lintDebug") }
+  }
+
+  private fun Project.configureAndroidLibrary() {
+    kmpExtension.androidLibrary {
+      compileSdk = libs.findVersion("android.compileSdk").get().requiredVersion.toInt()
+      minSdk = libs.findVersion("android.minSdk").get().requiredVersion.toInt()
+
+      withHostTest {
+        isIncludeAndroidResources = true
+        isReturnDefaultValues = true
+      }
+
+      lint {
+        applyLintConfiguration(this)
+      }
+
+      // TODO
+      // releaseTask.configure { it.dependsOn("lintDebug") }
+    }
+  }
+
+  private fun Project.applyLintConfiguration(lint: Lint) {
+    with(lint) {
+      targetSdk = libs.findVersion("android.targetSdk").get().requiredVersion.toInt()
       warningsAsErrors = true
       htmlReport = true
       disable + setOf("GradleDependency", "ObsoleteLintCustomCheck")
     }
-
-    releaseTask.configure { it.dependsOn("lintDebug") }
   }
 
   internal companion object {

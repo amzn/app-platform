@@ -60,6 +60,13 @@ public open class AppPlatformPlugin : Plugin<Project> {
       }
     }
 
+    plugins.withId(PluginIds.ANDROID_KMP_LIBRARY) {
+      dependencies.add(
+        "androidMainImplementation",
+        "$APP_PLATFORM_GROUP:renderer-android-view-public:$APP_PLATFORM_VERSION",
+      )
+    }
+
     plugins.withIds(PluginIds.ANDROID_APP, PluginIds.ANDROID_LIBRARY) {
       dependencies.add(
         "implementation",

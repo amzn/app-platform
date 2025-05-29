@@ -130,18 +130,20 @@ public open class KmpPlugin : Plugin<Project> {
         val appleAndDesktop = kmpExtension.sourceSets.create("appleAndDesktop$suffix")
         appleAndDesktop.dependsOn(common)
 
-        kmpExtension.sourceSets.named("apple$suffix").configure { it.dependsOn(appleAndDesktop) }
-        kmpExtension.sourceSets.named("desktop$suffix").configure { it.dependsOn(appleAndDesktop) }
-
         val noWasmJs = kmpExtension.sourceSets.create("noWasmJs$suffix")
         noWasmJs.dependsOn(common)
 
         appleAndDesktop.dependsOn(noWasmJs)
-        kmpExtension.sourceSets.named("native$suffix").configure { it.dependsOn(noWasmJs) }
-        if (suffix == "Main") {
-          kmpExtension.sourceSets.named("android$suffix").configure { it.dependsOn(noWasmJs) }
-        } else {
-          kmpExtension.sourceSets.named("androidUnit$suffix").configure { it.dependsOn(noWasmJs) }
+
+        kmpExtension.sourceSets.configureEach { sourceSet ->
+          when (sourceSet.name) {
+            "apple$suffix",
+            "desktop$suffix" -> sourceSet.dependsOn(appleAndDesktop)
+            "native$suffix",
+            "android$suffix",
+            "androidHost$suffix",
+            "androidUnit$suffix" -> sourceSet.dependsOn(noWasmJs)
+          }
         }
       }
     }
@@ -261,6 +263,7 @@ public open class KmpPlugin : Plugin<Project> {
         kmpExtension.targets.configureEach {
           if (it.name != "metadata") {
             dependencies.addKspProcessorDependencies("ksp${it.name.capitalize()}")
+            // TODO: Android
             dependencies.addKspProcessorDependencies("ksp${it.name.capitalize()}Test")
           }
         }
