@@ -21,6 +21,8 @@ import software.amazon.app.platform.sample.login.LoginPresenter.Model
 class LoginRenderer : ComposeRenderer<Model>() {
   @Composable
   override fun Compose(model: Model) {
+    check(model is Model.LoginScreen)
+
     Column(
       modifier = Modifier.fillMaxSize(),
       verticalArrangement = Arrangement.Center,
@@ -34,6 +36,13 @@ class LoginRenderer : ComposeRenderer<Model>() {
           modifier = Modifier.testTag("loginButton"),
         ) {
           Text("Login")
+        }
+
+        Button(
+          onClick = { model.onEvent(LoginPresenter.Event.Backstack) },
+          modifier = Modifier.testTag("backstackButton"),
+        ) {
+          Text("Backstack")
         }
       }
     }

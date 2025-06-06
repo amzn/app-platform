@@ -28,6 +28,7 @@ android {
 }
 
 dependencies {
+    commonMainImplementation project(':sample:backstack:impl')
     commonMainImplementation project(':sample:login:impl')
     commonMainImplementation project(':sample:navigation:impl')
     commonMainImplementation project(':sample:templates:impl')

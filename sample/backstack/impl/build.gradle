@@ -14,12 +14,6 @@ appPlatform {
     enableMoleculePresenters true
 }
 
-dependencies {
-    commonMainApi project(':sample:backstack:public')
-    commonMainApi project(':sample:user:public')
-    commonTestImplementation project(':sample:user:testing')
-}
-
 compose {
     dependencies {
         commonMainImplementation dependencies.components.resources
