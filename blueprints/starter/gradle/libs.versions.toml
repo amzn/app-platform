@@ -1,0 +1,25 @@
+[versions]
+app-platfrom = "0.0.3"
+agp = "8.10.1"
+android-compileSdk = "36"
+android-minSdk = "21"
+android-targetSdk = "36"
+androidx-activity-compose = "1.10.1"
+androidx-lifecycle = "2.9.0"
+compose = "1.8.1"
+coroutines = "1.10.2"
+kotlin = "2.1.20"
+material = "1.7.3"
+
+[libraries]
+androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "androidx-activity-compose" }
+androidx-lifecycle-viewmodel = { group = "org.jetbrains.androidx.lifecycle", name = "lifecycle-viewmodel", version.ref = "androidx-lifecycle" }
+compose-material = { module = "org.jetbrains.compose.material3:material3", version.ref = "compose" }
+compose-material-icons = { module = "org.jetbrains.compose.material:material-icons-extended", version.ref = "material" }
+kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "coroutines" }
+
+[plugins]
+androidApplication = { id = "com.android.application", version.ref = "agp" }
+androidLibrary = { id = "com.android.library", version.ref = "agp" }
+appPlatform = { id = "software.amazon.app.platform", version.ref = "app-platfrom" }
+kotlinMultiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
