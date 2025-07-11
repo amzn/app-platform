@@ -103,6 +103,7 @@ public open class AppPlatformPlugin : Plugin<Project> {
      * Returns the set of dependencies that need to be exported in a Framework for native targets in
      * order to make App Platform work.
      */
+    @JvmStatic
     public fun exportedDependencies(): Set<String> =
       setOf(
           "kotlin-inject-contribute-public",

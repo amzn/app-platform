@@ -13,6 +13,7 @@ public class software/amazon/app/platform/gradle/AppPlatformPlugin : org/gradle/
 	public fun <init> ()V
 	public synthetic fun apply (Ljava/lang/Object;)V
 	public fun apply (Lorg/gradle/api/Project;)V
+	public static final fun exportedDependencies ()Ljava/util/Set;
 }
 
 public final class software/amazon/app/platform/gradle/AppPlatformPlugin$Companion {
