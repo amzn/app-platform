@@ -1,15 +1,15 @@
 pluginManagement {
-    repositories {
-        google()
-        gradlePluginPortal()
-    }
+  repositories {
+    google()
+    gradlePluginPortal()
+  }
 }
 
 dependencyResolutionManagement {
-    repositories {
-        google()
-        mavenCentral()
-    }
+  repositories {
+    google()
+    mavenCentral()
+  }
 }
 
 rootProject.name = "Template"

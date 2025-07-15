@@ -7,6 +7,8 @@ android-targetSdk = "36"
 androidx-activity-compose = "1.10.1"
 androidx-lifecycle = "2.9.0"
 compose = "1.8.1"
+compose-hot-reload = "1.0.0-alpha11"
+compose-multiplatform = "1.8.2"
 coroutines = "1.10.2"
 kotlin = "2.1.20"
 material = "1.7.3"
@@ -17,9 +19,14 @@ androidx-lifecycle-viewmodel = { group = "org.jetbrains.androidx.lifecycle", nam
 compose-material = { module = "org.jetbrains.compose.material3:material3", version.ref = "compose" }
 compose-material-icons = { module = "org.jetbrains.compose.material:material-icons-extended", version.ref = "material" }
 kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "coroutines" }
+coroutines-swing = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-swing", version.ref = "coroutines" }
+compose-desktop-currentOs = { module = "org.jetbrains.compose.desktop:desktop", version.ref = "compose" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }
 androidLibrary = { id = "com.android.library", version.ref = "agp" }
 appPlatform = { id = "software.amazon.app.platform", version.ref = "app-platfrom" }
 kotlinMultiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
+composeHotReload = { id = "org.jetbrains.compose.hot-reload", version.ref = "compose-hot-reload" }
+composeMultiplatform = { id = "org.jetbrains.compose", version.ref = "compose-multiplatform" }
+composeCompiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }

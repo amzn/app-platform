@@ -5,74 +5,83 @@ import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget
 
 plugins {
-    alias(libs.plugins.appPlatform)
-    alias(libs.plugins.androidLibrary)
-    alias(libs.plugins.kotlinMultiplatform)
+  alias(libs.plugins.appPlatform)
+  alias(libs.plugins.androidLibrary)
+  alias(libs.plugins.kotlinMultiplatform)
 }
 
 appPlatform {
-    enableComposeUi(true)
-    enableModuleStructure(true)
-    enableKotlinInject(true)
-    enableMoleculePresenters(true)
+  enableComposeUi(true)
+  enableModuleStructure(true)
+  enableKotlinInject(true)
+  enableMoleculePresenters(true)
 }
 
 kotlin {
-    androidTarget {
-        compilerOptions {
-            jvmTarget.set(JvmTarget.JVM_11)
-        }
+  jvm("desktop") {
+    compilerOptions {
+      jvmTarget.set(JvmTarget.JVM_11)
     }
+  }
 
-    iosX64()
-    iosArm64()
-    iosSimulatorArm64()
-
-    targets.withType<KotlinNativeTarget>().configureEach {
-        binaries.framework {
-            baseName = project.name.replace("-", "").replaceFirstChar { it.uppercase() }
-        }
+  androidTarget {
+    compilerOptions {
+      jvmTarget.set(JvmTarget.JVM_11)
     }
+  }
 
-    wasmJs {
-        binaries.executable()
+  iosX64()
+  iosArm64()
+  iosSimulatorArm64()
 
-        browser {
-            commonWebpackConfig {
-                outputFileName = "${project.name}.js"
-            }
-            outputModuleName = project.name.replace("-", "")
-        }
+  targets.withType<KotlinNativeTarget>().configureEach {
+    binaries.framework {
+      baseName = project.name.replace("-", "").replaceFirstChar { it.uppercase() }
     }
+  }
 
-    sourceSets {
-        commonMain {
-            dependencies {
-                implementation(libs.kotlinx.coroutines.core)
-            }
-        }
+  wasmJs {
+    binaries.executable()
+
+    browser {
+      commonWebpackConfig {
+        outputFileName = "${project.name}.js"
+      }
+      outputModuleName = project.name.replace("-", "")
     }
+  }
+
+  sourceSets {
+    commonMain {
+      dependencies {
+        implementation(libs.kotlinx.coroutines.core)
+      }
+    }
+  }
 }
 
 android {
-    namespace = "software.amazon.app.platform.template.navigation"
-    compileSdk = libs.versions.android.compileSdk.get().toInt()
+  namespace = "software.amazon.app.platform.template.navigation"
+  compileSdk = libs.versions.android.compileSdk.get().toInt()
 
-    defaultConfig {
-        minSdk = libs.versions.android.minSdk.get().toInt()
-        targetSdk = libs.versions.android.targetSdk.get().toInt()
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-    }
+  defaultConfig {
+    minSdk = libs.versions.android.minSdk.get().toInt()
+    testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+  }
 
-    buildTypes {
-        release {
-            isMinifyEnabled = false
-        }
-    }
+  testOptions {
+    targetSdk = libs.versions.android.targetSdk.get().toInt()
+  }
 
-    packaging {
-        resources {
-            excludes += listOf("/META-INF/{AL2.0,LGPL2.1}")
-        }
+  buildTypes {
+    release {
+      isMinifyEnabled = false
     }
+  }
+
+  packaging {
+    resources {
+      excludes += listOf("/META-INF/{AL2.0,LGPL2.1}")
+    }
+  }
 }

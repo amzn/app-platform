@@ -1,4 +1,4 @@
-name: Build Starter Blueprint (Android + iOS + WASM)
+name: Build Starter Blueprint (Android + iOS + WASM + Desktop)
 
 on:
   push:
@@ -12,56 +12,59 @@ jobs:
   build-ios-starter-app:
     runs-on: macos-latest-xlarge
     timeout-minutes: 25
-
     defaults:
       run:
         working-directory: blueprints/starter
-
     steps:
       - uses: actions/checkout@v4
-
       - name: Setup
         uses: ./.github/actions/setup-action
         with:
           gradle-encryption-key: ${{ secrets.GRADLE_ENCRYPTION_KEY }}
-
       - name: Build iOS Framework
         run: ./gradlew :app:linkDebugFrameworkIosSimulatorArm64
 
   build-wasm-starter-app:
     runs-on: ubuntu-latest
     timeout-minutes: 25
-
     defaults:
       run:
         working-directory: blueprints/starter
-
     steps:
       - uses: actions/checkout@v4
-
       - name: Setup
         uses: ./.github/actions/setup-action
         with:
           gradle-encryption-key: ${{ secrets.GRADLE_ENCRYPTION_KEY }}
-
       - name: Build WASM binary
         run: ./gradlew :app:wasmJsBrowserDistribution
 
   build-android-starter-app:
     runs-on: ubuntu-latest
     timeout-minutes: 25
-
     defaults:
       run:
         working-directory: blueprints/starter
-
     steps:
       - uses: actions/checkout@v4
-
       - name: Setup
         uses: ./.github/actions/setup-action
         with:
           gradle-encryption-key: ${{ secrets.GRADLE_ENCRYPTION_KEY }}
-
       - name: Build Android
         run: ./gradlew :app:assembleDebug
+
+  build-desktop-starter-app:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    defaults:
+      run:
+        working-directory: blueprints/starter
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup
+        uses: ./.github/actions/setup-action
+        with:
+          gradle-encryption-key: ${{ secrets.GRADLE_ENCRYPTION_KEY }}
+      - name: Build Desktop binary
+        run: ./gradlew :app:desktopMainClasses

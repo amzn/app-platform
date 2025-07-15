@@ -6,12 +6,12 @@ This is a Kotlin Multiplatform template application built using the [Amazon App 
 
 This template demonstrates:
 
-- ✅ Kotlin Multiplatform targeting Android, iOS, and WebAssembly (WASM)
+- ✅ Kotlin Multiplatform targeting Android, iOS, WebAssembly (WASM), and Desktop (JVM)
 - ✅ [App Platform](https://github.com/amzn/app-platform) conventions for DI, state, rendering, and navigation
 - ✅ Molecule-powered presenters
 - ✅ Scoped dependency injection using `@ContributesBinding`, `@SingleIn`, and `@ContributesRenderer`
 - ✅ Reactive state with `StateFlow`
-- ✅ Compose UI for Android and WASM
+- ✅ Compose UI for Android, Desktop, and WASM
 - ✅ Modular code structure for feature separation
 
 ## 🧱 Features
@@ -24,7 +24,7 @@ This template demonstrates:
 ## 📦 Modules
 
 - `:app` – Main app entrypoint using Compose + App Platform
-- `:templates` - Main module for templates and the entry point into the application
+- `:templates` – Main module for templates and the entry point into the application
 - `:navigation` – Example feature module
 
 ## 🧪 Running the App
@@ -54,7 +54,13 @@ This template demonstrates:
 
 > 💡 The required Kotlin Multiplatform framework will be built automatically as part of the Xcode build process (`./gradlew :app:embedAndSignAppleFrameworkForXcode`).
 
-Then open the browser link shown in the terminal.
+### Desktop (JVM)
+
+```bash
+./gradlew :app:run
+```
+
+> This runs the desktop Compose app using the JVM target.
 
 ## 🔧 Configuration
 
@@ -62,7 +68,7 @@ You can modify app behavior by editing:
 
 - `gradle.properties` – JVM and native memory settings
 - `libs.versions.toml` – Centralized dependency version catalog
-- `app/build.gradle` – Platform-specific targets and UI modules
+- `app/build.gradle.kts` – Platform-specific targets and UI modules
 
 ## 🤝 Contributing
 
