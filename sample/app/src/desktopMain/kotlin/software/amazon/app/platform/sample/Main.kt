@@ -13,6 +13,8 @@ fun main() {
         desktopApp.destroy()
         exitApplication()
       },
+      // alwaysOnTop helps during development to see the application in foreground.
+      alwaysOnTop = true,
       title = "App Platform",
     ) {
       desktopApp.renderTemplates()

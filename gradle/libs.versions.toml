@@ -23,6 +23,7 @@ assertk = "0.28.1"
 auto-service = "1.1.1"
 auto-service-ksp = "1.2.0"
 build-config = "5.6.7"
+compose-hot-reload-plugin = "1.0.0-beta03"
 # https://www.jetbrains.com/help/kotlin-multiplatform-dev/compose-compatibility-and-versioning.html#kotlin-compatibility
 # https://mvnrepository.com/artifact/org.jetbrains.compose/compose-gradle-plugin
 # https://github.com/JetBrains/compose-multiplatform/releases
@@ -116,6 +117,7 @@ android-library = { id = "com.android.library", version.ref = "agp" }
 android-lint = { id = "com.android.lint", version.ref = "agp" }
 app-platform = { id = "software.amazon.app.platform" }
 build-config = { id = "com.github.gmazzo.buildconfig", version.ref = "build-config" }
+compose-hot-reload = { id = "org.jetbrains.compose.hot-reload", version.ref = "compose-hot-reload-plugin" }
 detekt = { id = "io.gitlab.arturbosch.detekt", version.ref = "detekt" }
 kotlin-atomicfu = { id = "org.jetbrains.kotlinx.atomicfu", version.ref = "kotlin-atomicfu" }
 kotlin-hierarchy = { id = "io.github.terrakok.kmp-hierarchy", version.ref = "kotlin-hierarchy" }
