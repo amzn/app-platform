@@ -7,7 +7,7 @@ site_description: "A lightweight application framework for state and memory mana
 remote_branch: gh-pages
 copyright: 'Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.'
 
-# theme configuration 
+# https://squidfunk.github.io/mkdocs-material/
 theme:
   name: 'material'
   favicon: images/favicon.png
@@ -30,6 +30,7 @@ theme:
   font:
     text: 'Inter'
     code: 'Fira Code'
+
   features:
     - content.code.annotate
     - content.code.copy
@@ -42,11 +43,6 @@ theme:
     - toc.integrate
     - content.tabs.link
 
-# Plugins - only search plugin kept
-plugins:
-  - search
-
-# Markdown extensions 
 markdown_extensions:
   - smarty
   - codehilite:
@@ -80,16 +76,21 @@ markdown_extensions:
   - attr_list
   - md_in_html
 
-# Navigation (unchanged)
 nav:
-  - Introduction: index.md
-  - Setup: setup.md
-  - Module Structure: module-structure.md
-  - Scope: scope.md
-  - Presenter: presenter.md
-  - Renderer: renderer.md
-  - Template: template.md
-  - DI Framework: di.md
-  - Testing: testing.md
-  - FAQ: faq.md
-  - Changelog: changelog.md
+  - 'Introduction': index.md
+  - 'Setup': setup.md
+  - 'Module Structure': module-structure.md
+  - 'Scope': scope.md
+  - 'Presenter': presenter.md
+  - 'Renderer': renderer.md
+  - 'Template': template.md
+  - 'DI Framework': di.md
+  - 'Testing': testing.md
+  - 'FAQ': faq.md
+  - 'Changelog': changelog.md
+
+plugins:
+  - search
+  - social:
+      cards_layout_options:
+        logo: docs/images/app-platform-logo.png
