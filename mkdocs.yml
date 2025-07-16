@@ -2,16 +2,17 @@ site_name: App Platform
 site_url: https://amzn.github.io/app-platform/
 repo_name: app-platform
 repo_url: https://github.com/amzn/app-platform
+edit_uri: edit/main/docs/
 site_description: "A lightweight application framework for state and memory management suitable for Kotlin Multiplatform projects."
 remote_branch: gh-pages
 copyright: 'Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.'
 
-# https://squidfunk.github.io/mkdocs-material/
-theme:
+#https://squidfunk.github.io/mkdocs-material/theme:
   name: 'material'
   favicon: images/favicon.png
   logo: images/logo.svg
   palette:
+    # Light mode
     - media: '(prefers-color-scheme: light)'
       scheme: default
       primary: blue grey
@@ -19,6 +20,7 @@ theme:
       toggle:
         icon: material/brightness-7
         name: Switch to dark mode
+    # Dark mode
     - media: '(prefers-color-scheme: dark)'
       scheme: slate
       primary: blue grey
@@ -29,7 +31,6 @@ theme:
   font:
     text: 'Inter'
     code: 'Fira Code'
-
   features:
     - content.code.annotate
     - content.code.copy
@@ -42,6 +43,15 @@ theme:
     - toc.integrate
     - content.tabs.link
 
+# Plugins
+plugins:
+  - search
+  - redirects
+  - social:
+      cards_layout_options:
+        logo: docs/images/app-platform-logo.png
+
+# Markdown extensions
 markdown_extensions:
   - smarty
   - codehilite:
@@ -75,20 +85,16 @@ markdown_extensions:
   - attr_list
   - md_in_html
 
+# Navigation
 nav:
-  - 'Introduction': index.md
-  - 'Setup': setup.md
-  - 'Module Structure': module-structure.md
-  - 'Scope': scope.md
-  - 'Presenter': presenter.md
-  - 'Renderer': renderer.md
-  - 'Template': template.md
-  - 'DI Framework': di.md
-  - 'Testing': testing.md
-  - 'FAQ': faq.md
-  - 'Changelog': changelog.md
-
-plugins:
-  - social:
-      cards_layout_options:
-        logo: docs/images/app-platform-logo.png
+  - Introduction: index.md
+  - Setup: setup.md
+  - Module Structure: module-structure.md
+  - Scope: scope.md
+  - Presenter: presenter.md
+  - Renderer: renderer.md
+  - Template: template.md
+  - DI Framework: di.md
+  - Testing: testing.md
+  - FAQ: faq.md
+  - Changelog: changelog.md
