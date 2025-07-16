@@ -50,7 +50,7 @@ public open class BaseAndroidPlugin : Plugin<Project> {
     android.lint {
       warningsAsErrors = true
       htmlReport = true
-      disable + setOf("GradleDependency", "ObsoleteLintCustomCheck")
+      disable += setOf("GradleDependency", "ObsoleteLintCustomCheck", "NewerVersionAvailable")
     }
 
     releaseTask.configure { it.dependsOn("lintDebug") }

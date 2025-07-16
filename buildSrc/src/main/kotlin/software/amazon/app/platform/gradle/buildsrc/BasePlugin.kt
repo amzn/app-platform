@@ -5,6 +5,8 @@ import com.android.build.gradle.internal.tasks.factory.dependsOn
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.tasks.testing.Test
+import org.jetbrains.kotlin.gradle.targets.web.yarn.BaseYarnRootExtension
+import org.jetbrains.kotlin.gradle.targets.web.yarn.CommonYarnPlugin
 import software.amazon.app.platform.gradle.buildsrc.AppPlatformExtension.Companion.appPlatformGradlePlugin
 
 public open class BasePlugin : Plugin<Project> {
@@ -19,6 +21,7 @@ public open class BasePlugin : Plugin<Project> {
     target.addAppPlatformGradlePlugin()
     target.runTestsInHeadlessMode()
     target.configureLogOutput()
+    target.upgradeYarnDependencies()
   }
 
   private fun Project.createReleaseTask() {
@@ -98,6 +101,15 @@ public open class BasePlugin : Plugin<Project> {
         appPlatformGradlePlugin.enableModuleStructure(true)
 
         releaseTask.dependsOn("checkModuleStructureDependencies")
+      }
+    }
+  }
+
+  private fun Project.upgradeYarnDependencies() {
+    plugins.withType(CommonYarnPlugin::class.java).configureEach {
+      with(extensions.getByType(BaseYarnRootExtension::class.java)) {
+        // Force the newer version due to https://github.com/amzn/app-platform/security/dependabot/5
+        resolution("webpack-dev-server", "5.2.1")
       }
     }
   }

@@ -1,5 +1,5 @@
 [versions]
-agp = "8.10.1"
+agp = "8.11.1"
 android-compileSdk = "36"
 # https://developer.android.com/jetpack/androidx/releases/compose-ui
 # https://maven.google.com/web/index.html#androidx.compose.ui:ui
@@ -23,6 +23,7 @@ assertk = "0.28.1"
 auto-service = "1.1.1"
 auto-service-ksp = "1.2.0"
 build-config = "5.6.7"
+compose-hot-reload-plugin = "1.0.0-beta03"
 # https://www.jetbrains.com/help/kotlin-multiplatform-dev/compose-compatibility-and-versioning.html#kotlin-compatibility
 # https://mvnrepository.com/artifact/org.jetbrains.compose/compose-gradle-plugin
 # https://github.com/JetBrains/compose-multiplatform/releases
@@ -34,15 +35,15 @@ jvm-compatibility = "11"
 jvm-gradle = "17"
 kotlin = "2.2.0"
 kotlin-atomicfu = "0.29.0"
-kotlin-compile-testing = "0.7.1"
+kotlin-compile-testing = "0.8.0"
 kotlin-hierarchy = "1.1"
 kotlin-inject = "0.7.2"
 kotlin-inject-anvil = "0.1.6"
 kotlin-poet = "2.2.0"
-kotlinx-binaryCompatibilityValidator = "0.18.0"
+kotlinx-binaryCompatibilityValidator = "0.18.1"
 ktfmt-gradle = "0.23.0"
 ksp = "2.2.0-2.0.2"
-maven-publish = "0.33.0"
+maven-publish = "0.34.0"
 molecule = "2.1.0"
 #noinspection GradleDependency
 recyclerView = "1.2.1"
@@ -116,6 +117,7 @@ android-library = { id = "com.android.library", version.ref = "agp" }
 android-lint = { id = "com.android.lint", version.ref = "agp" }
 app-platform = { id = "software.amazon.app.platform" }
 build-config = { id = "com.github.gmazzo.buildconfig", version.ref = "build-config" }
+compose-hot-reload = { id = "org.jetbrains.compose.hot-reload", version.ref = "compose-hot-reload-plugin" }
 detekt = { id = "io.gitlab.arturbosch.detekt", version.ref = "detekt" }
 kotlin-atomicfu = { id = "org.jetbrains.kotlinx.atomicfu", version.ref = "kotlin-atomicfu" }
 kotlin-hierarchy = { id = "io.github.terrakok.kmp-hierarchy", version.ref = "kotlin-hierarchy" }

@@ -5,6 +5,8 @@ plugins {
     // It's used to manage certain configurations and dependencies for all
     // :sample:* modules, otherwise we'd need to repeat them several times.
     id 'software.amazon.app.platform.app'
+
+    alias libs.plugins.compose.hot.reload
 }
 
 // This extension comes from our published plugin.
