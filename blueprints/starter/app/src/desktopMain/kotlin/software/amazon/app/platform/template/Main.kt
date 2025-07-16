@@ -13,6 +13,7 @@ fun main() {
         desktopApp.destroy()
         exitApplication()
       },
+      alwaysOnTop = true,
       title = "Template App",
     ) {
       desktopApp.renderTemplates()

@@ -43,7 +43,13 @@ This template demonstrates:
 
 ### iOS
 
-#### Option 1: Run via Xcode (Recommended)
+#### Option 1: Run from IntelliJ IDEA or Android Studio
+
+1. Install the [Kotlin Multiplatform IDE plugin](https://plugins.jetbrains.com/plugin/14936-kotlin-multiplatform).
+
+2. Select the iosApp run configuration and run the app.
+
+#### Option 2: Run via Xcode
 
 1. Open the Xcode project:
    ```bash

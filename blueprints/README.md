@@ -7,7 +7,7 @@ This folder contains reusable templates ("blueprints") to help you quickly get s
 The `starter/` blueprint provides everything you need to bootstrap a new project with App Platform. It includes:
 
 - Pre-configured `build.gradle.kts` files for Kotlin Multiplatform
-- Android + iOS + WASM targets with Compose UI enabled
+- Android + iOS + Desktop + WASM targets with Compose UI enabled
 - App Platform integrations like Molecule presenters and Kotlin Inject
 - A working module structure with navigation and templates
 

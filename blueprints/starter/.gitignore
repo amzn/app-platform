@@ -1,9 +1,23 @@
+# Gradle
 .gradle
 /.gradle/
 build/
 local.properties
+/reports/
 
+# IntelliJ IDEA
+.idea/*
+*.iml
+*.ipl
+*.ipr
+*.iws
+.shelf/
+
+# kotlin
 .kotlin
 
-.idea/*
+# iOS
+**/xcuserdata/
+
+# Steve Jobs
 .DS_Store

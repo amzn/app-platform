@@ -1,6 +1,6 @@
 [versions]
 app-platfrom = "0.0.3"
-agp = "8.10.1"
+agp = "8.11.1"
 android-compileSdk = "36"
 android-minSdk = "21"
 android-targetSdk = "36"
@@ -10,7 +10,7 @@ compose = "1.8.1"
 compose-hot-reload = "1.0.0-alpha11"
 compose-multiplatform = "1.8.2"
 coroutines = "1.10.2"
-kotlin = "2.1.20"
+kotlin = "2.1.21"
 material = "1.7.3"
 
 [libraries]

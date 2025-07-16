@@ -2,7 +2,6 @@
 
 import org.jetbrains.kotlin.gradle.ExperimentalWasmDsl
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
-import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget
 
 plugins {
   alias(libs.plugins.appPlatform)
@@ -11,7 +10,6 @@ plugins {
 }
 
 appPlatform {
-  enableComposeUi(true)
   enableModuleStructure(true)
   enableKotlinInject(true)
   enableMoleculePresenters(true)
@@ -34,19 +32,8 @@ kotlin {
   iosArm64()
   iosSimulatorArm64()
 
-  targets.withType<KotlinNativeTarget>().configureEach {
-    binaries.framework {
-      baseName = project.name.replace("-", "").replaceFirstChar { it.uppercase() }
-    }
-  }
-
   wasmJs {
-    binaries.executable()
-
     browser {
-      commonWebpackConfig {
-        outputFileName = "${project.name}.js"
-      }
       outputModuleName = project.name.replace("-", "")
     }
   }
@@ -66,22 +53,5 @@ android {
 
   defaultConfig {
     minSdk = libs.versions.android.minSdk.get().toInt()
-    testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-  }
-
-  testOptions {
-    targetSdk = libs.versions.android.targetSdk.get().toInt()
-  }
-
-  buildTypes {
-    release {
-      isMinifyEnabled = false
-    }
-  }
-
-  packaging {
-    resources {
-      excludes += listOf("/META-INF/{AL2.0,LGPL2.1}")
-    }
   }
 }
