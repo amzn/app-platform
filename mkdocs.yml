@@ -7,12 +7,12 @@ site_description: "A lightweight application framework for state and memory mana
 remote_branch: gh-pages
 copyright: 'Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.'
 
-#https://squidfunk.github.io/mkdocs-material/theme:
+# theme configuration 
+theme:
   name: 'material'
   favicon: images/favicon.png
   logo: images/logo.svg
   palette:
-    # Light mode
     - media: '(prefers-color-scheme: light)'
       scheme: default
       primary: blue grey
@@ -20,7 +20,6 @@ copyright: 'Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.'
       toggle:
         icon: material/brightness-7
         name: Switch to dark mode
-    # Dark mode
     - media: '(prefers-color-scheme: dark)'
       scheme: slate
       primary: blue grey
@@ -43,15 +42,11 @@ copyright: 'Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.'
     - toc.integrate
     - content.tabs.link
 
-# Plugins
+# Plugins - only search plugin kept
 plugins:
   - search
-  - redirects
-  - social:
-      cards_layout_options:
-        logo: docs/images/app-platform-logo.png
 
-# Markdown extensions
+# Markdown extensions 
 markdown_extensions:
   - smarty
   - codehilite:
@@ -85,7 +80,7 @@ markdown_extensions:
   - attr_list
   - md_in_html
 
-# Navigation
+# Navigation (unchanged)
 nav:
   - Introduction: index.md
   - Setup: setup.md
