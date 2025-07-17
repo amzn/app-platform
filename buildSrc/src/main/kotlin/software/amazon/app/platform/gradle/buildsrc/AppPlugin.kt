@@ -9,6 +9,7 @@ import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 import org.jetbrains.kotlin.gradle.ExperimentalWasmDsl
 import org.jetbrains.kotlin.gradle.targets.js.webpack.KotlinWebpackConfig
 import software.amazon.app.platform.gradle.AppPlatformPlugin
+import software.amazon.app.platform.gradle.buildsrc.AppPlugin.App.Companion.app
 import software.amazon.app.platform.gradle.buildsrc.KmpPlugin.Companion.composeMultiplatform
 import software.amazon.app.platform.gradle.buildsrc.KmpPlugin.Companion.kmpExtension
 import software.amazon.app.platform.gradle.isAppModule
@@ -59,11 +60,17 @@ public open class AppPlugin : Plugin<Project> {
     //
     // Release builds are built with 'wasmJsBrowserDistribution'. To test the release run
     // 'npx http-server' from the folder 'sample/app/build/dist/wasmJs/productionExecutable'.
+
+    // Keep references to the Project outside of the lambdas below, otherwise this will break
+    // the configuration cache.
+    val jsFileName = app.jsFileName
+    val outputName = safePathString
+
     kmpExtension.wasmJs {
       browser {
-        outputModuleName.set(project.safePathString)
+        outputModuleName.set(outputName)
         commonWebpackConfig {
-          it.outputFileName = "sample-app.js"
+          it.outputFileName = jsFileName
           it.devServer = it.devServer ?: KotlinWebpackConfig.DevServer()
         }
       }
@@ -75,8 +82,7 @@ public open class AppPlugin : Plugin<Project> {
     fun Project.allExportedDependencies(): Set<Any> {
       return AppPlatformPlugin.exportedDependencies()
         .plus(
-          project
-            .project(":sample")
+          project(app.rootProjectPath)
             .subprojects
             .filter { it.subprojects.isEmpty() }
             .filter { !it.isRobotsModule() && !it.isTestingModule() && !it.isAppModule() }
@@ -85,7 +91,7 @@ public open class AppPlugin : Plugin<Project> {
 
     fun Project.configureDesktopApp() {
       composeMultiplatform.extensions.getByType(DesktopExtension::class.java).application.apply {
-        mainClass = "software.amazon.app.platform.sample.MainKt"
+        mainClass = app.desktopMainFile
 
         nativeDistributions.targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
         nativeDistributions.packageName = "software.amazon.app.platform.demo"
@@ -98,6 +104,28 @@ public open class AppPlugin : Plugin<Project> {
         nativeDistributions.packageVersion =
           VersionNumber(max(1, version.major), version.minor, version.patch, null).toString()
       }
+    }
+  }
+
+  internal enum class App(val rootProjectPath: String) {
+    RECIPES(":recipes"),
+    SAMPLE(":sample");
+
+    val iosFrameworkName: String = rootProjectPath.substring(1).capitalize() + "App"
+    val jsFileName: String = rootProjectPath.substring(1) + "-app.js"
+    val desktopMainFile: String =
+      "software.amazon.app.platform.${rootProjectPath.substring(1)}.MainKt"
+
+    companion object {
+      val Project.app: App
+        get() {
+          check(isAppModule())
+          return when (path) {
+            ":recipes:app" -> RECIPES
+            ":sample:app" -> SAMPLE
+            else -> throw NotImplementedError()
+          }
+        }
     }
   }
 }

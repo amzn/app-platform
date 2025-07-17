@@ -3,6 +3,7 @@ package software.amazon.app.platform.gradle.buildsrc
 import org.gradle.api.Project
 import org.gradle.api.plugins.JavaPluginExtension
 import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget
+import software.amazon.app.platform.gradle.buildsrc.AppPlugin.App.Companion.app
 import software.amazon.app.platform.gradle.buildsrc.AppPlugin.Companion.allExportedDependencies
 import software.amazon.app.platform.gradle.buildsrc.KmpPlugin.Companion.composeDependencies
 import software.amazon.app.platform.gradle.buildsrc.KmpPlugin.Companion.kmpExtension
@@ -28,7 +29,11 @@ internal sealed interface Platform {
     override fun configurePlatform() {
       target.binaries.framework {
         baseName =
-          if (project.path == ":sample:app") "SampleApp" else project.safePathString.capitalize()
+          if (project.isAppModule()) {
+            project.app.iosFrameworkName
+          } else {
+            project.safePathString.capitalize()
+          }
         isStatic = project.isAppModule()
 
         if (project.isAppModule()) {
@@ -146,11 +151,8 @@ internal sealed interface Platform {
   companion object {
 
     private val projectsUsingCompose =
-      setOf(
-        ":renderer-compose-multiplatform:public",
-        ":robot-compose-multiplatform:public",
-        ":sample:",
-      )
+      setOf(":renderer-compose-multiplatform:public", ":robot-compose-multiplatform:public") +
+        AppPlugin.App.entries.map { it.rootProjectPath }
 
     fun Project.allPlatforms(): Set<Platform> = buildSet {
       // Always add Android. It's our most important platform and buildable in all
