@@ -25,6 +25,12 @@ class LandingRenderer : ComposeRenderer<Model>() {
       Button(onClick = { model.onEvent(LandingPresenter.Event.AddPresenterToBackstack) }) {
         Text("Add presenter to backstack")
       }
+      Button(
+        onClick = { model.onEvent(LandingPresenter.Event.MenuPresenter) },
+        modifier = Modifier.padding(top = 12.dp),
+      ) {
+        Text("Menu presenter")
+      }
     }
   }
 }

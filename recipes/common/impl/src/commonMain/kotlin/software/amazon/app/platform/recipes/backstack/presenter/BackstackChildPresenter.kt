@@ -25,6 +25,10 @@ import software.amazon.app.platform.recipes.backstack.LocalBackstackScope
 import software.amazon.app.platform.recipes.backstack.presenter.BackstackChildPresenter.Model
 import software.amazon.app.platform.renderer.ComposeRenderer
 
+/**
+ * A presenter that is added to the backstack and has a button to put a new instance on top of the
+ * stack.
+ */
 class BackstackChildPresenter(private val index: Int) : MoleculePresenter<Unit, Model> {
   @Composable
   override fun present(input: Unit): Model {

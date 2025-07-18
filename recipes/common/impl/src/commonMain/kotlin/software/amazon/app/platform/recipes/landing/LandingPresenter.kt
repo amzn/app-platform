@@ -4,6 +4,7 @@ import androidx.compose.runtime.Composable
 import me.tatarka.inject.annotations.Inject
 import software.amazon.app.platform.presenter.BaseModel
 import software.amazon.app.platform.presenter.molecule.MoleculePresenter
+import software.amazon.app.platform.recipes.appbar.menu.MenuPresenter
 import software.amazon.app.platform.recipes.backstack.LocalBackstackScope
 import software.amazon.app.platform.recipes.backstack.presenter.BackstackChildPresenter
 import software.amazon.app.platform.recipes.landing.LandingPresenter.Model
@@ -20,6 +21,10 @@ class LandingPresenter : MoleculePresenter<Unit, Model> {
         Event.AddPresenterToBackstack -> {
           backstack.push(BackstackChildPresenter(0))
         }
+
+        Event.MenuPresenter -> {
+          backstack.push(MenuPresenter())
+        }
       }
     }
   }
@@ -34,5 +39,8 @@ class LandingPresenter : MoleculePresenter<Unit, Model> {
   sealed interface Event {
     /** Add a new presenter to the backstack. */
     data object AddPresenterToBackstack : Event
+
+    /** Show the presenter with a custom App Bar menu. */
+    data object MenuPresenter : Event
   }
 }
