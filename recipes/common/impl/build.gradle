@@ -17,6 +17,9 @@ appPlatform {
 compose {
     dependencies {
         commonMainImplementation dependencies.components.resources
-        commonMainImplementation dependencies.material
+        commonMainImplementation dependencies.material3
+        commonMainImplementation dependencies.materialIconsExtended
+        commonMainImplementation dependencies.runtimeSaveable
+        commonMainImplementation dependencies.ui
     }
 }
