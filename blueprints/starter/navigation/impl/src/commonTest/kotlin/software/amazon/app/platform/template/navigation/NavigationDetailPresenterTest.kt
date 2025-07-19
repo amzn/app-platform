@@ -2,12 +2,12 @@ package software.amazon.app.platform.template.navigation
 
 import assertk.assertThat
 import assertk.assertions.isEqualTo
+import kotlin.test.Test
+import kotlin.time.Duration.Companion.milliseconds
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.advanceTimeBy
-import kotlin.test.Test
 import kotlinx.coroutines.test.runTest
 import software.amazon.app.platform.presenter.molecule.test
-import kotlin.time.Duration.Companion.milliseconds
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class NavigationDetailPresenterTest {
@@ -23,9 +23,7 @@ class NavigationDetailPresenterTest {
 
       exampleRepository.setExampleFlowValue(5)
 
-      awaitItem().let { model ->
-        assertThat(model.exampleValue).isEqualTo(5)
-      }
+      awaitItem().let { model -> assertThat(model.exampleValue).isEqualTo(5) }
 
       // There is a 1 milli delay within presenter before updating count.
       advanceTimeBy(1.milliseconds)

@@ -11,32 +11,28 @@ import software.amazon.app.platform.template.templates.AppTemplate
 class NavigationPresenterImplTest {
 
   @Test
-  fun `correct template and presenter models are returned`() =
-    runTest {
-      val presenter =
-        NavigationPresenterImpl(
-          navigationHeaderPresenter = FakeNavigationHeaderPresenter(),
-          navigationDetailPresenter = FakeNavigationDetailPresenter(),
-        )
+  fun `correct template and presenter models are returned`() = runTest {
+    val presenter =
+      NavigationPresenterImpl(
+        navigationHeaderPresenter = FakeNavigationHeaderPresenter(),
+        navigationDetailPresenter = FakeNavigationDetailPresenter(),
+      )
 
-      presenter.test(this) {
-        awaitItem().let { template ->
-          assertThat(template).isInstanceOf<AppTemplate.HeaderDetailTemplate>()
-          (template as? AppTemplate.HeaderDetailTemplate)?.let { headerDetailTemplate ->
-            assertThat(headerDetailTemplate.header).isInstanceOf<NavigationHeaderPresenter.Model>()
-            assertThat(headerDetailTemplate.detail).isInstanceOf<NavigationDetailPresenter.Model>()
-          }
+    presenter.test(this) {
+      awaitItem().let { template ->
+        assertThat(template).isInstanceOf<AppTemplate.HeaderDetailTemplate>()
+        (template as? AppTemplate.HeaderDetailTemplate)?.let { headerDetailTemplate ->
+          assertThat(headerDetailTemplate.header).isInstanceOf<NavigationHeaderPresenter.Model>()
+          assertThat(headerDetailTemplate.detail).isInstanceOf<NavigationDetailPresenter.Model>()
         }
       }
     }
+  }
 
   private class FakeNavigationDetailPresenter : NavigationDetailPresenter {
     @Composable
     override fun present(input: Unit): NavigationDetailPresenter.Model =
-      NavigationDetailPresenter.Model(
-        exampleValue = 5,
-        exampleCount = 1,
-      )
+      NavigationDetailPresenter.Model(exampleValue = 5, exampleCount = 1)
   }
 
   private class FakeNavigationHeaderPresenter : NavigationHeaderPresenter {
