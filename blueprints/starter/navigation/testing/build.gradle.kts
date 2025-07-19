@@ -10,7 +10,6 @@ plugins {
 }
 
 appPlatform {
-  enableComposeUi(true)
   enableModuleStructure(true)
   enableKotlinInject(true)
   enableMoleculePresenters(true)
@@ -42,31 +41,17 @@ kotlin {
   sourceSets {
     commonMain {
       dependencies {
-        implementation(libs.compose.material)
-        implementation(libs.compose.material.icons)
-        implementation(project(":templates:public"))
-      }
-    }
-    commonTest {
-      dependencies {
-        implementation(kotlin("test"))
-        implementation(libs.assertk)
-        implementation(libs.coroutines.test)
-        implementation(project(":navigation:testing"))
+        implementation(libs.kotlinx.coroutines.core)
       }
     }
   }
 }
 
 android {
-  namespace = "software.amazon.app.platform.template.navigation.impl"
+  namespace = "software.amazon.app.platform.template.navigation"
   compileSdk = libs.versions.android.compileSdk.get().toInt()
 
   defaultConfig {
     minSdk = libs.versions.android.minSdk.get().toInt()
-  }
-
-  testOptions.unitTests {
-    isReturnDefaultValues = true
   }
 }
