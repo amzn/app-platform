@@ -23,3 +23,7 @@ compose {
         commonMainImplementation dependencies.ui
     }
 }
+
+dependencies {
+    commonMainImplementation libs.androidx.collection
+}

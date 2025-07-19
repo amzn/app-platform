@@ -8,6 +8,7 @@ android-minSdk = "21"
 android-targetSdk = "36"
 #noinspection GradleDependency
 androidx-activity = "1.8.2"
+androidx-collection = "1.5.0"
 #noinspection GradleDependency
 androidx-constraintlayout = "2.1.4"
 #noinspection GradleDependency
@@ -57,6 +58,7 @@ android-gradle-plugin-api = { module = "com.android.tools.build:gradle-api", ver
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "androidx-activity" }
 androidx-constraintlayout = { module = "androidx.constraintlayout:constraintlayout", version.ref = "androidx-constraintlayout" }
 androidx-core = { module = "androidx.core:core-ktx", version.ref = "androidx-core" }
+androidx-collection = { module = "androidx.collection:collection", version.ref = "androidx-collection" }
 androidx-lint-gradle = {  module = "androidx.lint:lint-gradle", version.ref = "androidx-lint-gradle" }
 androidx-test-espresso = { module = "androidx.test.espresso:espresso-core", version.ref = "androidx-test-espresso" }
 androidx-test-junit = { module = "androidx.test.ext:junit", version.ref = "androidx-test-junit" }

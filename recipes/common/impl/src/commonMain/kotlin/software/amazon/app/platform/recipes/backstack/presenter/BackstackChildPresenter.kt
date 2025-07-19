@@ -8,8 +8,11 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.produceState
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -34,13 +37,14 @@ class BackstackChildPresenter(private val index: Int) : MoleculePresenter<Unit, 
   override fun present(input: Unit): Model {
     val backstack = checkNotNull(LocalBackstackScope.current)
 
-    val counter by
-      produceState(0) {
-        while (isActive) {
-          delay(1.seconds)
-          value += 1
-        }
+    var counter by rememberSaveable { mutableIntStateOf(0) }
+
+    LaunchedEffect(Unit) {
+      while (isActive) {
+        delay(1.seconds)
+        counter += 1
       }
+    }
 
     return Model(index = index, counter = counter) {
       when (it) {

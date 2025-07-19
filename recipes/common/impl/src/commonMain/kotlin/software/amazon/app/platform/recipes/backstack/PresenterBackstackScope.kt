@@ -3,7 +3,6 @@ package software.amazon.app.platform.recipes.backstack
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
 import androidx.compose.runtime.compositionLocalOf
-import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import software.amazon.app.platform.presenter.BaseModel
@@ -11,6 +10,7 @@ import software.amazon.app.platform.presenter.molecule.MoleculePresenter
 import software.amazon.app.platform.presenter.molecule.returningCompositionLocalProvider
 import software.amazon.app.platform.recipes.backstack.PresenterBackstackScope.BackstackChange
 import software.amazon.app.platform.recipes.backstack.PresenterBackstackScope.BackstackChange.Action
+import software.amazon.app.platform.recipes.saveable.rememberReturningSaveableStateHolder
 
 /**
  * Receiver scope for content lambda for [presenterBackstack]. In this scope, [lastBackstackChange]
@@ -142,11 +142,14 @@ fun <ModelT : BaseModel> presenterBackstack(
   content: PresenterBackstackScope.(model: BaseModel) -> ModelT,
 ): ModelT {
   val scope = remember { PresenterBackstackScopeImpl(initialPresenter) }
+  val saveableStateHolder = rememberReturningSaveableStateHolder()
 
-  return returningCompositionLocalProvider(LocalBackstackScope provides scope) {
-    val presenter = scope.lastBackstackChange.value.backstack.last()
-    val backstackModel = key(presenter) { presenter.present(Unit) }
+  val presenter = scope.lastBackstackChange.value.backstack.last()
 
-    content.invoke(scope, backstackModel)
+  return saveableStateHolder.SaveableStateProvider(key = presenter) {
+    returningCompositionLocalProvider(LocalBackstackScope provides scope) {
+      val backstackModel = presenter.present(Unit)
+      content.invoke(scope, backstackModel)
+    }
   }
 }
