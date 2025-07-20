@@ -10,5 +10,10 @@ import software.amazon.app.platform.presenter.molecule.MoleculePresenter
  * actions that affect the overall screen.
  */
 interface NavigationHeaderPresenter : MoleculePresenter<Unit, NavigationHeaderPresenter.Model> {
-  data class Model(val exampleBoolean: Boolean) : BaseModel
+  data class Model(val clickedCount: Int, val onEvent: (Event) -> Unit) : BaseModel
+
+  /** Events that can be triggered by the UI layer (Renderer) and processed by the Presenter. */
+  sealed interface Event {
+    data object Clicked : Event
+  }
 }

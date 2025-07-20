@@ -38,6 +38,6 @@ class NavigationPresenterImplTest {
   private class FakeNavigationHeaderPresenter : NavigationHeaderPresenter {
     @Composable
     override fun present(input: Unit): NavigationHeaderPresenter.Model =
-      NavigationHeaderPresenter.Model(exampleBoolean = true)
+      NavigationHeaderPresenter.Model(clickedCount = 0) {}
   }
 }

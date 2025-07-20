@@ -1,6 +1,7 @@
 package software.amazon.app.platform.template.navigation
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -48,6 +49,15 @@ class NavigationHeaderRenderer : ComposeRenderer<Model>() {
             style = MaterialTheme.typography.titleMedium,
           )
         }
+
+        Text(
+          text = "Click Me (times clicked: ${model.clickedCount})",
+          color = MaterialTheme.colorScheme.onBackground,
+          style = MaterialTheme.typography.titleMedium,
+          // Sends event to NavigationHeaderPresenter to be processed which will update
+          // the above clickedCount value.
+          modifier = Modifier.clickable { model.onEvent(NavigationHeaderPresenter.Event.Clicked) },
+        )
       }
 
       Spacer(
