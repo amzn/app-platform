@@ -1,3 +1,7 @@
+public final class software/amazon/app/platform/presenter/molecule/backgesture/BackGestureDispatcherPresenterAndroidKt {
+	public static final fun forwardBackPressEventsToPresenters (Lsoftware/amazon/app/platform/presenter/molecule/backgesture/BackGestureDispatcherPresenter;Landroidx/activity/OnBackPressedDispatcherOwner;)V
+}
+
 public class software/amazon/app/platform/renderer/AndroidRendererFactory : software/amazon/app/platform/renderer/BaseRendererFactory {
 	public fun <init> (Lsoftware/amazon/app/platform/scope/RootScopeProvider;Landroid/app/Activity;Landroid/view/ViewGroup;)V
 	public fun createRenderer (Lkotlin/reflect/KClass;)Lsoftware/amazon/app/platform/renderer/Renderer;

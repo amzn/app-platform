@@ -1,5 +1,5 @@
 package software.amazon.app.platform.renderer
 
-import android.app.Activity
+import androidx.activity.ComponentActivity
 
-class TestActivity : Activity()
+class TestActivity : ComponentActivity()

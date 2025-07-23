@@ -18,13 +18,13 @@ import org.junit.Rule
 import org.junit.Test
 import software.amazon.app.platform.presenter.BaseModel
 import software.amazon.app.platform.presenter.molecule.MoleculePresenter
-import software.amazon.app.platform.presenter.molecule.backgesture.ForwardBackPressEventsToPresentersTest.TestPresenter.Model
+import software.amazon.app.platform.presenter.molecule.backgesture.ForwardBackPressEventsToPresentersComposeTest.TestPresenter.Model
 import software.amazon.app.platform.presenter.molecule.returningCompositionLocalProvider
 import software.amazon.app.platform.renderer.ComposeRenderer
 import software.amazon.app.platform.renderer.TestActivity
 import software.amazon.app.platform.renderer.getActivityFromTestRule
 
-class ForwardBackPressEventsToPresentersTest {
+class ForwardBackPressEventsToPresentersComposeTest {
 
   @get:Rule val activityRule = ActivityScenarioRule(TestActivity::class.java)
 
