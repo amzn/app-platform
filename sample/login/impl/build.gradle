@@ -16,14 +16,11 @@ appPlatform {
 
 dependencies {
     commonMainApi project(':sample:user:public')
+
+    commonMainImplementation compose.components.resources
+    commonMainImplementation compose.material
+
     commonTestImplementation project(':sample:user:testing')
-}
 
-compose {
-    dependencies {
-        commonMainImplementation dependencies.components.resources
-        commonMainImplementation dependencies.material
-
-        appleAndDesktopTestImplementation dependencies.uiTest
-    }
+    appleAndDesktopTestImplementation compose.uiTest
 }

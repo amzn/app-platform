@@ -11,16 +11,12 @@ appPlatformBuildSrc {
 dependencies {
     commonMainApi project(':robot:public')
     commonMainApi project(':scope:public')
+    commonMainApi compose.uiTest
+
     commonMainImplementation project(':robot-internal:public')
 
     commonTestApi project(':scope:testing')
-}
 
-compose {
-    dependencies {
-        commonMainApi dependencies.uiTest
-
-        desktopTestImplementation dependencies.material
-        iosTestImplementation dependencies.material
-    }
+    desktopTestImplementation compose.material
+    iosTestImplementation compose.material
 }

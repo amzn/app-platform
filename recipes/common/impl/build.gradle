@@ -14,16 +14,12 @@ appPlatform {
     enableMoleculePresenters true
 }
 
-compose {
-    dependencies {
-        commonMainImplementation dependencies.components.resources
-        commonMainImplementation dependencies.material3
-        commonMainImplementation dependencies.materialIconsExtended
-        commonMainImplementation dependencies.runtimeSaveable
-        commonMainImplementation dependencies.ui
-    }
-}
-
 dependencies {
+    commonMainImplementation compose.components.resources
+    commonMainImplementation compose.material3
+    commonMainImplementation compose.materialIconsExtended
+    commonMainImplementation compose.runtimeSaveable
+    commonMainImplementation compose.ui
+
     commonMainImplementation libs.androidx.collection
 }
