@@ -5,6 +5,8 @@ on:
     paths:
       - 'blueprints/starter/**'
       - '.github/**'
+    tags-ignore:
+      - '**'
   pull_request:
     paths:
       - 'blueprints/starter/**'
