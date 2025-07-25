@@ -449,7 +449,7 @@ class RootPresenter(
 ```
 
 The last step is to forward back gestures from the UI layer to `Presenters` to invoke the callbacks in the
-`Presenters`. Here again it's recommended to do this in from the root `Renderer`:
+`Presenters`. Here again it's recommended to do this from within the root `Renderer`:
 
 ```kotlin hl_lines="4 8"
 @Inject
@@ -469,7 +469,7 @@ class RootPresenterRenderer(
 A similar built-in integration is provided for Android Views. There it's recommended to call this function from each
 Android `Activity`:
 
-```kotlin hl_lines="8 12 20 25 28"
+```kotlin hl_lines="6"
 class MainActivity : ComponentActivity() {
 
   override fun onCreate(savedInstanceState: Bundle?) {
@@ -647,7 +647,7 @@ There are common scenarios you may encounter when using `Presenters`.
 
 ### Save `Presenter` state
 
-`Presenters` can make fully use of the Compose runtime, e.g. using `remember { }` and `mutableStateOf()`. But when a
+`Presenters` can make full use of the Compose runtime, e.g. using `remember { }` and `mutableStateOf()`. But when a
 `Presenter` leaves the composition and no longer is part of the hierarchy, then it loses its state and would be called
 with the initial state the next time.
 
