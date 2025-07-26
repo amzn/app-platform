@@ -43,7 +43,7 @@ class TestBackGestureDispatcherPresenterTest {
   }
 
   @Test
-  fun `a presenter cannot be tested with the dispatcher wrapper`() = runTest {
+  fun `a presenter can be tested with the dispatcher wrapper`() = runTest {
     val presenter =
       object : MoleculePresenter<Unit, BaseModel> {
         @Composable
