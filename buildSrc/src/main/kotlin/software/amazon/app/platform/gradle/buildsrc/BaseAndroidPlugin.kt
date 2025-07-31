@@ -43,14 +43,23 @@ public open class BaseAndroidPlugin : Plugin<Project> {
     android.compileOptions.targetCompatibility = javaVersion
 
     android.testOptions.unitTests {
-      isIncludeAndroidResources = true
+      // Disable including Android resources in tests. None of our modules need them and it avoids
+      // running into issues with Gradle 9: https://issuetracker.google.com/issues/411739086
+      isIncludeAndroidResources = false
+
       isReturnDefaultValues = true
     }
 
     android.lint {
       warningsAsErrors = true
       htmlReport = true
-      disable += setOf("GradleDependency", "ObsoleteLintCustomCheck", "NewerVersionAvailable")
+      disable +=
+        setOf(
+          "GradleDependency",
+          "ObsoleteLintCustomCheck",
+          "NewerVersionAvailable",
+          "AndroidGradlePluginVersion",
+        )
     }
 
     releaseTask.configure { it.dependsOn("lintDebug") }
