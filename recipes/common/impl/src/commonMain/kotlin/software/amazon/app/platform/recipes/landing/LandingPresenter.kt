@@ -8,6 +8,7 @@ import software.amazon.app.platform.recipes.appbar.menu.MenuPresenter
 import software.amazon.app.platform.recipes.backstack.LocalBackstackScope
 import software.amazon.app.platform.recipes.backstack.presenter.BackstackChildPresenter
 import software.amazon.app.platform.recipes.landing.LandingPresenter.Model
+import software.amazon.app.platform.recipes.nav3.Navigation3HomePresenter
 
 /** The presenter that is responsible to show the content of the landing page in the Recipes app. */
 @Inject
@@ -24,6 +25,10 @@ class LandingPresenter : MoleculePresenter<Unit, Model> {
 
         Event.MenuPresenter -> {
           backstack.push(MenuPresenter())
+        }
+
+        Event.Navigation3 -> {
+          backstack.push(Navigation3HomePresenter())
         }
       }
     }
@@ -42,5 +47,8 @@ class LandingPresenter : MoleculePresenter<Unit, Model> {
 
     /** Show the presenter with a custom App Bar menu. */
     data object MenuPresenter : Event
+
+    /** Show the presenter highlighting navigation3 integration. */
+    data object Navigation3 : Event
   }
 }

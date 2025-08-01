@@ -31,6 +31,12 @@ class LandingRenderer : ComposeRenderer<Model>() {
       ) {
         Text("Menu presenter")
       }
+      Button(
+        onClick = { model.onEvent(LandingPresenter.Event.Navigation3) },
+        modifier = Modifier.padding(top = 12.dp),
+      ) {
+        Text("Navigation3")
+      }
     }
   }
 }

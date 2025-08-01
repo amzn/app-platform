@@ -14,6 +14,20 @@ appPlatform {
     enableMoleculePresenters true
 }
 
+kotlin {
+    def noAndroid = sourceSets.create("noAndroidMain")
+
+    sourceSets.named('commonMain').configure {
+        noAndroid.dependsOn(it)
+    }
+    sourceSets.named('appleAndDesktopMain').configure {
+        it.dependsOn(noAndroid)
+    }
+    sourceSets.named('wasmJsMain').configure {
+        it.dependsOn(noAndroid)
+    }
+}
+
 dependencies {
     commonMainImplementation compose.components.resources
     commonMainImplementation compose.material3
@@ -22,4 +36,7 @@ dependencies {
     commonMainImplementation compose.ui
 
     commonMainImplementation libs.androidx.collection
+
+    androidMainImplementation libs.navigation3.runtime
+    androidMainImplementation libs.navigation3.ui
 }

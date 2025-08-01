@@ -908,3 +908,107 @@ return contentModel.toTemplate { model ->
   RecipesAppTemplate.FullScreenTemplate(model, appBarConfig)
 }
 ```
+
+### Navigation 3
+
+The [Navigation 3 library](https://developer.android.com/guide/navigation/navigation-3) can be used with App Platform.
+For idiomatic navigation App Platform [recommends](presenter.md#model-driven-navigation) handling navigation events in 
+`Presenters`. `Presenters` are composable, build a tree and can delegate which `Presenter` is shown on screen to child 
+`Presenters`. This is how App Platform implements a unidirectional dataflow. The downside of Navigation 3 is that 
+it pushes navigation logic into the Compose UI layer, which is against App Platform's philosophy of handling navigation 
+in the business logic. With the right integration strategy, this downside can be mitigated.
+
+The Recipes app manages the backstack of `Presenters` in the parent 
+[`Navigation3HomePresenter`](https://github.com/amzn/app-platform/blob/main/recipes/common/impl/src/commonMain/kotlin/software/amazon/app/platform/recipes/nav3/Navigation3HomePresenter.kt)
+and forwards the backstack and options to modify the stack to the `Renderer`. Note that the `Model` is computed for 
+each `Presenter` in the backstack:
+
+```kotlin
+@Composable
+override fun present(input: Unit): Model {
+  val backstack = remember {
+    mutableStateListOf<MoleculePresenter<Unit, out BaseModel>>().apply {
+      // There must be always one element.
+      add(Navigation3ChildPresenter(index = 0, backstack = this))
+    }
+  }
+
+  return Model(backstack = backstack.map { it.present(Unit) }) {
+    when (it) {
+      Event.Pop -> {
+        backstack.removeAt(backstack.size - 1)
+      }
+    }
+  }
+}
+```
+
+The [`Renderer`](https://github.com/amzn/app-platform/blob/main/recipes/common/impl/src/androidMain/kotlin/software/amazon/app/platform/recipes/nav3/AndroidNavigation3HomeRenderer.kt) 
+wraps the backstack in a `NavDisplay` and forwards back gestures to the `Presenter`. There is a unique `NavEntry`
+for each position in the stack and the individual `Renderer` for each `Model` is invoked:
+
+```kotlin
+@Inject
+@ContributesRenderer
+class AndroidNavigation3HomeRenderer(private val rendererFactory: RendererFactory) : ComposeRenderer<Model>() {
+  @Composable
+  override fun Compose(model: Model) {
+    // Use the position of the model in the backstack as key for `NavDisplay`. This way
+    // we can update models without Navigation 3 treating those changes as a new screen.
+    val backstack = model.backstack.mapIndexed { index, _ -> index }
+
+    NavDisplay(
+      backStack = backstack,
+      onBack = { model.onEvent(Event.Pop) },
+      entryProvider = { key ->
+        NavEntry(key) {
+          val model = model.backstack[it]
+          rendererFactory.getComposeRenderer(model).renderCompose(model)
+        }
+      },
+    )
+  }
+}
+```
+
+With this integration handling of the backstack is managed in the `Presenter` and testable. 
+
+??? info "Alternative integration"
+
+    If a unidirectional dataflow isn't required, an alternative integration is making each `NavEntry` a unique 
+    `Presenter` root and compute the `Model` directly using the `Presenter`. For the reasons mentioned we don't 
+    recommend this setup.
+
+    ```kotlin
+    data object List
+    data object Detail
+
+    @Inject
+    @ContributesRenderer
+    class Navigation3Renderer(
+      private val listPresenter: ListPresenter,
+      private val detailPresenter: DetailPresenter,
+      private val rendererFactory: RendererFactory,
+    ) : ComposeRenderer<Model>() {
+      @Composable
+      override fun Compose(model: Model) {
+        val backstack = remember { mutableStateListOf<Any>(List) }
+
+        NavDisplay(
+          backStack = backstack,
+          onBack = { backstack.removeAt(backstack.size - 1) },
+          entryProvider =
+            entryProvider {
+              entry<List> {
+                val model = listPresenter.present(Unit)
+                rendererFactory.getComposeRenderer(model).renderCompose(model)
+              }
+              entry<Detail> {
+                val model = detailPresenter.present(Unit)
+                rendererFactory.getComposeRenderer(model).renderCompose(model)
+              }
+            },
+        )
+      }
+    }
+    ```

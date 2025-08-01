@@ -47,6 +47,7 @@ ktfmt-gradle = "0.23.0"
 ksp = "2.2.0-2.0.2"
 maven-publish = "0.34.0"
 molecule = "2.1.0"
+navigation3 = "1.0.0-alpha06"
 #noinspection GradleDependency
 recyclerView = "1.2.1"
 turbine = "1.2.1"
@@ -110,6 +111,8 @@ ksp-embeddable = { module = "com.google.devtools.ksp:symbol-processing-aa-embedd
 ksp-gradle-plugin = { module = "com.google.devtools.ksp:symbol-processing-gradle-plugin", version.ref = "ksp" }
 maven-publish-gradle-plugin = { module = "com.vanniktech:gradle-maven-publish-plugin", version.ref = "maven-publish" }
 molecule-runtime = { module = "app.cash.molecule:molecule-runtime", version.ref = "molecule" }
+navigation3-runtime = { module = "androidx.navigation3:navigation3-runtime", version.ref = "navigation3" }
+navigation3-ui = { module = "androidx.navigation3:navigation3-ui", version.ref = "navigation3" }
 recyclerView = { module = "androidx.recyclerview:recyclerview", version.ref = "recyclerView" }
 turbine = { module = "app.cash.turbine:turbine", version.ref = "turbine" }
 #noinspection SimilarGradleDependency
