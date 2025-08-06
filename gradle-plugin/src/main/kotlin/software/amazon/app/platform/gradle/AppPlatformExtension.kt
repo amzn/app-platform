@@ -189,6 +189,7 @@ private fun Project.enableKotlinInject() {
     kmpExtension.targets.configureEach { target ->
       if (target.name != "metadata") {
         dependencies.addKspProcessorDependencies("ksp${target.name.capitalize()}")
+        // TODO: Android
         dependencies.addKspProcessorDependencies("ksp${target.name.capitalize()}Test")
 
         if (target.platformType == KotlinPlatformType.androidJvm) {

@@ -8,12 +8,6 @@ appPlatformBuildSrc {
     enableInstrumentedTests true
 }
 
-android {
-    buildFeatures {
-        viewBinding = true
-    }
-}
-
 // This doesn't work automatically in KMP modules. It's only needed for the IDE and indexing the
 // generated sources.
 if (project.properties['android.injected.invoked.from.ide'] == 'true') {
@@ -38,7 +32,7 @@ dependencies {
     androidMainApi libs.recyclerView
     androidMainImplementation libs.androidx.core
 
-    androidInstrumentedTestImplementation libs.androidx.test.espresso
+    androidDeviceTestImplementation libs.androidx.test.espresso
     // Use the version aligned with AGP in tests.
-    androidInstrumentedTestImplementation libs.viewbinding.agp
+    androidDeviceTestImplementation libs.viewbinding.agp
 }

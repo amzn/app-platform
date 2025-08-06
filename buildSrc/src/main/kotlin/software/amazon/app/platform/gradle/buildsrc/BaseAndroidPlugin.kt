@@ -2,15 +2,23 @@ package software.amazon.app.platform.gradle.buildsrc
 
 import com.android.build.api.dsl.ApplicationExtension
 import com.android.build.api.dsl.LibraryExtension
+import com.android.build.api.dsl.Lint
+import com.android.build.api.dsl.androidLibrary
 import org.gradle.api.Plugin
 import org.gradle.api.Project
+import software.amazon.app.platform.gradle.buildsrc.KmpPlugin.Companion.kmpExtension
+import software.amazon.app.platform.gradle.isAppModule
 
 public open class BaseAndroidPlugin : Plugin<Project> {
   override fun apply(target: Project) {
-    target.configureAndroid()
+    if (target.isAppModule()) {
+      target.configureAndroidApp()
+    } else {
+      target.configureAndroidLibrary()
+    }
   }
 
-  private fun Project.configureAndroid() {
+  private fun Project.configureAndroidApp() {
     val android = android
 
     android.compileSdk = libs.findVersion("android.compileSdk").get().requiredVersion.toInt()
@@ -31,7 +39,7 @@ public open class BaseAndroidPlugin : Plugin<Project> {
 
           applicationId = "software.amazon.app.platform.demo"
           versionCode = 1
-          versionName = this@configureAndroid.versionName
+          versionName = this@configureAndroidApp.versionName
         }
       }
     }
@@ -50,7 +58,31 @@ public open class BaseAndroidPlugin : Plugin<Project> {
       isReturnDefaultValues = true
     }
 
-    android.lint {
+    android.lint { applyLintConfiguration(this) }
+
+    releaseTask.configure { it.dependsOn("lintDebug") }
+  }
+
+  private fun Project.configureAndroidLibrary() {
+    kmpExtension.androidLibrary {
+      compileSdk = libs.findVersion("android.compileSdk").get().requiredVersion.toInt()
+      minSdk = libs.findVersion("android.minSdk").get().requiredVersion.toInt()
+
+      withHostTest {
+        isIncludeAndroidResources = true
+        isReturnDefaultValues = true
+      }
+
+      lint { applyLintConfiguration(this) }
+
+      // TODO
+      // releaseTask.configure { it.dependsOn("lintDebug") }
+    }
+  }
+
+  private fun Project.applyLintConfiguration(lint: Lint) {
+    with(lint) {
+      targetSdk = libs.findVersion("android.targetSdk").get().requiredVersion.toInt()
       warningsAsErrors = true
       htmlReport = true
       disable +=
@@ -61,57 +93,69 @@ public open class BaseAndroidPlugin : Plugin<Project> {
           "AndroidGradlePluginVersion",
         )
     }
-
-    releaseTask.configure { it.dependsOn("lintDebug") }
   }
 
   internal companion object {
     internal fun Project.enableInstrumentedTests() {
-      releaseTask.configure {
-        it.dependsOn("assembleDebugAndroidTest")
-        it.dependsOn("emulatorCheck")
-      }
+      if (isAppModule()) {}
 
-      android.defaultConfig {
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-        testInstrumentationRunnerArguments += "clearPackageData" to "true"
-      }
+      // TODO
+      //      releaseTask.configure {
+      //        it.dependsOn("assembleDebugAndroidTest")
+      //        it.dependsOn("emulatorCheck")
+      //      }
 
-      android.testOptions.execution = "ANDROIDX_TEST_ORCHESTRATOR"
+      if (isAppModule()) {
+        android.defaultConfig {
+          testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+          testInstrumentationRunnerArguments += "clearPackageData" to "true"
+        }
+
+        android.testOptions.execution = "ANDROIDX_TEST_ORCHESTRATOR"
+
+        @Suppress("UnstableApiUsage")
+        android.testOptions.managedDevices.localDevices.create("emulator") {
+          // Use device profiles you typically see in Android Studio.
+          it.device = "Pixel 3"
+          it.apiLevel = 30
+          it.require64Bit = true
+          it.systemImageSource = "aosp-atd"
+        }
+      } else {
+        kmpExtension.androidLibrary {
+          withDeviceTest {
+            instrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+            instrumentationRunnerArguments += "clearPackageData" to "true"
+            execution = "ANDROIDX_TEST_ORCHESTRATOR"
+
+//            @Suppress("UnstableApiUsage")
+//            managedDevices.localDevices.create("emulator") {
+//              // Use device profiles you typically see in Android Studio.
+//              it.device = "Pixel 3"
+//              it.apiLevel = 30
+//              it.require64Bit = true
+//              it.systemImageSource = "aosp-atd"
+//            }
+          }
+        }
+      }
 
       dependencies.add(
         "androidTestUtil",
         libs.findLibrary("androidx.test.orchestrator").get().get().toString(),
       )
-      dependencies.add(
-        "androidTestImplementation",
-        libs.findLibrary("androidx.test.runner").get().get().toString(),
-      )
-      dependencies.add(
-        "androidTestImplementation",
-        libs.findLibrary("androidx.test.rules").get().get().toString(),
-      )
-      dependencies.add(
-        "androidTestImplementation",
-        libs.findLibrary("androidx.test.junit").get().get().toString(),
-      )
-      dependencies.add(
-        "androidTestImplementation",
-        libs.findLibrary("kotlin.test").get().get().toString(),
-      )
-      dependencies.add(
-        "androidTestImplementation",
-        libs.findLibrary("assertk").get().get().toString(),
-      )
 
-      @Suppress("UnstableApiUsage")
-      android.testOptions.managedDevices.localDevices.create("emulator") {
-        // Use device profiles you typically see in Android Studio.
-        it.device = "Pixel 3"
-        it.apiLevel = 30
-        it.require64Bit = true
-        it.systemImageSource = "aosp-atd"
-      }
+      val configName =
+        if (isAppModule()) {
+          "androidTestImplementation"
+        } else {
+          "androidDeviceTestImplementation"
+        }
+      dependencies.add(configName, libs.findLibrary("androidx.test.runner").get().get().toString())
+      dependencies.add(configName, libs.findLibrary("androidx.test.rules").get().get().toString())
+      dependencies.add(configName, libs.findLibrary("androidx.test.junit").get().get().toString())
+      dependencies.add(configName, libs.findLibrary("kotlin.test").get().get().toString())
+      dependencies.add(configName, libs.findLibrary("assertk").get().get().toString())
     }
   }
 }

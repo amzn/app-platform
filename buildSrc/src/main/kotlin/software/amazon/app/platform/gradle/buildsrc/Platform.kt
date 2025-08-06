@@ -1,5 +1,6 @@
 package software.amazon.app.platform.gradle.buildsrc
 
+import com.android.build.api.dsl.androidLibrary
 import org.gradle.api.Project
 import org.gradle.api.plugins.JavaPluginExtension
 import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget
@@ -45,21 +46,33 @@ internal sealed interface Platform {
 
   private class AndroidPlatform(private val project: Project) : Platform {
 
-    override val unitTestTaskName: String = "testDebugUnitTest"
+    override val unitTestTaskName: String =
+      if (project.isAppModule()) "testDebugUnitTest" else "testAndroidHostTest"
 
     override fun configurePlatform() {
-      project.kmpExtension.androidTarget().compilerOptions { jvmTarget.set(project.javaTarget) }
+      if (project.isAppModule()) {
+        project.kmpExtension.androidTarget().compilerOptions { jvmTarget.set(project.javaTarget) }
 
-      project.android.sourceSets.getByName("main").apply {
-        project
-          .file("src/androidMain/AndroidManifest.xml")
-          .takeIf { it.exists() }
-          ?.let { manifest.srcFile(it) }
-        project.file("src/androidMain/res").takeIf { it.exists() }?.let { res.srcDirs(it) }
-        project
-          .file("src/commonMain/resources")
-          .takeIf { it.exists() }
-          ?.let { resources.srcDirs(it) }
+        project.android.sourceSets.getByName("main").apply {
+          project
+            .file("src/androidMain/AndroidManifest.xml")
+            .takeIf { it.exists() }
+            ?.let { manifest.srcFile(it) }
+          project.file("src/androidMain/res").takeIf { it.exists() }?.let { res.srcDirs(it) }
+          project
+            .file("src/commonMain/resources")
+            .takeIf { it.exists() }
+            ?.let { resources.srcDirs(it) }
+        }
+      } else {
+        project.plugins.apply(Plugins.ANDROID_KMP_LIBRARY)
+
+        @Suppress("UnstableApiUsage")
+        project.kmpExtension.androidLibrary {
+          compilations.configureEach {
+            it.compilerOptions.configure { jvmTarget.set(project.javaTarget) }
+          }
+        }
       }
     }
   }
