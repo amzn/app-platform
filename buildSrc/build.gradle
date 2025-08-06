@@ -49,6 +49,12 @@ gradlePlugin {
             implementationClass = "software.amazon.app.platform.gradle.buildsrc.JvmLibraryPlugin"
             description = "The Gradle convention plugin for JVM library modules."
         }
+        appPlatformAndroidLibPlugin {
+            id = "software.amazon.app.platform.lib.android"
+            displayName = "App Platform Android Library Gradle Plugin"
+            implementationClass = "software.amazon.app.platform.gradle.buildsrc.AndroidLibraryPlugin"
+            description = "The Gradle convention plugin for Android library modules."
+        }
         appPlatformRootPlugin {
             id = "software.amazon.app.platform.root"
             displayName = "App Platform Root Gradle Plugin"

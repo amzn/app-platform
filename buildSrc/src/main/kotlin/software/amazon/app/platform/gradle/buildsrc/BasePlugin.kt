@@ -97,7 +97,7 @@ public open class BasePlugin : Plugin<Project> {
     if (!isRoot) {
       plugins.apply(Plugins.APP_PLATFORM)
 
-      plugins.withIds(Plugins.KOTLIN_MULTIPLATFORM, Plugins.KOTLIN_JVM) {
+      plugins.withIds(Plugins.KOTLIN_MULTIPLATFORM, Plugins.KOTLIN_JVM, Plugins.KOTLIN_ANDROID) {
         appPlatformGradlePlugin.enableModuleStructure(true)
 
         releaseTask.dependsOn("checkModuleStructureDependencies")
