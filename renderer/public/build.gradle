@@ -1,6 +1,5 @@
 plugins {
     id 'software.amazon.app.platform.lib'
-    alias libs.plugins.kotlin.atomicfu
 }
 
 appPlatformBuildSrc {
@@ -11,6 +10,8 @@ appPlatformBuildSrc {
 dependencies {
     commonMainApi project(':presenter:public')
     commonMainApi project(':scope:public')
+
+    commonMainImplementation libs.kotlin.atomicfu
 
     commonTestImplementation project(':internal:testing')
     commonTestImplementation project(':scope:testing')
