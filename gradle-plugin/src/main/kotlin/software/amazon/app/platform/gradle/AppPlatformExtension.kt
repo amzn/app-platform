@@ -154,21 +154,18 @@ private fun Project.enableKotlinInject() {
   )
 
   fun DependencyHandler.addKspProcessorDependencies(kspConfigurationName: String) {
-    addProvider(
+    add(kspConfigurationName, "me.tatarka.inject:kotlin-inject-compiler-ksp:$KOTLIN_INJECT_VERSION")
+    add(
       kspConfigurationName,
-      provider { "me.tatarka.inject:kotlin-inject-compiler-ksp:" + KOTLIN_INJECT_VERSION },
+      "$APP_PLATFORM_GROUP:kotlin-inject-contribute-public:$APP_PLATFORM_VERSION",
     )
     add(
       kspConfigurationName,
-      "$APP_PLATFORM_GROUP:kotlin-inject-contribute-public:" + APP_PLATFORM_VERSION,
+      "$APP_PLATFORM_GROUP:kotlin-inject-contribute-impl-code-generators:$APP_PLATFORM_VERSION",
     )
     add(
       kspConfigurationName,
-      "$APP_PLATFORM_GROUP:kotlin-inject-contribute-impl-code-generators:" + APP_PLATFORM_VERSION,
-    )
-    add(
-      kspConfigurationName,
-      "software.amazon.lastmile.kotlin.inject.anvil:compiler:" + KOTLIN_INJECT_ANVIL_VERSION,
+      "software.amazon.lastmile.kotlin.inject.anvil:compiler:$KOTLIN_INJECT_ANVIL_VERSION",
     )
   }
 
@@ -176,9 +173,9 @@ private fun Project.enableKotlinInject() {
     kmpExtension.sourceSets.getByName("commonMain").dependencies {
       implementation("me.tatarka.inject:kotlin-inject-runtime:$KOTLIN_INJECT_VERSION")
       implementation("$APP_PLATFORM_GROUP:kotlin-inject-public:$APP_PLATFORM_VERSION")
-      implementation("$APP_PLATFORM_GROUP:kotlin-inject-contribute-public:" + APP_PLATFORM_VERSION)
+      implementation("$APP_PLATFORM_GROUP:kotlin-inject-contribute-public:$APP_PLATFORM_VERSION")
       implementation(
-        "software.amazon.lastmile.kotlin.inject.anvil:runtime:" + KOTLIN_INJECT_ANVIL_VERSION
+        "software.amazon.lastmile.kotlin.inject.anvil:runtime:$KOTLIN_INJECT_ANVIL_VERSION"
       )
       implementation(
         "software.amazon.lastmile.kotlin.inject.anvil:runtime-optional:" +
@@ -187,17 +184,39 @@ private fun Project.enableKotlinInject() {
     }
 
     kmpExtension.targets.configureEach { target ->
+      // Skip the metadata, because we want to run KSP only for the concrete platforms.
       if (target.name != "metadata") {
-        dependencies.addKspProcessorDependencies("ksp${target.name.capitalize()}")
-        dependencies.addKspProcessorDependencies("ksp${target.name.capitalize()}Test")
+        target.compilations.configureEach { compilation ->
+          fun configExists(name: String): Boolean = configurations.any { it.name == name }
 
-        if (target.platformType == KotlinPlatformType.androidJvm) {
-          target.compilations.configureEach { compilation ->
-            if (compilation.name == "debugAndroidTest") {
-              // This is the name of the configuration for instrumented tests in
-              // KMP projects.
-              dependencies.addKspProcessorDependencies("kspAndroidAndroidTest")
+          // The implementationConfigurationName name is
+          // 'iosSimulatorArm64CompilationImplementation', 'wasmJsTestCompileClasspath' or
+          // 'desktopCompileClasspath'.
+          //
+          // E.g. 'desktopCompileClasspath' with give use 'kspDesktop'
+          var configName =
+            "ksp" +
+              compilation.implementationConfigurationName
+                .substringBefore("Compilation")
+                .capitalize()
+
+          if (!configExists(configName) && target.platformType == KotlinPlatformType.androidJvm) {
+            // Android has different naming for some reason.
+            //
+            // E.g. for instrumentation tests 'kspAndroidDebugAndroidTest' should actually be
+            // 'kspAndroidAndroidTestDebug', but we will use 'kspAndroidAndroidTest'.
+            //
+            // For unit tests 'kspAndroidDebugUnitTest' should actually be 'kspAndroidTestDebug',
+            // but we will use 'kspAndroidTest'.
+            when {
+              configName.endsWith("AndroidTest") -> configName = "kspAndroidAndroidTest"
+              configName.endsWith("UnitTest") -> configName = "kspAndroidTest"
             }
+          }
+
+          // Check again if the config exists.
+          if (configExists(configName)) {
+            dependencies.addKspProcessorDependencies(configName)
           }
         }
       }
@@ -211,19 +230,19 @@ private fun Project.enableKotlinInject() {
     )
     dependencies.add(
       "implementation",
-      "$APP_PLATFORM_GROUP:kotlin-inject-contribute-public:" + APP_PLATFORM_VERSION,
+      "$APP_PLATFORM_GROUP:kotlin-inject-contribute-public:$APP_PLATFORM_VERSION",
     )
     dependencies.add(
       "implementation",
-      "software.amazon.lastmile.kotlin.inject.anvil:runtime:" + KOTLIN_INJECT_ANVIL_VERSION,
+      "software.amazon.lastmile.kotlin.inject.anvil:runtime:$KOTLIN_INJECT_ANVIL_VERSION",
     )
     dependencies.add(
       "implementation",
-      "software.amazon.lastmile.kotlin.inject.anvil:runtime-optional:" + KOTLIN_INJECT_ANVIL_VERSION,
+      "software.amazon.lastmile.kotlin.inject.anvil:runtime-optional:$KOTLIN_INJECT_ANVIL_VERSION",
     )
     dependencies.add(
       "implementation",
-      "me.tatarka.inject:kotlin-inject-runtime:" + KOTLIN_INJECT_VERSION,
+      "me.tatarka.inject:kotlin-inject-runtime:$KOTLIN_INJECT_VERSION",
     )
     dependencies.addKspProcessorDependencies("ksp")
   }

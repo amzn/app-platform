@@ -122,6 +122,7 @@ viewbinding-agp = { module = "androidx.databinding:viewbinding", version.ref = "
 
 [plugins]
 android-app = { id = "com.android.application", version.ref = "agp" }
+android-kmp-library = { id = "com.android.kotlin.multiplatform.library", version.ref = "agp" }
 android-library = { id = "com.android.library", version.ref = "agp" }
 android-lint = { id = "com.android.lint", version.ref = "agp" }
 app-platform = { id = "software.amazon.app.platform" }
