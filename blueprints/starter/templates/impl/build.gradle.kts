@@ -49,7 +49,6 @@ kotlin {
 }
 
 android {
-  namespace = "software.amazon.app.platform.template.templates.impl"
   compileSdk = libs.versions.android.compileSdk.get().toInt()
 
   defaultConfig {
