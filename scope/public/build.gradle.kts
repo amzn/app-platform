@@ -1,10 +1,20 @@
+import com.android.build.api.dsl.androidLibrary
+
 plugins {
-  id("com.android.library").version("8.12.0")
+  id("com.android.kotlin.multiplatform.library").version("8.12.0")
   id("org.jetbrains.kotlin.multiplatform").version("2.2.0")
 }
 
 kotlin {
-  androidTarget()
+  androidLibrary {
+    namespace = "some.namespace"
+    compileSdk = 36
+    minSdk = 36
+
+    withHostTest {
+      isReturnDefaultValues = true
+    }
+  }
 
   sourceSets {
     commonTest {
@@ -14,13 +24,4 @@ kotlin {
       }
     }
   }
-}
-
-android {
-  namespace = "some.namespace"
-  compileSdk = 36
-
-  defaultConfig.minSdk = 36
-
-  testOptions.unitTests.isReturnDefaultValues = true
 }
