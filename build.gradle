@@ -1,3 +1,0 @@
- plugins {
-     id 'software.amazon.app.platform.root'
- }
