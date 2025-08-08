@@ -1,7 +1,7 @@
 [versions]
 assertk = "0.28.1"
 app-platfrom = "0.0.4"
-agp = "8.11.1"
+agp = "8.13.0-alpha03"
 android-compileSdk = "36"
 android-minSdk = "21"
 android-targetSdk = "36"
@@ -26,7 +26,7 @@ coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", ve
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }
-androidLibrary = { id = "com.android.library", version.ref = "agp" }
+androidKmpLibrary = { id = "com.android.kotlin.multiplatform.library", version.ref = "agp" }
 appPlatform = { id = "software.amazon.app.platform", version.ref = "app-platfrom" }
 kotlinMultiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
 composeHotReload = { id = "org.jetbrains.compose.hot-reload", version.ref = "compose-hot-reload" }
