@@ -25,7 +25,7 @@ assertk = "0.28.1"
 auto-service = "1.1.1"
 auto-service-ksp = "1.2.0"
 build-config = "5.6.7"
-compose-hot-reload-plugin = "1.0.0-beta04"
+compose-hot-reload-plugin = "1.0.0-beta05"
 # https://www.jetbrains.com/help/kotlin-multiplatform-dev/compose-compatibility-and-versioning.html#kotlin-compatibility
 # https://mvnrepository.com/artifact/org.jetbrains.compose/compose-gradle-plugin
 # https://github.com/JetBrains/compose-multiplatform/releases
