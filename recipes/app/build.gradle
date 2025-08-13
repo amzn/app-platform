@@ -20,6 +20,11 @@ appPlatform {
 
 dependencies {
     commonMainImplementation project(':recipes:common:impl')
+    commonMainImplementation compose.components.resources
+    commonMainImplementation compose.material3
+    commonMainImplementation compose.materialIconsExtended
+    commonMainImplementation compose.runtimeSaveable
+    commonMainImplementation compose.ui
 
     androidMainImplementation libs.androidx.activity.compose
 }
