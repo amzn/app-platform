@@ -4,13 +4,17 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.ContributesTo
 import software.amazon.app.platform.renderer.ComposeRendererFactory
 import software.amazon.app.platform.renderer.getComposeRenderer
 import software.amazon.app.platform.scope.RootScopeProvider
 import software.amazon.app.platform.scope.Scope
 import software.amazon.app.platform.scope.di.diComponent
-import software.amazon.lastmile.kotlin.inject.anvil.AppScope
-import software.amazon.lastmile.kotlin.inject.anvil.ContributesTo
+import software.amazon.app.platform.scope.di.metro.metroComponent
+
+//import software.amazon.lastmile.kotlin.inject.anvil.AppScope
+//import software.amazon.lastmile.kotlin.inject.anvil.ContributesTo
 
 /**
  * Responsible for creating the app component [component] and producing templates. Call [destroy] to
@@ -24,7 +28,7 @@ class DesktopApp(private val component: (RootScopeProvider) -> AppComponent) : R
   private val demoApplication = DemoApplication().apply { create(component(this)) }
 
   private val templateProvider =
-    rootScope.diComponent<Component>().templateProviderFactory.createTemplateProvider()
+    rootScope.metroComponent<Component>().templateProviderFactory.createTemplateProvider()
 
   /** Call this composable function to start rendering templates on the screen. */
   @Composable

@@ -12,7 +12,7 @@ plugins {
 // This extension comes from our published plugin.
 appPlatform {
     enableComposeUi true
-    enableKotlinInject true
+    enableMetro true
     enableModuleStructure true
     enableMoleculePresenters true
     addImplModuleDependencies true

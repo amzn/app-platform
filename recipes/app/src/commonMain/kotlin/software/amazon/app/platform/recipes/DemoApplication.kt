@@ -4,6 +4,7 @@ import software.amazon.app.platform.scope.RootScopeProvider
 import software.amazon.app.platform.scope.Scope
 import software.amazon.app.platform.scope.coroutine.addCoroutineScopeScoped
 import software.amazon.app.platform.scope.di.addDiComponent
+import software.amazon.app.platform.scope.di.metro.addMetroComponent
 import software.amazon.app.platform.scope.register
 
 /**
@@ -23,7 +24,7 @@ class DemoApplication : RootScopeProvider {
 
     _rootScope =
       Scope.buildRootScope {
-        addDiComponent(appComponent)
+        addMetroComponent(appComponent)
 
         addCoroutineScopeScoped(appComponent.appScopeCoroutineScopeScoped)
       }

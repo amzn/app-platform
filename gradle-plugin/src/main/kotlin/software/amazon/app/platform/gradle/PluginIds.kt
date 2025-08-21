@@ -10,4 +10,5 @@ internal object PluginIds {
   const val KOTLIN_JVM = "org.jetbrains.kotlin.jvm"
   const val KOTLIN_ANDROID = "org.jetbrains.kotlin.android"
   const val KSP = "com.google.devtools.ksp"
+  const val METRO = "dev.zacsweers.metro"
 }

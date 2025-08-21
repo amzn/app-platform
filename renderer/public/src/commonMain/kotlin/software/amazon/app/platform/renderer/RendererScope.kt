@@ -1,6 +1,6 @@
 package software.amazon.app.platform.renderer
 
-import software.amazon.app.platform.inject.ContributesRenderer
+//import software.amazon.app.platform.inject.ContributesRenderer
 
 /**
  * A Scope specifically for `Renderer` implementations.

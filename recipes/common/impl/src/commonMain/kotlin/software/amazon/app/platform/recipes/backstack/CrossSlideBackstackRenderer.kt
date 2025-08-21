@@ -18,8 +18,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.LocalWindowInfo
-import me.tatarka.inject.annotations.Inject
-import software.amazon.app.platform.inject.ContributesRenderer
+import dev.zacsweers.metro.Inject
+import software.amazon.app.platform.inject.metro.ContributesRenderer
 import software.amazon.app.platform.recipes.backstack.CrossSlideBackstackPresenter.Model
 import software.amazon.app.platform.renderer.ComposeRenderer
 import software.amazon.app.platform.renderer.RendererFactory

@@ -1,18 +1,21 @@
 package software.amazon.app.platform.renderer
 
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.ContributesTo
+import dev.zacsweers.metro.ForScope
+import dev.zacsweers.metro.GraphExtension
+import dev.zacsweers.metro.Provider
+import dev.zacsweers.metro.Provides
+import dev.zacsweers.metro.SingleIn
 import kotlin.reflect.KClass
 import software.amazon.app.platform.presenter.BaseModel
-import software.amazon.lastmile.kotlin.inject.anvil.AppScope
-import software.amazon.lastmile.kotlin.inject.anvil.ContributesSubcomponent
-import software.amazon.lastmile.kotlin.inject.anvil.ForScope
-import software.amazon.lastmile.kotlin.inject.anvil.SingleIn
 
 /** Component that provides all [Renderer] instance from the dependency graph. */
-@ContributesSubcomponent(RendererScope::class)
+@GraphExtension(RendererScope::class)
 @SingleIn(RendererScope::class)
 public interface RendererComponent {
   /** All [Renderer]s provided in the dependency graph. */
-  public val renderers: Map<KClass<out BaseModel>, () -> Renderer<*>>
+  public val renderers: Map<KClass<out BaseModel>, Provider<Renderer<*>>>
 
   /**
    * [RendererFactory]s cache renderers based on the model type. This works well, when there's a one
@@ -28,9 +31,10 @@ public interface RendererComponent {
   public val modelToRendererMapping: Map<KClass<out BaseModel>, KClass<out Renderer<*>>>
 
   /** The parent interface to create a [RendererComponent]. */
-  @ContributesSubcomponent.Factory(AppScope::class)
+  @ContributesTo(AppScope::class)
+  @GraphExtension.Factory
   public interface Parent {
     /** Creates a new [RendererComponent]. */
-    public fun rendererComponent(factory: RendererFactory): RendererComponent
+    public fun rendererComponent(@Provides factory: RendererFactory): RendererComponent
   }
 }

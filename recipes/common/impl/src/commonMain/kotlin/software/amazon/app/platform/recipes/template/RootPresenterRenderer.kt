@@ -28,8 +28,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import me.tatarka.inject.annotations.Inject
-import software.amazon.app.platform.inject.ContributesRenderer
+import dev.zacsweers.metro.Inject
+import software.amazon.app.platform.inject.metro.ContributesRenderer
 import software.amazon.app.platform.presenter.BaseModel
 import software.amazon.app.platform.presenter.molecule.backgesture.BackGestureDispatcherPresenter
 import software.amazon.app.platform.presenter.molecule.backgesture.ForwardBackPressEventsToPresenters
@@ -129,4 +129,68 @@ class RootPresenterRenderer(
       }
     }
   }
+
+  //  * @ContributesTo(RendererScope::class)
+  // * interface IncrementRendererComponent {
+  // *     @Provides
+  // *     @IntoMap
+  // *     fun provideIncrementRendererIncrementPresenterModel(
+  // *         renderer: () -> IncrementRenderer,
+  // *     ): Pair<KClass<out BaseModel>, () -> Renderer<*>> = IncrementPresenter.Model::class to renderer
+  // *
+  // *     @Provides
+  // *     fun provideIncrementRenderer(): IncrementRenderer = IncrementRenderer()
+  // * }
+
+  //  *     @Provides
+  // *     @IntoMap
+  // *     @ForScope(RendererScope::class)
+  // *     fun provideRendererModelKey(): Pair<KClass<out BaseModel>, KClass<out Renderer<*>>> =
+  // *         Model::class to TestRenderer::class
+
+//  @ContributesTo(RendererScope::class)
+//  interface Component {
+//    @Provides
+//    @IntoMap
+//    @RendererKey(RecipesAppTemplate::class)
+//    fun provideRenderer(
+//      renderer: Provider<RootPresenterRenderer>
+//    ): Renderer<*> = renderer.invoke()
+//
+//    @Provides
+//    @IntoMap
+//    @RendererKey(RecipesAppTemplate.FullScreenTemplate::class)
+//    fun provideRenderer2(
+//      renderer: Provider<RootPresenterRenderer>
+//    ): Renderer<*> = renderer.invoke()
+//
+//    @Provides
+//    @IntoMap
+//    @ForScope(RendererScope::class)
+//    @RendererKey(RecipesAppTemplate::class)
+//    fun provideRendererMapping(
+////      renderer: Provider<RootPresenterRenderer>
+//    ): KClass<out Renderer<*>> = RootPresenterRenderer::class
+//
+//    @Provides
+//    @IntoMap
+//    @ForScope(RendererScope::class)
+//    @RendererKey(RecipesAppTemplate.FullScreenTemplate::class)
+//    fun provideRendererMapping2(
+////      renderer: Provider<RootPresenterRenderer>
+//    ): KClass<out Renderer<*>> = RootPresenterRenderer::class
+//  }
 }
+
+//@Target(
+//  AnnotationTarget.FUNCTION,
+//  AnnotationTarget.FIELD,
+//  AnnotationTarget.PROPERTY,
+//  AnnotationTarget.PROPERTY_GETTER,
+//  AnnotationTarget.CLASS,
+//  AnnotationTarget.TYPE,
+//)
+//@Retention(AnnotationRetention.RUNTIME)
+//@MapKey
+//public annotation class RendererKey(val value: KClass<*>)
+

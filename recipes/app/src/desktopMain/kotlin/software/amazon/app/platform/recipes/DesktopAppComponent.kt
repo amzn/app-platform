@@ -1,11 +1,10 @@
 package software.amazon.app.platform.recipes
 
-import me.tatarka.inject.annotations.Component
-import me.tatarka.inject.annotations.Provides
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.DependencyGraph
+import dev.zacsweers.metro.Provides
+import dev.zacsweers.metro.SingleIn
 import software.amazon.app.platform.scope.RootScopeProvider
-import software.amazon.lastmile.kotlin.inject.anvil.AppScope
-import software.amazon.lastmile.kotlin.inject.anvil.MergeComponent
-import software.amazon.lastmile.kotlin.inject.anvil.SingleIn
 
 /**
  * The final Desktop app component. Unlike the Android and iOS specific counterpart, this class
@@ -13,8 +12,16 @@ import software.amazon.lastmile.kotlin.inject.anvil.SingleIn
  *
  * [rootScopeProvider] is provided in the [DesktopAppComponent] and can be injected.
  */
-@Component
-@MergeComponent(AppScope::class)
+@DependencyGraph(scope = AppScope::class)
+//@MergeComponent(AppScope::class)
 @SingleIn(AppScope::class)
-abstract class DesktopAppComponent(@get:Provides val rootScopeProvider: RootScopeProvider) :
-  DesktopAppComponentMerged
+interface DesktopAppComponent
+//(@get:Provides val rootScopeProvider: RootScopeProvider)
+//  :
+//  DesktopAppComponentMerged{
+{
+  @DependencyGraph.Factory
+  fun interface Factory {
+    fun create(@Provides rootScopeProvider: RootScopeProvider): DesktopAppComponent
+  }
+}

@@ -9,7 +9,8 @@ plugins {
 
 appPlatform {
     enableComposeUi true
-    enableKotlinInject true
+//    enableKotlinInject true
+    enableMetro true
     enableModuleStructure true
     enableMoleculePresenters true
 }

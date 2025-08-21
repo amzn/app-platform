@@ -1,6 +1,7 @@
 package software.amazon.app.platform.recipes
 
 import android.app.Application
+import dev.zacsweers.metro.createGraphFactory
 import software.amazon.app.platform.scope.RootScopeProvider
 import software.amazon.app.platform.scope.Scope
 
@@ -22,6 +23,6 @@ open class AndroidApplication : Application(), RootScopeProvider {
 
   /** Create the [AppComponent]. In UI tests we use a different instance. */
   protected open fun component(demoApplication: DemoApplication): AppComponent {
-    return AndroidAppComponent::class.create(this, demoApplication)
+    return createGraphFactory<AndroidAppComponent.Factory>().create(this, demoApplication)
   }
 }

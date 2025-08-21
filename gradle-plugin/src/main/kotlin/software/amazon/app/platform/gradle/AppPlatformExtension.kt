@@ -52,6 +52,24 @@ constructor(objects: ObjectFactory, private val project: Project) {
 
   internal fun isKotlinInjectEnabled(): Property<Boolean> = enableKotlinInject
 
+  private val enableMetro: Property<Boolean> =
+    objects.property(Boolean::class.java).convention(false)
+
+  /** Adds KSP and kotlin-inject as dependency. */
+  public fun enableMetro(enabled: Boolean) {
+    if (enabled == enableMetro.get()) return
+
+    enableMetro.set(enabled)
+    enableMetro.disallowChanges()
+
+    if (enabled) {
+      addPublicModuleDependencies(true)
+      project.enableMetro()
+    }
+  }
+
+  internal fun isMetroEnabled(): Property<Boolean> = enableMetro
+
   private val enableMoleculePresenters: Property<Boolean> =
     objects.property(Boolean::class.java).convention(false)
 
@@ -246,6 +264,121 @@ private fun Project.enableKotlinInject() {
     )
     dependencies.addKspProcessorDependencies("ksp")
   }
+}
+
+private fun Project.enableMetro() {
+  plugins.apply(PluginIds.METRO)
+
+  // Enable KSP for our custom extensions.
+  plugins.apply(PluginIds.KSP)
+
+  fun DependencyHandler.addKspProcessorDependencies(kspConfigurationName: String) {
+    add(
+      kspConfigurationName,
+      "$APP_PLATFORM_GROUP:metro-contribute-public:$APP_PLATFORM_VERSION",
+    )
+    add(
+      kspConfigurationName,
+      "$APP_PLATFORM_GROUP:metro-contribute-impl-code-generators:$APP_PLATFORM_VERSION",
+    )
+  }
+
+  plugins.withId(PluginIds.KOTLIN_MULTIPLATFORM) {
+    kmpExtension.sourceSets.getByName("commonMain").dependencies {
+      implementation("$APP_PLATFORM_GROUP:metro-public:$APP_PLATFORM_VERSION")
+      implementation("$APP_PLATFORM_GROUP:metro-contribute-public:$APP_PLATFORM_VERSION")
+
+      kmpExtension.targets.configureEach { target ->
+        // Skip the metadata, because we want to run KSP only for the concrete platforms.
+        if (target.name != "metadata") {
+          target.compilations.configureEach { compilation ->
+            fun configExists(name: String): Boolean = configurations.any { it.name == name }
+
+            // The implementationConfigurationName name is
+            // 'iosSimulatorArm64CompilationImplementation', 'wasmJsTestCompileClasspath' or
+            // 'desktopCompileClasspath'.
+            //
+            // E.g. 'desktopCompileClasspath' with give use 'kspDesktop'
+            var configName =
+              "ksp" +
+                compilation.implementationConfigurationName
+                  .substringBefore("Compilation")
+                  .capitalize()
+
+            if (!configExists(configName) && target.platformType == KotlinPlatformType.androidJvm) {
+              // Android has different naming for some reason.
+              //
+              // E.g. for instrumentation tests 'kspAndroidDebugAndroidTest' should actually be
+              // 'kspAndroidAndroidTestDebug', but we will use 'kspAndroidAndroidTest'.
+              //
+              // For unit tests 'kspAndroidDebugUnitTest' should actually be 'kspAndroidTestDebug',
+              // but we will use 'kspAndroidTest'.
+              when {
+                configName.endsWith("AndroidTest") -> configName = "kspAndroidAndroidTest"
+                configName.endsWith("UnitTest") -> configName = "kspAndroidTest"
+              }
+            }
+
+            // Check again if the config exists.
+            if (configExists(configName)) {
+              dependencies.addKspProcessorDependencies(configName)
+            }
+          }
+        }
+      }
+    }
+  }
+
+  plugins.withIds(PluginIds.KOTLIN_ANDROID, PluginIds.KOTLIN_JVM) {
+    dependencies.add(
+      "implementation",
+      "$APP_PLATFORM_GROUP:metro-public:$APP_PLATFORM_VERSION",
+    )
+
+    dependencies.add(
+      "implementation",
+      "$APP_PLATFORM_GROUP:metro-contribute-public:$APP_PLATFORM_VERSION",
+    )
+
+    dependencies.addKspProcessorDependencies("ksp")
+  }
+
+
+  plugins.withId(PluginIds.KOTLIN_MULTIPLATFORM) {
+//    kmpExtension.sourceSets.getByName("commonMain").dependencies {
+//      implementation("me.tatarka.inject:kotlin-inject-runtime:$KOTLIN_INJECT_VERSION")
+//      implementation("$APP_PLATFORM_GROUP:kotlin-inject-public:$APP_PLATFORM_VERSION")
+//      implementation(
+//        "software.amazon.lastmile.kotlin.inject.anvil:runtime:$KOTLIN_INJECT_ANVIL_VERSION"
+//      )
+//      implementation(
+//        "software.amazon.lastmile.kotlin.inject.anvil:runtime-optional:" +
+//          KOTLIN_INJECT_ANVIL_VERSION
+//      )
+//    }
+
+  }
+
+//  plugins.withIds(PluginIds.KOTLIN_ANDROID, PluginIds.KOTLIN_JVM) {
+//    dependencies.add(
+//      "implementation",
+//      "$APP_PLATFORM_GROUP:kotlin-inject-public:$APP_PLATFORM_VERSION",
+//    )
+//
+//    dependencies.add(
+//      "implementation",
+//      "software.amazon.lastmile.kotlin.inject.anvil:runtime:$KOTLIN_INJECT_ANVIL_VERSION",
+//    )
+//    dependencies.add(
+//      "implementation",
+//      "software.amazon.lastmile.kotlin.inject.anvil:runtime-optional:$KOTLIN_INJECT_ANVIL_VERSION",
+//    )
+//    dependencies.add(
+//      "implementation",
+//      "me.tatarka.inject:kotlin-inject-runtime:$KOTLIN_INJECT_VERSION",
+//    )
+//
+//  }
 }
 
 private fun Project.enableMoleculePresenters() {

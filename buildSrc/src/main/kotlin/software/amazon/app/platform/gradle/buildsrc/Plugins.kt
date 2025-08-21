@@ -14,4 +14,5 @@ internal object Plugins {
   const val KSP = "com.google.devtools.ksp"
   const val KTFMT = "com.ncorti.ktfmt.gradle"
   const val MAVEN_PUBLISH = "com.vanniktech.maven.publish"
+  const val METRO = "dev.zacsweers.metro"
 }

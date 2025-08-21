@@ -19,15 +19,15 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import kotlin.time.Duration.Companion.seconds
 import kotlinx.coroutines.delay
-import software.amazon.app.platform.inject.ContributesRenderer
+import software.amazon.app.platform.inject.metro.ContributesRenderer
 import software.amazon.app.platform.presenter.BaseModel
 import software.amazon.app.platform.presenter.molecule.MoleculePresenter
 import software.amazon.app.platform.recipes.appbar.AppBarConfig
 import software.amazon.app.platform.recipes.appbar.AppBarConfigModel
 import software.amazon.app.platform.recipes.appbar.menu.MenuPresenter.Model
 import software.amazon.app.platform.renderer.ComposeRenderer
+import kotlin.time.Duration.Companion.seconds
 
 /** This presenter provides a custom menu in the App Bar. */
 class MenuPresenter : MoleculePresenter<Unit, Model> {

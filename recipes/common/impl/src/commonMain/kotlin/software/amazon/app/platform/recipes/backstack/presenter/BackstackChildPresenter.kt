@@ -19,7 +19,7 @@ import androidx.compose.ui.unit.dp
 import kotlin.time.Duration.Companion.seconds
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
-import software.amazon.app.platform.inject.ContributesRenderer
+import software.amazon.app.platform.inject.metro.ContributesRenderer
 import software.amazon.app.platform.presenter.BaseModel
 import software.amazon.app.platform.presenter.molecule.MoleculePresenter
 import software.amazon.app.platform.recipes.appbar.AppBarConfig

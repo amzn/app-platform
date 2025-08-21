@@ -3,7 +3,8 @@ plugins {
 }
 
 appPlatformBuildSrc {
-    enableDi true
+//    enableDi true
+    enableMetro true
     enablePublishing true
 }
 

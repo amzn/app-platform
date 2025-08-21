@@ -5,7 +5,7 @@ package software.amazon.app.platform.recipes.nav3
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.remember
-import me.tatarka.inject.annotations.Inject
+import dev.zacsweers.metro.Inject
 import software.amazon.app.platform.presenter.BaseModel
 import software.amazon.app.platform.presenter.molecule.MoleculePresenter
 import software.amazon.app.platform.recipes.appbar.AppBarConfig

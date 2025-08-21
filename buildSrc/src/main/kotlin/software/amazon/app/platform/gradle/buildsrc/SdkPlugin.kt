@@ -27,6 +27,8 @@ internal object SdkPlugin {
       if (parent.name == "contribute" && parent.parent?.name == "kotlin-inject-extensions") {
         // Change the artifact ID, because "contribute" alone is a weird name.
         artifactId(libraryName = "kotlin-inject-contribute")
+      } else if (parent.name == "contribute" && parent.parent?.name == "metro-extensions") {
+        artifactId(libraryName = "metro-contribute")
       } else {
         artifactId()
       }

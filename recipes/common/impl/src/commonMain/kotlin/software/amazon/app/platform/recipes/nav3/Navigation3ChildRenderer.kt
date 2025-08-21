@@ -12,7 +12,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import software.amazon.app.platform.inject.ContributesRenderer
+import software.amazon.app.platform.inject.metro.ContributesRenderer
 import software.amazon.app.platform.recipes.nav3.Navigation3ChildPresenter.Model
 import software.amazon.app.platform.renderer.ComposeRenderer
 

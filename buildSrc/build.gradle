@@ -77,6 +77,7 @@ dependencies {
     implementation libs.kotlin.hierarchy.plugin
     implementation libs.ktfmt.gradle.plugin
     implementation libs.maven.publish.gradle.plugin
+    implementation libs.metro.gradle.plugin
     implementation libs.detekt.gradle.plugin
     implementation "$GROUP:gradle-plugin:$VERSION_NAME"
 }

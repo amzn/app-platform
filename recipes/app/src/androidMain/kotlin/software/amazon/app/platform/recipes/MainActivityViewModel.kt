@@ -2,12 +2,12 @@ package software.amazon.app.platform.recipes
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.ContributesTo
 import kotlinx.coroutines.flow.StateFlow
 import software.amazon.app.platform.recipes.template.RecipesAppTemplate
 import software.amazon.app.platform.scope.RootScopeProvider
-import software.amazon.app.platform.scope.di.diComponent
-import software.amazon.lastmile.kotlin.inject.anvil.AppScope
-import software.amazon.lastmile.kotlin.inject.anvil.ContributesTo
+import software.amazon.app.platform.scope.di.metro.metroComponent
 
 /**
  * `ViewModel` that hosts the stream of templates and survives configuration changes. Note that we
@@ -15,7 +15,7 @@ import software.amazon.lastmile.kotlin.inject.anvil.ContributesTo
  */
 class MainActivityViewModel(application: Application) : AndroidViewModel(application) {
 
-  private val component = (application as RootScopeProvider).rootScope.diComponent<Component>()
+  private val component = (application as RootScopeProvider).rootScope.metroComponent<Component>()
   private val templateProvider = component.templateProviderFactory.createTemplateProvider()
 
   /** The stream of templates that are rendered by [MainActivity]. */

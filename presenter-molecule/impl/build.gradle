@@ -4,6 +4,7 @@ plugins {
 
 appPlatformBuildSrc {
     enableDi true
+    enableMetro true
     enableMolecule true
     enablePublishing true
 

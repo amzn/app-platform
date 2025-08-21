@@ -3,9 +3,9 @@ package software.amazon.app.platform.recipes.nav3
 import androidx.compose.runtime.Composable
 import androidx.navigation3.runtime.NavEntry
 import androidx.navigation3.ui.NavDisplay
-import me.tatarka.inject.annotations.Inject
-import software.amazon.app.platform.inject.ContributesRenderer
+import dev.zacsweers.metro.Inject
 import software.amazon.app.platform.recipes.nav3.Navigation3HomePresenter.Event
+import software.amazon.app.platform.inject.metro.ContributesRenderer
 import software.amazon.app.platform.recipes.nav3.Navigation3HomePresenter.Model
 import software.amazon.app.platform.renderer.ComposeRenderer
 import software.amazon.app.platform.renderer.RendererFactory

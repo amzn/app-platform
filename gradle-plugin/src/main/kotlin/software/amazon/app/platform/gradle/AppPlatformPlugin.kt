@@ -92,6 +92,9 @@ public open class AppPlatformPlugin : Plugin<Project> {
       if (appPlatform.isKotlinInjectEnabled().get()) {
         add("$APP_PLATFORM_GROUP:kotlin-inject-impl:$APP_PLATFORM_VERSION")
       }
+      if (appPlatform.isMetroEnabled().get()) {
+        add("$APP_PLATFORM_GROUP:metro-impl:$APP_PLATFORM_VERSION")
+      }
     }
 
     plugins.withId(PluginIds.KOTLIN_MULTIPLATFORM) {

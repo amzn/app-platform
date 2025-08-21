@@ -243,12 +243,71 @@ public open class KmpPlugin : Plugin<Project> {
         // Avoid creating a circular dependency.
         if (
           path != ":kotlin-inject:public" &&
-            !path.startsWith(":kotlin-inject-extensions:contribute:")
+          !path.startsWith(":kotlin-inject-extensions:contribute:")
         ) {
           add(kspConfigurationName, project(":kotlin-inject-extensions:contribute:public"))
           add(
             kspConfigurationName,
             project(":kotlin-inject-extensions:contribute:impl-code-generators"),
+          )
+        }
+      }
+
+      if (isKmpModule) {
+        kmpExtension.targets.configureEach {
+          if (it.name != "metadata") {
+            dependencies.addKspProcessorDependencies("ksp${it.name.capitalize()}")
+            dependencies.addKspProcessorDependencies("ksp${it.name.capitalize()}Test")
+          }
+        }
+      } else {
+        dependencies.addKspProcessorDependencies("ksp")
+      }
+    }
+
+    fun Project.enableMetro() {
+      plugins.apply(Plugins.METRO)
+
+      // Enable KSP for our custom extensions.
+      plugins.apply(Plugins.KSP)
+      tasks.withType(KspTask::class.java).configureEach { kspTask ->
+        if (kspTask is KotlinCompile) {
+          kspTask.compilerOptions.jvmTarget.set(javaTarget)
+        }
+      }
+
+      if (path != ":metro:public") {
+        if (isKmpModule) {
+          kmpExtension.sourceSets.getByName("commonMain").dependencies {
+            implementation(project(":metro:public"))
+
+            if (!path.startsWith(":metro-extensions:contribute:")) {
+              implementation(project(":metro-extensions:contribute:public"))
+            }
+          }
+        } else {
+          dependencies.add("implementation", project(":metro:public"))
+
+          if (!path.startsWith(":metro-extensions:contribute:")) {
+            dependencies.add(
+              "implementation",
+              project(":metro-extensions:contribute:public"),
+            )
+          }
+
+        }
+      }
+
+      fun DependencyHandler.addKspProcessorDependencies(kspConfigurationName: String) {
+        // Avoid creating a circular dependency.
+        if (
+          path != ":metro:public" &&
+          !path.startsWith(":metro-extensions:contribute:")
+        ) {
+          add(kspConfigurationName, project(":metro-extensions:contribute:public"))
+          add(
+            kspConfigurationName,
+            project(":metro-extensions:contribute:impl-code-generators"),
           )
         }
       }

@@ -1,11 +1,10 @@
 package software.amazon.app.platform.presenter.molecule
 
 import app.cash.molecule.RecompositionMode
-import kotlin.coroutines.CoroutineContext
-import kotlin.coroutines.EmptyCoroutineContext
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.plus
-import software.amazon.app.platform.presenter.PresenterCoroutineScope
+import kotlin.coroutines.CoroutineContext
+import kotlin.coroutines.EmptyCoroutineContext
 
 /**
  * Creates new [MoleculeScope]s with the given defaults. When calling [createMoleculeScope], then
@@ -13,7 +12,7 @@ import software.amazon.app.platform.presenter.PresenterCoroutineScope
  * elements to created scopes. [recompositionMode] is used for launching [MoleculePresenter]s.
  */
 internal class DefaultMoleculeScopeFactory(
-  @PresenterCoroutineScope private val coroutineScopeFactory: () -> CoroutineScope,
+  private val coroutineScopeFactory: () -> CoroutineScope,
   private val coroutineContext: CoroutineContext = EmptyCoroutineContext,
   private val recompositionMode: RecompositionMode,
 ) : MoleculeScopeFactory {

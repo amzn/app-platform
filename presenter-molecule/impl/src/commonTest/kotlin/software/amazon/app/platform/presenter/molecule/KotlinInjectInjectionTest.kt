@@ -20,7 +20,7 @@ import software.amazon.lastmile.kotlin.inject.anvil.AppScope
 import software.amazon.lastmile.kotlin.inject.anvil.ForScope
 import software.amazon.lastmile.kotlin.inject.anvil.SingleIn
 
-class InjectionTest {
+class KotlinInjectInjectionTest {
 
   @Test
   fun `the PresenterCoroutineScope can be injected lazily`() {
@@ -40,7 +40,7 @@ class InjectionTest {
 
 @Component
 @SingleIn(AppScope::class)
-abstract class TestComponent(
+abstract class KotlinInjectTestComponent(
   private val coroutineScope: CoroutineScope,
   private val coroutineDispatcher: CoroutineDispatcher,
 ) : PresenterCoroutineScopeComponent {
@@ -55,12 +55,12 @@ abstract class TestComponent(
   fun provideMainCoroutineDispatcher(): CoroutineDispatcher = coroutineDispatcher
 
   @Provides
-  fun provideMoleculeScopeFactory(factory: TestMoleculeScopeFactory): MoleculeScopeFactory = factory
+  fun provideMoleculeScopeFactory(factory: KotlinInjectTestMoleculeScopeFactory): MoleculeScopeFactory = factory
 }
 
 @Inject
 @SingleIn(AppScope::class)
-class TestMoleculeScopeFactory(
+class KotlinInjectTestMoleculeScopeFactory(
   @PresenterCoroutineScope coroutineScopeFactory: () -> CoroutineScope
 ) :
   MoleculeScopeFactory by DefaultMoleculeScopeFactory(
@@ -73,4 +73,4 @@ class TestMoleculeScopeFactory(
 expect fun createTestComponent(
   coroutineScope: CoroutineScope,
   coroutineDispatcher: CoroutineDispatcher,
-): TestComponent
+): KotlinInjectTestComponent

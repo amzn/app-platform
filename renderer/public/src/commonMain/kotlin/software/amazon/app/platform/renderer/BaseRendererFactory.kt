@@ -1,11 +1,11 @@
 package software.amazon.app.platform.renderer
 
-import kotlin.reflect.KClass
 import kotlinx.atomicfu.locks.SynchronizedObject
 import kotlinx.atomicfu.locks.synchronized
 import software.amazon.app.platform.presenter.BaseModel
 import software.amazon.app.platform.scope.RootScopeProvider
-import software.amazon.app.platform.scope.di.diComponent
+import software.amazon.app.platform.scope.di.metro.metroComponent
+import kotlin.reflect.KClass
 
 /**
  * Default implementation for [RendererFactory]. Implementations usually override [createRenderer]
@@ -14,9 +14,9 @@ import software.amazon.app.platform.scope.di.diComponent
 public open class BaseRendererFactory(rootScopeProvider: RootScopeProvider) : RendererFactory {
 
   private val rendererComponent =
-    rootScopeProvider.rootScope.diComponent<RendererComponent.Parent>().rendererComponent(this)
+    rootScopeProvider.rootScope.metroComponent<RendererComponent.Parent>().rendererComponent(this)
 
-  private val renderers: Map<KClass<out BaseModel>, () -> Renderer<*>> = rendererComponent.renderers
+  private val renderers: Map<KClass<out BaseModel>, () -> Renderer<*>> = rendererComponent.renderers.mapValues { {it.value.invoke()} }
 
   private val cacheKeys: Map<KClass<out BaseModel>, KClass<out Renderer<*>>> =
     rendererComponent.modelToRendererMapping

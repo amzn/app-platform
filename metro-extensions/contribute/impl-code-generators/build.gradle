@@ -1,0 +1,66 @@
+plugins {
+    id 'software.amazon.app.platform.lib.jvm'
+    id 'com.google.devtools.ksp'
+
+    alias(libs.plugins.build.config)
+}
+
+appPlatformBuildSrc {
+    enablePublishing true
+}
+
+test {
+    useJUnitPlatform()
+
+    // Since Kotlin 2.0 we need more memory to run our tests.
+    maxHeapSize = "2g"
+}
+
+dependencies {
+    implementation libs.ksp.api
+
+    implementation libs.kotlin.poet
+    implementation libs.kotlin.poet.ksp
+
+    implementation libs.auto.service.annotations
+    ksp libs.auto.service.ksp
+
+    // Gives us access to annotations.
+    implementation libs.metro.runtime
+//    implementation libs.kotlin.inject.anvil.runtime
+//    implementation libs.kotlin.inject.anvil.runtime.optional
+
+    testImplementation project(':metro:public')
+    testImplementation project(':presenter:public')
+    testImplementation project(':renderer:public')
+//    testImplementation project(':robot:public')
+    testImplementation project(':scope:public')
+    testImplementation libs.kotlin.compile.testing.core
+    testImplementation libs.kotlin.compile.testing.ksp
+
+    // Added so that the compiler plugin is picked up in tests.
+    testImplementation libs.metro.compiler
+
+    // Bump transitive dependency.
+    testImplementation libs.kotlin.compiler.embeddable
+    testImplementation libs.ksp
+    testImplementation libs.ksp.embeddable
+}
+
+buildConfig {
+    useKotlinOutput {
+        internalVisibility = false
+    }
+
+    sourceSets.named("test") {
+        buildConfigField(boolean, 'USE_KSP_2', providers.gradleProperty('ksp.useKSP2').get().toBoolean())
+    }
+}
+
+// We don't need the apiCheck in this module.
+tasks.named('apiCheck').configure {
+    it.enabled = false
+}
+tasks.named('apiDump').configure {
+    it.enabled = false
+}

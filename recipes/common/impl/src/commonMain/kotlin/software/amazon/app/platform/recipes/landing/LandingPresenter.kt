@@ -1,7 +1,7 @@
 package software.amazon.app.platform.recipes.landing
 
 import androidx.compose.runtime.Composable
-import me.tatarka.inject.annotations.Inject
+import dev.zacsweers.metro.Inject
 import software.amazon.app.platform.presenter.BaseModel
 import software.amazon.app.platform.presenter.molecule.MoleculePresenter
 import software.amazon.app.platform.recipes.appbar.menu.MenuPresenter
