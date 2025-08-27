@@ -4,29 +4,29 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.ContributesTo
 import software.amazon.app.platform.renderer.ComposeRendererFactory
 import software.amazon.app.platform.renderer.getComposeRenderer
 import software.amazon.app.platform.scope.RootScopeProvider
 import software.amazon.app.platform.scope.Scope
-import software.amazon.app.platform.scope.di.kotlinInjectComponent
-import software.amazon.lastmile.kotlin.inject.anvil.AppScope
-import software.amazon.lastmile.kotlin.inject.anvil.ContributesTo
+import software.amazon.app.platform.scope.di.metro.metroDependencyGraph
 
 /**
- * Responsible for creating the app component [component] and producing templates. Call [destroy] to
- * clean up any resources.
+ * Responsible for creating the ap [graph] and producing templates. Call [destroy] to clean up any
+ * resources.
  *
- * This class is reused in UI tests, but the tests use a different test specific [AppComponent].
+ * This class is reused in UI tests, but the tests use a different test specific [AppGraph].
  */
-class DesktopApp(private val component: (RootScopeProvider) -> AppComponent) : RootScopeProvider {
+class DesktopApp(private val graph: (RootScopeProvider) -> AppGraph) : RootScopeProvider {
 
   override val rootScope: Scope
     get() = demoApplication.rootScope
 
-  private val demoApplication = DemoApplication().apply { create(component(this)) }
+  private val demoApplication = DemoApplication().apply { create(graph(this)) }
 
   private val templateProvider =
-    rootScope.kotlinInjectComponent<Component>().templateProviderFactory.createTemplateProvider()
+    rootScope.metroDependencyGraph<Graph>().templateProviderFactory.createTemplateProvider()
 
   /** Call this composable function to start rendering templates on the screen. */
   @Composable
@@ -45,9 +45,9 @@ class DesktopApp(private val component: (RootScopeProvider) -> AppComponent) : R
     demoApplication.destroy()
   }
 
-  /** Component interface to give us access to objects from the app component. */
+  /** Graph interface to give us access to objects from the app graph. */
   @ContributesTo(AppScope::class)
-  interface Component {
+  interface Graph {
     /** Gives access to the [TemplateProvider.Factory] from the object graph. */
     val templateProviderFactory: TemplateProvider.Factory
   }
