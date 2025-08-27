@@ -30,8 +30,8 @@ class NavigationPresenterImplTest {
         userManager.login(
           userId = 1L,
           scope = this@runTest,
-          component =
-            object : NavigationPresenterImpl.UserComponent {
+          graph =
+            object : NavigationPresenterImpl.UserGraph {
               override val userPresenter: UserPagePresenter
                 get() = FakeUserPagePresenter()
             },

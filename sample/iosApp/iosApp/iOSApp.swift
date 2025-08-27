@@ -12,7 +12,7 @@ class AppDelegate: NSObject, UIApplicationDelegate, RootScopeProvider {
     }
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil) -> Bool {
-        demoApplication.create(appComponent: IosAppComponentKt.createIosAppComponent(application: application, rootScopeProvider: demoApplication))
+        demoApplication.create(appGraph: IosAppGraphKt.createIosAppGraph(application: application, rootScopeProvider: demoApplication))
         return true
     }
 }

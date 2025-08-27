@@ -5,7 +5,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import me.tatarka.inject.annotations.Inject
+import dev.zacsweers.metro.Inject
 import software.amazon.app.platform.presenter.BaseModel
 import software.amazon.app.platform.presenter.molecule.MoleculePresenter
 import software.amazon.app.platform.sample.user.UserPageListPresenter.Input

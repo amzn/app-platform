@@ -16,8 +16,8 @@ import software.amazon.app.platform.scope.Scope
 import software.amazon.app.platform.scope.Scoped
 import software.amazon.app.platform.scope.buildTestScope
 import software.amazon.app.platform.scope.coroutine.CoroutineScopeScoped
-import software.amazon.app.platform.scope.di.addKotlinInjectComponent
-import software.amazon.app.platform.scope.di.kotlinInjectComponent
+import software.amazon.app.platform.scope.di.metro.addMetroDependencyGraph
+import software.amazon.app.platform.scope.di.metro.metroDependencyGraph
 
 class UserManagerImplTest {
 
@@ -66,13 +66,13 @@ class UserManagerImplTest {
   private fun userManager(rootScopeProvider: RootScopeProvider): UserManagerImpl =
     UserManagerImpl(
       rootScopeProvider,
-      rootScopeProvider.rootScope.kotlinInjectComponent<UserComponent.Factory>(),
+      rootScopeProvider.rootScope.metroDependencyGraph<UserGraph.Factory>(),
     )
 
-  private fun TestScope.appComponent(): Any =
-    object : UserComponent.Factory {
-      override fun createUserComponent(user: User): UserComponent {
-        return object : UserComponent {
+  private fun TestScope.appGraph(): Any =
+    object : UserGraph.Factory {
+      override fun createUserGraph(user: User): UserGraph {
+        return object : UserGraph {
           override val userScopedInstances: Set<Scoped> = emptySet()
           override val userScopeCoroutineScopeScoped: CoroutineScopeScoped =
             CoroutineScopeScoped(coroutineContext + Job() + CoroutineName("TestUserScope"))
@@ -80,10 +80,10 @@ class UserManagerImplTest {
       }
     }
 
-  private fun TestScope.rootScopeProvider(appComponent: Any = appComponent()): RootScopeProvider {
+  private fun TestScope.rootScopeProvider(appGraph: Any = appGraph()): RootScopeProvider {
     return object : RootScopeProvider {
       override val rootScope: Scope =
-        Scope.buildTestScope(this@rootScopeProvider) { addKotlinInjectComponent(appComponent) }
+        Scope.buildTestScope(this@rootScopeProvider) { addMetroDependencyGraph(appGraph) }
     }
   }
 }

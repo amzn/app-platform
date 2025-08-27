@@ -9,7 +9,7 @@ import platform.UIKit.UIViewController
 import software.amazon.app.platform.renderer.ComposeRendererFactory
 import software.amazon.app.platform.renderer.Renderer
 import software.amazon.app.platform.scope.RootScopeProvider
-import software.amazon.app.platform.scope.di.kotlinInjectComponent
+import software.amazon.app.platform.scope.di.metro.metroDependencyGraph
 
 /**
  * This function is called from Swift to hook up the Compose Multiplatform UI.
@@ -24,7 +24,7 @@ fun mainViewController(rootScopeProvider: RootScopeProvider): UIViewController =
     // Create a single instance.
     val templateProvider = remember {
       rootScopeProvider.rootScope
-        .kotlinInjectComponent<IosAppComponent>()
+        .metroDependencyGraph<IosAppGraph>()
         .templateProviderFactory
         .createTemplateProvider()
     }
