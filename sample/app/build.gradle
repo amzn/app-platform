@@ -10,10 +10,17 @@ plugins {
 // This extension comes from our published plugin.
 appPlatform {
     enableComposeUi true
-    enableKotlinInject true
+    enableMetro true
     enableModuleStructure true
     enableMoleculePresenters true
     addImplModuleDependencies true
+}
+
+metro {
+    // Suppress for this sample. The input is used to demonstrate how platform specific
+    // types can be provided in the graph.
+    //noinspection UnnecessaryQualifiedReference
+    unusedGraphInputsSeverity.set(dev.zacsweers.metro.gradle.DiagnosticSeverity.NONE)
 }
 
 // This extension comes from buildSrc.

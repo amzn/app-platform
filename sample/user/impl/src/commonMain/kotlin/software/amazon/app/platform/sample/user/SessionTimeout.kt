@@ -1,5 +1,7 @@
 package software.amazon.app.platform.sample.user
 
+import dev.zacsweers.metro.Inject
+import dev.zacsweers.metro.SingleIn
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.milliseconds
 import kotlin.time.Duration.Companion.seconds
@@ -8,12 +10,10 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.update
-import me.tatarka.inject.annotations.Inject
+import software.amazon.app.platform.inject.metro.ContributesScoped
 import software.amazon.app.platform.scope.Scope
 import software.amazon.app.platform.scope.Scoped
 import software.amazon.app.platform.scope.coroutine.launch
-import software.amazon.lastmile.kotlin.inject.anvil.ContributesBinding
-import software.amazon.lastmile.kotlin.inject.anvil.SingleIn
 
 /**
  * This class logs out the user after a certain delay.
@@ -25,7 +25,7 @@ import software.amazon.lastmile.kotlin.inject.anvil.SingleIn
  */
 @Inject
 @SingleIn(UserScope::class)
-@ContributesBinding(UserScope::class)
+@ContributesScoped(UserScope::class)
 class SessionTimeout(private val userManager: UserManager, animationHelper: AnimationHelper) :
   Scoped {
 

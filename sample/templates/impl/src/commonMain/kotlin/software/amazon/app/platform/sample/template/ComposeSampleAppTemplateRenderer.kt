@@ -12,7 +12,7 @@ import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Modifier
-import me.tatarka.inject.annotations.Inject
+import dev.zacsweers.metro.Inject
 import software.amazon.app.platform.inject.ContributesRenderer
 import software.amazon.app.platform.presenter.BaseModel
 import software.amazon.app.platform.presenter.molecule.backgesture.BackGestureDispatcherPresenter
