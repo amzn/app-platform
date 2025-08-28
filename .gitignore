@@ -5,6 +5,9 @@ build/
 !/scripts/**/build
 local.properties
 /reports/
+gradle-user-home/
+profile-out/
+profile-out-*/
 
 # IntelliJ IDEA
 .idea/*

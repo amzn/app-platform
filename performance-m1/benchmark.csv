@@ -1,0 +1,20 @@
+scenario,Clean Build Warmup,Clean Build
+version,Gradle 8.14.3,Gradle 8.14.3
+tasks,release,release
+value,total execution time,total execution time
+warm-up build #1,336132.10,250800.74
+measured build #1,286056.48,354726.29
+warm-up build #3,,370790.89
+warm-up build #4,,356620.62
+warm-up build #5,,393586.91
+warm-up build #6,,386978.65
+measured build #1,,412660.51
+measured build #2,,394670.22
+measured build #3,,325059.28
+measured build #4,,336021.92
+measured build #5,,341742.38
+measured build #6,,358250.43
+measured build #7,,355119.48
+measured build #8,,340695.00
+measured build #9,,366978.95
+measured build #10,,360209.38
