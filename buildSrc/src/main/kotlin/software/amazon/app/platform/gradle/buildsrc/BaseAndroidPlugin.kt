@@ -69,7 +69,6 @@ public open class BaseAndroidPlugin : Plugin<Project> {
     internal fun Project.enableInstrumentedTests() {
       releaseTask.configure {
         it.dependsOn("assembleDebugAndroidTest")
-        it.dependsOn("emulatorCheck")
       }
 
       android.defaultConfig {

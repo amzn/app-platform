@@ -1,0 +1,25 @@
+# Run with: gradle-profiler --benchmark --scenario-file performance.scenarios
+
+aaa_clean_build {
+    title = "Clean Build Warmup"
+    tasks = ["release"]
+    gradle-args = ["--parallel", "--rerun-tasks", "--no-build-cache", "--no-configuration-cache", "-Pkotlin.native.cacheKind.iosSimulatorArm64=none"]
+    cleanup-tasks = ["clean"]
+    run-using = tooling-api // value can be "cli" or "tooling-api"
+    daemon = warm // value can be "warm", "cold", or "none"
+
+    iterations = 1
+    warm-ups = 1
+}
+
+clean_build {
+    title = "Clean Build"
+    tasks = ["release"]
+    gradle-args = ["--parallel", "--rerun-tasks", "--no-build-cache", "--no-configuration-cache", "-Pkotlin.native.cacheKind.iosSimulatorArm64=none", "--offline"]
+    cleanup-tasks = ["clean"]
+    run-using = tooling-api // value can be "cli" or "tooling-api"
+    daemon = warm // value can be "warm", "cold", or "none"
+
+    iterations = 10
+    warm-ups = 6
+}
