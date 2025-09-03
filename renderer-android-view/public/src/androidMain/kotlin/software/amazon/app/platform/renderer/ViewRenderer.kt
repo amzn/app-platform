@@ -89,7 +89,9 @@ public abstract class ViewRenderer<in ModelT : BaseModel> : BaseAndroidViewRende
     // View and add it to the parent.
     view?.let {
       try {
-        parent.removeView(it)
+        if (parent === it.parent) {
+          parent.removeView(it)
+        }
       } catch (_: NullPointerException) {
         // This shouldn't happen, yet it does sporadically.
         // Specifically:
@@ -101,11 +103,11 @@ public abstract class ViewRenderer<in ModelT : BaseModel> : BaseAndroidViewRende
         // at android.view.ViewGroup.removeViewInternal(ViewGroup.java:5531)
         // at android.view.ViewGroup.removeView(ViewGroup.java:5462)
         // at software.amazon.app.platform.renderer.ViewRenderer.resetView(ViewRenderer.kt:101)
+      } finally {
+        // Allows us to reclaim the memory.
+        view = null
       }
     }
-
-    // Allows us to reclaim the memory.
-    view = null
   }
 
   final override fun render(model: ModelT) {
