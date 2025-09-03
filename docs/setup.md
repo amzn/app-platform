@@ -22,6 +22,9 @@ are explained in more detail in many of the following sections.
       // false by default. Configures KSP and adds the kotlin-inject-anvil library as dependency.
       enableKotlinInject true
 
+      // false by default. Configures Metro and adds App Platform specific extensions as dependency.
+      enableMetro true
+
       // false by default. Configures Molecule and provides access to the MoleculePresenter API.
       enableMoleculePresenters true
 
@@ -51,6 +54,9 @@ are explained in more detail in many of the following sections.
       // false by default. Configures KSP and adds the kotlin-inject-anvil library as dependency.
       enableKotlinInject(true)
 
+      // false by default. Configures Metro and adds App Platform specific extensions as dependency.
+      enableMetro(true)
+
       // false by default. Configures Molecule and provides access to the MoleculePresenter API.
       enableMoleculePresenters(true)
 
@@ -66,7 +72,7 @@ are explained in more detail in many of the following sections.
 !!! note
 
     All settings of App Platform are optional and opt-in, e.g. you can use Molecule Presenters without enabling
-    the opinionated module structure. Compose UI can be enabled without using `kotlin-inject-anvil`.
+    the opinionated module structure. Compose UI can be enabled without using `kotlin-inject-anvil` or `Metro`.
 
 ## Snapshot
 
@@ -87,8 +93,3 @@ To import snapshot builds use following repository:
       url = uri("https://central.sonatype.com/repository/maven-snapshots/")
     }
     ```
-
-!!! warning
-
-    Notice that the URL starts with `aws.oss.sonatype.org`. The `aws` subdomain is specific to Amazon and used
-    by App Platform.

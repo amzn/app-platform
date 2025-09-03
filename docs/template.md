@@ -129,7 +129,7 @@ fun mainViewController(rootScopeProvider: RootScopeProvider): UIViewController =
     val factory = remember { ComposeRendererFactory(rootScopeProvider = rootScopeProvider) }
 
     val templatePresenter = remember {
-      val component = rootScopeProvider.rootScope.diComponent<ViewControllerComponent>()
+      val component = rootScopeProvider.rootScope.kotlinInjectComponent<ViewControllerComponent>()
       component.factory.createSampleAppTemplatePresenter(component.navigationPresenter)
     }
 

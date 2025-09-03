@@ -92,7 +92,7 @@ rootScope.buildChild("user scope") {
 
       val userScope =
         rootScopeProvider.rootScope.buildChild("user-$userId") {
-          addDiComponent(userComponent)
+          addKotlinInjectComponent(userComponent)
           addCoroutineScopeScoped(userComponent.userScopeCoroutineScopeScoped)
         }
 
@@ -175,17 +175,20 @@ fun Scope.myService(): MyService {
 ```
 
 The App Platform comes with a coroutine scope service and an integration for
-[kotlin-inject-anvil](https://github.com/amzn/kotlin-inject-anvil) as dependency injection framework.
+[kotlin-inject-anvil](https://github.com/amzn/kotlin-inject-anvil) and [Metro](https://zacsweers.github.io/metro) 
+as dependency injection frameworks.
 
 ```kotlin
 val rootScope = Scope.buildRootScope {
-  addDiComponent(kotlinInjectComponent)
   addCoroutineScopeScoped(coroutineScope)
+  addKotlinInjectComponent(kotlinInjectComponent)
+  addMetroDependencyGraph(metroDependencyGraph)
 }
 
 // Obtain service.
-rootScope.diComponent<AbcComponent>()
 rootScope.coroutineScope()
+rootScope.kotlinInjectComponent<AbcComponent>()
+rootScope.metroDependencyGraph<DefGraph>()
 ```
 
 !!! warning
@@ -203,32 +206,55 @@ rootScope.coroutineScope()
     In tests when using `Scope.buildTestScope()` or `runTestWithScope` the `backgroundScope` is from the `TestScope`
     is used by default and added to `Scope` instance.
 
-It's strongly recommended to add a `CoroutineScope` to each each `Scope`. App Platform provides a `CoroutineScope`
+It's strongly recommended to add a `CoroutineScope` to each `Scope`. App Platform provides a `CoroutineScope`
 [by default for the `AppScope`](https://github.com/amzn/app-platform/blob/main/kotlin-inject/impl/src/commonMain/kotlin/software/amazon/app/platform/scope/coroutine/AppScopeCoroutineScopeComponent.kt).
 It is important to register this `CoroutineScope` in the created app `Scope` instance in order to cancel the
 `CoroutineScope` in case the `AppScope` ever gets destroyed. The same applies to any child scope.
 
-```kotlin
-@SingleIn(AppScope::class)
-@MergeComponent(AppScope::class)
-interface AppComponent {
-  /** The coroutine scope that runs as long as the app scope is alive. */
-  @ForScope(AppScope::class) val appScopeCoroutineScopeScoped: CoroutineScopeScoped // (1)!
-}
+=== "kotlin-inject-anvil"
 
-fun createAppScope(appComponent: AppComponent): Scope {
-  return Scope.buildRootScope {
-    addDiComponent(appComponent)
-    addCoroutineScopeScoped(appComponent.appScopeCoroutineScopeScoped)
-  }
-}
-```
+    ```kotlin
+    @SingleIn(AppScope::class)
+    @MergeComponent(AppScope::class)
+    interface AppComponent {
+      /** The coroutine scope that runs as long as the app scope is alive. */
+      @ForScope(AppScope::class) val appScopeCoroutineScopeScoped: CoroutineScopeScoped // (1)!
+    }
+    
+    fun createAppScope(appComponent: AppComponent): Scope {
+      return Scope.buildRootScope {
+        addKotlinInjectComponent(appComponent)
+        addCoroutineScopeScoped(appComponent.appScopeCoroutineScopeScoped)
+      }
+    }
+    ```
 
-1.  `CoroutineScopeScoped` wraps a `CoroutineScope` in a `Scoped` instance. In `onExitScope()` of this instance the
-    `CoroutineScope` will be canceled.
+    1.  `CoroutineScopeScoped` wraps a `CoroutineScope` in a `Scoped` instance. In `onExitScope()` of this instance the
+        `CoroutineScope` will be canceled.
+
+=== "Metro"
+
+    ```kotlin
+    @DependencyGraph(AppScope::class)
+    interface AppGraph {
+      /** The coroutine scope that runs as long as the app scope is alive. */
+      @ForScope(AppScope::class) val appScopeCoroutineScopeScoped: CoroutineScopeScoped // (1)!
+    }
+    
+    fun createAppScope(appGraph: AppGraph): Scope {
+      return Scope.buildRootScope {
+        addMetroDependencyGraph(appGraph)
+        addCoroutineScopeScoped(appGraph.appScopeCoroutineScopeScoped)
+      }
+    }
+    ```
+
+    1.  `CoroutineScopeScoped` wraps a `CoroutineScope` in a `Scoped` instance. In `onExitScope()` of this instance the
+        `CoroutineScope` will be canceled.
+
 
 The `CoroutineScope` can be injected in classes and used to launch async work. A common pattern is to use the
-`onEnterScope()` function to launch coroutine jobs:
+`onEnterScope()` function when implementing the `Scoped` interface to launch coroutine jobs:
 
 ```kotlin
 override fun onEnterScope(scope: Scope) {
@@ -243,8 +269,8 @@ override fun onEnterScope(scope: Scope) {
 
 1.  `scope.launch` is a convenience function for `scope.coroutineScope().launch`.
 
-Since the `CoroutineScope` is part of the `kotlin-inject-anvil` object graph, the `CoroutineScope` can be injected
-in the constructor as well:
+Since the `CoroutineScope` is part of the `kotlin-inject-anvil` or Metro object graph, the `CoroutineScope` can be
+injected in the constructor as well:
 
 ```kotlin
 @Inject
@@ -322,38 +348,72 @@ class AndroidLocationProvider(
     not `LocationProvider`. Being lifecycle aware is an implementation detail.
 
 How the `Scoped` object is instantiated depends on the dependency injection framework and which scope to use.
-With `kotlin-inject-anvil` for the app scope it would be:
+With `kotlin-inject-anvil` and Metro for the app scope it would be:
 
-```kotlin
-@Inject // (1)!
-@SingleIn(AppScope::class) // (2)!
-@ContributesBinding(AppScope::class) //(3)!
-class AndroidLocationProvider(
-  ...
-) : LocationProvider, Scoped {
-  ...
-}
-```
-
-1.  This annotation is required to support constructor injection.
-2.  This annotation ensures that there is only ever a single instance of `AndroidLocationProvider` in the `AppScope`.
-3.  This annotation ensures that when somebody injects `LocationProvider`, then they get the singleton instance of `AndroidLocationProvider`.
-
-??? note "`@ContributesBinding` will generate and contribute bindings"
-
-    The `@ContributesBinding` annotation will generate a component interface with bindings for `LocationProvider`
-    and `Scoped`. The generated interface will be added automatically to the `AppScope`. No further manual step
-    is needed.
+=== "kotlin-inject-anvil"
 
     ```kotlin
-    @Provides
-    public fun provideAndroidLocationProvider(androidLocationProvider: AndroidLocationProvider): LocationProvider = androidLocationProvider
-
-    @Provides
-    @IntoSet
-    @ForScope(AppScope::class)
-    fun provideAndroidLocationProviderScoped(androidLocationProvider: AndroidLocationProvider): Scoped = androidLocationProvider
+    @Inject // (1)!
+    @SingleIn(AppScope::class) // (2)!
+    @ContributesBinding(AppScope::class) //(3)!
+    class AndroidLocationProvider(
+      ...
+    ) : LocationProvider, Scoped {
+      ...
+    }
     ```
+
+    1.  This annotation is required to support constructor injection.
+    2.  This annotation ensures that there is only ever a single instance of `AndroidLocationProvider` in the `AppScope`.
+    3.  This annotation ensures that when somebody injects `LocationProvider`, then they get the singleton instance of `AndroidLocationProvider`.
+
+    ??? note "`@ContributesBinding` will generate and contribute bindings"
+    
+        The `@ContributesBinding` annotation will generate a component interface with bindings for `LocationProvider`
+        and `Scoped`. The generated interface will be added automatically to the `AppScope`. No further manual step
+        is needed.
+    
+        ```kotlin
+        @Provides
+        public fun provideAndroidLocationProvider(androidLocationProvider: AndroidLocationProvider): LocationProvider = androidLocationProvider
+    
+        @Provides
+        @IntoSet
+        @ForScope(AppScope::class)
+        fun provideAndroidLocationProviderScoped(androidLocationProvider: AndroidLocationProvider): Scoped = androidLocationProvider
+        ```
+
+=== "Metro"
+
+    ```kotlin
+    @Inject // (1)!
+    @SingleIn(AppScope::class) // (2)!
+    @ContributesScoped(AppScope::class) //(3)!
+    class AndroidLocationProvider(
+      ...
+    ) : LocationProvider, Scoped {
+      ...
+    }
+    ```
+
+    1.  This annotation is required to support constructor injection.
+    2.  This annotation ensures that there is only ever a single instance of `AndroidLocationProvider` in the `AppScope`.
+    3.  This annotation ensures that when somebody injects `LocationProvider`, then they get the singleton instance of `AndroidLocationProvider`.
+
+    ??? note "`@ContributesScoped` will generate and contribute bindings"
+    
+        The `@ContributesScoped` annotation will generate a graph interface with bindings for `LocationProvider`
+        and `Scoped`. The generated interface will be added automatically to the `AppScope`. No further manual step
+        is needed.
+    
+        ```kotlin
+        @Binds
+        val AndroidLocationProvider.binds: LocationProvider
+        
+        @Binds @IntoSet @ForScope(AppScope::class)
+        val AndroidLocationProvider.bindsScoped: Scoped
+        ```
+
 
 ??? example "Sample"
 
@@ -364,7 +424,7 @@ class AndroidLocationProvider(
     ```kotlin
     @Inject
     @SingleIn(UserScope::class)
-    @ContributesBinding(UserScope::class)
+    @ContributesBinding(UserScope::class) // Use @ContributesScoped with Metro.
     class SessionTimeout(...) : Scoped {
 
       override fun onEnterScope(scope: Scope) {
@@ -385,35 +445,67 @@ class AndroidLocationProvider(
 
 ### Registering `Scoped`
 
-The dependency injection framework like `kotlin-inject-anvil` is only responsible for creating `Scoped` instances,
-but it doesn't automatically register them in the `Scope`. This has to be done whenever the `Scope` is created:
+The dependency injection frameworks like `kotlin-inject-anvil` and Metro are only responsible for creating `Scoped` 
+instances, but don't automatically register them in the `Scope`. This has to be done whenever the `Scope` is created:
 
-```kotlin hl_lines="5 16"
-@SingleIn(AppScope::class)
-@MergeComponent(AppScope::class)
-interface AppComponent {
-  /** All [Scoped] instances part of the app scope. */
-  @ForScope(AppScope::class) val appScopedInstances: Set<Scoped>
-}
+=== "kotlin-inject-anvil"
 
-fun createAppScope(appComponent: AppComponent): Scope {
-  val rootScope =
-    Scope.buildRootScope {
-      addDiComponent(appComponent)
-
-      addCoroutineScopeScoped(appComponent.appScopeCoroutineScopeScoped)
+    ```kotlin hl_lines="5 16"
+    @SingleIn(AppScope::class)
+    @MergeComponent(AppScope::class)
+    interface AppComponent {
+      /** All [Scoped] instances part of the app scope. */
+      @ForScope(AppScope::class) val appScopedInstances: Set<Scoped>
     }
+    
+    fun createAppScope(appComponent: AppComponent): Scope {
+      val rootScope =
+        Scope.buildRootScope {
+          addKotlinInjectComponent(appComponent)
+    
+          addCoroutineScopeScoped(appComponent.appScopeCoroutineScopeScoped)
+        }
+    
+      rootScope.register(appComponent.appScopedInstances)
+    
+      return rootScope
+    }
+    ```
+    
+    By calling `appComponent.appScopedInstances` the DI framework instantiates all `Scoped` instances part of the
+    `AppScope`. The `rootScope.register(...)` call will register all of the `Scoped` instances and invoke
+    `onEnterScope(scope)`. When calling `rootScope.destroy()` later at some point, then `onExitScope()` will be
+    called for all `Scoped` instances.
 
-  rootScope.register(appComponent.appScopedInstances)
 
-  return rootScope
-}
-```
+=== "Metro"
 
-By calling `appComponent.appScopedInstances` the DI framework instantiates all `Scoped` instances part of the
-`AppScope`. The `rootScope.register(...)` call will register all of the `Scoped` instances and invoke
-`onEnterScope(scope)`. When calling `rootScope.destroy()` later at some point, then `onExitScope()` will be
-called for all `Scoped` instances.
+    ```kotlin hl_lines="4 16"
+    @DependencyGraph(AppScope::class)
+    interface AppGraph {
+      /** All [Scoped] instances part of the app scope. */
+      @ForScope(AppScope::class) val appScopedInstances: Set<Scoped>
+    }
+    
+    fun createAppScope(appGraph: AppGraph): Scope {
+      val rootScope =
+        Scope.buildRootScope {
+          addMetroDependencyGraph(appGraph)
+    
+          addCoroutineScopeScoped(appGraph.appScopeCoroutineScopeScoped)
+        }
+    
+      rootScope.register(appGraph.appScopedInstances)
+    
+      return rootScope
+    }
+    ```
+    
+    By calling `appGraph.appScopedInstances` the DI framework instantiates all `Scoped` instances part of the
+    `AppScope`. The `rootScope.register(...)` call will register all of the `Scoped` instances and invoke
+    `onEnterScope(scope)`. When calling `rootScope.destroy()` later at some point, then `onExitScope()` will be
+    called for all `Scoped` instances.
+
 
 ??? example "Sample"
 
@@ -427,24 +519,48 @@ The convenience function `onExit` is handy when you want to create objects lazil
 not create a property in the class itself. This callback notifies you when the `Scope` is destroyed similar to
 `onExitScope()`.
 
-```kotlin
-@Inject
-@SingleIn(AppScope::class)
-@ContributesBinding(AppScope::class)
-class MyClass(private val application: Application) : Scoped {
+=== "kotlin-inject-anvil"
 
-  override fun onEnterScope(scope: Scope) {
-    val receiver = object : BroadcastReceiver()
-
-    application.registerReceiver(receiver, Intent())
-
-    scope.onExit {
-      // This function is invoked when the scope gets destroyed.
-      application.unregisterReceiver(receiver)
+    ```kotlin
+    @Inject
+    @SingleIn(AppScope::class)
+    @ContributesBinding(AppScope::class)
+    class MyClass(private val application: Application) : Scoped {
+    
+      override fun onEnterScope(scope: Scope) {
+        val receiver = object : BroadcastReceiver()
+    
+        application.registerReceiver(receiver, Intent())
+    
+        scope.onExit {
+          // This function is invoked when the scope gets destroyed.
+          application.unregisterReceiver(receiver)
+        }
+      }
     }
-  }
-}
-```
+    ```
+
+=== "Metro"
+
+    ```kotlin
+    @Inject
+    @SingleIn(AppScope::class)
+    @ContributesScoped(AppScope::class)
+    class MyClass(private val application: Application) : Scoped {
+    
+      override fun onEnterScope(scope: Scope) {
+        val receiver = object : BroadcastReceiver()
+    
+        application.registerReceiver(receiver, Intent())
+    
+        scope.onExit {
+          // This function is invoked when the scope gets destroyed.
+          application.unregisterReceiver(receiver)
+        }
+      }
+    }
+    ```
+
 
 ### Threading
 

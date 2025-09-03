@@ -51,8 +51,8 @@ usage of the module structure are implemented in the Gradle plugin.
 
 ### Dependency Injection
 
-App Platform uses by default [kotlin-inject-anvil](di.md) for dependency
-injection. But this isn't enforced and can be changed (1).
+App Platform by default provides support for [kotlin-inject-anvil](di.md) and [Metro](di.md) as dependency
+injection solution. But these frameworks aren't enforced and you can bring your own (1).
 { .annotate }
 
 1.  In the very first versions of App Platform, we at Amazon used [Dagger 2](https://dagger.dev/) and
@@ -90,7 +90,7 @@ and Desktop.
 
 The [Gradle plugin](setup.md) comes with a convenient DSL to take care of many necessary configurations, e.g. it sets
 up the *Compose* compiler for *Molecule* and *Compose Multiplatform*. It configures KSP and integrates
-*kotlin-inject-anvil* for each platform. It sets the Android namespace and artifact ID when the module
+*kotlin-inject-anvil* or *Metro* for each platform. It sets the Android namespace and artifact ID when the module
 structure is enabled.
 
 ## Getting Started

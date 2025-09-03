@@ -297,26 +297,43 @@ class ConnectionRobot : Robot {
 
 `Robots` must be annotated with `@ContributesRobot` in order to find them during tests when using the `robot<Type>()`
 or `composeRobot<Type>()` function. The annotation makes sure that the robots are added to the `kotlin-inject-anvil`
-dependency graph.
+or Metro dependency graph.
 
 ??? info "Generated code"
 
     The `@ContributesRobot` annotation generates following code.
+    
+    === "kotlin-inject-anvil"
 
-    ```kotlin
-    @ContributesTo(AppScope::class)
-    public interface LoginRobotComponent {
-      public val loginRobot: LoginRobot
+        ```kotlin
+        @ContributesTo(AppScope::class)
+        public interface LoginRobotComponent {
+          @Provides public fun provideLoginRobot(): LoginRobot = LoginRobot()
+    
+          @Provides
+          @IntoMap
+          public fun provideLoginRobotIntoMap(
+            robot: () -> LoginRobot
+          ): Pair<KClass<out Robot>, () -> Robot> = LoginRobot::class to robot
+        }
+        ```
+    
+    === "Metro"
+    
+        ```kotlin
+        @ContributesTo(AppScope::class)
+        public interface LoginRobotGraph {
+          @Provides public fun provideLoginRobot(): LoginRobot = LoginRobot()
+    
+          @Provides
+          @IntoMap
+          @RobotKey(LoginRobot::class)
+          public fun provideLoginRobotIntoMap(
+            robot: Provider<LoginRobot>
+          ): Robot = robot()
+        }
+        ```
 
-      @Provides public fun provideLoginRobot(): LoginRobot = LoginRobot()
-
-      @Provides
-      @IntoMap
-      public fun provideLoginRobotIntoMap(
-        robot: () -> LoginRobot
-      ): Pair<KClass<out Robot>, () -> Robot> = LoginRobot::class to robot
-    }
-    ```
 
 If a `Robot` needs to inject other types such a fake implementations, then it needs to be additionally annotated with
 `@Inject`, e.g.

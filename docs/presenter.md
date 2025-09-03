@@ -124,7 +124,7 @@ class AmazonLoginPresenter : LoginPresenter {
 
 !!! note
 
-    `MoleculePresenters` are never singletons. While they use `kotlin-inject-anvil` for constructor injection and
+    `MoleculePresenters` are never singletons. While they use `kotlin-inject-anvil` or Metro for constructor injection and
     automatically bind the concrete implementation to an API using `@ContributesBinding`, they don't use the
     `@SingleIn` annotation. `MoleculePresenters` manage their state in the `@Composable` function with the Compose
     runtime. Therefore, it's strongly discouraged to have any class properties.

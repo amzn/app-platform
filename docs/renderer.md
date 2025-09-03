@@ -146,11 +146,11 @@ different implementations:
 
 ### `@ContributesRenderer`
 
-All factory implementations rely on the dependency injection framework kotlin-inject-anvil to discover and initialize
-renderers. When the factory is created, it builds the `RendererComponent`, which parent is the app component.
+All factory implementations rely on the dependency injection framework `kotlin-inject-anvil` or Metro to discover and 
+initialize renderers. When the factory is created, it builds the `RendererComponent`, which parent is the app component.
 The `RendererComponent` lazily provides all renderers using the multibindings feature. To participate in the lookup,
-renderers must tell kotlin-inject-anvil which models they can render. This is done through a component interface,
-which automatically gets generated and added to the renderer scope by using the
+renderers must tell `kotlin-inject-anvil` or Metro which models they can render. This is done through a component 
+interface, which automatically gets generated and added to the renderer scope by using the
 [`@ContributesRenderer` annotation](https://github.com/amzn/app-platform/blob/main/kotlin-inject-extensions/contribute/public/src/commonMain/kotlin/software/amazon/app/platform/inject/ContributesRenderer.kt).
 
 Which `Model` type is used for the binding is determined based on the super type. In the following example
@@ -163,24 +163,50 @@ class LoginRenderer : ComposeRenderer<LoginPresenter.Model>()
 
 ??? info "Generated code"
 
-    The `@ContributesRenderer` annotation generates following code.
+    === "kotlin-inject-anvil"
+    
+        The `@ContributesRenderer` annotation generates following code.
+    
+        ```kotlin
+        @ContributesTo(RendererScope::class)
+        interface LoginRendererComponent {
+          @Provides
+          public fun provideSoftwareAmazonAppPlatformSampleLoginLoginRenderer(): LoginRenderer = LoginRenderer()
+    
+          @Provides
+          @IntoMap
+          public fun provideSoftwareAmazonAppPlatformSampleLoginLoginRendererLoginPresenterModel(renderer: () -> LoginRenderer): Pair<KClass<out BaseModel>, () -> Renderer<*>> = LoginPresenter.Model::class to renderer
+    
+          @Provides
+          @IntoMap
+          @ForScope(scope = RendererScope::class)
+          public fun provideSoftwareAmazonAppPlatformSampleLoginLoginRendererLoginPresenterModelKey(): Pair<KClass<out BaseModel>, KClass<out Renderer<*>>> = LoginPresenter.Model::class to LoginRenderer::class
+        }
+        ```
+    
+    === "Metro"
+    
+        The `@ContributesRenderer` annotation generates following code.
+    
+        ```kotlin
+        @ContributesTo(RendererScope::class)
+        interface LoginRendererGraph {
+          @Provides
+          public fun provideSoftwareAmazonAppPlatformSampleLoginLoginRenderer(): LoginRenderer = LoginRenderer()
+    
+          @Provides
+          @IntoMap
+          @RendererKey(LoginPresenter.Model::class)
+          public fun provideSoftwareAmazonAppPlatformSampleLoginLoginRendererLoginPresenterModel(renderer: Provider<LoginRenderer>): Renderer<*> = renderer()
+    
+          @Provides
+          @IntoMap
+          @ForScope(scope = RendererScope::class)
+          @RendererKey(LoginPresenter.Model::class)
+          public fun provideSoftwareAmazonAppPlatformSampleLoginLoginRendererLoginPresenterModelKey(): KClass<out Renderer<*>> = LoginRenderer::class
+        }
+        ```
 
-    ```kotlin
-    @ContributesTo(RendererScope::class)
-    interface LoginRendererComponent {
-      @Provides
-      public fun provideSoftwareAmazonAppPlatformSampleLoginLoginRenderer(): LoginRenderer = LoginRenderer()
-
-      @Provides
-      @IntoMap
-      public fun provideSoftwareAmazonAppPlatformSampleLoginLoginRendererLoginPresenterModel(renderer: () -> LoginRenderer): Pair<KClass<out BaseModel>, () -> Renderer<*>> = LoginPresenter.Model::class to renderer
-
-      @Provides
-      @IntoMap
-      @ForScope(scope = RendererScope::class)
-      public fun provideSoftwareAmazonAppPlatformSampleLoginLoginRendererLoginPresenterModelKey(): Pair<KClass<out BaseModel>, KClass<out Renderer<*>>> = LoginPresenter.Model::class to LoginRenderer::class
-    }
-    ```
 
 ### Creating `RendererFactory`
 
