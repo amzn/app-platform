@@ -5,7 +5,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.children
-import androidx.core.view.doOnAttach
 import androidx.core.view.doOnDetach
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.coroutines.CoroutineScope
@@ -68,6 +67,18 @@ public abstract class ViewRenderer<in ModelT : BaseModel> : BaseAndroidViewRende
   private var view: View? = null
   private var lastModel: ModelT? = null
 
+  private val onAttachListener =
+    object : View.OnAttachStateChangeListener {
+      override fun onViewAttachedToWindow(v: View) {
+        // Invoke this callback only once.
+        v.removeOnAttachStateChangeListener(this)
+
+        onViewAttached(v)
+      }
+
+      override fun onViewDetachedFromWindow(v: View) = Unit
+    }
+
   final override fun init(activity: Activity, parent: ViewGroup) {
     // Renderer is not assigned an initialized Activity or Parent has changed
     if (!this::activity.isInitialized || this.parent != parent) {
@@ -82,30 +93,36 @@ public abstract class ViewRenderer<in ModelT : BaseModel> : BaseAndroidViewRende
     return inflate(activity, parent, inflater, model).also { view = it }
   }
 
-  private fun resetView() {
+  private fun onViewAttached(view: View) {
+    lastModel = null
+
+    // Wait for the view to be attached first, otherwise doOnDetach gets
+    // called immediately.
+    view.doOnDetach {
+      if (releaseViewOnDetach()) {
+        // call onDetach first so view is still available during cleanup tasks
+        onDetach()
+        resetView(view)
+      }
+    }
+  }
+
+  private fun resetView(view: View) {
     coroutineScope.cancel()
+
+    // Allows us to reclaim the memory. Reset all cached value before calling removeView() in case
+    // there are any recursive calls with doOnDetach for child views.
+    this.view = null
+
+    // Reset the last model, because we want to re-render when the view is attached again even
+    // for the same model.
+    lastModel = null
 
     // Remove the view from the parent. In case the Renderer is reused we inflate a new
     // View and add it to the parent.
-    view?.let {
-      try {
-        parent.removeView(it)
-      } catch (_: NullPointerException) {
-        // This shouldn't happen, yet it does sporadically.
-        // Specifically:
-        // java.lang.NullPointerException: Attempt to write to field 'android.view.ViewParent
-        // android.view.View.mParent'
-        //                                 on a null object reference
-        // at android.view.ViewGroup.removeFromArray(ViewGroup.java:5372)
-        // at android.view.ViewGroup.removeViewInternal(ViewGroup.java:5569)
-        // at android.view.ViewGroup.removeViewInternal(ViewGroup.java:5531)
-        // at android.view.ViewGroup.removeView(ViewGroup.java:5462)
-        // at software.amazon.app.platform.renderer.ViewRenderer.resetView(ViewRenderer.kt:101)
-      }
+    if (view.parent === parent) {
+      parent.removeView(view)
     }
-
-    // Allows us to reclaim the memory.
-    view = null
   }
 
   final override fun render(model: ModelT) {
@@ -114,17 +131,19 @@ public abstract class ViewRenderer<in ModelT : BaseModel> : BaseAndroidViewRende
     if (parent.children.none { it === view }) {
       parent.addView(view)
 
-      view.doOnAttach {
-        lastModel = null
-        // Wait for the view to be attached first, otherwise doOnDetach gets
-        // called immediately.
-        view.doOnDetach {
-          if (releaseViewOnDetach()) {
-            // call onDetach first so view is still available during cleanup tasks
-            onDetach()
-            resetView()
-          }
-        }
+      // In case we registered the callback before, remove it first. There is no API to check
+      // whether this callback has been registered before. The callback should only be registered
+      // once.
+      view.removeOnAttachStateChangeListener(onAttachListener)
+
+      // This implementation below is similar to `doOnAttach {}`, which we used to use. However,
+      // this extension function didn't allow us to unregister the previous callback and we
+      // accidentally registered too many. That's why we had to extract `onAttachListener` into
+      // a variable.
+      if (view.isAttachedToWindow) {
+        onViewAttached(view)
+      } else {
+        view.addOnAttachStateChangeListener(onAttachListener)
       }
     }
 

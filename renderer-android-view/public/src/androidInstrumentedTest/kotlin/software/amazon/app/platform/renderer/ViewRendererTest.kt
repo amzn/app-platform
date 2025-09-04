@@ -4,6 +4,7 @@ import android.app.Activity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.FrameLayout
 import android.widget.TextView
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import assertk.assertThat
@@ -168,8 +169,55 @@ class ViewRendererTest {
     }
   }
 
-  private fun renderer(activity: Activity): TestViewRenderer {
-    return TestViewRenderer().also { it.init(activity, activity.contentView) }
+  @Test
+  fun onDetach_is_called_once() {
+    // This test verifies an edge case we suppressed for a long time. The crash happened in the
+    // ViewRenderer implementation when not correctly unregistering onAttach / onDetach callbacks.
+    //
+    // java.lang.NullPointerException: Attempt to write to field 'android.view.ViewParent
+    // android.view.View.mParent' on a null object reference
+    //   at android.view.ViewGroup.removeFromArray(ViewGroup.java:5384)
+    //   at android.view.ViewGroup.removeViewInternal(ViewGroup.java:5581)
+    //   at android.view.ViewGroup.removeViewInternal(ViewGroup.java:5543)
+    //   at android.view.ViewGroup.removeView(ViewGroup.java:5474)
+
+    activityRule.scenario.onActivity { activity ->
+      val grandParent = FrameLayout(activity)
+      activity.setContentView(grandParent)
+
+      val parent = FrameLayout(activity)
+
+      // To trigger the crash it is important that the 'parent' container is not attached to the
+      // view hierarchy yet (not a child of 'grandParent' yet).
+      val renderer = renderer(activity, parent)
+      renderer.render(TestModel(1))
+      // By removing the view we'll add it to the 'parent' in the next render() call again. The bug
+      // used to be that we didn't clear the callbacks. In production the issue also manifested
+      // during Activity.onCreate() before Activity.onStart() without explicitly removing all views.
+      parent.removeAllViews()
+      renderer.render(TestModel(2))
+
+      assertThat(renderer.inflateCalled).isEqualTo(1)
+      assertThat(renderer.renderCalled).isEqualTo(2)
+      assertThat(renderer.onDetachCalled).isEqualTo(0)
+
+      // Adding the view invoked the onAttach callback and removing it will invoke the onDetach
+      // callback. In the past without clearing the callbacks properly onDetach was called
+      // twice and triggered the exception.
+      grandParent.addView(parent)
+      grandParent.removeAllViews()
+
+      assertThat(renderer.inflateCalled).isEqualTo(1)
+      assertThat(renderer.renderCalled).isEqualTo(2)
+      assertThat(renderer.onDetachCalled).isEqualTo(1)
+    }
+  }
+
+  private fun renderer(
+    activity: Activity,
+    parent: ViewGroup = activity.contentView,
+  ): TestViewRenderer {
+    return TestViewRenderer().also { it.init(activity, parent) }
   }
 
   private val Activity.contentView: ViewGroup
@@ -186,6 +234,9 @@ class ViewRendererTest {
       private set
 
     var renderCalled = 0
+      private set
+
+    var onDetachCalled = 0
       private set
 
     override fun inflate(
@@ -206,6 +257,10 @@ class ViewRendererTest {
 
     override fun releaseViewOnDetach(): Boolean {
       return releaseViewOnDetach
+    }
+
+    override fun onDetach() {
+      onDetachCalled++
     }
   }
 }
