@@ -8,7 +8,7 @@ plugins {
 }
 
 appPlatform {
-    enableKotlinInject true
+    enableMetro true
     enableModuleStructure true
     enableMoleculePresenters true
 }

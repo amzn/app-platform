@@ -4,7 +4,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.TestScope
 import software.amazon.app.platform.scope.Scope
 import software.amazon.app.platform.scope.buildTestScope
-import software.amazon.app.platform.scope.di.addKotlinInjectComponent
+import software.amazon.app.platform.scope.di.metro.addMetroDependencyGraph
 
 /**
  * Fake implementation of [UserManager], which is useful in unit tests.
@@ -18,15 +18,12 @@ class FakeUserManager(override val user: MutableStateFlow<User?> = MutableStateF
     user.value = FakeUser(userId = userId)
   }
 
-  /**
-   * Overloaded function to change the coroutine scope and kotlin-inject component for the
-   * [FakeUser].
-   */
-  fun login(userId: Long, scope: TestScope, component: Any) {
+  /** Overloaded function to change the coroutine scope and Metro graph for the [FakeUser]. */
+  fun login(userId: Long, scope: TestScope, graph: Any) {
     user.value =
       FakeUser(
         userId = userId,
-        scope = Scope.buildTestScope(scope) { addKotlinInjectComponent(component) },
+        scope = Scope.buildTestScope(scope) { addMetroDependencyGraph(graph) },
       )
   }
 
