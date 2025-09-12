@@ -3,6 +3,7 @@ package software.amazon.app.platform.sample
 import androidx.compose.ui.test.ComposeUiTest
 import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.runComposeUiTest
+import dev.zacsweers.metro.createGraphFactory
 import kotlin.test.AfterTest
 import kotlin.test.BeforeTest
 import kotlin.test.Test
@@ -21,8 +22,8 @@ class LoginUiTest {
   @BeforeTest
   fun before() {
     desktopApp = DesktopApp {
-      // Note that we use a different test specific component in UI tests.
-      TestDesktopAppComponent::class.create(it)
+      // Note that we use a different test specific graph in UI tests.
+      createGraphFactory<TestDesktopAppGraph.Factory>().create(it)
     }
 
     // This is required for Desktop and iOS. On Android it's expected that the Application
