@@ -22,4 +22,15 @@ dependencies {
     commonMainImplementation project(':recipes:common:impl')
 
     androidMainImplementation libs.androidx.activity.compose
+
+    //noinspection UseTomlInstead
+    androidMainImplementation 'androidx.appcompat:appcompat:1.7.1'
+    //noinspection UseTomlInstead
+    androidMainImplementation 'androidx.fragment:fragment-ktx:1.8.9'
+}
+
+android {
+    buildFeatures {
+        viewBinding true
+    }
 }

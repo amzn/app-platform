@@ -20,7 +20,6 @@ class TemplateProvider(
   presenter: RootPresenter,
   @Assisted private val moleculeScope: MoleculeScope,
 ) {
-
   /** The templates that should be rendered in the UI. */
   val templates: StateFlow<RecipesAppTemplate> by lazy {
     moleculeScope.launchMoleculePresenter(presenter = presenter, input = Unit).model

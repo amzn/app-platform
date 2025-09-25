@@ -14,7 +14,6 @@ import software.amazon.lastmile.kotlin.inject.anvil.ContributesTo
  * use [application] to get access to the root scope.
  */
 class MainActivityViewModel(application: Application) : AndroidViewModel(application) {
-
   private val component =
     (application as RootScopeProvider).rootScope.kotlinInjectComponent<Component>()
   private val templateProvider = component.templateProviderFactory.createTemplateProvider()
