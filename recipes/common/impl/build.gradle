@@ -40,3 +40,9 @@ dependencies {
     androidMainImplementation libs.navigation3.runtime
     androidMainImplementation libs.navigation3.ui
 }
+
+android {
+    buildFeatures {
+        viewBinding true
+    }
+}

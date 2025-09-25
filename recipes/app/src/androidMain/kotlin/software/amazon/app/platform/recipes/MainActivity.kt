@@ -1,5 +1,6 @@
 package software.amazon.app.platform.recipes
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -24,16 +25,8 @@ class MainActivity : ComponentActivity() {
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
-    enableEdgeToEdge()
 
-    val rendererFactory =
-      ComposeAndroidRendererFactory.createForComposeUi(rootScopeProvider = rootScopeProvider)
-
-    setContent {
-      val template by viewModel.templates.collectAsState()
-
-      val renderer = rendererFactory.getComposeRenderer(template)
-      renderer.renderCompose(template)
-    }
+    val intent = Intent(this, FeatureActivity::class.java)
+    startActivity(intent)
   }
 }

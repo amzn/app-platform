@@ -3,6 +3,7 @@ package software.amazon.app.platform.renderer
 import android.app.Activity
 import android.app.Application
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -107,7 +108,7 @@ public abstract class ViewRenderer<in ModelT : BaseModel> : BaseAndroidViewRende
 
     check(this.activity == activity && this.parent == parent) {
       "A ViewRenderer should ever be only attached to one parent view. Current parent is " +
-        "${this.parent}, new parent is $parent"
+        "${this.parent}, new parent is ${parent.id}"
     }
   }
 
@@ -125,6 +126,7 @@ public abstract class ViewRenderer<in ModelT : BaseModel> : BaseAndroidViewRende
     // Wait for the view to be attached first, otherwise doOnDetach gets
     // called immediately.
     view.doOnDetach {
+      Log.i("jesslwan", "doOnDetach invoked for view: ${view.hashCode()}")
       if (releaseViewOnDetach()) {
         // call onDetach first so view is still available during cleanup tasks
         onDetach()
@@ -134,6 +136,7 @@ public abstract class ViewRenderer<in ModelT : BaseModel> : BaseAndroidViewRende
   }
 
   private fun resetView(view: View) {
+    Log.i("jesslwan", "resetView invoked for view: ${view.hashCode()}")
     coroutineScope.cancel()
 
     // Allows us to reclaim the memory. Reset all cached value before calling removeView() in case
@@ -147,15 +150,21 @@ public abstract class ViewRenderer<in ModelT : BaseModel> : BaseAndroidViewRende
     // Remove the view from the parent. In case the Renderer is reused we inflate a new
     // View and add it to the parent.
     if (view.parent === parent) {
-      parent.removeView(view)
+      Log.i("jesslwan", "parent (${parent.id}) children: {${parent.children.toList().map { it.hashCode() }}")
+      parent.removeView(view) // commenting this out will also ensure the recipes app doesn't crash.
+      Log.i("jesslwan", "parent (${parent.id}) removed child view (${view.hashCode()})")
     }
   }
 
   final override fun render(model: ModelT) {
     val view = view ?: createView(model)
 
+    Log.i("jesslwan", "added view: ${view.hashCode()}")
+
     if (parent.children.none { it === view }) {
       parent.addView(view)
+
+      Log.i("jesslwan", "view (${view.hashCode()}) added to parent (${parent.id})")
 
       // In case we registered the callback before, remove it first. There is no API to check
       // whether this callback has been registered before. The callback should only be registered
@@ -167,8 +176,10 @@ public abstract class ViewRenderer<in ModelT : BaseModel> : BaseAndroidViewRende
       // accidentally registered too many. That's why we had to extract `onAttachListener` into
       // a variable.
       if (view.isAttachedToWindow) {
+        Log.i("jesslwan", "view (${view.hashCode()}) did not add onAttachListener")
         onViewAttached(view)
       } else {
+        Log.i("jesslwan", "view (${view.hashCode()}) added onAttachListener")
         view.addOnAttachStateChangeListener(onAttachListener)
       }
     }
