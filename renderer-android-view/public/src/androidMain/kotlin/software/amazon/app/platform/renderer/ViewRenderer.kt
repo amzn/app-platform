@@ -3,6 +3,8 @@ package software.amazon.app.platform.renderer
 import android.app.Activity
 import android.app.Application
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -145,9 +147,13 @@ public abstract class ViewRenderer<in ModelT : BaseModel> : BaseAndroidViewRende
     lastModel = null
 
     // Remove the view from the parent. In case the Renderer is reused we inflate a new
-    // View and add it to the parent.
-    if (view.parent === parent) {
-      parent.removeView(view)
+    // View and add it to the parent. This action must run after all currently queued main
+    // thread operations finish. This is needed because we cannot remove views from parents in
+    // the onDetach callback as this may lead to inconsistent view state and trigger crashes.
+    Handler(Looper.getMainLooper()).post {
+      if (view.parent === parent) {
+        parent.removeView(view)
+      }
     }
   }
 
