@@ -11,8 +11,10 @@ import androidx.core.view.children
 import androidx.core.view.doOnDetach
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.cancel
+import kotlinx.coroutines.launch
 import software.amazon.app.platform.presenter.BaseModel
 
 /**
@@ -149,10 +151,12 @@ public abstract class ViewRenderer<in ModelT : BaseModel> : BaseAndroidViewRende
 
     // Remove the view from the parent. In case the Renderer is reused we inflate a new
     // View and add it to the parent.
-    if (view.parent === parent) {
-      Log.i("jesslwan", "parent (${parent.id}) children: {${parent.children.toList().map { it.hashCode() }}")
-      parent.removeView(view) // commenting this out will also ensure the recipes app doesn't crash.
-      Log.i("jesslwan", "parent (${parent.id}) removed child view (${view.hashCode()})")
+    CoroutineScope(Dispatchers.Main).launch {
+      if (view.parent === parent) {
+        Log.i("jesslwan", "parent (${parent.id}) children: {${parent.children.toList().map { it.hashCode() }}")
+        parent.removeView(view) // commenting this out will also ensure the recipes app doesn't crash.
+        Log.i("jesslwan", "parent (${parent.id}) removed child view (${view.hashCode()})")
+      }
     }
   }
 
