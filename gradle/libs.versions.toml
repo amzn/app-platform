@@ -3,8 +3,8 @@ agp = "8.13.0"
 android-compileSdk = "36"
 # https://developer.android.com/jetpack/androidx/releases/compose-ui
 # https://maven.google.com/web/index.html#androidx.compose.ui:ui
-android-compose-version = "1.9.1"
-android-minSdk = "21"
+android-compose-version = "1.9.2"
+android-minSdk = "23"
 android-targetSdk = "36"
 #noinspection GradleDependency
 androidx-activity = "1.8.2"
@@ -24,8 +24,8 @@ androidx-test-runner = "1.6.2"
 assertk = "0.28.1"
 auto-service = "1.1.1"
 auto-service-ksp = "1.2.0"
-build-config = "5.6.7"
-compose-hot-reload-plugin = "1.0.0-beta06"
+build-config = "5.6.8"
+compose-hot-reload-plugin = "1.0.0-beta08"
 # https://www.jetbrains.com/help/kotlin-multiplatform-dev/compose-compatibility-and-versioning.html#kotlin-compatibility
 # https://mvnrepository.com/artifact/org.jetbrains.compose/compose-gradle-plugin
 # https://github.com/JetBrains/compose-multiplatform/releases
@@ -47,7 +47,7 @@ ktfmt-gradle = "0.24.0"
 ksp = "2.2.20-2.0.2"
 maven-publish = "0.34.0"
 metro = "0.6.6"
-molecule = "2.1.0"
+molecule = "2.2.0"
 navigation3 = "1.0.0-alpha06"
 #noinspection GradleDependency
 recyclerView = "1.2.1"

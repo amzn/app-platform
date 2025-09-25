@@ -6,6 +6,8 @@
 
 ### Changed
 
+- Changed the min SDK from 21 to 23, see #149.
+
 ### Deprecated
 
 ### Removed
