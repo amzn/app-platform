@@ -20,9 +20,8 @@ import software.amazon.app.platform.renderer.template.AndroidTemplateRenderer
  */
 @Inject
 @ContributesRenderer
-class AndroidRecipesTemplateRenderer(
-  private val rendererFactory: RendererFactory,
-) : AndroidTemplateRenderer<RecipesAppTemplate>(rendererFactory) {
+class AndroidRecipesTemplateRenderer(private val rendererFactory: RendererFactory) :
+  AndroidTemplateRenderer<RecipesAppTemplate>(rendererFactory) {
 
   private lateinit var fullscreenContainer: Container
 
@@ -34,7 +33,8 @@ class AndroidRecipesTemplateRenderer(
   ): View {
     return layoutInflater.inflate(R.layout.root_container, parent, false).also {
       val rootView = it as FrameLayout
-      fullscreenContainer = Container(activity, rootView.findViewById(R.id.full_screen_container), null)
+      fullscreenContainer =
+        Container(activity, rootView.findViewById(R.id.full_screen_container), null)
     }
   }
 

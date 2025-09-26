@@ -25,15 +25,13 @@ class FeatureFragment : Fragment() {
 
   private val viewModel by viewModels<MainActivityViewModel>()
 
-  private val component get() =
-    rootScopeProvider.rootScope.kotlinInjectComponent<Component>()
+  private val component
+    get() = rootScopeProvider.rootScope.kotlinInjectComponent<Component>()
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
 
-    component.backGestureDispatcherPresenter.forwardBackPressEventsToPresenters(
-      requireActivity(),
-    )
+    component.backGestureDispatcherPresenter.forwardBackPressEventsToPresenters(requireActivity())
   }
 
   override fun onCreateView(
@@ -44,10 +42,7 @@ class FeatureFragment : Fragment() {
     return inflater.inflate(R.layout.workflow_container, container, false)
   }
 
-  override fun onViewCreated(
-    view: View,
-    savedInstanceState: Bundle?,
-  ) {
+  override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
 
     val parentView = view.findViewById<ViewGroup>(R.id.workflow_container)

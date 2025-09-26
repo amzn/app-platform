@@ -13,7 +13,7 @@ class AndroidLandingRenderer : ViewBindingRenderer<LandingPresenter.Model, Landi
     activity: Activity,
     parent: ViewGroup,
     layoutInflater: LayoutInflater,
-    initialModel: LandingPresenter.Model
+    initialModel: LandingPresenter.Model,
   ): LandingViewBinding = LandingViewBinding.inflate(layoutInflater, parent, false)
 
   override fun renderModel(model: LandingPresenter.Model) {
