@@ -6,8 +6,10 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import android.widget.TextView
+import androidx.core.view.children
 import androidx.lifecycle.Lifecycle
 import androidx.test.ext.junit.rules.ActivityScenarioRule
+import androidx.test.platform.app.InstrumentationRegistry
 import assertk.assertFailure
 import assertk.assertThat
 import assertk.assertions.isEqualTo
@@ -300,6 +302,47 @@ class ViewRendererTest {
 
       assertFailure { renderer.init(activity, parent1) }
         .messageContains("A ViewRenderer should ever be only attached to one parent view.")
+    }
+  }
+
+  @Test
+  fun multiple_renderers_with_the_same_parent_can_be_detached_when_the_activity_is_destroyed() {
+    val renderers = List(10) { TestViewRenderer() }
+
+    activityRule.scenario.onActivity { activity ->
+      val parent = FrameLayout(activity).also { activity.contentView.addView(it) }
+
+      renderers.forEachIndexed { index, renderer ->
+        renderer.init(activity, parent)
+
+        // This creates and attaches the view.
+        renderer.render(TestModel(index))
+      }
+    }
+
+    activityRule.scenario.moveToState(Lifecycle.State.RESUMED)
+
+    activityRule.scenario.onActivity { activity ->
+      val childViews =
+        activity.contentView.children.filterIsInstance<ViewGroup>().single().children.toList()
+
+      childViews.forEach { assertThat(it.isAttachedToWindow).isTrue() }
+      renderers.forEach {
+        assertThat(it.inflateCalled).isEqualTo(1)
+        assertThat(it.renderCalled).isEqualTo(1)
+        assertThat(it.onDetachCalled).isEqualTo(0)
+      }
+    }
+
+    activityRule.scenario.moveToState(Lifecycle.State.DESTROYED)
+
+    // Wait for the idle sync, otherwise not all onDetach callbacks may have been invoked.
+    InstrumentationRegistry.getInstrumentation().waitForIdleSync()
+
+    renderers.forEach {
+      assertThat(it.inflateCalled).isEqualTo(1)
+      assertThat(it.renderCalled).isEqualTo(1)
+      assertThat(it.onDetachCalled).isEqualTo(1)
     }
   }
 
