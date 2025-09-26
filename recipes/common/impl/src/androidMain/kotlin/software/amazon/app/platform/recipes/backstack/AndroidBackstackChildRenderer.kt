@@ -10,12 +10,13 @@ import software.amazon.app.platform.recipes.common.impl.databinding.BackstackChi
 import software.amazon.app.platform.renderer.ViewBindingRenderer
 
 @ContributesRenderer
-class AndroidBackstackChildRenderer : ViewBindingRenderer<BackstackChildPresenter.Model, BackstackChildViewBinding>() {
+class AndroidBackstackChildRenderer :
+  ViewBindingRenderer<BackstackChildPresenter.Model, BackstackChildViewBinding>() {
   override fun inflateViewBinding(
     activity: Activity,
     parent: ViewGroup,
     layoutInflater: LayoutInflater,
-    initialModel: BackstackChildPresenter.Model
+    initialModel: BackstackChildPresenter.Model,
   ): BackstackChildViewBinding = BackstackChildViewBinding.inflate(layoutInflater, parent, false)
 
   @SuppressLint("SetTextI18n")
@@ -28,4 +29,3 @@ class AndroidBackstackChildRenderer : ViewBindingRenderer<BackstackChildPresente
     }
   }
 }
-
