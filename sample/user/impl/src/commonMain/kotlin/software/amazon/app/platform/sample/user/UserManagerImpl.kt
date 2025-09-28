@@ -2,30 +2,30 @@ package software.amazon.app.platform.sample.user
 
 import app_platform.sample.user.impl.generated.resources.Res
 import app_platform.sample.user.impl.generated.resources.allDrawableResources
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.ContributesBinding
+import dev.zacsweers.metro.Inject
+import dev.zacsweers.metro.SingleIn
 import kotlin.random.Random
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import me.tatarka.inject.annotations.Inject
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import software.amazon.app.platform.scope.RootScopeProvider
 import software.amazon.app.platform.scope.coroutine.addCoroutineScopeScoped
-import software.amazon.app.platform.scope.di.addKotlinInjectComponent
+import software.amazon.app.platform.scope.di.metro.addMetroDependencyGraph
 import software.amazon.app.platform.scope.register
-import software.amazon.lastmile.kotlin.inject.anvil.AppScope
-import software.amazon.lastmile.kotlin.inject.anvil.ContributesBinding
-import software.amazon.lastmile.kotlin.inject.anvil.SingleIn
 
 /**
  * Production implementation of [UserManager].
  *
- * This class is responsible for creating the [UserScope] and [UserComponent].
+ * This class is responsible for creating the [UserScope] and [UserGraph].
  */
 @Inject
 @SingleIn(AppScope::class)
 @ContributesBinding(AppScope::class)
 class UserManagerImpl(
   private val rootScopeProvider: RootScopeProvider,
-  private val userComponentFactory: UserComponent.Factory,
+  private val userGraphFactory: UserGraph.Factory,
 ) : UserManager {
 
   private val _user = MutableStateFlow<User?>(null)
@@ -46,13 +46,13 @@ class UserManagerImpl(
           ),
       )
 
-    val userComponent = userComponentFactory.createUserComponent(user)
+    val userGraph = userGraphFactory.createUserGraph(user)
 
     val userScope =
       rootScopeProvider.rootScope.buildChild("user-$userId") {
-        addKotlinInjectComponent(userComponent)
+        addMetroDependencyGraph(userGraph)
 
-        addCoroutineScopeScoped(userComponent.userScopeCoroutineScopeScoped)
+        addCoroutineScopeScoped(userGraph.userScopeCoroutineScopeScoped)
       }
 
     user.scope = userScope
@@ -61,7 +61,7 @@ class UserManagerImpl(
 
     // Register instances after the userScope has been set to avoid race conditions for Scoped
     // instances that may use the userScope.
-    userScope.register(userComponent.userScopedInstances)
+    userScope.register(userGraph.userScopedInstances)
   }
 
   override fun logout() {
