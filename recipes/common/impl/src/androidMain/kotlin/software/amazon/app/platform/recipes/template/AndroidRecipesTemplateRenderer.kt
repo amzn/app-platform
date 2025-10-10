@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
+import co.touchlab.kermit.Logger
 import me.tatarka.inject.annotations.Inject
 import software.amazon.app.platform.inject.ContributesRenderer
 import software.amazon.app.platform.presenter.BaseModel
@@ -44,5 +45,10 @@ class AndroidRecipesTemplateRenderer(private val rendererFactory: RendererFactor
         fullscreenContainer.renderModel(model.model)
       }
     }
+  }
+
+  override fun onDetach() {
+    Logger.i { "[jesslwan] detaching renderer"}
+    super.onDetach()
   }
 }

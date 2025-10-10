@@ -44,8 +44,6 @@ import software.amazon.app.platform.renderer.getComposeRenderer
  *
  * [rendererFactory] is used to get the [Renderer] for the [BaseModel] wrapped in the template.
  */
-@Inject
-@ContributesRenderer
 class RootPresenterRenderer(
   private val rendererFactory: RendererFactory,
   private val backGestureDispatcherPresenter: BackGestureDispatcherPresenter,

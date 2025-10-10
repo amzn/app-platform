@@ -4,6 +4,9 @@ import androidx.activity.BackEventCompat
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.OnBackPressedDispatcher
 import androidx.activity.OnBackPressedDispatcherOwner
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.coroutineScope
+//import androidx.lifecycle.repeatOnLifecycle
 import androidx.lifecycle.lifecycleScope
 import java.util.concurrent.CancellationException
 import kotlinx.coroutines.CoroutineScope
@@ -42,6 +45,7 @@ public fun BackGestureDispatcherPresenter.forwardBackPressEventsToPresenters(
   // Later if needed we can consider limiting this to the STARTED lifecycle if needed with
   // repeatOnLifecycle API. For now we forward events until the lifecycle changes to DESTROYED.
   onBackPressedDispatcherOwner.lifecycleScope.launch {
+//    onBackPressedDispatcherOwner.repeatOnLifecycle() {}
     val forwarder =
       BackGestureForwarder(
         onBackPressedDispatcherOwner = onBackPressedDispatcherOwner,

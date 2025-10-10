@@ -1,4 +1,4 @@
-package software.amazon.app.platform.recipes.template
+package software.amazon.app.platform.recipes
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
@@ -13,6 +13,7 @@ import software.amazon.app.platform.recipes.appbar.AppBarConfig
 import software.amazon.app.platform.recipes.appbar.AppBarConfigModel
 import software.amazon.app.platform.recipes.backstack.CrossSlideBackstackPresenter
 import software.amazon.app.platform.recipes.landing.LandingPresenter
+import software.amazon.app.platform.recipes.template.RecipesAppTemplate
 import software.amazon.lastmile.kotlin.inject.anvil.AppScope
 import software.amazon.lastmile.kotlin.inject.anvil.ContributesBinding
 
@@ -20,7 +21,9 @@ import software.amazon.lastmile.kotlin.inject.anvil.ContributesBinding
  * A presenter that wraps any other presenter and turns the emitted models from the other presenter
  * into [RecipesAppTemplate]s.
  */
-class RootPresenter(
+@Inject
+class AndroidRootPresenter(
+  private val savedInstanceStateRegistry: SavedInstanceStateRegistry,
   private val landingPresenter: LandingPresenter,
   private val backGestureDispatcherPresenter: BackGestureDispatcherPresenter,
 ) : MoleculePresenter<Unit, RecipesAppTemplate> {
@@ -31,9 +34,10 @@ class RootPresenter(
 
   @Composable
   override fun present(input: Unit): RecipesAppTemplate {
-    Logger.i { "[jesslwan] Present in root presenter"}
+    Logger.i { "[jesslwan] Present in android root presenter"}
 
     return returningCompositionLocalProvider(
+      LocalSavedInstanceStateRegistry provides savedInstanceStateRegistry,
       LocalBackGestureDispatcherPresenter provides backGestureDispatcherPresenter
     ) {
       val backstackPresenter = remember { CrossSlideBackstackPresenter(landingPresenter) }
@@ -91,3 +95,4 @@ class RootPresenter(
 //    }
 //  }
 }
+

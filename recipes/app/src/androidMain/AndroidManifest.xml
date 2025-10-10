@@ -7,7 +7,7 @@
         android:allowBackup="false"
         android:label="Recipes"
         android:supportsRtl="true"
-        android:theme="@android:style/Theme.Material.Light.NoActionBar"
+        android:theme="@style/Theme.AppCompat.DayNight.NoActionBar"
         tools:ignore="DataExtractionRules,MissingApplicationIcon">
         <activity
             android:exported="true"
@@ -22,7 +22,7 @@
 
         <activity
             android:name="software.amazon.app.platform.recipes.FeatureActivity"
-            android:theme="@style/Theme.AppCompat.NoActionBar"
+            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar"
             android:configChanges="orientation|screenSize|screenLayout|keyboardHidden|mnc|colorMode|density|fontScale|fontWeightAdjustment|keyboard|layoutDirection|locale|mcc|navigation|smallestScreenSize|touchscreen|uiMode" />
 
     </application>

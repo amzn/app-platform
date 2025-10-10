@@ -29,8 +29,6 @@ import software.amazon.app.platform.renderer.getComposeRenderer
  * Plays a cross-slide animation whenever the backstack provided [CrossSlideBackstackPresenter]
  * changes.
  */
-@Inject
-@ContributesRenderer
 class CrossSlideBackstackRenderer(private val rendererFactory: RendererFactory) :
   ComposeRenderer<Model>() {
 

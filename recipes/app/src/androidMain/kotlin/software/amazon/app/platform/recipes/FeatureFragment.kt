@@ -6,7 +6,12 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.coroutineScope
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
+import androidx.lifecycle.viewmodel.viewModelFactory
+import co.touchlab.kermit.Logger
 import kotlinx.coroutines.launch
 import software.amazon.app.platform.presenter.molecule.backgesture.BackGestureDispatcherPresenter
 import software.amazon.app.platform.presenter.molecule.backgesture.forwardBackPressEventsToPresenters
@@ -23,7 +28,11 @@ class FeatureFragment : Fragment() {
   private val rootScopeProvider
     get() = requireActivity().application as RootScopeProvider
 
-  private val viewModel by viewModels<MainActivityViewModel>()
+  private val viewModelFactory by viewModels<ViewModelFactory> {
+    ViewModelFactory.factory(scopeName = this::class.java.simpleName)
+  }
+
+  private val viewModel: MainActivityViewModel by viewModels { viewModelFactory }
 
   private val component
     get() = rootScopeProvider.rootScope.kotlinInjectComponent<Component>()
@@ -49,18 +58,19 @@ class FeatureFragment : Fragment() {
 
     val rendererFactory = AndroidRendererFactory(rootScopeProvider, requireActivity(), parentView)
 
-    val templates = viewModel.templates
+    component.templateEngineFactory.create(rendererFactory).take(
+      templates = viewModel.templates,
+      lifecycle = lifecycle,
+    )
+  }
 
-    viewLifecycleOwner.lifecycleScope.launch {
-      templates.collect { template ->
-        val renderer = rendererFactory.getRenderer(template)
-        renderer.render(template)
-      }
-    }
+  override fun onSaveInstanceState(outState: Bundle) {
+    super.onSaveInstanceState(outState)
   }
 
   @ContributesTo(AppScope::class)
   interface Component {
     val backGestureDispatcherPresenter: BackGestureDispatcherPresenter
+    val templateEngineFactory: TemplateEngine.Factory
   }
 }
