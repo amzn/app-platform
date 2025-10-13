@@ -3,8 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="#FFFFFF">
+    android:layout_height="match_parent">
 
     <TextView
         android:id="@+id/counter_text"
@@ -12,7 +11,6 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:text="Landing"
-        android:textColor="#000000"
         android:textSize="40sp"
         tools:ignore="HardcodedText" />
 

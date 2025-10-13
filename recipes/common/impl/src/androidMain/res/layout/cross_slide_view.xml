@@ -3,17 +3,29 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="#FFFFFF">
+    android:layout_height="match_parent">
 
-    <TextView
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Cross Slide Renderer"
-        android:gravity="center"
-        android:background="#000000"
-        android:textColor="#FFFFFF"
-        tools:ignore="HardcodedText" />
+        android:layout_marginTop="50dp">
+
+        <Button
+            android:id="@+id/light_mode_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Light mode"
+            android:layout_gravity="center_horizontal"
+            tools:ignore="ButtonStyle,HardcodedText" />
+
+        <Button
+            android:id="@+id/dark_mode_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Dark mode"
+            android:layout_gravity="center_horizontal"
+            tools:ignore="ButtonStyle,HardcodedText" />
+    </LinearLayout>
 
     <FrameLayout
         android:id="@+id/child_container"

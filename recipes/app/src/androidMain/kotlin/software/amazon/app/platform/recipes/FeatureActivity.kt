@@ -16,9 +16,11 @@ class FeatureActivity : AppCompatActivity() {
 
     binding = FeatureContainerBinding.inflate(layoutInflater).also { setContentView(it.root) }
 
-    supportFragmentManager
-      .beginTransaction()
-      .add(binding.featureContainer.id, FeatureFragment())
-      .commit()
+    if (supportFragmentManager.findFragmentById(binding.featureContainer.id) == null) {
+      supportFragmentManager
+        .beginTransaction()
+        .add(binding.featureContainer.id, FeatureFragment())
+        .commit()
+    }
   }
 }

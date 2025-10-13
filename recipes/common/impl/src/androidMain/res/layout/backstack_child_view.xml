@@ -3,13 +3,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="#FFFFFF">
+    android:layout_height="match_parent">
     <TextView
         android:id="@+id/child_number_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textColor="#000000"
         android:gravity="center"
         tools:text="Child 1"
         android:textSize="40sp" />
@@ -18,7 +16,6 @@
         android:id="@+id/counter_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textColor="#000000"
         android:gravity="center"
         tools:text="0"
         android:textSize="40sp" />

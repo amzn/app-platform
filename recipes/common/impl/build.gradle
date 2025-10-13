@@ -39,6 +39,9 @@ dependencies {
 
     androidMainImplementation libs.navigation3.runtime
     androidMainImplementation libs.navigation3.ui
+
+    //noinspection UseTomlInstead
+    androidMainImplementation 'androidx.appcompat:appcompat:1.7.1'
 }
 
 android {

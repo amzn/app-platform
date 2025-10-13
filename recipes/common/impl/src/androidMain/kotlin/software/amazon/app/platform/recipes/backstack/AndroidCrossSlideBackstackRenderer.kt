@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
+import androidx.appcompat.app.AppCompatDelegate
 import me.tatarka.inject.annotations.Inject
 import software.amazon.app.platform.inject.ContributesRenderer
 import software.amazon.app.platform.recipes.common.impl.R
@@ -29,6 +30,18 @@ class AndroidCrossSlideBackstackRenderer(private val rendererFactory: RendererFa
   private var lastAnimationContentKey: Int? = null
 
   override fun renderModel(model: CrossSlideBackstackPresenter.Model) {
+    binding.lightModeButton.setOnClickListener {
+      AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+
+      activity.recreate()
+    }
+
+    binding.darkModeButton.setOnClickListener {
+      AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+
+      activity.recreate()
+    }
+
     val modelToRender = model.delegate
     val renderer =
       rendererFactory.getRenderer(
