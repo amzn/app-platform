@@ -50,7 +50,7 @@ package software.amazon.app.platform.scope
 public interface Scoped {
   /**
    * This function is called when the given [scope] is created or was already created by the time
-   * this [Scoped] is being register.
+   * this [Scoped] is being registered.
    *
    * This method provides no guarantee on which thread it is invoked. It can be the main thread or a
    * background thread. E.g. for the `AppScope` it's usually invoked on the main thread, when the
