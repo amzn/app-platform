@@ -3,7 +3,7 @@
 !!! note
 
     App Platform has a generic `Renderer` interface that can be used for multiple UI layer implementations.
-    Compose Multiplatform and Android Views are stable and supported out of the box. However, Compose Multiplatform is
+    Compose Multiplatform and Android Views are stable and supported out of the box. However, Compose UI is
     an opt-in feature through the Gradle DSL and must be explicitly enabled. The default value is `false`.
 
     ```groovy
