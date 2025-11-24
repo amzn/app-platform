@@ -21,5 +21,8 @@ appPlatform {
 dependencies {
     commonMainImplementation project(':recipes:common:impl')
 
+    //noinspection UseTomlInstead
+    commonMainImplementation("co.touchlab:kermit:2.0.4")
+
     androidMainImplementation libs.androidx.activity.compose
 }

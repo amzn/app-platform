@@ -1,6 +1,7 @@
 package software.amazon.app.platform.recipes.landing
 
 import androidx.compose.runtime.Composable
+import co.touchlab.kermit.Logger
 import me.tatarka.inject.annotations.Inject
 import software.amazon.app.platform.presenter.BaseModel
 import software.amazon.app.platform.presenter.molecule.MoleculePresenter
@@ -9,6 +10,7 @@ import software.amazon.app.platform.recipes.backstack.LocalBackstackScope
 import software.amazon.app.platform.recipes.backstack.presenter.BackstackChildPresenter
 import software.amazon.app.platform.recipes.landing.LandingPresenter.Model
 import software.amazon.app.platform.recipes.nav3.Navigation3HomePresenter
+import software.amazon.app.platform.recipes.swiftui.SwiftUiHomePresenter
 
 /** The presenter that is responsible to show the content of the landing page in the Recipes app. */
 @Inject
@@ -16,6 +18,8 @@ class LandingPresenter : MoleculePresenter<Unit, Model> {
   @Composable
   override fun present(input: Unit): Model {
     val backstack = checkNotNull(LocalBackstackScope.current)
+
+    Logger.i { "Hello World" }
 
     return Model {
       when (it) {
@@ -29,6 +33,10 @@ class LandingPresenter : MoleculePresenter<Unit, Model> {
 
         Event.Navigation3 -> {
           backstack.push(Navigation3HomePresenter())
+        }
+
+        Event.SwiftUI -> {
+          backstack.push(SwiftUiHomePresenter())
         }
       }
     }
@@ -50,5 +58,8 @@ class LandingPresenter : MoleculePresenter<Unit, Model> {
 
     /** Show the presenter highlighting navigation3 integration. */
     data object Navigation3 : Event
+
+    /** Show the presenter highlighting SwiftUI integration. */
+    data object SwiftUI : Event
   }
 }

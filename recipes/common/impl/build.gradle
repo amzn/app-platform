@@ -16,15 +16,25 @@ appPlatform {
 
 kotlin {
     def noAndroid = sourceSets.create("noAndroidMain")
+    def noIos = sourceSets.create("noIosMain")
 
     sourceSets.named('commonMain').configure {
         noAndroid.dependsOn(it)
+        noIos.dependsOn(it)
     }
-    sourceSets.named('appleAndDesktopMain').configure {
+    sourceSets.named('appleMain').configure {
         it.dependsOn(noAndroid)
     }
     sourceSets.named('wasmJsMain').configure {
         it.dependsOn(noAndroid)
+        it.dependsOn(noIos)
+    }
+    sourceSets.named('desktopMain').configure {
+        it.dependsOn(noAndroid)
+        it.dependsOn(noIos)
+    }
+    sourceSets.named('androidMain').configure {
+        it.dependsOn(noIos)
     }
 }
 
@@ -34,6 +44,9 @@ dependencies {
     commonMainImplementation compose.materialIconsExtended
     commonMainImplementation compose.runtimeSaveable
     commonMainImplementation compose.ui
+
+    //noinspection UseTomlInstead
+    commonMainImplementation("co.touchlab:kermit:2.0.4")
 
     commonMainImplementation libs.androidx.collection
 

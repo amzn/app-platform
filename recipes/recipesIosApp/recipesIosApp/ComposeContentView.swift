@@ -14,12 +14,40 @@ struct ComposeView: UIViewControllerRepresentable {
     init(rootScopeProvider: RootScopeProvider) {
         self.rootScopeProvider = rootScopeProvider
     }
+    
+    func makeCoordinator() -> Coordinator {
+        Coordinator()
+    }
 
     func makeUIViewController(context: Context) -> UIViewController {
-        MainViewControllerKt.mainViewController(rootScopeProvider: rootScopeProvider)
+        let composeVC = MainViewControllerKt.mainViewController(rootScopeProvider: rootScopeProvider) { model in
+            context.coordinator.navigateToNativeViewController(model: model)
+        }
+                
+        // Wrap in navigation controller
+        let navController = UINavigationController(rootViewController: composeVC)
+        
+        context.coordinator.navigationController = navController
+        
+        return navController
     }
 
     func updateUIViewController(_ uiViewController: UIViewController, context: Context) {}
+    
+    class Coordinator {
+        weak var navigationController: UINavigationController?
+        
+        func navigateToNativeViewController(model: BaseModel) {
+            let modelHash = ObjectIdentifier(model as AnyObject).hashValue
+            
+            DispatchQueue.main.async { [weak self] in
+                guard let navController = self?.navigationController else { return }
+                
+                let detailVC = CounterViewController()
+                navController.pushViewController(detailVC, animated: true)
+            }
+        }
+    }
 }
 
 struct ComposeContentView: View {

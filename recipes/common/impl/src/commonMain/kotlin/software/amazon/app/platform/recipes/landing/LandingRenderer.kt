@@ -37,6 +37,12 @@ class LandingRenderer : ComposeRenderer<Model>() {
       ) {
         Text("Navigation3")
       }
+      Button(
+        onClick = { model.onEvent(LandingPresenter.Event.SwiftUI) },
+        modifier = Modifier.padding(top = 12.dp),
+      ) {
+        Text("SwiftUI")
+      }
     }
   }
 }
