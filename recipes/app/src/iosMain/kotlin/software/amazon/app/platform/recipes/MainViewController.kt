@@ -5,7 +5,12 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.window.ComposeUIViewController
+import co.touchlab.kermit.Logger
 import platform.UIKit.UIViewController
+import software.amazon.app.platform.presenter.BaseModel
+import software.amazon.app.platform.recipes.backstack.CrossSlideBackstackPresenter
+import software.amazon.app.platform.recipes.swiftui.SwiftUiHomePresenter
+import software.amazon.app.platform.recipes.template.RecipesAppTemplate
 import software.amazon.app.platform.renderer.ComposeRendererFactory
 import software.amazon.app.platform.renderer.Renderer
 import software.amazon.app.platform.scope.RootScopeProvider
@@ -19,7 +24,7 @@ import software.amazon.app.platform.scope.di.kotlinInjectComponent
  * good enough for the iOS recipes app.
  */
 @Suppress("unused")
-fun mainViewController(rootScopeProvider: RootScopeProvider): UIViewController =
+fun mainViewController(rootScopeProvider: RootScopeProvider, renderSwiftUi: (BaseModel) -> Unit): UIViewController =
   ComposeUIViewController {
     // Create a single instance.
     val templateProvider = remember {
@@ -42,6 +47,16 @@ fun mainViewController(rootScopeProvider: RootScopeProvider): UIViewController =
     // Render templates using our Renderer runtime.
     val template by templateProvider.templates.collectAsState()
 
-    val renderer = factory.getRenderer(template::class)
-    renderer.renderCompose(template)
+    // TODO: do something about this.....
+    val swiftUiModel =
+      ((template as? RecipesAppTemplate.FullScreenTemplate)?.model
+        as? CrossSlideBackstackPresenter.Model)?.delegate as? SwiftUiHomePresenter.Model
+
+    if (swiftUiModel == null) {
+      val renderer = factory.getRenderer(template::class)
+
+      renderer.renderCompose(template)
+    } else {
+      renderSwiftUi(swiftUiModel)
+    }
   }
