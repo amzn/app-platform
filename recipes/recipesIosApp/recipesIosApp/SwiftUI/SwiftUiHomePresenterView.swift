@@ -8,7 +8,7 @@
 import SwiftUI
 import RecipesApp
 
-extension SwiftUiHomePresenter.Model: SelfRenderingViewModel {
+extension SwiftUiHomePresenter.Model: PresenterViewModel {
 
     func makeViewRenderer() -> some View {
         SwiftUiHomePresenterView(model: self)
@@ -57,9 +57,9 @@ private struct NavigationStackView: View {
 
     var body: some View {
         NavigationStack(path: model.pathBinding()) {
-            PresenterModelView(model: backstack[0])
+            backstack[0].getViewRenderer()
                 .navigationDestination(for: Int.self) { index in
-                    PresenterModelView(model: backstack[index])
+                    backstack[index].getViewRenderer()
                 }
         }
     }

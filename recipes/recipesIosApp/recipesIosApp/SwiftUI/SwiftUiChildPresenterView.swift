@@ -8,7 +8,7 @@
 import RecipesApp
 import SwiftUI
 
-extension SwiftUiChildPresenter.Model: SelfRenderingViewModel {
+extension SwiftUiChildPresenter.Model: PresenterViewModel {
     func makeViewRenderer() -> some View {
         SwiftUiChildPresenterView(model: self)
     }

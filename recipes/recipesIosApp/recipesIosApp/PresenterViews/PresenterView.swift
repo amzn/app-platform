@@ -15,7 +15,7 @@ import RecipesApp
 /// Note that `PresenterView` should not be used often. `Presenters` are hierarchical, with parent `Presenters` containing the models of their children.
 /// The view for a parent `Presenter` model should also present the model of its children, so `PresenterView` is only be needed for the root
 /// parent `Presenter`.
-struct PresenterView<Model>: View {
+struct PresenterView<Model: BaseModel>: View {
     @StateObject var viewModelObserver: ViewModelObserver
 
     init(presenter: Presenter, viewModelType: Model.Type, handleViewModelError: @escaping (Error) -> ()) {
@@ -31,7 +31,7 @@ struct PresenterView<Model>: View {
 
     var body: some View {
         if let viewModel = viewModelObserver.viewModel {
-            PresenterModelView(model: viewModel)
+            viewModel.getViewRenderer()
         }
     }
 

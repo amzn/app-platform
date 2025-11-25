@@ -6,6 +6,7 @@
 //
 
 import RecipesApp
+import SwiftUI
 
 extension Presenter {
     /// Returns an async sequence of type `Model` from a `Presenter` model `StateFlow`.
@@ -15,7 +16,6 @@ extension Presenter {
             .compactMap { $0 as? Model }
             .asAsyncThrowingStream()
     }
-
 }
 
 enum KotlinFlowError {
@@ -52,7 +52,6 @@ extension Kotlinx_coroutines_coreFlow {
         }
         return collector.values
     }
-
 }
 
 fileprivate class Kotlinx_coroutines_coreFlowCollectorImpl<Value>: Kotlinx_coroutines_coreFlowCollector {
@@ -92,12 +91,29 @@ extension AsyncSequence {
             try await asyncIterator.next()
         }
     }
-
 }
 
 extension Int {
     /// Converts Swift Int to Kotlin's Int type for interop.
     func toKotlinInt() -> KotlinInt {
         return KotlinInt(integerLiteral: self)
+    }
+}
+
+extension BaseModel {
+    /// Gets the view for some `BaseModel`
+    ///
+    /// Returns. created by `makeViewRenderer()` if a model conforms to `PresenterViewModel` otherwise, crash the build for
+    /// debug builds or return a default view.
+    @MainActor func getViewRenderer() -> AnyView {
+        guard let viewModel = self as? (any PresenterViewModel) else {
+            assertionFailure("ViewModel \(self) does not conform to `PresenterViewModel`")
+            
+            // This is an implementation detail. If crashing is preferred even in production builds, `fatalError(..)`
+            // can be used instead
+            return AnyView(Text("Error, some ViewModel was not implemented!"))
+        }
+
+        return AnyView(viewModel.makeViewRenderer())
     }
 }
