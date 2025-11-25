@@ -2,6 +2,8 @@ package software.amazon.app.platform.recipes
 
 import me.tatarka.inject.annotations.IntoSet
 import me.tatarka.inject.annotations.Provides
+import software.amazon.app.platform.presenter.molecule.MoleculeScopeFactory
+import software.amazon.app.platform.recipes.swiftui.SwiftUiHomePresenter
 import software.amazon.app.platform.scope.Scoped
 import software.amazon.app.platform.scope.coroutine.CoroutineScopeScoped
 import software.amazon.lastmile.kotlin.inject.anvil.AppScope
@@ -28,4 +30,10 @@ interface AppComponent {
    * needed.
    */
   @Provides @IntoSet @ForScope(AppScope::class) fun provideEmptyScoped(): Scoped = Scoped.NO_OP
+
+  /** The root presenter for the SwiftUI recipe. */
+  val swiftUiHomePresenter: SwiftUiHomePresenter
+
+  /** Factory needed to launch presenters from native. */
+  val moleculeScopeFactory: MoleculeScopeFactory
 }

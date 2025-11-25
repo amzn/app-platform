@@ -9,12 +9,10 @@ import SwiftUI
 import RecipesApp
 
 class AppDelegate: NSObject, UIApplicationDelegate, RootScopeProvider {
-    private let demoApplication: DemoApplication = DemoApplication()
+    let demoApplication: DemoApplication = DemoApplication()
     
     var rootScope: Scope {
-        get {
-            demoApplication.rootScope
-        }
+        get { demoApplication.rootScope }
     }
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil) -> Bool {
@@ -30,7 +28,7 @@ struct recipesIosApp: App {
     
     var body: some Scene {
         WindowGroup {
-            ComposeContentView(rootScopeProvider: appDelegate)
+            ContentView(appDelegate: appDelegate)
         }
     }
 }

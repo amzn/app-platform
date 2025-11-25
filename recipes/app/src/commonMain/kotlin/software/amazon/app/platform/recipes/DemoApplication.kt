@@ -4,6 +4,7 @@ import software.amazon.app.platform.scope.RootScopeProvider
 import software.amazon.app.platform.scope.Scope
 import software.amazon.app.platform.scope.coroutine.addCoroutineScopeScoped
 import software.amazon.app.platform.scope.di.addKotlinInjectComponent
+import software.amazon.app.platform.scope.di.kotlinInjectComponent
 import software.amazon.app.platform.scope.register
 
 /**
@@ -16,6 +17,10 @@ class DemoApplication : RootScopeProvider {
 
   override val rootScope: Scope
     get() = checkNotNull(_rootScope) { "Must call create() first." }
+
+  /** Provides the application scope DI component. */
+  val appComponent: AppComponent
+    get() = rootScope.kotlinInjectComponent<AppComponent>()
 
   /** Creates the root scope and remembers the instance. */
   fun create(appComponent: AppComponent) {
