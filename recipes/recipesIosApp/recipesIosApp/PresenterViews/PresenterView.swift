@@ -12,7 +12,7 @@ import RecipesApp
 ///
 /// `PresenterView` can be instantiated by passing in a Kotlin `Presenter` or an `AsyncSequence` of `ViewModels`.
 ///
-/// Note that `PresenterView` should only be used at the root of a `Presenter` hieararchy. `Presenters` are hierarchical. The view for a parent
+/// Note that `PresenterView` should only be used at the root of a `Presenter` hierarchy. `Presenters` are hierarchical. The view for a parent
 /// `Presenter` model should also present the model of its children, so `PresenterView` is only be needed for the root parent `Presenter`.
 struct PresenterView<Model: BaseModel>: View {
     @StateObject var viewModelObserver: ViewModelObserver
