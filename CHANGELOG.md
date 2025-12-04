@@ -4,6 +4,8 @@
 
 ### Added
 
+- Added a recipe for `Presenter` integration with SwiftUI, see #154.
+
 ### Changed
 
 ### Deprecated
@@ -16,6 +18,7 @@
 
 ### Other Notes & Contributions
 
+- Special thanks to [@rvenable](https://github.com/rvenable) for creating the original Swift APIs that served as the foundation for #154!
 
 ## [0.0.7] - 2025-09-26
 

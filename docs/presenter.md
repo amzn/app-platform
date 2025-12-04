@@ -1012,3 +1012,189 @@ With this integration handling of the backstack is managed in the `Presenter` an
       }
     }
     ```
+
+### SwiftUI
+
+#### `Presenters` and SwiftUI `Views`
+
+In iOS it's possible to connect `Presenters` to SwiftUI `Views` so `Presenter` logic can be shared while keeping UI
+native. The Recipes app demonstrates a [set of Swift APIs](https://github.com/amzn/app-platform/tree/main/recipes/recipesIosApp/recipesIosApp/PresenterViews)
+that demonstrate how to launch a `Presenter` and render SwiftUI `Views` in the iOS flavor. Note that App Platform 
+does not provide an API equivalent of SwiftUI `Renderers`. As such, we need to decide how to observe the flow of models 
+from a given `Presenter` and create `Views` from them.
+
+To obtain an observable stream of models, `Presenter` can be extended to provide an `AsyncThrowingStream` from the 
+model `StateFlow`. It's also possible to implement a convenient extension of `Flow` so we can convert any `Flow` to an
+`AsyncThrowingStream`.
+
+```swift
+extension Presenter {
+    func viewModels<Model>(ofType type: Model.Type) -> AsyncThrowingStream<Model, Error> {
+        model
+            .values()
+            .compactMap { $0 as? Model }
+            .asAsyncThrowingStream()
+    }
+}
+
+extension Kotlinx_coroutines_coreFlow {
+    /// The Flows send Any, so we lose type information and need to cast at runtime instead of getting a type-safe compile time check.
+    func values() -> AsyncThrowingStream<Any?, Error> {
+        let collector = Kotlinx_coroutines_coreFlowCollectorImpl<Any?>()
+        collect(collector: collector, completionHandler: collector.onComplete(_:))
+        return collector.values
+    }
+}
+```
+
+Given a `Model` there are multiple ways to implement association with some SwiftUI `View`. The Recipes app chooses to
+create a `protocol` for view creation and extend `BaseModel` to create views under the requirement of its conformance:
+
+```swift
+protocol PresenterViewModel {
+    associatedtype Renderer : View
+    @ViewBuilder @MainActor func makeViewRenderer() -> Self.Renderer
+}
+
+extension BaseModel {
+    @MainActor func getViewRenderer() -> AnyView {
+        guard let viewModel = self as? (any PresenterViewModel) else {
+            assertionFailure("ViewModel \(self) does not conform to `PresenterViewModel`")
+
+            // This is an implementation detail. If crashing is preferred even in production builds, `fatalError(..)`
+            // can be used instead
+            return AnyView(Text("Error, some ViewModel was not implemented!"))
+        }
+
+        return AnyView(viewModel.makeViewRenderer())
+    }
+}
+```
+
+??? info "Alternate implementation"
+
+    We can also create a `View` registry:
+    
+    ```swift
+    public class PresenterViewRegistry {
+        @MainActor private var registry: [ObjectIdentifier: (Any) -> AnyView] = [:]
+    
+        public init(registry: [ObjectIdentifier : (Any) -> AnyView] = [:]) {
+            self.registry = registry
+        }
+    
+        public static var shared: PresenterViewRegistry = PresenterViewRegistry()
+    }
+    
+    @MainActor public extension PresenterViewRegistry {
+        func registerViewForModelType<Model, Content: View>(_ type: Model.Type, makeView: @escaping (Model) -> Content) {
+            let typeID = ObjectIdentifier(Model.self)
+            registry[typeID] = { model in
+                AnyView(makeView(model as! Model))
+            }
+        }
+    
+        func makeViewForModel<Model>(_ model: Model) -> some View {
+            let type = type(of: model as Any)
+            let typeID = ObjectIdentifier(type)
+            if let makeView = registry[typeID] {
+                return makeView(model)
+            }
+            fatalError("Could not find view builder for \(type). Add it to the registry.")
+        }
+    }
+    ```
+    
+    The registry can be stored in an `Environment` property wrapper. This is similar to how `@ContributesRenderer` works 
+    under the hood, though without an equivalent App Platform API the heavy lifting on registration and registry 
+    lifecycle management falls to consumers. Due to these reasons we generally recommend to use the protocol setup.
+
+#### Navigation with `Presenters` and SwiftUI
+
+SwiftUI provides [navigation containers](https://developer.apple.com/documentation/swiftui/navigation) to enable
+movement between different part of an app's view hierarchy. Similar to `Navigation 3`, SwiftUI's navigation containers 
+push navigation logic to the UI layer, which is against App Platform's philosophy of handling navigation in business
+logic. However, to support navigation with SwiftUI `Views` and `Presenters`, it is recommended to integrate with 
+SwiftUI's navigation offerings. This SwiftUI keeps the determination of some completed back gesture an implementation
+detail, and we want ensure that all back events are handled appropriately and the user experience feels truly native.
+
+!!! note
+
+    We provide a recipe for integration with `NavigationStack` for single column navigation based on back gesture. For 
+    other kinds of navigation with `NavigationSplitView` or `NavigationLink` it is possible to integrate following our
+    [model driven navigation](https://amzn.github.io/app-platform/presenter/#model-driven-navigation) pattern. However,
+    we don't provide an explicit recipe for it. If you're missing some use cases here, please let us know.
+
+The Recipes app demonstrates how SwiftUI navigation APIs can be used while following App Platform's philosophy of 
+unidirectional data flow. As navigation is a part of business logic, the recipe [implements navigation with 
+a backstack of `Presenters`](https://github.com/amzn/app-platform/blob/main/recipes/common/impl/src/commonMain/kotlin/software/amazon/app/platform/recipes/swiftui/SwiftUiHomePresenter.kt).
+The root `Presenter` responsible for the `Presenter` backstack computes the `Model` backstack:
+
+```kotlin
+@Composable
+  override fun present(input: Unit): Model {
+    val backstack = remember {
+      mutableStateListOf<MoleculePresenter<Unit, out BaseModel>>().apply {
+        // There must be always one element.
+        add(SwiftUiChildPresenter(index = 0, backstack = this))
+      }
+    }
+
+    return Model(modelBackstack = backstack.map { it.present(Unit) }) {
+      when (it) {
+        is Event.BackstackModificationEvent -> {
+          val updatedBackstack = it.indicesBackstack.map { index -> backstack[index] }
+
+          backstack.clear()
+          backstack.addAll(updatedBackstack)
+        }
+      }
+    }
+  }
+```
+The `Presenter` forwards the `Models` and event callbacks to a SwiftUI `View`, which
+integrates these models with a [`NavigationStack`](https://github.com/amzn/app-platform/blob/main/recipes/recipesIosApp/recipesIosApp/SwiftUI/SwiftUiHomePresenterView.swift).
+Note that to integrate we create a `Binding` that is passed in to the `NavigationStack`. The `Binding's` value type must
+conform to `Hashable` and by default `BaseModel` does not conform. To resolve this in the recipe we simply represent
+each `Model` by the index of its position in the `Model` backstack as we do not require more complex identifiers.
+
+```swift
+extension SwiftUiHomePresenter.Model {
+    func pathBinding() -> Binding<[Int]> {
+        .init {
+            // drop the first value of the backstack from the path because that should be the root view
+            Array(self.modelBackstack.indices.dropFirst())
+        } set: { modifiedIndices in
+
+            // the resulting backstack indices the presenter should compute on is the first index (0) that was
+            // dropped as well as the remaining indices post modification
+            let indicesBackstack = [0] + modifiedIndices.map { $0.toKotlinInt() }
+
+            self.onEvent(
+                SwiftUiHomePresenterEventBackstackModificationEvent (
+                    indicesBackstack: indicesBackstack
+                )
+            )
+        }
+    }
+}
+
+private struct NavigationStackView: View {
+    var backstack: [BaseModel]
+    var model: SwiftUiHomePresenter.Model
+
+    init(model: SwiftUiHomePresenter.Model) {
+        self.backstack = model.modelBackstack
+        self.model = model
+    }
+
+    var body: some View {
+        NavigationStack(path: model.pathBinding()) {
+            backstack[0].getViewRenderer()
+                .navigationDestination(for: Int.self) { index in
+                    backstack[index].getViewRenderer()
+                }
+        }
+    }
+}
+```
