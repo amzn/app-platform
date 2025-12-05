@@ -1048,7 +1048,8 @@ extension Kotlinx_coroutines_coreFlow {
 ```
 
 Given a `Model` there are multiple ways to implement association with some SwiftUI `View`. The Recipes app chooses to
-create a `protocol` for view creation and extend `BaseModel` to create views under the requirement of its conformance:
+create a [`protocol`](https://docs.swift.org/swift-book/documentation/the-swift-programming-language/protocols/) for
+view creation and extend `BaseModel` to create views under the requirement of its conformance:
 
 ```swift
 protocol PresenterViewModel {
@@ -1154,9 +1155,10 @@ The root `Presenter` responsible for the `Presenter` backstack computes the `Mod
 ```
 The `Presenter` forwards the `Models` and event callbacks to a SwiftUI `View`, which
 integrates these models with a [`NavigationStack`](https://github.com/amzn/app-platform/blob/main/recipes/recipesIosApp/recipesIosApp/SwiftUI/SwiftUiHomePresenterView.swift).
-Note that to integrate we create a `Binding` that is passed in to the `NavigationStack`. The `Binding's` value type must
-conform to `Hashable` and by default `BaseModel` does not conform. To resolve this in the recipe we simply represent
-each `Model` by the index of its position in the `Model` backstack as we do not require more complex identifiers.
+Note that to integrate we create a [`Binding`](https://developer.apple.com/documentation/swiftui/binding) that is passed
+in to the `NavigationStack`. The `Binding's` value type must conform to `Hashable` and by default `BaseModel` does not
+conform. To resolve this in the recipe we simply represent each `Model` by the index of its position in the `Model`
+backstack as we do not require more complex identifiers.
 
 ```swift
 extension SwiftUiHomePresenter.Model {
