@@ -2,12 +2,12 @@ package software.amazon.app.platform.sample
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.ContributesTo
 import kotlinx.coroutines.flow.StateFlow
 import software.amazon.app.platform.sample.template.SampleAppTemplate
 import software.amazon.app.platform.scope.RootScopeProvider
-import software.amazon.app.platform.scope.di.kotlinInjectComponent
-import software.amazon.lastmile.kotlin.inject.anvil.AppScope
-import software.amazon.lastmile.kotlin.inject.anvil.ContributesTo
+import software.amazon.app.platform.scope.di.metro.metroDependencyGraph
 
 /**
  * `ViewModel` that hosts the stream of templates and survives configuration changes. Note that we
@@ -15,9 +15,8 @@ import software.amazon.lastmile.kotlin.inject.anvil.ContributesTo
  */
 class MainActivityViewModel(application: Application) : AndroidViewModel(application) {
 
-  private val component =
-    (application as RootScopeProvider).rootScope.kotlinInjectComponent<Component>()
-  private val templateProvider = component.templateProviderFactory.createTemplateProvider()
+  private val graph = (application as RootScopeProvider).rootScope.metroDependencyGraph<Graph>()
+  private val templateProvider = graph.templateProviderFactory.createTemplateProvider()
 
   /** The stream of templates that are rendered by [MainActivity]. */
   val templates: StateFlow<SampleAppTemplate> = templateProvider.templates
@@ -26,9 +25,9 @@ class MainActivityViewModel(application: Application) : AndroidViewModel(applica
     templateProvider.cancel()
   }
 
-  /** Component interface to give us access to objects from the app component. */
+  /** Graph interface to give us access to objects from the app graph. */
   @ContributesTo(AppScope::class)
-  interface Component {
+  interface Graph {
     /** Gives access to the [TemplateProvider.Factory] from the object graph. */
     val templateProviderFactory: TemplateProvider.Factory
   }
