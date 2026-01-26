@@ -41,7 +41,7 @@ class Compilation internal constructor(val kotlinCompilation: KotlinCompilation)
 
     // KSP1 isn't supported with Metro, likely because we run KSP within the kotlinc. That's fine,
     // we shouldn't bother about KSP1 anymore.
-    kotlinCompilation.configureKsp(useKsp2 = true) {
+    kotlinCompilation.configureKsp() {
       symbolProcessorProviders +=
         ServiceLoader.load(
           SymbolProcessorProvider::class.java,

@@ -55,10 +55,6 @@ buildConfig {
     useKotlinOutput {
         internalVisibility = false
     }
-
-    sourceSets.named("test") {
-        buildConfigField(boolean, 'USE_KSP_2', providers.gradleProperty('ksp.useKSP2').get().toBoolean())
-    }
 }
 
 // We don't need the apiCheck in this module.

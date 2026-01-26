@@ -18,7 +18,3 @@ dependencies {
     commonTestImplementation project(':kotlin-inject:impl')
     commonTestImplementation libs.kotlin.inject.runtime.kmp
 }
-
-ksp {
-    useKsp2.set(true)
-}
