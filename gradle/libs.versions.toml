@@ -1,5 +1,5 @@
 [versions]
-agp = "8.13.0"
+agp = "8.13.2"
 android-compileSdk = "36"
 # https://developer.android.com/jetpack/androidx/releases/compose-ui
 # https://maven.google.com/web/index.html#androidx.compose.ui:ui
@@ -29,26 +29,26 @@ compose-hot-reload-plugin = "1.0.0-beta08"
 # https://www.jetbrains.com/help/kotlin-multiplatform-dev/compose-compatibility-and-versioning.html#kotlin-compatibility
 # https://mvnrepository.com/artifact/org.jetbrains.compose/compose-gradle-plugin
 # https://github.com/JetBrains/compose-multiplatform/releases
-compose-multiplatform = "1.9.0"
+compose-multiplatform = "1.9.3"
 coroutines = "1.10.2"
 detekt = "1.23.8"
 graphviz-java = "0.18.1"
 jvm-compatibility = "11"
 jvm-gradle = "17"
-kotlin = "2.2.20"
-kotlin-atomicfu = "0.29.0"
-kotlin-compile-testing = "0.8.0"
+kotlin = "2.2.21"
+kotlin-atomicfu = "0.31.0"
+kotlin-compile-testing = "0.12.1"
 kotlin-hierarchy = "1.1"
-kotlin-inject = "0.7.2"
+kotlin-inject = "0.9.0"
 kotlin-inject-anvil = "0.1.6"
 kotlin-poet = "2.2.0"
 kotlinx-binaryCompatibilityValidator = "0.18.1"
 ktfmt-gradle = "0.24.0"
-ksp = "2.2.20-2.0.2"
+ksp = "2.3.4"
 maven-publish = "0.34.0"
-metro = "0.6.6"
+metro = "0.10.1"
 molecule = "2.2.0"
-navigation3 = "1.0.0-alpha06"
+navigation3 = "1.0.0"
 #noinspection GradleDependency
 recyclerView = "1.2.1"
 turbine = "1.2.1"

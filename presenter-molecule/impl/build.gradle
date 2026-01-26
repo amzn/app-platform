@@ -20,20 +20,5 @@ dependencies {
 }
 
 ksp {
-    // Caused by: ksp.org.jetbrains.kotlin.analysis.api.lifetime.KaInvalidLifetimeOwnerAccessException: Access to invalid ksp.org.jetbrains.kotlin.analysis.api.platform.lifetime.KotlinAlwaysAccessibleLifetimeToken@33adf999: PSI has changed since creation
-    //        at ksp.org.jetbrains.kotlin.analysis.api.fir.symbols.KaFirNamedFunctionSymbol.getPsi(KaFirNamedFunctionSymbol.kt:247)
-    //        at com.google.devtools.ksp.impl.symbol.kotlin.UtilKt.toContainingFile(util.kt:237)
-    //        at com.google.devtools.ksp.impl.symbol.kotlin.AbstractKSDeclarationImpl$containingFile$2.invoke(AbstractKSDeclarationImpl.kt:79)
-    //        at com.google.devtools.ksp.impl.symbol.kotlin.AbstractKSDeclarationImpl$containingFile$2.invoke(AbstractKSDeclarationImpl.kt:78)
-    //        at kotlin.SynchronizedLazyImpl.getValue(LazyJVM.kt:83)
-    //        at com.google.devtools.ksp.impl.symbol.kotlin.AbstractKSDeclarationImpl.getContainingFile(AbstractKSDeclarationImpl.kt:78)
-    //        at me.tatarka.kotlin.ast.KSAstProvider.addOriginatingElement(KSAst.kt:94)
-    //        at me.tatarka.inject.compiler.KmpComponentCreateGenerator.generate(KmpComponentCreateGenerator.kt:27)
-    //        at me.tatarka.inject.compiler.ksp.ProcessKmpComponentCreateKt.generateKmpComponentCreateFiles(ProcessKmpComponentCreate.kt:40)
-    //        at me.tatarka.inject.compiler.ksp.InjectProcessor.finish(InjectProcessor.kt:113)
-    //
-    // Unfortunately, for this module KSP2 needs to be disabled due to this crash.
-    //
-    // TODO: Resolve the bug in kotlin-inject.
-    useKsp2.set(false)
+    useKsp2.set(true)
 }

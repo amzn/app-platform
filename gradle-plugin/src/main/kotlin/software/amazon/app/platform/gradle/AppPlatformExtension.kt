@@ -366,14 +366,12 @@ private fun Project.addKspDependenciesWhenConfigExists(
     target.compilations.configureEach { compilation ->
       fun configExists(name: String): Boolean = configurations.any { it.name == name }
 
-      // The implementationConfigurationName name is
-      // 'iosSimulatorArm64CompilationImplementation', 'wasmJsTestCompileClasspath' or
-      // 'desktopCompileClasspath'.
+      // The defaultSourceSet name is 'iosSimulatorArm64CompilationImplementation',
+      // 'wasmJsTestCompileClasspath' or 'desktopCompileClasspath'.
       //
       // E.g. 'desktopCompileClasspath' with give use 'kspDesktop'
       var configName =
-        "ksp" +
-          compilation.implementationConfigurationName.substringBefore("Compilation").capitalize()
+        "ksp" + compilation.defaultSourceSet.name.substringBefore("Compilation").capitalize()
 
       if (!configExists(configName) && target.platformType == KotlinPlatformType.androidJvm) {
         // Android has different naming for some reason.
