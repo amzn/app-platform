@@ -17,27 +17,27 @@ public abstract interface class software/amazon/app/platform/presenter/molecule/
 	public fun provideAndroidMoleculeScopeFactory (Ldev/zacsweers/metro/Provider;)Lsoftware/amazon/app/platform/presenter/molecule/MoleculeScopeFactory;
 }
 
-public abstract interface class software/amazon/app/platform/presenter/molecule/AndroidMoleculeScopeFactoryGraph$$$MetroContributionToMetroAppScope : software/amazon/app/platform/presenter/molecule/AndroidMoleculeScopeFactoryGraph {
-}
-
-public final class software/amazon/app/platform/presenter/molecule/AndroidMoleculeScopeFactoryGraph$$$MetroContributionToMetroAppScope$DefaultImpls {
-	public static fun provideAndroidMoleculeScopeFactory (Lsoftware/amazon/app/platform/presenter/molecule/AndroidMoleculeScopeFactoryGraph$$$MetroContributionToMetroAppScope;Ldev/zacsweers/metro/Provider;)Lsoftware/amazon/app/platform/presenter/molecule/MoleculeScopeFactory;
-}
-
 public final class software/amazon/app/platform/presenter/molecule/AndroidMoleculeScopeFactoryGraph$DefaultImpls {
 	public static fun provideAndroidMoleculeScopeFactory (Lsoftware/amazon/app/platform/presenter/molecule/AndroidMoleculeScopeFactoryGraph;Ldev/zacsweers/metro/Provider;)Lsoftware/amazon/app/platform/presenter/molecule/MoleculeScopeFactory;
 }
 
-public final class software/amazon/app/platform/presenter/molecule/AndroidMoleculeScopeFactoryGraph$ProvideAndroidMoleculeScopeFactory$$MetroFactory : dev/zacsweers/metro/internal/Factory {
+public abstract interface class software/amazon/app/platform/presenter/molecule/AndroidMoleculeScopeFactoryGraph$MetroContributionToMetroAppScope : software/amazon/app/platform/presenter/molecule/AndroidMoleculeScopeFactoryGraph {
+}
+
+public final class software/amazon/app/platform/presenter/molecule/AndroidMoleculeScopeFactoryGraph$MetroContributionToMetroAppScope$DefaultImpls {
+	public static fun provideAndroidMoleculeScopeFactory (Lsoftware/amazon/app/platform/presenter/molecule/AndroidMoleculeScopeFactoryGraph$MetroContributionToMetroAppScope;Ldev/zacsweers/metro/Provider;)Lsoftware/amazon/app/platform/presenter/molecule/MoleculeScopeFactory;
+}
+
+public final class software/amazon/app/platform/presenter/molecule/AndroidMoleculeScopeFactoryGraph$ProvideAndroidMoleculeScopeFactoryMetroFactory : dev/zacsweers/metro/internal/Factory {
 	public static final field $stable I
-	public static final field Companion Lsoftware/amazon/app/platform/presenter/molecule/AndroidMoleculeScopeFactoryGraph$ProvideAndroidMoleculeScopeFactory$$MetroFactory$Companion;
+	public static final field Companion Lsoftware/amazon/app/platform/presenter/molecule/AndroidMoleculeScopeFactoryGraph$ProvideAndroidMoleculeScopeFactoryMetroFactory$Companion;
 	public synthetic fun <init> (Lsoftware/amazon/app/platform/presenter/molecule/AndroidMoleculeScopeFactoryGraph;Ldev/zacsweers/metro/Provider;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
 	public synthetic fun invoke ()Ljava/lang/Object;
 	public final fun invoke ()Lsoftware/amazon/app/platform/presenter/molecule/MoleculeScopeFactory;
 	public final fun mirrorFunction (Ldev/zacsweers/metro/Provider;)Lsoftware/amazon/app/platform/presenter/molecule/MoleculeScopeFactory;
 }
 
-public final class software/amazon/app/platform/presenter/molecule/AndroidMoleculeScopeFactoryGraph$ProvideAndroidMoleculeScopeFactory$$MetroFactory$Companion {
+public final class software/amazon/app/platform/presenter/molecule/AndroidMoleculeScopeFactoryGraph$ProvideAndroidMoleculeScopeFactoryMetroFactory$Companion {
 	public final fun create (Lsoftware/amazon/app/platform/presenter/molecule/AndroidMoleculeScopeFactoryGraph;Ldev/zacsweers/metro/Provider;)Ldev/zacsweers/metro/internal/Factory;
 	public final fun provideAndroidMoleculeScopeFactory (Lsoftware/amazon/app/platform/presenter/molecule/AndroidMoleculeScopeFactoryGraph;Ldev/zacsweers/metro/Provider;)Lsoftware/amazon/app/platform/presenter/molecule/MoleculeScopeFactory;
 }
@@ -54,27 +54,27 @@ public abstract interface class software/amazon/app/platform/presenter/molecule/
 	public fun provideDefaultBackGestureDispatcherPresenter ()Lsoftware/amazon/app/platform/presenter/molecule/backgesture/BackGestureDispatcherPresenter;
 }
 
-public abstract interface class software/amazon/app/platform/presenter/molecule/backgesture/DefaultBackGestureDispatcherPresenterGraph$$$MetroContributionToMetroAppScope : software/amazon/app/platform/presenter/molecule/backgesture/DefaultBackGestureDispatcherPresenterGraph {
-}
-
-public final class software/amazon/app/platform/presenter/molecule/backgesture/DefaultBackGestureDispatcherPresenterGraph$$$MetroContributionToMetroAppScope$DefaultImpls {
-	public static fun provideDefaultBackGestureDispatcherPresenter (Lsoftware/amazon/app/platform/presenter/molecule/backgesture/DefaultBackGestureDispatcherPresenterGraph$$$MetroContributionToMetroAppScope;)Lsoftware/amazon/app/platform/presenter/molecule/backgesture/BackGestureDispatcherPresenter;
-}
-
 public final class software/amazon/app/platform/presenter/molecule/backgesture/DefaultBackGestureDispatcherPresenterGraph$DefaultImpls {
 	public static fun provideDefaultBackGestureDispatcherPresenter (Lsoftware/amazon/app/platform/presenter/molecule/backgesture/DefaultBackGestureDispatcherPresenterGraph;)Lsoftware/amazon/app/platform/presenter/molecule/backgesture/BackGestureDispatcherPresenter;
 }
 
-public final class software/amazon/app/platform/presenter/molecule/backgesture/DefaultBackGestureDispatcherPresenterGraph$ProvideDefaultBackGestureDispatcherPresenter$$MetroFactory : dev/zacsweers/metro/internal/Factory {
+public abstract interface class software/amazon/app/platform/presenter/molecule/backgesture/DefaultBackGestureDispatcherPresenterGraph$MetroContributionToMetroAppScope : software/amazon/app/platform/presenter/molecule/backgesture/DefaultBackGestureDispatcherPresenterGraph {
+}
+
+public final class software/amazon/app/platform/presenter/molecule/backgesture/DefaultBackGestureDispatcherPresenterGraph$MetroContributionToMetroAppScope$DefaultImpls {
+	public static fun provideDefaultBackGestureDispatcherPresenter (Lsoftware/amazon/app/platform/presenter/molecule/backgesture/DefaultBackGestureDispatcherPresenterGraph$MetroContributionToMetroAppScope;)Lsoftware/amazon/app/platform/presenter/molecule/backgesture/BackGestureDispatcherPresenter;
+}
+
+public final class software/amazon/app/platform/presenter/molecule/backgesture/DefaultBackGestureDispatcherPresenterGraph$ProvideDefaultBackGestureDispatcherPresenterMetroFactory : dev/zacsweers/metro/internal/Factory {
 	public static final field $stable I
-	public static final field Companion Lsoftware/amazon/app/platform/presenter/molecule/backgesture/DefaultBackGestureDispatcherPresenterGraph$ProvideDefaultBackGestureDispatcherPresenter$$MetroFactory$Companion;
+	public static final field Companion Lsoftware/amazon/app/platform/presenter/molecule/backgesture/DefaultBackGestureDispatcherPresenterGraph$ProvideDefaultBackGestureDispatcherPresenterMetroFactory$Companion;
 	public synthetic fun <init> (Lsoftware/amazon/app/platform/presenter/molecule/backgesture/DefaultBackGestureDispatcherPresenterGraph;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
 	public synthetic fun invoke ()Ljava/lang/Object;
 	public final fun invoke ()Lsoftware/amazon/app/platform/presenter/molecule/backgesture/BackGestureDispatcherPresenter;
 	public final fun mirrorFunction ()Lsoftware/amazon/app/platform/presenter/molecule/backgesture/BackGestureDispatcherPresenter;
 }
 
-public final class software/amazon/app/platform/presenter/molecule/backgesture/DefaultBackGestureDispatcherPresenterGraph$ProvideDefaultBackGestureDispatcherPresenter$$MetroFactory$Companion {
+public final class software/amazon/app/platform/presenter/molecule/backgesture/DefaultBackGestureDispatcherPresenterGraph$ProvideDefaultBackGestureDispatcherPresenterMetroFactory$Companion {
 	public final fun create (Lsoftware/amazon/app/platform/presenter/molecule/backgesture/DefaultBackGestureDispatcherPresenterGraph;)Ldev/zacsweers/metro/internal/Factory;
 	public final fun provideDefaultBackGestureDispatcherPresenter (Lsoftware/amazon/app/platform/presenter/molecule/backgesture/DefaultBackGestureDispatcherPresenterGraph;)Lsoftware/amazon/app/platform/presenter/molecule/backgesture/BackGestureDispatcherPresenter;
 }
