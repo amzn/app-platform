@@ -1,0 +1,1362 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="A lightweight application framework for state and memory management suitable for Kotlin Multiplatform projects.">
+      
+      
+      
+        <link rel="canonical" href="https://amzn.github.io/app-platform/module-structure/">
+      
+      
+        <link rel="prev" href="../setup/">
+      
+      
+        <link rel="next" href="../scope/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.1">
+    
+    
+      
+        <title>Module Structure - App Platform</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inter:300,300i,400,400i,700,700i%7CFira+Code:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Inter";--md-code-font:"Fira Code"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  
+<meta property="og:type" content="website" />
+<meta property="og:title" content="Module Structure - App Platform" />
+<meta property="og:description" content="A lightweight application framework for state and memory management suitable for Kotlin Multiplatform projects." />
+<meta property="og:image" content="https://amzn.github.io/app-platform/assets/images/social/module-structure.png" />
+<meta property="og:image:type" content="image/png" />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta property="og:url" content="https://amzn.github.io/app-platform/module-structure/" />
+<meta property="twitter:card" content="summary_large_image" />
+<meta property="twitter:title" content="Module Structure - App Platform" />
+<meta property="twitter:description" content="A lightweight application framework for state and memory management suitable for Kotlin Multiplatform projects." />
+<meta property="twitter:image" content="https://amzn.github.io/app-platform/assets/images/social/module-structure.png" />
+</head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="blue-grey" data-md-color-accent="blue">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#module-structure" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow md-header--lifted" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="App Platform" class="md-header__button md-logo" aria-label="App Platform" data-md-component="logo">
+      
+  <img src="../images/logo.svg" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            App Platform
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Module Structure
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="blue-grey" data-md-color-accent="blue"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="blue-grey" data-md-color-accent="blue"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/amzn/app-platform" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    app-platform
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+    
+      
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href=".." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Introduction
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../setup/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Setup
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    <li class="md-tabs__item md-tabs__item--active">
+      <a href="./" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Module Structure
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../scope/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Scope
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../presenter/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Presenter
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../renderer/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Renderer
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../template/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Template
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../di/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  DI Framework
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../testing/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Testing
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../faq/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  FAQ
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../changelog/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Changelog
+
+      </a>
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+    
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+  
+
+<nav class="md-nav md-nav--primary md-nav--lifted md-nav--integrated" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="App Platform" class="md-nav__button md-logo" aria-label="App Platform" data-md-component="logo">
+      
+  <img src="../images/logo.svg" alt="logo">
+
+    </a>
+    App Platform
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/amzn/app-platform" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    app-platform
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Introduction
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../setup/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Setup
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module Structure
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module Structure
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#dependency-inversion" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Dependency inversion
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Dependency inversion">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#kotlin-code" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Kotlin code
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#gradle-modules" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Gradle modules
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#module-rules" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Module rules
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#module-types" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Module types
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Module types">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#public" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        :public
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#impl" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        :impl
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#internal" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        :internal
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#testing" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        :testing
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#robots" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        :robots
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#app" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        :app
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#example" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Example
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#gradle-setup" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Gradle setup
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../scope/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Scope
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../presenter/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Presenter
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../renderer/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Renderer
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../template/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Template
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../di/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    DI Framework
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../testing/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Testing
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../faq/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    FAQ
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../changelog/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Changelog
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+    <a href="https://github.com/amzn/app-platform/edit/main/docs/module-structure.md" title="Edit this page" class="md-content__button md-icon" rel="edit">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75z"/></svg>
+    </a>
+  
+  
+
+
+<h1 id="module-structure">Module Structure<a class="headerlink" href="#module-structure" title="Permanent link">&para;</a></h1>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Using the module structure is an opt-in feature through the Gradle DSL. The default value is <code>false</code> and
+this feature has to be enabled for each module.
+<div class="highlight"><pre><span></span><code><span class="n">appPlatform</span><span class="w"> </span><span class="o">{</span>
+<span class="w">  </span><span class="n">enableModuleStructure</span><span class="w"> </span><span class="kc">true</span>
+<span class="o">}</span>
+</code></pre></div></p>
+</div>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p><a href="./#impl"><code>:impl</code></a> modules are usually imported by the final <a href="./#app"><code>:app</code></a>
+modules. This also applies to App Platform itself. This Gradle option imports all necessary <code>:impl</code> modules for
+enabled features.
+<div class="highlight"><pre><span></span><code><span class="n">appPlatform</span><span class="w"> </span><span class="o">{</span>
+<span class="w">  </span><span class="n">addImplModuleDependencies</span><span class="w"> </span><span class="kc">true</span>
+<span class="o">}</span>
+</code></pre></div></p>
+</div>
+<div class="admonition example">
+<p class="admonition-title">Sample</p>
+<p>App Platform itself and the <a href="https://github.com/amzn/app-platform/tree/main/sample">sample app</a> use the module
+structure to separate APIs from implementations. The sample app highlights how we structure code and make use
+of the various module types.</p>
+</div>
+<h2 id="dependency-inversion">Dependency inversion<a class="headerlink" href="#dependency-inversion" title="Permanent link">&para;</a></h2>
+<p>Dependency inversion means that high-level APIs don’t depend on low-level details and low-level details
+only import other high-level APIs. It significantly reduces coupling between components. Dependency
+inversion can be implemented on different levels, e.g. in code and in the module structure.</p>
+<h3 id="kotlin-code">Kotlin code<a class="headerlink" href="#kotlin-code" title="Permanent link">&para;</a></h3>
+<p>Dependency inversion implemented in Kotlin code refers to having abstractions in place instead of
+relying on concrete implementations. Imagine this example:</p>
+<div class="highlight"><pre><span></span><code><span class="kd">class</span><span class="w"> </span><span class="nc">AccountProvider</span><span class="p">(</span>
+<span class="w">  </span><span class="kd">private</span><span class="w"> </span><span class="kd">val</span><span class="w"> </span><span class="nv">database</span><span class="p">:</span><span class="w"> </span><span class="n">SqliteDatabase</span><span class="p">,</span>
+<span class="w">  </span><span class="p">...</span>
+<span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kd">val</span><span class="w"> </span><span class="nv">currentAccount</span><span class="p">:</span><span class="w"> </span><span class="n">StateFlow</span><span class="o">&lt;</span><span class="n">Account</span><span class="o">&gt;</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">...</span>
+
+<span class="w">  </span><span class="kd">fun</span><span class="w"> </span><span class="nf">updateCurrentAccount</span><span class="p">(</span><span class="n">account</span><span class="p">:</span><span class="w"> </span><span class="n">Account</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="p">...</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kd">class</span><span class="w"> </span><span class="nc">ChangeAccountHandler</span><span class="p">(</span>
+<span class="w">  </span><span class="kd">private</span><span class="w"> </span><span class="kd">val</span><span class="w"> </span><span class="nv">accountProvider</span><span class="p">:</span><span class="w"> </span><span class="n">AccountProvider</span>
+<span class="p">)</span><span class="w"> </span><span class="p">{</span>
+
+<span class="w">  </span><span class="kd">private</span><span class="w"> </span><span class="kd">fun</span><span class="w"> </span><span class="nf">onAccountChanged</span><span class="p">(</span><span class="n">account</span><span class="p">:</span><span class="w"> </span><span class="n">Account</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">accountProvider</span><span class="p">.</span><span class="na">updateCurrentAccount</span><span class="p">(</span><span class="n">account</span><span class="p">)</span>
+<span class="w">    </span><span class="p">...</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+<p><code>ChangeAccountHandler</code> has a strong dependency on <code>AccountProvider</code>. This is problematic in multiple ways.
+Evolving <code>AccountProvider</code> is challenging, because implementation details are easily leaked and become
+part of the public API. Every dependency from <code>AccountProvider</code> is exposed to consumers, e.g. <code>ChangeAccountHandler</code>
+knows that <code>AccountProvider</code> uses Sqlite for its implementation, a detail which should be hidden and makes
+dependency graphs unnecessarily large. <code>ChangeAccountHandler</code> is hard to test. One has to spin up a Sqlite database
+in a unit test environment in order to instantiate <code>AccountProvider</code> and pass it as argument to
+<code>ChangeAccountHandler</code>.</p>
+<p>A much better approach is introducing abstract APIs:</p>
+<div class="highlight"><pre><span></span><code><span class="kd">interface</span><span class="w"> </span><span class="nc">AccountProvider</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kd">val</span><span class="w"> </span><span class="nv">currentAccount</span><span class="p">:</span><span class="w"> </span><span class="n">StateFlow</span><span class="o">&lt;</span><span class="n">Account</span><span class="o">&gt;</span>
+
+<span class="w">  </span><span class="kd">fun</span><span class="w"> </span><span class="nf">updateCurrentAccount</span><span class="p">(</span><span class="n">account</span><span class="p">:</span><span class="w"> </span><span class="n">Account</span><span class="p">)</span>
+<span class="p">}</span>
+
+<span class="kd">class</span><span class="w"> </span><span class="nc">SqliteAccountProvider</span><span class="p">(</span>
+<span class="w">  </span><span class="kd">private</span><span class="w"> </span><span class="kd">val</span><span class="w"> </span><span class="nv">database</span><span class="p">:</span><span class="w"> </span><span class="n">SqliteDatabase</span>
+<span class="w">  </span><span class="p">...</span>
+<span class="p">)</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">AccountProvider</span><span class="w"> </span><span class="p">{</span>
+
+<span class="w">  </span><span class="nd">@VisibleForTesting</span>
+<span class="w">  </span><span class="kd">val</span><span class="w"> </span><span class="nv">allAccounts</span><span class="p">:</span><span class="w"> </span><span class="n">List</span><span class="o">&lt;</span><span class="n">Account</span><span class="o">&gt;</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">...</span>
+
+<span class="w">  </span><span class="p">...</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>The interface <code>AccountProvider</code> solves the mentioned shortcomings. <code>SqliteAccountProvider</code> can change and
+for example expose more fields (<code>allAccounts</code> in this sample) for verifications in unit tests without anyone
+knowing as the interface doesn’t need to be updated. Sqlite is a pure implementation detail and no consumer
+of <code>AccountProvider</code> has to know about it. This allows us to easily swap the implementation for a fake
+<code>AccountProvider</code> together with fake data in a unit test for <code>ChangeAccountHandler</code>.</p>
+<p>Breaking the dependency serves an additional purpose especially in Kotlin Multiplatform when
+implementations have platform dependencies:</p>
+<div class="highlight"><pre><span></span><code><span class="c1">// commonMain</span>
+<span class="kd">interface</span><span class="w"> </span><span class="nc">SqlDriver</span>
+
+<span class="c1">// androidMain</span>
+<span class="kd">class</span><span class="w"> </span><span class="nc">AndroidSqlDriver</span><span class="p">(</span><span class="n">context</span><span class="p">:</span><span class="w"> </span><span class="n">Context</span><span class="p">)</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">SqlDriver</span>
+
+<span class="c1">// iosMain</span>
+<span class="kd">class</span><span class="w"> </span><span class="nc">NativeSqlDriver</span><span class="p">()</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">SqlDriver</span>
+</code></pre></div>
+<p class="annotate">Notice how the Android implementation has a strong dependency on the Android runtime through the <code>Context</code>
+class. Relying on interfaces / abstract classes together with dependency injection is the
+<a href="https://www.jetbrains.com/help/kotlin-multiplatform-dev/multiplatform-connect-to-apis.html#dependency-injection-framework">preferred way</a> (1)
+over <code>expect / actual</code> functions to implement dependency inversion as this approach allows platform specific changes.</p>
+<ol>
+<li>When you use a DI framework, you inject all of the dependencies through this framework. The same logic applies to handling platform dependencies. We recommend continuing to use DI if you already have it in your project, rather than using the expected and actual functions manually. This way, you can avoid mixing two different ways of injecting dependencies.</li>
+</ol>
+<h3 id="gradle-modules">Gradle modules<a class="headerlink" href="#gradle-modules" title="Permanent link">&para;</a></h3>
+<p>The App Platform separates APIs from implementations by splitting the code in separate Gradle modules. The same
+recommendation applies not only to other core libraries but also feature code due to the many benefits such as
+smaller dependency graphs, lower coupling and a simple mechanism to replace dependencies with fakes.</p>
+<p>Imagine having two implementations of the shared interface <code>LocationProvider</code> for two applications
+<em>Delivery App</em> and <em>Navigation App</em>:</p>
+<div class="highlight"><pre><span></span><code><span class="kd">interface</span><span class="w"> </span><span class="nc">LocationProvider</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kd">val</span><span class="w"> </span><span class="nv">location</span><span class="p">:</span><span class="w"> </span><span class="n">StateFlow</span><span class="o">&lt;</span><span class="n">Location</span><span class="o">&gt;</span>
+<span class="p">}</span>
+
+<span class="kd">class</span><span class="w"> </span><span class="nc">DeliveryAppLocationProvider</span><span class="p">(</span>
+<span class="w">  </span><span class="kd">private</span><span class="w"> </span><span class="kd">val</span><span class="w"> </span><span class="nv">dataLayer</span><span class="p">:</span><span class="w"> </span><span class="n">DeliveryAppDataLayer</span><span class="p">,</span>
+<span class="w">  </span><span class="p">...</span>
+<span class="p">)</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">LocationProvider</span><span class="w"> </span><span class="p">{..}</span>
+
+<span class="kd">class</span><span class="w"> </span><span class="nc">NavigationAppLocationProvider</span><span class="p">(</span>
+<span class="w">  </span><span class="kd">private</span><span class="w"> </span><span class="kd">val</span><span class="w"> </span><span class="nv">application</span><span class="p">:</span><span class="w"> </span><span class="n">NavigationApplication</span><span class="p">,</span>
+<span class="w">  </span><span class="p">...</span>
+<span class="p">)</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">LocationProvider</span><span class="w"> </span><span class="p">{..}</span>
+</code></pre></div>
+<p>If both classes live in the same module, then the shared Gradle module must depend on modules belonging to
+<em>Delivery</em> and <em>Navigation</em> App at the same time. This is not ideal, because then the <em>Delivery App</em> would
+automatically depend on code from the <em>Navigation App</em> and the <em>Navigation App</em> on <em>Delivery App</em> code through
+a transitive dependency as highlighted in the diagram below.</p>
+<pre class="mermaid"><code>%%{init: {'themeCSS': '.label { font-family: monospace; }'}}%%
+graph TD
+  delivery-platform["`:delivery-platform`"]
+  navigation-platform["`:navigation-platform`"]
+  location["`**:location**
+  *DeliveryAppLocationProvider*
+  *NavigationAppLocationProvider*`"]
+  delivery-app["`:delivery-app`"]
+  navigation-app["`:navigation-app`"]
+
+  delivery-platform --&gt; location
+  navigation-platform --&gt; location
+  location --&gt; delivery-app
+  location --&gt; navigation-app</code></pre>
+<p>To avoid the issue of the transitive dependencies, concrete implementation classes <code>DeliveryAppLocationProvider</code>
+and <code>NavigationAppLocationProvider</code> could be moved into the final respective application packages <code>:delivery-app</code>
+and <code>:navigation-app</code>.</p>
+<pre class="mermaid"><code>%%{init: {'themeCSS': '.label { font-family: monospace; }'}}%%
+graph TD
+  delivery-platform["`:delivery-platform`"]
+  location["`:location`"]
+  navigation-platform["`:navigation-platform`"]
+  delivery-app["`**:delivery-app**
+  *DeliveryAppLocationProvider*`"]
+  navigation-app["`**:navigation-app**
+  *NavigationAppLocationProvider*`"]
+
+  delivery-platform --&gt; delivery-app
+  navigation-platform --&gt; navigation-app
+  location --&gt; delivery-app
+  location --&gt; navigation-app</code></pre>
+<p>However, this would be a bad approach from a modularization standpoint. The app modules would become
+larger and larger over time and the many classes within it would have a low cohesion level. Build times get
+longer roughly linear to the size of the module, because individual build steps such as Kotlin compilation
+can’t be parallelized.</p>
+<p>Instead, a similar approach to <a href="./#kotlin-code">dependency inversion in Kotlin code</a>
+is applied to modules. The shared package can be split into a public API and implementation sub-module:</p>
+<pre class="mermaid"><code>%%{init: {'themeCSS': '.label { font-family: monospace; }'}}%%
+graph TD
+  delivery-platform["`:delivery-platform`"]
+  location-public["`:location:public`"]
+  navigation-platform["`:navigation-platform`"]
+  location-impl-delivery["`**:location:impl-delivery**
+  *DeliveryAppLocationProvider*`"]
+  location-impl-navigation["`**:location:impl-navigation**
+  *NavigationAppLocationProvider*`"]
+  delivery-app["`:delivery-app`"]
+  navigation-app["`:navigation-app`"]
+
+  delivery-platform --&gt; location-impl-delivery
+  navigation-platform --&gt; location-impl-navigation
+  location-public --&gt; location-impl-delivery
+  location-public --&gt; location-impl-navigation
+  location-impl-delivery --&gt; delivery-app
+  location-impl-navigation --&gt; navigation-app</code></pre>
+<p>By cleanly separating shared code in <code>:public</code> modules from implementations in <code>:impl</code> modules we break
+dependencies in our build graph. <code>DeliveryAppLocationProvider</code> and <code>NavigationAppLocationProvider</code> provide a
+separate implementation for each application target of the shared API, have dependencies on each individual
+platform and yet don’t leak any implementation details nor platform APIs.</p>
+<h2 id="module-rules">Module rules<a class="headerlink" href="#module-rules" title="Permanent link">&para;</a></h2>
+<p>In order to follow the dependency inversion principle correctly the most important rule in this module structure
+is that no other module but the final application module is allowed to depend on <code>:impl</code> modules. <code>:public</code>
+modules on the other hand are widely shared and can be imported by any other module.</p>
+<p><img alt="Forbidden dependency" src="../images/module-structure-forbidden-dep.png" width="600" /></p>
+<p>A library always comes with a single <code>:public</code> module for shared code. There can be zero, one or more <code>:impl</code>
+modules, e.g. when dependency inversion isn’t needed, then the <code>:impl</code> module is redundant. When the implementation
+can be shared between all apps, then only a single <code>:impl</code> module is needed. When there are multiple different
+implementations for different applications, then multiple <code>:impl</code> modules are required like in the example above.
+To make code easier to discover, it’s recommended to put all Gradle modules into the same sub module.</p>
+<p>This module structure reduces coupling between libraries and increases cohesion within modules, which are two
+desired attributes in a modularized codebase. <code>:impl</code> modules can change and be modified without impacting any
+other library. Our build dependency graph stays flat and all <code>:impl</code> modules can be compiled and assembled in
+parallel.</p>
+<p>The <code>:public / :impl</code> module split is recommended whenever dependency inversion is needed for code, because of
+all the benefits mentioned above. The split becomes more natural over time and the benefit increases. Rare
+exceptions are when dependency inversion isn’t applied such as for sharing utilities like extension functions,
+UI components or test helpers.</p>
+<h2 id="module-types">Module types<a class="headerlink" href="#module-types" title="Permanent link">&para;</a></h2>
+<p>Beyond <code>:public</code> and <code>:impl</code> modules, there are further optional module types:</p>
+<p><img alt="Module types" src="../images/module-structure-types.png" width="600" /></p>
+<h3 id="public"><code>:public</code><a class="headerlink" href="#public" title="Permanent link">&para;</a></h3>
+<p><code>:public</code> modules contain the code that should be shared and reused by other modules and libraries.
+APIs (interfaces) usually live in <code>:public</code> modules, but also code where dependency inversion isn’t applied
+such as static utilities, extension functions and UI components.</p>
+<h3 id="impl"><code>:impl</code><a class="headerlink" href="#impl" title="Permanent link">&para;</a></h3>
+<p><code>:impl</code> modules contain the concrete implementations of the API from <code>:public</code> modules. A library can have
+zero or more <code>:impl</code> modules. If a library contains multiple <code>:impl</code> modules, then they’re suffixed with a name,
+e.g. <code>:login:impl-amazon</code> and <code>:login:impl-google</code>.</p>
+<h3 id="internal"><code>:internal</code><a class="headerlink" href="#internal" title="Permanent link">&para;</a></h3>
+<p><code>:internal</code> modules are used when code should be shared between multiple <code>:impl</code> modules of the same library,
+but the code should not be exposed through the <code>:public</code> module. This code is <em>internal</em> to this library.</p>
+<h3 id="testing"><code>:testing</code><a class="headerlink" href="#testing" title="Permanent link">&para;</a></h3>
+<p><code>:testing</code> modules provide a mechanism to share utilities or fake implementations for tests with other libraries.
+<code>:testing</code> modules are allowed to be imported as test dependency by any other module type and are never added
+to the runtime classpath. Even its own <code>:public</code> module can reuse the code from the <code>:testing</code> module for its tests.</p>
+<h3 id="robots"><code>:robots</code><a class="headerlink" href="#robots" title="Permanent link">&para;</a></h3>
+<p><code>:*-robots</code> modules help implementing the robot pattern for UI tests and make them shareable. Robots must know
+about concrete implementations, therefore they usually depend on an <code>:impl</code> module, but don&rsquo;t expose this <code>:impl</code>
+module on the compile classpath. <code>:robot</code> modules are only imported and reused for UI tests and are never
+added as dependency to the runtime classpath of a module similar to <code>:testing</code> modules.</p>
+<h3 id="app"><code>:app</code><a class="headerlink" href="#app" title="Permanent link">&para;</a></h3>
+<p><code>:app</code> modules refer to the final application, where all feature implementations are imported and assembled
+as a single binary. Therefore, <code>:app</code> modules are allowed to depend on <code>:impl</code> modules of all imported libraries
+and features.</p>
+<h2 id="example">Example<a class="headerlink" href="#example" title="Permanent link">&para;</a></h2>
+<p>A more complex dependency graph could look like this:</p>
+<p><img alt="Module structure example" src="../images/module-structure-example.png" /></p>
+<p>This example highlights many of the more frequently used dependencies. Notice that the impl modules
+<code>:location:impl-delivery</code> and <code>:location:impl-navigation</code> both depend on the internal module <code>:location:internal</code>
+to share some implementations, but non-shared code lives in each <code>:impl</code> module. The <code>:impl</code> modules import
+application specific code <code>:delivery-app-platform:public</code> and <code>:navigation-app-platform:public</code> safely without
+leaking the code to the wrong app. Further, <code>:location:impl-navigation</code> imports and uses <code>:navigation:public</code>,
+but neither the other impl module <code>:location:impl-delivery</code> nor its public module <code>:location:public</code> need to
+know about this dependency or depend on it.</p>
+<p>The second library <code>:navigation:public</code>, which imports <code>:location:public</code>, reuses testing module <code>:location:testing</code>
+for its unit tests. This saves boilerplate to setup fake implementations of the shared APIs from <code>:location:public</code>
+and discourages using mocking frameworks.</p>
+<p>The app <code>:navigation-app</code> imports its specific impl module <code>:location:impl-navigation</code>. It also reuses the
+robots from the <code>:location:impl-navigation-robots</code> module for its UI tests, further reducing strong dependencies
+on concrete implementations and favoring reusability.</p>
+<h2 id="gradle-setup">Gradle setup<a class="headerlink" href="#gradle-setup" title="Permanent link">&para;</a></h2>
+<p>Using the module structure is an opt-in feature through the Gradle DSL. The default value is <code>false</code> and
+this feature has to be enabled for each module.</p>
+<div class="highlight"><pre><span></span><code><span class="n">appPlatform</span><span class="w"> </span><span class="o">{</span>
+<span class="w">  </span><span class="n">enableModuleStructure</span><span class="w"> </span><span class="kc">true</span>
+<span class="o">}</span>
+</code></pre></div>
+<p>With this setting enabled, several checks and features are enabled:</p>
+<ul>
+<li>App Platform ensures that the Gradle module follows the naming convention, e.g. it&rsquo;s named <code>:public</code> or <code>:impl</code>.</li>
+<li>Default dependencies are added, e.g. an <code>:impl</code> module imports its <code>:public</code> module by default, or <code>:impl-robots</code> imports its <code>:impl</code> module by default.</li>
+<li>An <a href="https://developer.android.com/build/configure-app-module#set-namespace">Android namespace</a> is set <a href="https://github.com/amzn/app-platform/blob/0f3e242ae08bb242fbd7080d33caa069c8fae2b4/gradle-plugin/src/main/kotlin/software/amazon/app/platform/gradle/ModuleStructurePlugin.kt#L90-L110">automatically</a> if it hasn&rsquo;t been configured yet.</li>
+<li>A Gradle task <code>:checkModuleStructureDependencies</code> is registered, which verifies that module structure dependency rules are followed. The <code>:check</code> Gradle task automatically depends on <code>:checkModuleStructureDependencies</code>.</li>
+<li>A consistent API for an <a href="https://github.com/amzn/app-platform/blob/main/gradle-plugin/src/main/kotlin/software/amazon/app/platform/gradle/ModuleStructurePlugin.kt#L125-L135"><code>Project.artifactId</code></a> is available, e.g. for <code>:my-module:public</code> it would return <code>my-module-public</code>.</li>
+</ul>
+<details class="example">
+<summary>Sample</summary>
+<p>The sample application doesn&rsquo;t set the Android namespace anywhere. Instead, it relies on the default from
+App Platform, e.g. the <code>:sample:templates:impl</code> module uses this generated namespace for its <code>R</code> class:</p>
+<div class="highlight"><pre><span></span><code><span class="n">software</span><span class="p">.</span><span class="na">amazon</span><span class="p">.</span><span class="na">app</span><span class="p">.</span><span class="na">platform</span><span class="p">.</span><span class="na">sample</span><span class="p">.</span><span class="na">templates</span><span class="p">.</span><span class="na">impl</span><span class="p">.</span><span class="na">R</span>
+</code></pre></div>
+<p>App Platform uses the <code>Project.artifactId()</code> API for its own modules. Publishing using the
+<a href="https://vanniktech.github.io/gradle-maven-publish-plugin/">Gradle Maven Publish Plugin</a> is configured
+<a href="https://github.com/amzn/app-platform/blob/0f3e242ae08bb242fbd7080d33caa069c8fae2b4/buildSrc/src/main/kotlin/software/amazon/app/platform/gradle/buildsrc/SdkPlugin.kt#L16-L34">here</a>.</p>
+<div class="highlight"><pre><span></span><code><span class="kd">private</span><span class="w"> </span><span class="kd">fun</span><span class="w"> </span><span class="nf">mavenPublishing</span><span class="p">(</span><span class="n">project</span><span class="p">:</span><span class="w"> </span><span class="n">Project</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="n">plugins</span><span class="p">.</span><span class="na">apply</span><span class="p">(</span><span class="n">Plugins</span><span class="p">.</span><span class="na">MAVEN_PUBLISH</span><span class="p">)</span>
+
+<span class="w">  </span><span class="n">project</span><span class="p">.</span><span class="na">extensions</span>
+<span class="w">    </span><span class="p">.</span><span class="na">getByType</span><span class="p">(</span><span class="n">MavenPublishBaseExtension</span><span class="o">::</span><span class="n">class</span><span class="p">.</span><span class="na">java</span><span class="p">)</span>
+<span class="w">    </span><span class="p">.</span><span class="na">coordinates</span><span class="p">(</span><span class="n">artifactId</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">project</span><span class="p">.</span><span class="na">artifactId</span><span class="p">())</span>
+<span class="p">}</span>
+</code></pre></div>
+</details>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+  <script>var tabs=__md_get("__tabs");if(Array.isArray(tabs))e:for(var set of document.querySelectorAll(".tabbed-set")){var labels=set.querySelector(".tabbed-labels");for(var tab of tabs)for(var label of labels.getElementsByTagName("label"))if(label.innerText.trim()===tab){var input=document.getElementById(label.htmlFor);input.checked=!0;continue e}}</script>
+
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
+    </div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["content.code.annotate", "content.code.copy", "content.code.select", "content.tooltips", "navigation.tabs", "navigation.tabs.sticky", "navigation.top", "toc.follow", "toc.integrate", "content.tabs.link", "content.action.edit"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>

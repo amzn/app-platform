@@ -1,0 +1,2187 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="A lightweight application framework for state and memory management suitable for Kotlin Multiplatform projects.">
+      
+      
+      
+        <link rel="canonical" href="https://amzn.github.io/app-platform/presenter/">
+      
+      
+        <link rel="prev" href="../scope/">
+      
+      
+        <link rel="next" href="../renderer/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.1">
+    
+    
+      
+        <title>Presenter - App Platform</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inter:300,300i,400,400i,700,700i%7CFira+Code:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Inter";--md-code-font:"Fira Code"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  
+<meta property="og:type" content="website" />
+<meta property="og:title" content="Presenter - App Platform" />
+<meta property="og:description" content="A lightweight application framework for state and memory management suitable for Kotlin Multiplatform projects." />
+<meta property="og:image" content="https://amzn.github.io/app-platform/assets/images/social/presenter.png" />
+<meta property="og:image:type" content="image/png" />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta property="og:url" content="https://amzn.github.io/app-platform/presenter/" />
+<meta property="twitter:card" content="summary_large_image" />
+<meta property="twitter:title" content="Presenter - App Platform" />
+<meta property="twitter:description" content="A lightweight application framework for state and memory management suitable for Kotlin Multiplatform projects." />
+<meta property="twitter:image" content="https://amzn.github.io/app-platform/assets/images/social/presenter.png" />
+</head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="blue-grey" data-md-color-accent="blue">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#presenter" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow md-header--lifted" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="App Platform" class="md-header__button md-logo" aria-label="App Platform" data-md-component="logo">
+      
+  <img src="../images/logo.svg" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            App Platform
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Presenter
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="blue-grey" data-md-color-accent="blue"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="blue-grey" data-md-color-accent="blue"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/amzn/app-platform" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    app-platform
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+    
+      
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href=".." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Introduction
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../setup/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Setup
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../module-structure/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Module Structure
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../scope/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Scope
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    <li class="md-tabs__item md-tabs__item--active">
+      <a href="./" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Presenter
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../renderer/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Renderer
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../template/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Template
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../di/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  DI Framework
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../testing/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Testing
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../faq/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  FAQ
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../changelog/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Changelog
+
+      </a>
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+    
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+  
+
+<nav class="md-nav md-nav--primary md-nav--lifted md-nav--integrated" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="App Platform" class="md-nav__button md-logo" aria-label="App Platform" data-md-component="logo">
+      
+  <img src="../images/logo.svg" alt="logo">
+
+    </a>
+    App Platform
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/amzn/app-platform" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    app-platform
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Introduction
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../setup/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Setup
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../module-structure/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module Structure
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../scope/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Scope
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Presenter
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Presenter
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#unidirectional-dataflow" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Unidirectional dataflow
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#moleculepresenter" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        MoleculePresenter
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#model-driven-navigation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Model driven navigation
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#parent-child-communication" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Parent child communication
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#launching" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Launching
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#testing" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Testing
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#back-gestures" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Back gestures
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#compose-runtime" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Compose runtime
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Compose runtime">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#lifecycle" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Lifecycle
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#state" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        State
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#side-effects" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Side effects
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#recipes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Recipes
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Recipes">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#save-presenter-state" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Save Presenter state
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#presenter-backstack" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Presenter backstack
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#compositionlocal" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        CompositionLocal
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#app-bar" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        App Bar
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#navigation-3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Navigation 3
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#swiftui" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        SwiftUI
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="SwiftUI">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#presenters-and-swiftui-views" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Presenters and SwiftUI Views
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#navigation-with-presenters-and-swiftui" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Navigation with Presenters and SwiftUI
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../renderer/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Renderer
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../template/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Template
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../di/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    DI Framework
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../testing/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Testing
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../faq/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    FAQ
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../changelog/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Changelog
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+    <a href="https://github.com/amzn/app-platform/edit/main/docs/presenter.md" title="Edit this page" class="md-content__button md-icon" rel="edit">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75z"/></svg>
+    </a>
+  
+  
+
+
+<h1 id="presenter">Presenter<a class="headerlink" href="#presenter" title="Permanent link">&para;</a></h1>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>While App Platform has a generic <code>Presenter</code> interface to remove coupling, we strongly recommend using
+<code>MoleculePresenter</code> for implementations. <code>MoleculePresenters</code> are an opt-in feature through the Gradle DSL.
+The default value is <code>false</code>.</p>
+<div class="highlight"><pre><span></span><code><span class="n">appPlatform</span><span class="w"> </span><span class="o">{</span>
+<span class="w">  </span><span class="n">enableMoleculePresenters</span><span class="w"> </span><span class="kc">true</span>
+<span class="o">}</span>
+</code></pre></div>
+</div>
+<h2 id="unidirectional-dataflow">Unidirectional dataflow<a class="headerlink" href="#unidirectional-dataflow" title="Permanent link">&para;</a></h2>
+<p>App Platform implements the unidirectional dataflow pattern to decouple business logic from UI rendering. Not only
+does this allow for better testing of business logic and provides clear boundaries, but individual apps can also
+share more code and change the look and feel when needed.</p>
+<h2 id="moleculepresenter"><code>MoleculePresenter</code><a class="headerlink" href="#moleculepresenter" title="Permanent link">&para;</a></h2>
+<p>In the unidirectional dataflow pattern events and state only travel into one direction through a single stream.
+State is produced by <code>Presenters</code> and can be observed through a reactive stream:</p>
+<div class="highlight"><pre><span></span><code><span class="kd">interface</span><span class="w"> </span><span class="nc">Presenter</span><span class="o">&lt;</span><span class="n">ModelT</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">BaseModel</span><span class="o">&gt;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kd">val</span><span class="w"> </span><span class="nv">model</span><span class="p">:</span><span class="w"> </span><span class="n">StateFlow</span><span class="o">&lt;</span><span class="n">ModelT</span><span class="o">&gt;</span>
+<span class="p">}</span>
+</code></pre></div>
+<p><code>Presenters</code> can be implemented in many ways as long as they can be converted to this interface. App Platform
+provides and recommends the implementation using <a href="https://github.com/cashapp/molecule">Molecule</a> since it provides
+many advantages. Molecule is a library that turns a <code>@Composable</code> function into a <code>StateFlow</code>. It leverages the
+core of <a href="https://developer.android.com/compose">Compose</a> without bringing in Compose UI as dependency. The primary
+use case of Compose is handling, creating and modifying tree-like data structures, which is a natural fit for
+UI frameworks. Molecule reuses Compose to handle state management and state transitions to implement business
+logic in the form of <code>@Composable</code> functions with all the benefits that Compose provides.</p>
+<p>The <a href="https://github.com/amzn/app-platform/blob/main/presenter-molecule/public/src/commonMain/kotlin/software/amazon/app/platform/presenter/molecule/MoleculePresenter.kt">MoleculePresenter</a>
+interface looks like this:</p>
+<div class="highlight"><pre><span></span><code><span class="kd">interface</span><span class="w"> </span><span class="nc">MoleculePresenter</span><span class="o">&lt;</span><span class="n">InputT</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="kt">Any</span><span class="p">,</span><span class="w"> </span><span class="n">ModelT</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">BaseModel</span><span class="o">&gt;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="nd">@Composable</span>
+<span class="w">  </span><span class="kd">fun</span><span class="w"> </span><span class="nf">present</span><span class="p">(</span><span class="n">input</span><span class="p">:</span><span class="w"> </span><span class="n">InputT</span><span class="p">):</span><span class="w"> </span><span class="n">ModelT</span>
+<span class="p">}</span>
+</code></pre></div>
+<p><a href="https://github.com/amzn/app-platform/blob/main/presenter/public/src/commonMain/kotlin/software/amazon/app/platform/presenter/BaseModel.kt"><code>Models</code></a>
+represent the state of a <code>Presenter</code>. Usually, they’re implemented as immutable, inner data classes of the <code>Presenter</code>.
+Using sealed hierarchies is a good practice to allow to differentiate between different states:</p>
+<div class="highlight"><pre><span></span><code><span class="kd">interface</span><span class="w"> </span><span class="nc">LoginPresenter</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">MoleculePresenter</span><span class="o">&lt;</span><span class="n">Model</span><span class="o">&gt;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kd">sealed</span><span class="w"> </span><span class="kd">interface</span><span class="w"> </span><span class="nc">Model</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">BaseModel</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kd">data</span><span class="w"> </span><span class="kd">object</span><span class="w"> </span><span class="nc">LoggedOut</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">Model</span>
+
+<span class="w">    </span><span class="kd">data</span><span class="w"> </span><span class="kd">class</span><span class="w"> </span><span class="nc">LoggedIn</span><span class="p">(</span>
+<span class="w">      </span><span class="kd">val</span><span class="w"> </span><span class="nv">user</span><span class="p">:</span><span class="w"> </span><span class="n">User</span><span class="p">,</span>
+<span class="w">    </span><span class="p">)</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">Model</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>Notice that it’s recommended even for <code>Presenters</code> to follow the dependency inversion principle. <code>LoginPresenter</code> is
+an interface and there can be multiple implementations.</p>
+<details class="example">
+<summary>Sample</summary>
+<p>The sample application follows the same principle of dependency inversion. E.g. the API of the
+<a href="https://github.com/amzn/app-platform/blob/main/sample/login/public/src/commonMain/kotlin/software/amazon/app/platform/sample/login/LoginPresenter.kt"><code>LoginPresenter</code></a>
+is part of the <code>:public</code> module, while the implementation <a href="https://github.com/amzn/app-platform/blob/main/sample/login/impl/src/commonMain/kotlin/software/amazon/app/platform/sample/login/LoginPresenterImpl.kt"><code>LoginPresenterImpl</code></a>
+lives in the <code>:impl</code> module. This abstraction is used in tests, where <a href="https://github.com/amzn/app-platform/blob/main/sample/navigation/impl/src/commonTest/kotlin/software/amazon/app/platform/sample/navigation/NavigationPresenterImplTest.kt#L45-L49"><code>FakeLoginPresenter</code></a>
+simplifies the test setup of classes relying on <code>LoginPresenter</code>.</p>
+</details>
+<p>Observers of the state of a <code>Presenter</code>, such as the UI layer, communicate back to the <code>Presenter</code> through events.
+Events are sent through a lambda in the <code>Model</code>, which the <code>Presenter</code> must provide:</p>
+<div class="highlight"><pre><span></span><code><span class="kd">interface</span><span class="w"> </span><span class="nc">LoginPresenter</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">MoleculePresenter</span><span class="o">&lt;</span><span class="kt">Unit</span><span class="p">,</span><span class="w"> </span><span class="n">Model</span><span class="o">&gt;</span><span class="w"> </span><span class="p">{</span>
+
+<span class="w">  </span><span class="kd">sealed</span><span class="w"> </span><span class="kd">interface</span><span class="w"> </span><span class="nc">Event</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kd">data</span><span class="w"> </span><span class="kd">object</span><span class="w"> </span><span class="nc">Logout</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">Event</span>
+
+<span class="w">    </span><span class="kd">data</span><span class="w"> </span><span class="kd">class</span><span class="w"> </span><span class="nc">ChangeName</span><span class="p">(</span>
+<span class="w">      </span><span class="kd">val</span><span class="w"> </span><span class="nv">newName</span><span class="p">:</span><span class="w"> </span><span class="kt">String</span><span class="p">,</span>
+<span class="w">    </span><span class="p">)</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">Event</span>
+<span class="w">  </span><span class="p">}</span>
+
+<span class="w">  </span><span class="kd">sealed</span><span class="w"> </span><span class="kd">interface</span><span class="w"> </span><span class="nc">Model</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">BaseModel</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kd">data</span><span class="w"> </span><span class="kd">object</span><span class="w"> </span><span class="nc">LoggedOut</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">Model</span>
+
+<span class="w">    </span><span class="kd">data</span><span class="w"> </span><span class="kd">class</span><span class="w"> </span><span class="nc">LoggedIn</span><span class="p">(</span>
+<span class="w">      </span><span class="kd">val</span><span class="w"> </span><span class="nv">user</span><span class="p">:</span><span class="w"> </span><span class="n">User</span><span class="p">,</span>
+<span class="hll"><span class="w">      </span><span class="kd">val</span><span class="w"> </span><span class="nv">onEvent</span><span class="p">:</span><span class="w"> </span><span class="p">(</span><span class="n">Event</span><span class="p">)</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="kt">Unit</span><span class="p">,</span>
+</span><span class="w">    </span><span class="p">)</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">Model</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>A concrete implementation of <code>LoginPresenter</code> could look like this:</p>
+<div class="highlight"><pre><span></span><code><span class="nd">@Inject</span>
+<span class="nd">@ContributesBinding</span><span class="p">(</span><span class="n">AppScope</span><span class="o">::</span><span class="n">class</span><span class="p">)</span>
+<span class="kd">class</span><span class="w"> </span><span class="nc">AmazonLoginPresenter</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">LoginPresenter</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="nd">@Composable</span>
+<span class="w">  </span><span class="kd">fun</span><span class="w"> </span><span class="nf">present</span><span class="p">(</span><span class="n">input</span><span class="p">:</span><span class="w"> </span><span class="kt">Unit</span><span class="p">):</span><span class="w"> </span><span class="n">Model</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="p">..</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">user</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">null</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="n">LoggedIn</span><span class="p">(</span><span class="n">user</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">user</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">event</span><span class="w"> </span><span class="o">-&gt;</span>
+<span class="w">        </span><span class="k">when</span><span class="w"> </span><span class="p">(</span><span class="n">event</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">          </span><span class="k">is</span><span class="w"> </span><span class="n">Logout</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="p">..</span>
+<span class="w">          </span><span class="k">is</span><span class="w"> </span><span class="n">ChangeName</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="p">..</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">      </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="n">LoggedOut</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p><code>MoleculePresenters</code> are never singletons. While they use <code>kotlin-inject-anvil</code> or Metro for constructor injection and
+automatically bind the concrete implementation to an API using <code>@ContributesBinding</code>, they don&rsquo;t use the
+<code>@SingleIn</code> annotation. <code>MoleculePresenters</code> manage their state in the <code>@Composable</code> function with the Compose
+runtime. Therefore, it&rsquo;s strongly discouraged to have any class properties.</p>
+</div>
+<h2 id="model-driven-navigation">Model driven navigation<a class="headerlink" href="#model-driven-navigation" title="Permanent link">&para;</a></h2>
+<p><code>Presenters</code> are composable, meaning that one presenter could combine N other presenters into a single stream of
+model objects. With that concept in mind we can decompose large presenters into multiple smaller ones. Not only
+do they become easier to change, maintain and test, but we can also share and reuse presenters between multiple
+screens if needed. Presenters form a tree with nested presenters. They’re unaware of their parent and communicate
+upwards only through their <code>Model</code>.</p>
+<div class="highlight"><pre><span></span><code><span class="kd">class</span><span class="w"> </span><span class="nc">OnboardingPresenterImpl</span><span class="p">(</span>
+<span class="w">  </span><span class="c1">// Make presenters lazy to only instantiate them when they&#39;re actually needed.</span>
+<span class="w">  </span><span class="kd">private</span><span class="w"> </span><span class="kd">val</span><span class="w"> </span><span class="nv">lazyLoginPresenter</span><span class="p">:</span><span class="w"> </span><span class="p">()</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">LoginPresenter</span><span class="p">,</span>
+<span class="w">  </span><span class="kd">private</span><span class="w"> </span><span class="kd">val</span><span class="w"> </span><span class="nv">lazyRegistrationPresenter</span><span class="p">:</span><span class="w"> </span><span class="p">()</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">RegistrationPresenter</span><span class="p">,</span>
+<span class="p">)</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">OnboardingPresenter</span><span class="w"> </span><span class="p">{</span>
+
+<span class="w">  </span><span class="nd">@Composable</span>
+<span class="w">  </span><span class="kd">fun</span><span class="w"> </span><span class="nf">present</span><span class="p">(</span><span class="n">input</span><span class="p">:</span><span class="w"> </span><span class="kt">Unit</span><span class="p">):</span><span class="w"> </span><span class="n">BaseModel</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="p">...</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">mustRegister</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="c1">// Remember the presenter to avoid creating a new one during each</span>
+<span class="w">      </span><span class="c1">// composition (in other words when computing a new model).</span>
+<span class="w">      </span><span class="kd">val</span><span class="w"> </span><span class="nv">registrationPresenter</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">remember</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">lazyRegistrationPresenter</span><span class="p">()</span><span class="w"> </span><span class="p">}</span>
+<span class="hll"><span class="w">      </span><span class="n">registrationPresenter</span><span class="p">.</span><span class="na">present</span><span class="p">(</span><span class="kt">Unit</span><span class="p">)</span>
+</span><span class="w">    </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="kd">val</span><span class="w"> </span><span class="nv">loginPresenter</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">remember</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">lazyLoginPresenter</span><span class="p">()</span><span class="w"> </span><span class="p">}</span>
+<span class="hll"><span class="w">      </span><span class="n">loginPresenter</span><span class="p">.</span><span class="na">present</span><span class="p">(</span><span class="kt">Unit</span><span class="p">)</span>
+</span><span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>Notice how the parent presenter calls the <code>@Composable</code> <code>present()</code> function from the child presenters like
+a regular function to compute their model and return it.</p>
+<details class="example">
+<summary>Sample</summary>
+<p><a href="https://github.com/amzn/app-platform/blob/main/sample/navigation/impl/src/commonMain/kotlin/software/amazon/app/platform/sample/navigation/NavigationPresenterImpl.kt"><code>NavigationPresenterImpl</code></a>
+is another example that highlights this principle.</p>
+<p><a href="https://github.com/amzn/app-platform/blob/main/sample/user/impl/src/commonMain/kotlin/software/amazon/app/platform/sample/user/UserPagePresenterImpl.kt"><code>UserPagePresenterImpl</code></a>
+goes a step further. Its <code>BaseModel</code> is composed of two sub-models. The <code>listModel</code> is even an input for the
+detail-presenter.</p>
+<div class="highlight"><pre><span></span><code><span class="kd">val</span><span class="w"> </span><span class="nv">listModel</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">userPageListPresenter</span><span class="p">.</span><span class="na">present</span><span class="p">(</span><span class="n">UserPageListPresenter</span><span class="p">.</span><span class="na">Input</span><span class="p">(</span><span class="n">user</span><span class="p">))</span>
+<span class="k">return</span><span class="w"> </span><span class="n">Model</span><span class="p">(</span>
+<span class="w">  </span><span class="n">listModel</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">listModel</span><span class="p">,</span>
+<span class="w">  </span><span class="n">detailModel</span><span class="w"> </span><span class="o">=</span>
+<span class="w">    </span><span class="n">userPageDetailPresenter</span><span class="p">.</span><span class="na">present</span><span class="p">(</span>
+<span class="w">      </span><span class="n">UserPageDetailPresenter</span><span class="p">.</span><span class="na">Input</span><span class="p">(</span><span class="n">user</span><span class="p">,</span><span class="w"> </span><span class="n">selectedAttribute</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">listModel</span><span class="p">.</span><span class="na">selectedIndex</span><span class="p">)</span>
+<span class="w">    </span><span class="p">),</span>
+<span class="p">)</span>
+</code></pre></div>
+</details>
+<p>This concept allows us to implement model-driven navigation. By driving the entire UI layer through <code>Presenters</code> and
+emitted <code>Models</code> navigation becomes a first class API and testable. Imagine having a root presenter implementing a
+back stack that forwards the model of the top most presenter. When the user navigates to a new screen, then the
+root presenter would add a new presenter to the stack and provide its model object.</p>
+<pre class="mermaid"><code>%%{init: {'themeCSS': '.label { font-family: monospace; }'}}%%
+graph TD
+  login["`Login presenter`"]
+  registration["`Register presenter`"]
+  onboarding["`Onboarding presenter`"]
+  delivery["`Delivery presenter`"]
+  settings["`Settings presenter`"]
+  root["`Root presenter`"]
+  ui["`UI Layer`"]
+
+  login --&gt; onboarding
+  registration --&gt; onboarding
+  onboarding --&gt; root
+  delivery --&gt; root
+  settings --&gt; root
+  root --&gt; ui
+
+  style ui stroke:#0f0</code></pre>
+<p>In the example above, the root presenter would forward the model of the onboarding, delivery or settings presenter
+to the UI layer. The onboarding presenter as shown in the code example can either call the login or registration
+presenter based on a condition. With Molecule calling a child presenter is as easy as invoking a function.</p>
+<h2 id="parent-child-communication">Parent child communication<a class="headerlink" href="#parent-child-communication" title="Permanent link">&para;</a></h2>
+<p>While the pattern isn’t used frequently, parent presenters can provide input to their child presenters. The
+returned model from the child presenter can be used further to change the control flow.</p>
+<div class="highlight"><pre><span></span><code><span class="kd">interface</span><span class="w"> </span><span class="nc">ChildPresenter</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">MoleculePresenter</span><span class="o">&lt;</span><span class="n">Input</span><span class="p">,</span><span class="w"> </span><span class="n">Model</span><span class="o">&gt;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kd">data</span><span class="w"> </span><span class="kd">class</span><span class="w"> </span><span class="nc">Input</span><span class="p">(</span>
+<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="nv">argument</span><span class="p">:</span><span class="w"> </span><span class="kt">String</span><span class="p">,</span>
+<span class="w">  </span><span class="p">)</span>
+<span class="p">}</span>
+
+<span class="kd">class</span><span class="w"> </span><span class="nc">ParentPresenterImpl</span><span class="p">(</span>
+<span class="w">  </span><span class="kd">private</span><span class="w"> </span><span class="kd">val</span><span class="w"> </span><span class="nv">lazyChildPresenter</span><span class="p">:</span><span class="w"> </span><span class="p">()</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">ChildPresenter</span>
+<span class="p">)</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">ParentPresenter</span><span class="w"> </span><span class="p">{</span>
+
+<span class="w">  </span><span class="nd">@Composable</span>
+<span class="w">  </span><span class="kd">fun</span><span class="w"> </span><span class="nf">present</span><span class="p">(</span><span class="n">input</span><span class="p">:</span><span class="w"> </span><span class="kt">Unit</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="nv">childPresenter</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">remember</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">lazyChildPresenter</span><span class="p">()</span><span class="w"> </span><span class="p">}</span>
+<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="nv">childModel</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">childPresenter</span><span class="p">.</span><span class="na">present</span><span class="p">(</span><span class="n">Input</span><span class="p">(</span><span class="n">argument</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;abc&quot;</span><span class="p">))</span>
+
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">childModel</span><span class="p">...)</span><span class="w"> </span><span class="p">...</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>This mechanism is favored less, because it only allows for direct parent to child presenter interactions and
+becomes hard to manage for deeply nested hierarchies. More often a service object is injected instead, which
+is used by the multiple presenters:</p>
+<div class="highlight"><pre><span></span><code><span class="kd">interface</span><span class="w"> </span><span class="nc">AccountManager</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kd">val</span><span class="w"> </span><span class="nv">currentAccount</span><span class="p">:</span><span class="w"> </span><span class="n">StateFlow</span><span class="o">&lt;</span><span class="n">Account</span><span class="o">&gt;</span>
+
+<span class="w">  </span><span class="kd">fun</span><span class="w"> </span><span class="nf">mustRegister</span><span class="p">():</span><span class="w"> </span><span class="kt">Boolean</span>
+<span class="p">}</span>
+
+<span class="kd">class</span><span class="w"> </span><span class="nc">AmazonLoginPresenter</span><span class="p">(</span>
+<span class="hll"><span class="w">  </span><span class="kd">private</span><span class="w"> </span><span class="kd">val</span><span class="w"> </span><span class="nv">accountManager</span><span class="p">:</span><span class="w"> </span><span class="n">AccountManager</span>
+</span><span class="p">):</span><span class="w"> </span><span class="n">LoginPresenter</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="nd">@Composable</span>
+<span class="w">  </span><span class="kd">fun</span><span class="w"> </span><span class="nf">present</span><span class="p">(</span><span class="n">input</span><span class="p">:</span><span class="w"> </span><span class="kt">Unit</span><span class="p">):</span><span class="w"> </span><span class="n">Model</span><span class="w"> </span><span class="p">{</span>
+<span class="hll"><span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="nv">account</span><span class="w"> </span><span class="k">by</span><span class="w"> </span><span class="n">accountManager</span><span class="p">.</span><span class="na">currentAccount</span><span class="p">.</span><span class="na">collectAsState</span><span class="p">()</span>
+</span><span class="w">    </span><span class="p">...</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kd">class</span><span class="w"> </span><span class="nc">OnboardingPresenterImpl</span><span class="p">(</span>
+<span class="w">  </span><span class="kd">private</span><span class="w"> </span><span class="kd">val</span><span class="w"> </span><span class="nv">lazyLoginPresenter</span><span class="p">:</span><span class="w"> </span><span class="p">()</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">LoginPresenter</span><span class="p">,</span>
+<span class="w">  </span><span class="kd">private</span><span class="w"> </span><span class="kd">val</span><span class="w"> </span><span class="nv">lazyRegistrationPresenter</span><span class="p">:</span><span class="w"> </span><span class="p">()</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">RegistrationPresenter</span><span class="p">,</span>
+<span class="hll"><span class="w">  </span><span class="kd">private</span><span class="w"> </span><span class="kd">val</span><span class="w"> </span><span class="nv">accountManager</span><span class="p">:</span><span class="w"> </span><span class="n">AccountManager</span><span class="p">,</span>
+</span><span class="p">)</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">OnboardingPresenter</span><span class="w"> </span><span class="p">{</span>
+
+<span class="w">  </span><span class="nd">@Composable</span>
+<span class="w">  </span><span class="kd">fun</span><span class="w"> </span><span class="nf">present</span><span class="p">(</span><span class="n">input</span><span class="p">:</span><span class="w"> </span><span class="kt">Unit</span><span class="p">):</span><span class="w"> </span><span class="n">BaseModel</span><span class="w"> </span><span class="p">{</span>
+<span class="hll"><span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="nv">account</span><span class="w"> </span><span class="k">by</span><span class="w"> </span><span class="n">accountManager</span><span class="p">.</span><span class="na">currentAccount</span><span class="p">.</span><span class="na">collectAsState</span><span class="p">()</span>
+</span><span class="w">    </span><span class="p">...</span>
+
+<span class="hll"><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">accountManager</span><span class="p">.</span><span class="na">mustRegister</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
+</span><span class="w">      </span><span class="kd">val</span><span class="w"> </span><span class="nv">registrationPresenter</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">remember</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">lazyRegistrationPresenter</span><span class="p">()</span><span class="w"> </span><span class="p">}</span>
+<span class="w">      </span><span class="n">registrationPresenter</span><span class="p">.</span><span class="na">present</span><span class="p">(</span><span class="kt">Unit</span><span class="p">)</span>
+<span class="w">    </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="kd">val</span><span class="w"> </span><span class="nv">loginPresenter</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">remember</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">lazyLoginPresenter</span><span class="p">()</span><span class="w"> </span><span class="p">}</span>
+<span class="w">      </span><span class="n">loginPresenter</span><span class="p">.</span><span class="na">present</span><span class="p">(</span><span class="kt">Unit</span><span class="p">)</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>This example shows how <code>AccountManager</code> holds state and is injected into multiple presenters instead of relying
+on presenter inputs.</p>
+<h2 id="launching">Launching<a class="headerlink" href="#launching" title="Permanent link">&para;</a></h2>
+<p><code>MoleculePresenters</code> can inject other presenters and call their <code>present()</code> function inline. If you are already in a
+composable UI context, then you can simply call the presenter to compute the model:</p>
+<div class="highlight"><pre><span></span><code><span class="kd">fun</span><span class="w"> </span><span class="nf">mainViewController</span><span class="p">():</span><span class="w"> </span><span class="n">UIViewController</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ComposeUIViewController</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kd">val</span><span class="w"> </span><span class="nv">presenter</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">remember</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">LoginPresenter</span><span class="p">()</span><span class="w"> </span><span class="p">}</span>
+<span class="w">  </span><span class="kd">val</span><span class="w"> </span><span class="nv">model</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">presenter</span><span class="p">.</span><span class="na">present</span><span class="p">(</span><span class="kt">Unit</span><span class="p">)</span>
+<span class="w">  </span><span class="p">...</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>In this example the <code>LoginPresenter</code> model is computed from an iOS Compose Multiplatform function.</p>
+<p>In other scenarios a composable context may not be available and it&rsquo;s necessary to turn the <code>@Composable</code> functions
+into a <code>StateFlow</code> for consumption.</p>
+<p><a href="https://github.com/amzn/app-platform/blob/main/presenter-molecule/public/src/commonMain/kotlin/software/amazon/app/platform/presenter/molecule/MoleculeScope.kt"><code>MoleculeScope</code></a>
+helps to turn a <code>MoleculePresenter</code> into a <code>Presenter</code>, which then exposes a <code>StateFlow</code>:</p>
+<div class="highlight"><pre><span></span><code><span class="kd">val</span><span class="w"> </span><span class="nv">stateFlow</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">moleculeScope</span>
+<span class="w">  </span><span class="p">.</span><span class="na">launchMoleculePresenter</span><span class="p">(</span>
+<span class="w">    </span><span class="n">presenter</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">myPresenter</span><span class="p">,</span>
+<span class="w">    </span><span class="n">input</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kt">Unit</span><span class="p">,</span>
+<span class="w">  </span><span class="p">)</span>
+<span class="w">  </span><span class="p">.</span><span class="na">model</span>
+</code></pre></div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p><code>MoleculeScope</code> wraps a <code>CoroutineScope</code>. The presenter keeps running, recomposing and producing new models
+until the <code>MoleculeScope</code> is canceled. If the <code>MoleculeScope</code> is never canceled, then presenters leak and will
+cause issues later.</p>
+<p>Use <a href="https://github.com/amzn/app-platform/blob/main/presenter-molecule/public/src/commonMain/kotlin/software/amazon/app/platform/presenter/molecule/MoleculeScopeFactory.kt"><code>MoleculeScopeFactory</code></a>
+to create a new <code>MoleculeScope</code> instance and call <code>cancel()</code> when you don&rsquo;t need it anymore.</p>
+<p>On Android an implementation using <code>ViewModels</code> may look like this:</p>
+<div class="highlight"><pre><span></span><code><span class="kd">class</span><span class="w"> </span><span class="nc">MainActivityViewModel</span><span class="p">(</span>
+<span class="w">  </span><span class="n">moleculeScopeFactory</span><span class="p">:</span><span class="w"> </span><span class="n">MoleculeScopeFactory</span><span class="p">,</span>
+<span class="w">  </span><span class="n">myPresenter</span><span class="p">:</span><span class="w"> </span><span class="n">MyPresenter</span><span class="p">,</span>
+<span class="p">)</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">ViewModel</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+
+<span class="w">  </span><span class="kd">private</span><span class="w"> </span><span class="kd">val</span><span class="w"> </span><span class="nv">moleculeScope</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">moleculeScopeFactory</span><span class="p">.</span><span class="na">createMoleculeScope</span><span class="p">()</span>
+
+<span class="w">  </span><span class="c1">// Expose the models for consumption.</span>
+<span class="w">  </span><span class="kd">val</span><span class="w"> </span><span class="nv">models</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">moleculeScope</span>
+<span class="w">    </span><span class="p">.</span><span class="na">launchMoleculePresenter</span><span class="p">(</span>
+<span class="w">      </span><span class="n">presenter</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">myPresenter</span><span class="p">,</span>
+<span class="w">      </span><span class="n">input</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kt">Unit</span>
+<span class="w">    </span><span class="p">)</span>
+<span class="w">    </span><span class="p">.</span><span class="na">models</span>
+
+<span class="w">  </span><span class="kd">override</span><span class="w"> </span><span class="kd">fun</span><span class="w"> </span><span class="nf">onCleared</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">moleculeScope</span><span class="p">.</span><span class="na">cancel</span><span class="p">()</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+</div>
+<div class="admonition info">
+<p class="admonition-title">Info</p>
+<p>By default <code>MoleculeScope</code> uses the main thread for running presenters and
+<a href="https://github.com/cashapp/molecule/blob/trunk/molecule-runtime/src/commonMain/kotlin/app/cash/molecule/RecompositionMode.kt"><code>RecompositionMode.ContextClock</code></a>,
+meaning a new model is produced only once per UI frame and further changes are conflated.</p>
+<p>This behavior can be changed by creating a custom <code>MoleculeScope</code>, e.g. tests make use of this:</p>
+<div class="highlight"><pre><span></span><code><span class="kd">fun</span><span class="w"> </span><span class="n">TestScope</span><span class="p">.</span><span class="nf">moleculeScope</span><span class="p">(</span>
+<span class="w">  </span><span class="n">coroutineContext</span><span class="p">:</span><span class="w"> </span><span class="n">CoroutineContext</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">EmptyCoroutineContext</span>
+<span class="p">):</span><span class="w"> </span><span class="n">MoleculeScope</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kd">val</span><span class="w"> </span><span class="nv">scope</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">backgroundScope</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">CoroutineName</span><span class="p">(</span><span class="s">&quot;TestMoleculeScope&quot;</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">coroutineContext</span>
+
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="n">MoleculeScope</span><span class="p">(</span><span class="n">scope</span><span class="p">,</span><span class="w"> </span><span class="n">RecompositionMode</span><span class="p">.</span><span class="na">Immediate</span><span class="p">)</span>
+<span class="p">}</span>
+</code></pre></div>
+</div>
+<h2 id="testing">Testing<a class="headerlink" href="#testing" title="Permanent link">&para;</a></h2>
+<p>A <a href="https://github.com/amzn/app-platform/blob/main/presenter-molecule/testing/src/commonMain/kotlin/software/amazon/app/platform/presenter/molecule/TestPresenter.kt"><code>test()</code></a>
+utility function is provided to make testing <code>MoleculePresenters</code> easy using the <a href="https://github.com/cashapp/turbine/">Turbine</a>
+library:</p>
+<div class="highlight"><pre><span></span><code><span class="kd">class</span><span class="w"> </span><span class="nc">LoginPresenterImplTest</span><span class="w"> </span><span class="p">{</span>
+
+<span class="w">  </span><span class="nd">@Test</span>
+<span class="w">  </span><span class="kd">fun</span><span class="w"> </span><span class="nf">`after 1 second the user is logged in after pressing the login button`</span><span class="p">()</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">runTest</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="nv">userManager</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">FakeUserManager</span><span class="p">()</span>
+
+<span class="w">    </span><span class="n">LoginPresenterImpl</span><span class="p">(</span><span class="n">userManager</span><span class="p">).</span><span class="na">test</span><span class="p">(</span><span class="k">this</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="kd">val</span><span class="w"> </span><span class="nv">firstModel</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">awaitItem</span><span class="p">()</span>
+<span class="w">      </span><span class="p">...</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>The <code>test()</code> function uses the <code>TestScope.backgroundScope</code> to run the presenter.</p>
+<details class="example">
+<summary>Sample</summary>
+<p>The sample application implements multiple tests for its presenters, e.g.
+<a href="https://github.com/amzn/app-platform/blob/main/sample/login/impl/src/commonTest/kotlin/software/amazon/app/platform/sample/login/LoginPresenterImplTest.kt"><code>LoginPresenterImplTest</code></a>,
+<a href="https://github.com/amzn/app-platform/blob/main/sample/navigation/impl/src/commonTest/kotlin/software/amazon/app/platform/sample/navigation/NavigationPresenterImplTest.kt"><code>NavigationPresenterImplTest</code></a>
+and <a href="https://github.com/amzn/app-platform/blob/main/sample/user/impl/src/commonTest/kotlin/software/amazon/app/platform/sample/user/UserPagePresenterImplTest.kt"><code>UserPagePresenterImplTest</code></a>.</p>
+</details>
+<h2 id="back-gestures">Back gestures<a class="headerlink" href="#back-gestures" title="Permanent link">&para;</a></h2>
+<p><code>Presenters</code> support back gestures with a similar API in terms of syntax and semantic to Compose Multiplatform. Any
+<code>Presenter</code> can call these functions:</p>
+<div class="highlight"><pre><span></span><code><span class="nd">@Composable</span>
+<span class="kd">fun</span><span class="w"> </span><span class="nf">present</span><span class="p">(</span><span class="n">input</span><span class="p">:</span><span class="w"> </span><span class="kt">Unit</span><span class="p">):</span><span class="w"> </span><span class="n">Model</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="n">BackHandlerPresenter</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="c1">// Handle a back press.  </span>
+<span class="w">  </span><span class="p">}</span>
+
+<span class="w">  </span><span class="n">PredictiveBackHandlerPresenter</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">progress</span><span class="p">:</span><span class="w"> </span><span class="n">Flow</span><span class="o">&lt;</span><span class="n">BackEventCompat</span><span class="o">&gt;</span><span class="w"> </span><span class="o">-&gt;</span>
+<span class="w">    </span><span class="c1">// code for gesture back started</span>
+<span class="w">    </span><span class="k">try</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="n">progress</span><span class="p">.</span><span class="na">collect</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">backevent</span><span class="w"> </span><span class="o">-&gt;</span>
+<span class="w">        </span><span class="c1">// code for progress</span>
+<span class="w">      </span><span class="p">}</span>
+<span class="w">      </span><span class="c1">// code for completion</span>
+<span class="w">    </span><span class="p">}</span><span class="w"> </span><span class="k">catch</span><span class="w"> </span><span class="p">(</span><span class="n">e</span><span class="p">:</span><span class="w"> </span><span class="n">CancellationException</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="c1">// code for cancellation</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">}</span><span class="w">  </span>
+<span class="p">}</span>
+</code></pre></div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Notice <code>Presenter</code> suffix in these function names. These functions should not be confused with <code>BackHandler {}</code> and
+<code>PredictiveBackHandler {}</code> coming from Compose Multiplatform or Compose UI Android, which would fail at runtime 
+when called from a <code>Presenter</code>.</p>
+</div>
+<p>Calling these functions requires <code>BackGestureDispatcherPresenter</code> to be setup as composition local. This is usually
+done from the root presenter in your hierarchy. An instance of <code>BackGestureDispatcherPresenter</code> is provided by App
+Platform in the application scope and can be injected:</p>
+<div class="highlight"><pre><span></span><code><span class="nd">@Inject</span>
+<span class="kd">class</span><span class="w"> </span><span class="nc">RootPresenter</span><span class="p">(</span>
+<span class="hll"><span class="w">  </span><span class="kd">private</span><span class="w"> </span><span class="kd">val</span><span class="w"> </span><span class="nv">backGestureDispatcherPresenter</span><span class="p">:</span><span class="w"> </span><span class="n">BackGestureDispatcherPresenter</span><span class="p">,</span>
+</span><span class="p">)</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">MoleculePresenter</span><span class="o">&lt;</span><span class="kt">Unit</span><span class="p">,</span><span class="w"> </span><span class="n">Model</span><span class="o">&gt;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="nd">@Composable</span>
+<span class="w">  </span><span class="kd">override</span><span class="w"> </span><span class="kd">fun</span><span class="w"> </span><span class="nf">present</span><span class="p">(</span><span class="n">input</span><span class="p">:</span><span class="w"> </span><span class="kt">Unit</span><span class="p">):</span><span class="w"> </span><span class="n">Model</span><span class="w"> </span><span class="p">{</span>
+<span class="hll"><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">returningCompositionLocalProvider</span><span class="p">(</span>
+</span><span class="hll"><span class="w">      </span><span class="n">LocalBackGestureDispatcherPresenter</span><span class="w"> </span><span class="n">provides</span><span class="w"> </span><span class="n">backGestureDispatcherPresenter</span>
+</span><span class="hll"><span class="w">    </span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+</span><span class="w">      </span><span class="c1">// Call other child presenters.</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>The last step is to forward back gestures from the UI layer to <code>Presenters</code> to invoke the callbacks in the
+<code>Presenters</code>. Here again it&rsquo;s recommended to do this from within the root <code>Renderer</code>:</p>
+<div class="highlight"><pre><span></span><code><span class="nd">@Inject</span>
+<span class="nd">@ContributesRenderer</span>
+<span class="kd">class</span><span class="w"> </span><span class="nc">RootPresenterRenderer</span><span class="p">(</span>
+<span class="hll"><span class="w">  </span><span class="kd">private</span><span class="w"> </span><span class="kd">val</span><span class="w"> </span><span class="nv">backGestureDispatcherPresenter</span><span class="p">:</span><span class="w"> </span><span class="n">BackGestureDispatcherPresenter</span><span class="p">,</span>
+</span><span class="p">)</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">ComposeRenderer</span><span class="o">&lt;</span><span class="n">Model</span><span class="o">&gt;</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="nd">@Composable</span>
+<span class="w">  </span><span class="kd">override</span><span class="w"> </span><span class="kd">fun</span><span class="w"> </span><span class="nf">Compose</span><span class="p">(</span><span class="n">model</span><span class="p">:</span><span class="w"> </span><span class="n">Model</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="hll"><span class="w">    </span><span class="n">backGestureDispatcherPresenter</span><span class="p">.</span><span class="na">ForwardBackPressEventsToPresenters</span><span class="p">()</span>
+</span>
+<span class="w">    </span><span class="c1">// Call other child renderers.</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>A similar built-in integration is provided for Android Views. There it&rsquo;s recommended to call this function from each
+Android <code>Activity</code>:</p>
+<div class="highlight"><pre><span></span><code><span class="kd">class</span><span class="w"> </span><span class="nc">MainActivity</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">ComponentActivity</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+
+<span class="w">  </span><span class="kd">override</span><span class="w"> </span><span class="kd">fun</span><span class="w"> </span><span class="nf">onCreate</span><span class="p">(</span><span class="n">savedInstanceState</span><span class="p">:</span><span class="w"> </span><span class="n">Bundle?)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">super</span><span class="p">.</span><span class="na">onCreate</span><span class="p">(</span><span class="n">savedInstanceState</span><span class="p">)</span>
+
+<span class="hll"><span class="w">    </span><span class="n">backGestureDispatcherPresenter</span><span class="p">.</span><span class="na">forwardBackPressEventsToPresenters</span><span class="p">(</span><span class="k">this</span><span class="p">)</span>
+</span><span class="w">    </span><span class="c1">// ...</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>Unit tests verifying the behavior of a <code>Presenter</code> using the back handler APIs need to provide the composition local
+as well. This can be achieved by wrapping the <code>Presenter</code> with <code>withBackGestureDispatcher()</code>:</p>
+<div class="highlight"><pre><span></span><code><span class="kd">class</span><span class="w"> </span><span class="nc">MyPresenterTest</span><span class="w"> </span><span class="p">{</span>
+
+<span class="w">  </span><span class="nd">@Test</span>
+<span class="w">  </span><span class="kd">fun</span><span class="w"> </span><span class="nf">`test back handler`</span><span class="p">()</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">runTest</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="nv">presenter</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">MyPresenter</span><span class="p">()</span>
+
+<span class="w">    </span><span class="n">presenter</span><span class="p">.</span><span class="na">withBackGestureDispatcher</span><span class="p">().</span><span class="na">test</span><span class="p">(</span><span class="k">this</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="c1">// Verify the produced models from the presenter.</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+<details class="example">
+<summary>Sample</summary>
+<p>The <code>BackHandlerPresenter {}</code> call has been integrated in the sample application with this recommended setup. All
+necessary changes are part of this <a href="https://github.com/amzn/app-platform/pull/84/commits/a807a5673973eae26940cd1130dad836cb3dbd43">commit</a>.</p>
+<p>The same setup has been integrated in the recipes app part of this <a href="https://github.com/amzn/app-platform/pull/82/commits/fce1b3fbc0b2683ec6a93a499694f914bac34b18">commit</a>
+as well. </p>
+</details>
+<h2 id="compose-runtime">Compose runtime<a class="headerlink" href="#compose-runtime" title="Permanent link">&para;</a></h2>
+<p>One of the major benefits of using Compose through Molecule is how the framework turns reactive streams such as
+<code>Flow</code> and <code>StateFlow</code> into imperative code, which then becomes easier to understand, write and maintain.
+Composable functions have a lifecycle, they enter a composition (the presenter starts to be used) and leave
+a composition (the presenter is no longer used). Properties can be made reactive and trigger creating a
+new <code>Model</code> whenever they change.</p>
+<h3 id="lifecycle">Lifecycle<a class="headerlink" href="#lifecycle" title="Permanent link">&para;</a></h3>
+<p>This example contains two child presenters:</p>
+<div class="highlight"><pre><span></span><code><span class="kd">class</span><span class="w"> </span><span class="nc">OnboardingPresenterImpl</span><span class="p">(</span>
+<span class="w">  </span><span class="kd">private</span><span class="w"> </span><span class="kd">val</span><span class="w"> </span><span class="nv">lazyLoginPresenter</span><span class="p">:</span><span class="w"> </span><span class="p">()</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">LoginPresenter</span><span class="p">,</span>
+<span class="w">  </span><span class="kd">private</span><span class="w"> </span><span class="kd">val</span><span class="w"> </span><span class="nv">lazyRegistrationPresenter</span><span class="p">:</span><span class="w"> </span><span class="p">()</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">RegistrationPresenter</span><span class="p">,</span>
+<span class="p">)</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">OnboardingPresenter</span><span class="w"> </span><span class="p">{</span>
+
+<span class="w">  </span><span class="nd">@Composable</span>
+<span class="w">  </span><span class="kd">fun</span><span class="w"> </span><span class="nf">present</span><span class="p">(</span><span class="n">input</span><span class="p">:</span><span class="w"> </span><span class="kt">Unit</span><span class="p">):</span><span class="w"> </span><span class="n">BaseModel</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="p">...</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">mustRegister</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="kd">val</span><span class="w"> </span><span class="nv">registrationPresenter</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">remember</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">lazyRegistrationPresenter</span><span class="p">()</span><span class="w"> </span><span class="p">}</span>
+<span class="w">      </span><span class="n">registrationPresenter</span><span class="p">.</span><span class="na">present</span><span class="p">(</span><span class="kt">Unit</span><span class="p">)</span>
+<span class="w">    </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="kd">val</span><span class="w"> </span><span class="nv">loginPresenter</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">remember</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">lazyLoginPresenter</span><span class="p">()</span><span class="w"> </span><span class="p">}</span>
+<span class="w">      </span><span class="n">loginPresenter</span><span class="p">.</span><span class="na">present</span><span class="p">(</span><span class="kt">Unit</span><span class="p">)</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>On the first composition, when <code>OnboardingPresenterImpl.present()</code> is called for the first time, the lifecycle of
+<code>OnboardingPresenterImpl</code> starts. Let’s assume <code>mustRegister</code> is true, then <code>RegistrationPresenter</code> gets called
+and its lifecycle starts as well. In the example when <code>mustRegister</code> switches to false, then <code>RegistrationPresenter</code>
+leaves the composition and its lifecycle ends. <code>LoginPresenter</code> enters the composition and its lifecycle starts.
+If the parent presenter of <code>OnboardingPresenterImpl</code> stops calling this presenter, then <code>OnboardingPresenterImpl</code>
+and <code>LoginPresenter</code> would leave composition and both of their lifecycles end.</p>
+<h3 id="state">State<a class="headerlink" href="#state" title="Permanent link">&para;</a></h3>
+<p><a href="https://developer.android.com/develop/ui/compose/state">Google’s guide</a> for state management is a good starting
+point. APIs most often used are <a href="https://developer.android.com/reference/kotlin/androidx/compose/runtime/package-summary#remember(kotlin.Function0)"><code>remember()</code></a>,
+<a href="https://developer.android.com/reference/kotlin/androidx/compose/runtime/package-summary#mutableStateOf(kotlin.Any,androidx.compose.runtime.SnapshotMutationPolicy)"><code>mutableStateOf()</code></a>,
+<a href="https://developer.android.com/reference/kotlin/androidx/compose/runtime/package-summary#(kotlinx.coroutines.flow.StateFlow).collectAsState(kotlin.coroutines.CoroutineContext)"><code>collectAsState()</code></a>
+and <a href="https://developer.android.com/reference/kotlin/androidx/compose/runtime/package-summary#produceState(kotlin.Any,kotlin.coroutines.SuspendFunction1)"><code>produceState()</code></a>.</p>
+<div class="highlight"><pre><span></span><code><span class="nd">@Composable</span>
+<span class="kd">fun</span><span class="w"> </span><span class="nf">present</span><span class="p">(</span><span class="n">input</span><span class="p">:</span><span class="w"> </span><span class="kt">Unit</span><span class="p">):</span><span class="w"> </span><span class="n">Model</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kd">var</span><span class="w"> </span><span class="nv">toggled</span><span class="p">:</span><span class="w"> </span><span class="kt">Boolean</span><span class="w"> </span><span class="k">by</span><span class="w"> </span><span class="n">remember</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">mutableStateOf</span><span class="p">(</span><span class="kc">false</span><span class="p">)</span><span class="w"> </span><span class="p">}</span>
+
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="n">Model</span><span class="p">(</span>
+<span class="w">    </span><span class="n">text</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">toggled</span><span class="p">)</span><span class="w"> </span><span class="s">&quot;toggled&quot;</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="s">&quot;not toggled&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">when</span><span class="w"> </span><span class="p">(</span><span class="nb">it</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="k">is</span><span class="w"> </span><span class="n">ToggleClicked</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">toggled</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">!</span><span class="n">toggled</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>In this example, whenever the Presenter receives the <code>ToggleClicked</code> event, then the state <code>toggled</code> changes.
+This triggers a recomposition in the Compose runtime and will call <code>present()</code> again to compute a new <code>Model</code>.</p>
+<p><code>Flows</code> can easily be observed using <code>collectAsState()</code>:</p>
+<div class="highlight"><pre><span></span><code><span class="kd">interface</span><span class="w"> </span><span class="nc">AccountManager</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kd">val</span><span class="w"> </span><span class="nv">currentAccount</span><span class="p">:</span><span class="w"> </span><span class="n">StateFlow</span><span class="o">&lt;</span><span class="n">Account</span><span class="o">&gt;</span>
+<span class="p">}</span>
+
+<span class="kd">class</span><span class="w"> </span><span class="nc">AmazonLoginPresenter</span><span class="p">(</span>
+<span class="w">  </span><span class="kd">private</span><span class="w"> </span><span class="kd">val</span><span class="w"> </span><span class="nv">accountManager</span><span class="p">:</span><span class="w"> </span><span class="n">AccountManager</span>
+<span class="p">):</span><span class="w"> </span><span class="n">LoginPresenter</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="nd">@Composable</span>
+<span class="w">  </span><span class="kd">fun</span><span class="w"> </span><span class="nf">present</span><span class="p">(</span><span class="n">input</span><span class="p">:</span><span class="w"> </span><span class="kt">Unit</span><span class="p">):</span><span class="w"> </span><span class="n">Model</span><span class="w"> </span><span class="p">{</span>
+<span class="hll"><span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="nv">account</span><span class="p">:</span><span class="w"> </span><span class="n">Account</span><span class="w"> </span><span class="k">by</span><span class="w"> </span><span class="n">accountManager</span><span class="p">.</span><span class="na">currentAccount</span><span class="p">.</span><span class="na">collectAsState</span><span class="p">()</span>
+</span><span class="w">    </span><span class="p">...</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>Whenever the <code>currentAccount</code> Flow emits a new <code>Account</code>, then the Compose runtime will trigger a recomposition
+and a new <code>Model</code> will be computed.</p>
+<h3 id="side-effects">Side effects<a class="headerlink" href="#side-effects" title="Permanent link">&para;</a></h3>
+<p>It’s recommended to read <a href="https://developer.android.com/jetpack/compose/side-effects">Google’s guide</a>. Since
+composable functions come with a lifecycle, async operations can safely be launched and get automatically torn
+down when the <code>Presenter</code> leaves the composition. Commonly used APIs are
+<a href="https://developer.android.com/reference/kotlin/androidx/compose/runtime/package-summary#LaunchedEffect(kotlin.Any,kotlin.coroutines.SuspendFunction1)"><code>LaunchedEffect()</code></a>,
+<a href="https://developer.android.com/reference/kotlin/androidx/compose/runtime/package-summary#DisposableEffect(kotlin.Any,kotlin.Function1)"><code>DisposableEffect()</code></a>
+and <a href="https://developer.android.com/reference/kotlin/androidx/compose/runtime/package-summary#rememberCoroutineScope(kotlin.Function0)"><code>rememberCoroutineScope()</code></a>.</p>
+<div class="highlight"><pre><span></span><code><span class="nd">@Composable</span>
+<span class="kd">fun</span><span class="w"> </span><span class="nf">present</span><span class="p">(</span><span class="n">input</span><span class="p">:</span><span class="w"> </span><span class="kt">Unit</span><span class="p">):</span><span class="w"> </span><span class="n">Model</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="n">LaunchedEffect</span><span class="p">(</span><span class="n">key</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="c1">// This is within a CoroutineScope and suspending functions can</span>
+<span class="w">    </span><span class="c1">// be called:</span>
+<span class="w">    </span><span class="n">flowOf</span><span class="p">(</span><span class="m">1</span><span class="p">,</span><span class="w"> </span><span class="m">2</span><span class="p">,</span><span class="w"> </span><span class="m">3</span><span class="p">).</span><span class="na">collect</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="p">...</span><span class="w"> </span><span class="p">}</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>If the <code>key</code> changes between compositions, then a new coroutine is launched and the previous one canceled. For more
+details see <a href="https://developer.android.com/jetpack/compose/side-effects#launchedeffect">here</a>.</p>
+<p>This is an example for how one would use <code>rememberCoroutineScope()</code>:</p>
+<div class="highlight"><pre><span></span><code><span class="nd">@Composable</span>
+<span class="kd">fun</span><span class="w"> </span><span class="nf">present</span><span class="p">(</span><span class="n">input</span><span class="p">:</span><span class="w"> </span><span class="kt">Unit</span><span class="p">):</span><span class="w"> </span><span class="n">Model</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kd">val</span><span class="w"> </span><span class="nv">coroutineScope</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">rememberCoroutineScope</span><span class="p">()</span>
+
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="n">Model</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">when</span><span class="w"> </span><span class="p">(</span><span class="nb">it</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="k">is</span><span class="w"> </span><span class="n">OnClick</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">coroutineScope</span><span class="p">.</span><span class="na">launch</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="p">...</span><span class="w"> </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>When the <code>Presenter</code> leaves composition, then all jobs launched by this coroutine scope get canceled. For more
+details see <a href="https://developer.android.com/jetpack/compose/side-effects#remembercoroutinescope">here</a>.</p>
+<h2 id="recipes">Recipes<a class="headerlink" href="#recipes" title="Permanent link">&para;</a></h2>
+<p>There are common scenarios you may encounter when using <code>Presenters</code>.</p>
+<div class="admonition info">
+<p class="admonition-title">Info</p>
+<p>The recipes below are not part of the App Platform API and we look for feedback. The solutions are either
+implemented in the Recipes or Sample app. Please let us know if these solutions work for you or which use cases
+you&rsquo;re missing.</p>
+<p>The <a href="../#web-recipe-app">Recipes app</a> and <a href="../#web-clickable">Sample app</a> can be tested in the browser.</p>
+</div>
+<h3 id="save-presenter-state">Save <code>Presenter</code> state<a class="headerlink" href="#save-presenter-state" title="Permanent link">&para;</a></h3>
+<p><code>Presenters</code> can make full use of the Compose runtime, e.g. using <code>remember { }</code> and <code>mutableStateOf()</code>. But when a
+<code>Presenter</code> leaves the composition and no longer is part of the hierarchy, then it loses its state and would be called
+with the initial state the next time.</p>
+<div class="highlight"><pre><span></span><code><span class="nd">@Composable</span>
+<span class="kd">fun</span><span class="w"> </span><span class="nf">present</span><span class="p">(</span><span class="n">input</span><span class="p">:</span><span class="w"> </span><span class="kt">Unit</span><span class="p">):</span><span class="w"> </span><span class="n">Model</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kd">val</span><span class="w"> </span><span class="nv">showLogin</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">...</span>
+
+<span class="w">  </span><span class="kd">val</span><span class="w"> </span><span class="nv">model</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">showLogin</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">loginPresenter</span><span class="p">.</span><span class="na">present</span><span class="p">(</span><span class="kt">Unit</span><span class="p">)</span>
+<span class="w">  </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">registerPresenter</span><span class="p">.</span><span class="na">present</span><span class="p">(</span><span class="kt">Unit</span><span class="p">)</span>
+<span class="w">  </span><span class="p">}</span>
+
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="n">model</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>Take this function for example. Every time <code>showLogin</code> is toggled then either <code>loginPresenter</code> or <code>registerPresenter</code>
+is called with their initial state. These presenters only remember their state, if <code>showLogin</code> doesn&rsquo;t change.</p>
+<p>The Compose runtime provides <code>rememberSaveable { }</code> and <code>SaveableStateHolder</code> as solution to save and restore instance
+state within a process or across process death. The Recipes app
+<a href="https://github.com/amzn/app-platform/blob/main/recipes/common/impl/src/commonMain/kotlin/software/amazon/app/platform/recipes/saveable/ReturningSaveableStateHolder.kt">ported <code>SaveableStateHolder</code></a>
+to work for <code>@Composable</code> functions that must return a value. <code>Presenters</code> wrapped with a
+<code>ReturningSaveableStateHolder</code> can use <code>rememberSaveable { }</code> to restore state even after they weren&rsquo;t part of the
+hierarchy anymore:</p>
+<div class="highlight"><pre><span></span><code><span class="nd">@Composable</span>
+<span class="kd">fun</span><span class="w"> </span><span class="nf">present</span><span class="p">(</span><span class="n">input</span><span class="p">:</span><span class="w"> </span><span class="kt">Unit</span><span class="p">):</span><span class="w"> </span><span class="n">Model</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kd">val</span><span class="w"> </span><span class="nv">showLogin</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">...</span>
+
+<span class="w">  </span><span class="kd">val</span><span class="w"> </span><span class="nv">model</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">showLogin</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">loginPresenter</span><span class="p">.</span><span class="na">present</span><span class="p">(</span><span class="kt">Unit</span><span class="p">)</span>
+<span class="w">  </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">registerPresenter</span><span class="p">.</span><span class="na">present</span><span class="p">(</span><span class="kt">Unit</span><span class="p">)</span>
+<span class="w">  </span><span class="p">}</span>
+
+<span class="w">  </span><span class="kd">val</span><span class="w"> </span><span class="nv">saveableStateHolder</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">rememberReturningSaveableStateHolder</span><span class="p">()</span>
+
+<span class="w">  </span><span class="kd">val</span><span class="w"> </span><span class="nv">presenter</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">showLogin</span><span class="p">)</span><span class="w"> </span><span class="n">loginPresenter</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="n">registerPresenter</span>
+
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="n">saveableStateHolder</span><span class="p">.</span><span class="na">SaveableStateProvider</span><span class="p">(</span><span class="n">key</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">presenter</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">presenter</span><span class="p">.</span><span class="na">present</span><span class="p">(</span><span class="kt">Unit</span><span class="p">)</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>State wrapped in <code>rememberSaveable { }</code> in <code>LoginPresenter</code> and <code>RegisterPresenter</code> will be preserved no
+matter how often <code>showLogin</code> is toggled.</p>
+<h3 id="presenter-backstack"><code>Presenter</code> backstack<a class="headerlink" href="#presenter-backstack" title="Permanent link">&para;</a></h3>
+<p>With <code>Presenters</code> it&rsquo;s easy to implement model driven navigation. Which <code>Presenter</code> is shown on screen is part of the
+business logic.</p>
+<div class="highlight"><pre><span></span><code><span class="nd">@Composable</span>
+<span class="kd">fun</span><span class="w"> </span><span class="nf">present</span><span class="p">(</span><span class="n">input</span><span class="p">:</span><span class="w"> </span><span class="kt">Unit</span><span class="p">):</span><span class="w"> </span><span class="n">Model</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kd">val</span><span class="w"> </span><span class="nv">showLogin</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">...</span>
+
+<span class="w">  </span><span class="kd">val</span><span class="w"> </span><span class="nv">model</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">showLogin</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">loginPresenter</span><span class="p">.</span><span class="na">present</span><span class="p">(</span><span class="kt">Unit</span><span class="p">)</span>
+<span class="w">  </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">registerPresenter</span><span class="p">.</span><span class="na">present</span><span class="p">(</span><span class="kt">Unit</span><span class="p">)</span>
+<span class="w">  </span><span class="p">}</span>
+
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="n">model</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>This pattern can be generalized:</p>
+<div class="highlight"><pre><span></span><code><span class="kd">interface</span><span class="w"> </span><span class="nc">NavigationManager</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kd">val</span><span class="w"> </span><span class="nv">currentPresenter</span><span class="p">:</span><span class="w"> </span><span class="n">StateFlow</span><span class="o">&lt;</span><span class="n">MoleculePresenter</span><span class="o">&lt;</span><span class="kt">Unit</span><span class="p">,</span><span class="w"> </span><span class="n">BaseModel</span><span class="o">&gt;&gt;</span>
+
+<span class="w">  </span><span class="kd">fun</span><span class="w"> </span><span class="nf">navigateTo</span><span class="p">(</span><span class="n">presenter</span><span class="p">:</span><span class="w"> </span><span class="n">MoleculePresenter</span><span class="o">&lt;</span><span class="kt">Unit</span><span class="p">,</span><span class="w"> </span><span class="n">BaseModel</span><span class="o">&gt;</span><span class="p">)</span>
+<span class="p">}</span>
+
+<span class="nd">@Inject</span>
+<span class="kd">class</span><span class="w"> </span><span class="nc">NavigationPresenter</span><span class="p">(</span><span class="kd">val</span><span class="w"> </span><span class="nv">navigationManager</span><span class="p">:</span><span class="w"> </span><span class="n">NavigationManager</span><span class="p">)</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">MoleculePresenter</span><span class="o">&lt;</span><span class="kt">Unit</span><span class="p">,</span><span class="w"> </span><span class="n">BaseModel</span><span class="o">&gt;</span><span class="w"> </span><span class="p">{</span>
+
+<span class="w">  </span><span class="nd">@Compose</span>
+<span class="w">  </span><span class="kd">fun</span><span class="w"> </span><span class="nf">present</span><span class="p">(</span><span class="n">input</span><span class="p">:</span><span class="w"> </span><span class="kt">Unit</span><span class="p">):</span><span class="w"> </span><span class="n">BaseModel</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="nv">presenter</span><span class="w"> </span><span class="k">by</span><span class="w"> </span><span class="n">navigationManager</span><span class="p">.</span><span class="na">currentPresenter</span><span class="p">.</span><span class="na">collectAsState</span><span class="p">()</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">presenter</span><span class="p">.</span><span class="na">present</span><span class="p">(</span><span class="kt">Unit</span><span class="p">)</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>This solution always shows the <code>Presenter</code> for which <code>navigateTo()</code> was called last. This function can be called from
+anywhere in the app.</p>
+<p>Another solution is a backstack of <code>Presenters</code>, where <code>Presenters</code> can be pushed to the stack and the top
+most <code>Presenter</code> can be popped from the stack. The Recipes app
+<a href="https://github.com/amzn/app-platform/blob/main/recipes/common/impl/src/commonMain/kotlin/software/amazon/app/platform/recipes/backstack/PresenterBackstackScope.kt">implemented this navigation pattern</a>
+with an easy to use <code>presenterBackstack { }</code> function:</p>
+<div class="highlight"><pre><span></span><code><span class="kd">class</span><span class="w"> </span><span class="nc">CrossSlideBackstackPresenter</span><span class="p">(</span>
+<span class="w">  </span><span class="kd">private</span><span class="w"> </span><span class="kd">val</span><span class="w"> </span><span class="nv">initialPresenter</span><span class="p">:</span><span class="w"> </span><span class="n">MoleculePresenter</span><span class="o">&lt;</span><span class="kt">Unit</span><span class="p">,</span><span class="w"> </span><span class="k">out</span><span class="w"> </span><span class="n">BaseModel</span><span class="o">&gt;</span>
+<span class="p">)</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">MoleculePresenter</span><span class="o">&lt;</span><span class="kt">Unit</span><span class="p">,</span><span class="w"> </span><span class="n">Model</span><span class="o">&gt;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="nd">@Composable</span>
+<span class="w">  </span><span class="kd">override</span><span class="w"> </span><span class="kd">fun</span><span class="w"> </span><span class="nf">present</span><span class="p">(</span><span class="n">input</span><span class="p">:</span><span class="w"> </span><span class="kt">Unit</span><span class="p">):</span><span class="w"> </span><span class="n">Model</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">presenterBackstack</span><span class="p">(</span><span class="n">initialPresenter</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">model</span><span class="w"> </span><span class="o">-&gt;</span>
+<span class="w">      </span><span class="c1">// Pop the top presenter on a back press event.</span>
+<span class="w">      </span><span class="n">BackHandlerPresenter</span><span class="p">(</span><span class="n">enabled</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">lastBackstackChange</span><span class="p">.</span><span class="na">value</span><span class="p">.</span><span class="na">backstack</span><span class="p">.</span><span class="na">size</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="m">1</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">pop</span><span class="p">()</span>
+<span class="w">      </span><span class="p">}</span>
+
+<span class="w">      </span><span class="n">Model</span><span class="p">(</span><span class="n">delegate</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">model</span><span class="p">,</span><span class="w"> </span><span class="n">backstackScope</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">this</span><span class="p">)</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+<p><code>presenterBackstack { }</code> provides
+<a href="https://github.com/amzn/app-platform/blob/main/recipes/common/impl/src/commonMain/kotlin/software/amazon/app/platform/recipes/backstack/PresenterBackstackScope.kt">PresenterBackstackScope</a>,
+which allows you to <code>push()</code> and <code>pop()</code> presenters.
+<a href="https://github.com/amzn/app-platform/blob/main/recipes/common/impl/src/commonMain/kotlin/software/amazon/app/platform/recipes/backstack/presenter/BackstackChildPresenter.kt#L38">Child presenters</a>
+wrapped in this function get access to this scope using a composition local:</p>
+<div class="highlight"><pre><span></span><code><span class="nd">@Composable</span>
+<span class="kd">override</span><span class="w"> </span><span class="kd">fun</span><span class="w"> </span><span class="nf">present</span><span class="p">(</span><span class="n">input</span><span class="p">:</span><span class="w"> </span><span class="kt">Unit</span><span class="p">):</span><span class="w"> </span><span class="n">Model</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kd">val</span><span class="w"> </span><span class="nv">backstack</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">checkNotNull</span><span class="p">(</span><span class="n">LocalBackstackScope</span><span class="p">.</span><span class="na">current</span><span class="p">)</span>
+<span class="w">  </span><span class="p">...</span>
+
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="n">Model</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">when</span><span class="w"> </span><span class="p">(</span><span class="nb">it</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="n">Event</span><span class="p">.</span><span class="na">AddPresenterToBackstack</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">backstack</span><span class="p">.</span><span class="na">push</span><span class="p">(</span><span class="n">BackstackChildPresenter</span><span class="p">())</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+<p><a href="https://github.com/amzn/app-platform/blob/main/recipes/common/impl/src/commonMain/kotlin/software/amazon/app/platform/recipes/backstack/CrossSlideBackstackPresenter.kt"><code>CrossSlideBackstackPresenter</code></a>
+from the Recipe app goes one step further and integrates the <code>BackHandlerPresenter { }</code> API to pop presenters from the
+stack when the back button is pressed. Its
+<a href="https://github.com/amzn/app-platform/blob/main/recipes/common/impl/src/commonMain/kotlin/software/amazon/app/platform/recipes/backstack/CrossSlideBackstackRenderer.kt"><code>Renderer</code></a>
+implements a slide animation whenever a presenter is pushed to the stack or popped from the stack.</p>
+<h3 id="compositionlocal"><code>CompositionLocal</code><a class="headerlink" href="#compositionlocal" title="Permanent link">&para;</a></h3>
+<p>Both the <code>BackHandlerPresenter { }</code> integration for back button presses and the backstack recipe for navigation leverage
+<a href="https://developer.android.com/develop/ui/compose/compositionlocal#creating">Compose&rsquo;s <code>CompositionLocal</code> feature</a>.
+This is a powerful mechanism to provide state from a parent presenter to nested child presenters even deep down in
+the stack without relying on the <code>Input</code> parameter of presenters or providing
+dependencies through the constructor. Another benefit is that <code>CompositionLocals</code> are embedded in the presenter tree
+and multiple instances can be provided for different parts of the tree or even be overridden, e.g. a parent presenter
+may use a backstack, but then a child presenter may provide its own backstack for its child presenters.</p>
+<p>A common implementation may look like this:</p>
+<div class="highlight"><pre><span></span><code><span class="kd">class</span><span class="w"> </span><span class="nc">YourType</span>
+
+<span class="kd">public</span><span class="w"> </span><span class="kd">val</span><span class="w"> </span><span class="nv">LocalYourType</span><span class="p">:</span><span class="w"> </span><span class="n">ProvidableCompositionLocal</span><span class="o">&lt;</span><span class="n">YourType?&gt;</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">compositionLocalOf</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="kc">null</span><span class="w"> </span><span class="p">}</span>
+
+<span class="kd">class</span><span class="w"> </span><span class="nc">ParentPresenter</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">MoleculePresenter</span><span class="o">&lt;</span><span class="kt">Unit</span><span class="p">,</span><span class="w"> </span><span class="n">Model</span><span class="o">&gt;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="nd">@Composable</span>
+<span class="w">  </span><span class="kd">override</span><span class="w"> </span><span class="kd">fun</span><span class="w"> </span><span class="nf">present</span><span class="p">(</span><span class="n">input</span><span class="p">:</span><span class="w"> </span><span class="kt">Unit</span><span class="p">):</span><span class="w"> </span><span class="n">Model</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="nv">yourType</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">remember</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">YourType</span><span class="p">()</span><span class="w"> </span><span class="p">}</span>
+
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">returningCompositionLocalProvider</span><span class="p">(</span>
+<span class="w">      </span><span class="n">LocalYourType</span><span class="w"> </span><span class="n">provides</span><span class="w"> </span><span class="n">yourType</span>
+<span class="w">    </span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="c1">// ... call child presenters</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kd">class</span><span class="w"> </span><span class="nc">ChildPresenter</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">MoleculePresenter</span><span class="o">&lt;</span><span class="kt">Unit</span><span class="p">,</span><span class="w"> </span><span class="n">Model</span><span class="o">&gt;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="nd">@Composable</span>
+<span class="w">  </span><span class="kd">override</span><span class="w"> </span><span class="kd">fun</span><span class="w"> </span><span class="nf">present</span><span class="p">(</span><span class="n">input</span><span class="p">:</span><span class="w"> </span><span class="kt">Unit</span><span class="p">):</span><span class="w"> </span><span class="n">Model</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="nv">yourType</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">checkNotNull</span><span class="p">(</span><span class="n">LocalYourType</span><span class="p">.</span><span class="na">current</span><span class="p">)</span>
+<span class="w">    </span><span class="p">...</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>While <code>CompositionLocals</code> are powerful, their biggest downsides are unit tests. In a unit test for <code>ChildPresenter</code>
+a value for <code>LocalYourType.current</code> must be provided, otherwise the call will throw an exception.</p>
+<h3 id="app-bar">App Bar<a class="headerlink" href="#app-bar" title="Permanent link">&para;</a></h3>
+<p>The Recipes app implements an app bar for all its screens and allows child presenters to change the content.</p>
+<p>There are multiple ways to implement the app bar and decompose the different screen elements. One way is using
+<a href="../template/">Templates</a>, where one slot in the template is reserved for the app bar model. A specific <code>Presenter</code>
+could be responsible for providing this model:</p>
+<div class="highlight"><pre><span></span><code><span class="kd">sealed</span><span class="w"> </span><span class="kd">interface</span><span class="w"> </span><span class="nc">SampleAppTemplate</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">Template</span><span class="w"> </span><span class="p">{</span>
+
+<span class="w">  </span><span class="kd">data</span><span class="w"> </span><span class="kd">class</span><span class="w"> </span><span class="nc">FullScreenTemplate</span><span class="p">(</span>
+<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="nv">appBarModel</span><span class="p">:</span><span class="w"> </span><span class="n">AppBarModel</span>
+<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="nv">content</span><span class="p">:</span><span class="w"> </span><span class="n">BaseModel</span><span class="p">,</span>
+<span class="w">  </span><span class="p">)</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">SampleAppTemplate</span>
+<span class="p">}</span>
+
+<span class="kd">class</span><span class="w"> </span><span class="nc">SampleAppTemplatePresenter</span><span class="p">(</span>
+<span class="w">  </span><span class="kd">private</span><span class="w"> </span><span class="kd">val</span><span class="w"> </span><span class="nv">appBarPresenter</span><span class="p">:</span><span class="w"> </span><span class="n">AppBarPresenter</span><span class="p">,</span>
+<span class="w">  </span><span class="kd">private</span><span class="w"> </span><span class="kd">val</span><span class="w"> </span><span class="nv">rootPresenter</span><span class="p">:</span><span class="w"> </span><span class="n">MoleculePresenter</span><span class="o">&lt;</span><span class="kt">Unit</span><span class="p">,</span><span class="w"> </span><span class="n">BaseModel</span><span class="o">&gt;</span><span class="p">,</span>
+<span class="p">)</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">MoleculePresenter</span><span class="o">&lt;</span><span class="kt">Unit</span><span class="p">,</span><span class="w"> </span><span class="n">SampleAppTemplate</span><span class="o">&gt;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="nd">@Composable</span>
+<span class="w">  </span><span class="kd">fun</span><span class="w"> </span><span class="nf">present</span><span class="p">(</span><span class="n">input</span><span class="p">:</span><span class="w"> </span><span class="kt">Unit</span><span class="p">):</span><span class="w"> </span><span class="n">SampleAppTemplate</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="nv">contentModel</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">rootPresenter</span><span class="p">.</span><span class="na">present</span><span class="p">(</span><span class="kt">Unit</span><span class="p">)</span>
+
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">contentModel</span><span class="p">.</span><span class="na">toTemplate</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">model</span><span class="w"> </span><span class="o">-&gt;</span>
+<span class="w">      </span><span class="kd">val</span><span class="w"> </span><span class="nv">appBarModel</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">appBarPresenter</span><span class="p">.</span><span class="na">present</span><span class="p">(</span><span class="kt">Unit</span><span class="p">)</span>
+<span class="w">      </span><span class="n">FullScreenTemplate</span><span class="p">(</span><span class="n">appBarModel</span><span class="p">,</span><span class="w"> </span><span class="n">contentModel</span><span class="p">)</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>The <code>SampleAppTemplateRenderer</code> has access to <code>appBarModel</code> from the <code>FullScreenTemplate</code> and can use the model
+to configure the app bar UI.</p>
+<p>The Recipe app has chosen a different implementation, where any <code>BaseModel</code> class from a <code>Presenter</code> can implement the
+specific <a href="https://github.com/amzn/app-platform/blob/main/recipes/common/impl/src/commonMain/kotlin/software/amazon/app/platform/recipes/appbar/AppBarConfigModel.kt"><code>AppBarConfigModel</code></a>
+interface, which provides the configuration for the app bar. Implementing this interface is optional:</p>
+<div class="highlight"><pre><span></span><code><span class="kd">class</span><span class="w"> </span><span class="nc">MenuPresenter</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">MoleculePresenter</span><span class="o">&lt;</span><span class="kt">Unit</span><span class="p">,</span><span class="w"> </span><span class="n">Model</span><span class="o">&gt;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="nd">@Composable</span>
+<span class="w">  </span><span class="kd">override</span><span class="w"> </span><span class="kd">fun</span><span class="w"> </span><span class="nf">present</span><span class="p">(</span><span class="n">input</span><span class="p">:</span><span class="w"> </span><span class="kt">Unit</span><span class="p">):</span><span class="w"> </span><span class="n">Model</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="p">...</span>
+<span class="w">  </span><span class="p">}</span>
+
+<span class="w">  </span><span class="kd">data</span><span class="w"> </span><span class="kd">class</span><span class="w"> </span><span class="nc">Model</span><span class="p">(</span>
+<span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="kd">val</span><span class="w"> </span><span class="nv">menuItems</span><span class="p">:</span><span class="w"> </span><span class="n">List</span><span class="o">&lt;</span><span class="n">AppBarConfig</span><span class="p">.</span><span class="na">MenuItem</span><span class="o">&gt;</span><span class="p">,</span>
+<span class="w">  </span><span class="p">)</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">BaseModel</span><span class="p">,</span><span class="w"> </span><span class="n">AppBarConfigModel</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kd">override</span><span class="w"> </span><span class="kd">fun</span><span class="w"> </span><span class="nf">appBarConfig</span><span class="p">():</span><span class="w"> </span><span class="n">AppBarConfig</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="k">return</span><span class="w"> </span><span class="n">AppBarConfig</span><span class="p">(</span><span class="n">title</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;Menu items&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">menuItems</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">menuItems</span><span class="p">)</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>If a <code>BaseModel</code> implementing <code>AppBarConfigModel</code> bubbles all the way up to the
+<a href="https://github.com/amzn/app-platform/blob/main/recipes/common/impl/src/commonMain/kotlin/software/amazon/app/platform/recipes/template/RootPresenter.kt"><code>RootPresenter</code></a>,
+then the <code>BaseModel</code> from the child <code>Presenter</code> will provide the config for the <code>Template</code> or otherwise the
+<code>RootPresenter</code> will provide a default:</p>
+<div class="highlight"><pre><span></span><code><span class="k">return</span><span class="w"> </span><span class="n">contentModel</span><span class="p">.</span><span class="na">toTemplate</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">model</span><span class="w"> </span><span class="o">-&gt;</span>
+<span class="w">  </span><span class="kd">val</span><span class="w"> </span><span class="nv">appBarConfig</span><span class="w"> </span><span class="o">=</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">model</span><span class="w"> </span><span class="k">is</span><span class="w"> </span><span class="n">AppBarConfigModel</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="n">model</span><span class="p">.</span><span class="na">appBarConfig</span><span class="p">().</span><span class="na">copy</span><span class="p">(</span><span class="n">backArrowAction</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">backArrowAction</span><span class="p">)</span>
+<span class="w">    </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="n">AppBarConfig</span><span class="p">(</span><span class="n">title</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">AppBarConfig</span><span class="p">.</span><span class="na">DEFAULT</span><span class="p">.</span><span class="na">title</span><span class="p">,</span><span class="w"> </span><span class="n">backArrowAction</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">backArrowAction</span><span class="p">)</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">  </span><span class="n">RecipesAppTemplate</span><span class="p">.</span><span class="na">FullScreenTemplate</span><span class="p">(</span><span class="n">model</span><span class="p">,</span><span class="w"> </span><span class="n">appBarConfig</span><span class="p">)</span>
+<span class="p">}</span>
+</code></pre></div>
+<h3 id="navigation-3">Navigation 3<a class="headerlink" href="#navigation-3" title="Permanent link">&para;</a></h3>
+<p>The <a href="https://developer.android.com/guide/navigation/navigation-3">Navigation 3 library</a> can be used with App Platform.
+For idiomatic navigation App Platform <a href="./#model-driven-navigation">recommends</a> handling navigation events in 
+<code>Presenters</code>. <code>Presenters</code> are composable, build a tree and can delegate which <code>Presenter</code> is shown on screen to child 
+<code>Presenters</code>. This is how App Platform implements a unidirectional dataflow. The downside of Navigation 3 is that 
+it pushes navigation logic into the Compose UI layer, which is against App Platform&rsquo;s philosophy of handling navigation 
+in the business logic. With the right integration strategy, this downside can be mitigated.</p>
+<p>The Recipes app manages the backstack of <code>Presenters</code> in the parent 
+<a href="https://github.com/amzn/app-platform/blob/main/recipes/common/impl/src/commonMain/kotlin/software/amazon/app/platform/recipes/nav3/Navigation3HomePresenter.kt"><code>Navigation3HomePresenter</code></a>
+and forwards the backstack and options to modify the stack to the <code>Renderer</code>. Note that the <code>Model</code> is computed for 
+each <code>Presenter</code> in the backstack:</p>
+<div class="highlight"><pre><span></span><code><span class="nd">@Composable</span>
+<span class="kd">override</span><span class="w"> </span><span class="kd">fun</span><span class="w"> </span><span class="nf">present</span><span class="p">(</span><span class="n">input</span><span class="p">:</span><span class="w"> </span><span class="kt">Unit</span><span class="p">):</span><span class="w"> </span><span class="n">Model</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kd">val</span><span class="w"> </span><span class="nv">backstack</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">remember</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">mutableStateListOf</span><span class="o">&lt;</span><span class="n">MoleculePresenter</span><span class="o">&lt;</span><span class="kt">Unit</span><span class="p">,</span><span class="w"> </span><span class="k">out</span><span class="w"> </span><span class="n">BaseModel</span><span class="o">&gt;&gt;</span><span class="p">().</span><span class="na">apply</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="c1">// There must be always one element.</span>
+<span class="w">      </span><span class="n">add</span><span class="p">(</span><span class="n">Navigation3ChildPresenter</span><span class="p">(</span><span class="n">index</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">0</span><span class="p">,</span><span class="w"> </span><span class="n">backstack</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">this</span><span class="p">))</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">}</span>
+
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="n">Model</span><span class="p">(</span><span class="n">backstack</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">backstack</span><span class="p">.</span><span class="na">map</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nb">it</span><span class="p">.</span><span class="na">present</span><span class="p">(</span><span class="kt">Unit</span><span class="p">)</span><span class="w"> </span><span class="p">})</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">when</span><span class="w"> </span><span class="p">(</span><span class="nb">it</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="n">Event</span><span class="p">.</span><span class="na">Pop</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">backstack</span><span class="p">.</span><span class="na">removeAt</span><span class="p">(</span><span class="n">backstack</span><span class="p">.</span><span class="na">size</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="m">1</span><span class="p">)</span>
+<span class="w">      </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>The <a href="https://github.com/amzn/app-platform/blob/main/recipes/common/impl/src/androidMain/kotlin/software/amazon/app/platform/recipes/nav3/AndroidNavigation3HomeRenderer.kt"><code>Renderer</code></a> 
+wraps the backstack in a <code>NavDisplay</code> and forwards back gestures to the <code>Presenter</code>. There is a unique <code>NavEntry</code>
+for each position in the stack and the individual <code>Renderer</code> for each <code>Model</code> is invoked:</p>
+<div class="highlight"><pre><span></span><code><span class="nd">@Inject</span>
+<span class="nd">@ContributesRenderer</span>
+<span class="kd">class</span><span class="w"> </span><span class="nc">AndroidNavigation3HomeRenderer</span><span class="p">(</span><span class="kd">private</span><span class="w"> </span><span class="kd">val</span><span class="w"> </span><span class="nv">rendererFactory</span><span class="p">:</span><span class="w"> </span><span class="n">RendererFactory</span><span class="p">)</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">ComposeRenderer</span><span class="o">&lt;</span><span class="n">Model</span><span class="o">&gt;</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="nd">@Composable</span>
+<span class="w">  </span><span class="kd">override</span><span class="w"> </span><span class="kd">fun</span><span class="w"> </span><span class="nf">Compose</span><span class="p">(</span><span class="n">model</span><span class="p">:</span><span class="w"> </span><span class="n">Model</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="c1">// Use the position of the model in the backstack as key for `NavDisplay`. This way</span>
+<span class="w">    </span><span class="c1">// we can update models without Navigation 3 treating those changes as a new screen.</span>
+<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="nv">backstack</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">model</span><span class="p">.</span><span class="na">backstack</span><span class="p">.</span><span class="na">mapIndexed</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">index</span><span class="p">,</span><span class="w"> </span><span class="n">_</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">index</span><span class="w"> </span><span class="p">}</span>
+
+<span class="w">    </span><span class="n">NavDisplay</span><span class="p">(</span>
+<span class="w">      </span><span class="n">backStack</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">backstack</span><span class="p">,</span>
+<span class="w">      </span><span class="n">onBack</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">model</span><span class="p">.</span><span class="na">onEvent</span><span class="p">(</span><span class="n">Event</span><span class="p">.</span><span class="na">Pop</span><span class="p">)</span><span class="w"> </span><span class="p">},</span>
+<span class="w">      </span><span class="n">entryProvider</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">key</span><span class="w"> </span><span class="o">-&gt;</span>
+<span class="w">        </span><span class="n">NavEntry</span><span class="p">(</span><span class="n">key</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">          </span><span class="kd">val</span><span class="w"> </span><span class="nv">model</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">model</span><span class="p">.</span><span class="na">backstack</span><span class="o">[</span><span class="nb">it</span><span class="o">]</span>
+<span class="w">          </span><span class="n">rendererFactory</span><span class="p">.</span><span class="na">getComposeRenderer</span><span class="p">(</span><span class="n">model</span><span class="p">).</span><span class="na">renderCompose</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">      </span><span class="p">},</span>
+<span class="w">    </span><span class="p">)</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>With this integration handling of the backstack is managed in the <code>Presenter</code> and testable. </p>
+<details class="info">
+<summary>Alternative integration</summary>
+<p>If a unidirectional dataflow isn&rsquo;t required, an alternative integration is making each <code>NavEntry</code> a unique 
+<code>Presenter</code> root and compute the <code>Model</code> directly using the <code>Presenter</code>. For the reasons mentioned we don&rsquo;t 
+recommend this setup.</p>
+<div class="highlight"><pre><span></span><code><span class="kd">data</span><span class="w"> </span><span class="kd">object</span><span class="w"> </span><span class="nc">List</span>
+<span class="kd">data</span><span class="w"> </span><span class="kd">object</span><span class="w"> </span><span class="nc">Detail</span>
+
+<span class="nd">@Inject</span>
+<span class="nd">@ContributesRenderer</span>
+<span class="kd">class</span><span class="w"> </span><span class="nc">Navigation3Renderer</span><span class="p">(</span>
+<span class="w">  </span><span class="kd">private</span><span class="w"> </span><span class="kd">val</span><span class="w"> </span><span class="nv">listPresenter</span><span class="p">:</span><span class="w"> </span><span class="n">ListPresenter</span><span class="p">,</span>
+<span class="w">  </span><span class="kd">private</span><span class="w"> </span><span class="kd">val</span><span class="w"> </span><span class="nv">detailPresenter</span><span class="p">:</span><span class="w"> </span><span class="n">DetailPresenter</span><span class="p">,</span>
+<span class="w">  </span><span class="kd">private</span><span class="w"> </span><span class="kd">val</span><span class="w"> </span><span class="nv">rendererFactory</span><span class="p">:</span><span class="w"> </span><span class="n">RendererFactory</span><span class="p">,</span>
+<span class="p">)</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">ComposeRenderer</span><span class="o">&lt;</span><span class="n">Model</span><span class="o">&gt;</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="nd">@Composable</span>
+<span class="w">  </span><span class="kd">override</span><span class="w"> </span><span class="kd">fun</span><span class="w"> </span><span class="nf">Compose</span><span class="p">(</span><span class="n">model</span><span class="p">:</span><span class="w"> </span><span class="n">Model</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="nv">backstack</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">remember</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">mutableStateListOf</span><span class="o">&lt;</span><span class="kt">Any</span><span class="o">&gt;</span><span class="p">(</span><span class="n">List</span><span class="p">)</span><span class="w"> </span><span class="p">}</span>
+
+<span class="w">    </span><span class="n">NavDisplay</span><span class="p">(</span>
+<span class="w">      </span><span class="n">backStack</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">backstack</span><span class="p">,</span>
+<span class="w">      </span><span class="n">onBack</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">backstack</span><span class="p">.</span><span class="na">removeAt</span><span class="p">(</span><span class="n">backstack</span><span class="p">.</span><span class="na">size</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="m">1</span><span class="p">)</span><span class="w"> </span><span class="p">},</span>
+<span class="w">      </span><span class="n">entryProvider</span><span class="w"> </span><span class="o">=</span>
+<span class="w">        </span><span class="n">entryProvider</span><span class="w"> </span><span class="p">{</span>
+<span class="w">          </span><span class="n">entry</span><span class="o">&lt;</span><span class="n">List</span><span class="o">&gt;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="kd">val</span><span class="w"> </span><span class="nv">model</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">listPresenter</span><span class="p">.</span><span class="na">present</span><span class="p">(</span><span class="kt">Unit</span><span class="p">)</span>
+<span class="w">            </span><span class="n">rendererFactory</span><span class="p">.</span><span class="na">getComposeRenderer</span><span class="p">(</span><span class="n">model</span><span class="p">).</span><span class="na">renderCompose</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
+<span class="w">          </span><span class="p">}</span>
+<span class="w">          </span><span class="n">entry</span><span class="o">&lt;</span><span class="n">Detail</span><span class="o">&gt;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="kd">val</span><span class="w"> </span><span class="nv">model</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">detailPresenter</span><span class="p">.</span><span class="na">present</span><span class="p">(</span><span class="kt">Unit</span><span class="p">)</span>
+<span class="w">            </span><span class="n">rendererFactory</span><span class="p">.</span><span class="na">getComposeRenderer</span><span class="p">(</span><span class="n">model</span><span class="p">).</span><span class="na">renderCompose</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
+<span class="w">          </span><span class="p">}</span>
+<span class="w">        </span><span class="p">},</span>
+<span class="w">    </span><span class="p">)</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+</details>
+<h3 id="swiftui">SwiftUI<a class="headerlink" href="#swiftui" title="Permanent link">&para;</a></h3>
+<h4 id="presenters-and-swiftui-views"><code>Presenters</code> and SwiftUI <code>Views</code><a class="headerlink" href="#presenters-and-swiftui-views" title="Permanent link">&para;</a></h4>
+<p>In iOS it&rsquo;s possible to connect <code>Presenters</code> to SwiftUI <code>Views</code> so <code>Presenter</code> logic can be shared while keeping UI
+native. The Recipes app demonstrates a <a href="https://github.com/amzn/app-platform/tree/main/recipes/recipesIosApp/recipesIosApp/PresenterViews">set of Swift APIs</a>
+that demonstrate how to launch a <code>Presenter</code> and render SwiftUI <code>Views</code> in the iOS flavor. Note that App Platform 
+does not provide an API equivalent of SwiftUI <code>Renderers</code>. As such, we need to decide how to observe the flow of models 
+from a given <code>Presenter</code> and create <code>Views</code> from them.</p>
+<p>To obtain an observable stream of models, <code>Presenter</code> can be extended to provide an <code>AsyncThrowingStream</code> from the 
+model <code>StateFlow</code>. It&rsquo;s also possible to implement a convenient extension of <code>Flow</code> so we can convert any <code>Flow</code> to an
+<code>AsyncThrowingStream</code>.</p>
+<div class="highlight"><pre><span></span><code><span class="kd">extension</span><span class="w"> </span><span class="nc">Presenter</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kd">func</span><span class="w"> </span><span class="nf">viewModels</span><span class="p">&lt;</span><span class="n">Model</span><span class="p">&gt;(</span><span class="n">ofType</span><span class="w"> </span><span class="n">type</span><span class="p">:</span><span class="w"> </span><span class="n">Model</span><span class="p">.</span><span class="kr">Type</span><span class="p">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w"> </span><span class="n">AsyncThrowingStream</span><span class="p">&lt;</span><span class="n">Model</span><span class="p">,</span><span class="w"> </span><span class="n">Error</span><span class="p">&gt;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">model</span>
+<span class="w">            </span><span class="p">.</span><span class="n">values</span><span class="p">()</span>
+<span class="w">            </span><span class="p">.</span><span class="n">compactMap</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nv">$0</span><span class="w"> </span><span class="k">as</span><span class="p">?</span><span class="w"> </span><span class="n">Model</span><span class="w"> </span><span class="p">}</span>
+<span class="w">            </span><span class="p">.</span><span class="n">asAsyncThrowingStream</span><span class="p">()</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kd">extension</span><span class="w"> </span><span class="nc">Kotlinx_coroutines_coreFlow</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="c1">/// The Flows send Any, so we lose type information and need to cast at runtime instead of getting a type-safe compile time check.</span>
+<span class="w">    </span><span class="kd">func</span><span class="w"> </span><span class="nf">values</span><span class="p">()</span><span class="w"> </span><span class="p">-&gt;</span><span class="w"> </span><span class="n">AsyncThrowingStream</span><span class="p">&lt;</span><span class="nb">Any</span><span class="p">?,</span><span class="w"> </span><span class="n">Error</span><span class="p">&gt;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="kd">let</span><span class="w"> </span><span class="nv">collector</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">Kotlinx_coroutines_coreFlowCollectorImpl</span><span class="p">&lt;</span><span class="nb">Any</span><span class="p">?</span><span class="o">&gt;</span><span class="p">()</span>
+<span class="w">        </span><span class="n">collect</span><span class="p">(</span><span class="n">collector</span><span class="p">:</span><span class="w"> </span><span class="n">collector</span><span class="p">,</span><span class="w"> </span><span class="n">completionHandler</span><span class="p">:</span><span class="w"> </span><span class="n">collector</span><span class="p">.</span><span class="n">onComplete</span><span class="p">(</span><span class="kc">_</span><span class="p">:))</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">collector</span><span class="p">.</span><span class="n">values</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>Given a <code>Model</code> there are multiple ways to implement association with some SwiftUI <code>View</code>. The Recipes app chooses to
+create a <a href="https://docs.swift.org/swift-book/documentation/the-swift-programming-language/protocols/"><code>protocol</code></a> for
+view creation and extend <code>BaseModel</code> to create views under the requirement of its conformance:</p>
+<div class="highlight"><pre><span></span><code><span class="kd">protocol</span><span class="w"> </span><span class="nc">PresenterViewModel</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kd">associatedtype</span><span class="w"> </span><span class="n">Renderer</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">View</span>
+<span class="w">    </span><span class="p">@</span><span class="n">ViewBuilder</span><span class="w"> </span><span class="p">@</span><span class="n">MainActor</span><span class="w"> </span><span class="kd">func</span><span class="w"> </span><span class="nf">makeViewRenderer</span><span class="p">()</span><span class="w"> </span><span class="p">-&gt;</span><span class="w"> </span><span class="kc">Self</span><span class="p">.</span><span class="n">Renderer</span>
+<span class="p">}</span>
+
+<span class="kd">extension</span><span class="w"> </span><span class="nc">BaseModel</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="p">@</span><span class="n">MainActor</span><span class="w"> </span><span class="kd">func</span><span class="w"> </span><span class="nf">getViewRenderer</span><span class="p">()</span><span class="w"> </span><span class="p">-&gt;</span><span class="w"> </span><span class="n">AnyView</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">guard</span><span class="w"> </span><span class="kd">let</span><span class="w"> </span><span class="nv">viewModel</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="kc">self</span><span class="w"> </span><span class="k">as</span><span class="p">?</span><span class="w"> </span><span class="p">(</span><span class="n">any</span><span class="w"> </span><span class="n">PresenterViewModel</span><span class="p">)</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="bp">assertionFailure</span><span class="p">(</span><span class="s">&quot;ViewModel </span><span class="si">\(</span><span class="kc">self</span><span class="si">)</span><span class="s"> does not conform to `PresenterViewModel`&quot;</span><span class="p">)</span>
+
+<span class="w">            </span><span class="c1">// This is an implementation detail. If crashing is preferred even in production builds, `fatalError(..)`</span>
+<span class="w">            </span><span class="c1">// can be used instead</span>
+<span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="n">AnyView</span><span class="p">(</span><span class="n">Text</span><span class="p">(</span><span class="s">&quot;Error, some ViewModel was not implemented!&quot;</span><span class="p">))</span>
+<span class="w">        </span><span class="p">}</span>
+
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">AnyView</span><span class="p">(</span><span class="n">viewModel</span><span class="p">.</span><span class="n">makeViewRenderer</span><span class="p">())</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+<details class="info">
+<summary>Alternate implementation</summary>
+<p>We can also create a <code>View</code> registry:</p>
+<div class="highlight"><pre><span></span><code><span class="kd">public</span><span class="w"> </span><span class="kd">class</span><span class="w"> </span><span class="nc">PresenterViewRegistry</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="p">@</span><span class="n">MainActor</span><span class="w"> </span><span class="kd">private</span><span class="w"> </span><span class="kd">var</span><span class="w"> </span><span class="nv">registry</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="nb">ObjectIdentifier</span><span class="p">:</span><span class="w"> </span><span class="p">(</span><span class="nb">Any</span><span class="p">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w"> </span><span class="n">AnyView</span><span class="p">]</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="p">[:]</span>
+
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kd">init</span><span class="p">(</span><span class="n">registry</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="nb">ObjectIdentifier</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">(</span><span class="nb">Any</span><span class="p">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w"> </span><span class="n">AnyView</span><span class="p">]</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="p">[:])</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="kc">self</span><span class="p">.</span><span class="n">registry</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">registry</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kd">static</span><span class="w"> </span><span class="kd">var</span><span class="w"> </span><span class="nv">shared</span><span class="p">:</span><span class="w"> </span><span class="n">PresenterViewRegistry</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">PresenterViewRegistry</span><span class="p">()</span>
+<span class="p">}</span>
+
+<span class="p">@</span><span class="n">MainActor</span><span class="w"> </span><span class="kd">public</span><span class="w"> </span><span class="kd">extension</span><span class="w"> </span><span class="nc">PresenterViewRegistry</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kd">func</span><span class="w"> </span><span class="nf">registerViewForModelType</span><span class="p">&lt;</span><span class="n">Model</span><span class="p">,</span><span class="w"> </span><span class="n">Content</span><span class="p">:</span><span class="w"> </span><span class="n">View</span><span class="p">&gt;(</span><span class="kc">_</span><span class="w"> </span><span class="n">type</span><span class="p">:</span><span class="w"> </span><span class="n">Model</span><span class="p">.</span><span class="kr">Type</span><span class="p">,</span><span class="w"> </span><span class="n">makeView</span><span class="p">:</span><span class="w"> </span><span class="p">@</span><span class="n">escaping</span><span class="w"> </span><span class="p">(</span><span class="n">Model</span><span class="p">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w"> </span><span class="n">Content</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="kd">let</span><span class="w"> </span><span class="nv">typeID</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="nb">ObjectIdentifier</span><span class="p">(</span><span class="n">Model</span><span class="p">.</span><span class="kc">self</span><span class="p">)</span>
+<span class="w">        </span><span class="n">registry</span><span class="p">[</span><span class="n">typeID</span><span class="p">]</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">model</span><span class="w"> </span><span class="k">in</span>
+<span class="w">            </span><span class="n">AnyView</span><span class="p">(</span><span class="n">makeView</span><span class="p">(</span><span class="n">model</span><span class="w"> </span><span class="k">as</span><span class="p">!</span><span class="w"> </span><span class="n">Model</span><span class="p">))</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="kd">func</span><span class="w"> </span><span class="nf">makeViewForModel</span><span class="p">&lt;</span><span class="n">Model</span><span class="p">&gt;(</span><span class="kc">_</span><span class="w"> </span><span class="n">model</span><span class="p">:</span><span class="w"> </span><span class="n">Model</span><span class="p">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w"> </span><span class="n">some</span><span class="w"> </span><span class="n">View</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="kd">let</span><span class="w"> </span><span class="nv">type</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">type</span><span class="p">(</span><span class="n">of</span><span class="p">:</span><span class="w"> </span><span class="n">model</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nb">Any</span><span class="p">)</span>
+<span class="w">        </span><span class="kd">let</span><span class="w"> </span><span class="nv">typeID</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="nb">ObjectIdentifier</span><span class="p">(</span><span class="n">type</span><span class="p">)</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="kd">let</span><span class="w"> </span><span class="nv">makeView</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">registry</span><span class="p">[</span><span class="n">typeID</span><span class="p">]</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="n">makeView</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">        </span><span class="bp">fatalError</span><span class="p">(</span><span class="s">&quot;Could not find view builder for </span><span class="si">\(</span><span class="n">type</span><span class="si">)</span><span class="s">. Add it to the registry.&quot;</span><span class="p">)</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>The registry can be stored in an <code>Environment</code> property wrapper. This is similar to how <code>@ContributesRenderer</code> works 
+under the hood, though without an equivalent App Platform API the heavy lifting on registration and registry 
+lifecycle management falls to consumers. Due to these reasons we generally recommend to use the protocol setup.</p>
+</details>
+<h4 id="navigation-with-presenters-and-swiftui">Navigation with <code>Presenters</code> and SwiftUI<a class="headerlink" href="#navigation-with-presenters-and-swiftui" title="Permanent link">&para;</a></h4>
+<p>SwiftUI provides <a href="https://developer.apple.com/documentation/swiftui/navigation">navigation containers</a> to enable
+movement between different part of an app&rsquo;s view hierarchy. Similar to <code>Navigation 3</code>, SwiftUI&rsquo;s navigation containers 
+push navigation logic to the UI layer, which is against App Platform&rsquo;s philosophy of handling navigation in business
+logic. However, to support navigation with SwiftUI <code>Views</code> and <code>Presenters</code>, it is recommended to integrate with 
+SwiftUI&rsquo;s navigation offerings. This SwiftUI keeps the determination of some completed back gesture an implementation
+detail, and we want ensure that all back events are handled appropriately and the user experience feels truly native.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>We provide a recipe for integration with <code>NavigationStack</code> for single column navigation based on back gesture. For 
+other kinds of navigation with <code>NavigationSplitView</code> or <code>NavigationLink</code> it is possible to integrate following our
+<a href="https://amzn.github.io/app-platform/presenter/#model-driven-navigation">model driven navigation</a> pattern. However,
+we don&rsquo;t provide an explicit recipe for it. If you&rsquo;re missing some use cases here, please let us know.</p>
+</div>
+<p>The Recipes app demonstrates how SwiftUI navigation APIs can be used while following App Platform&rsquo;s philosophy of 
+unidirectional data flow. As navigation is a part of business logic, the recipe <a href="https://github.com/amzn/app-platform/blob/main/recipes/common/impl/src/commonMain/kotlin/software/amazon/app/platform/recipes/swiftui/SwiftUiHomePresenter.kt">implements navigation with 
+a backstack of <code>Presenters</code></a>.
+The root <code>Presenter</code> responsible for the <code>Presenter</code> backstack computes the <code>Model</code> backstack:</p>
+<p><div class="highlight"><pre><span></span><code><span class="nd">@Composable</span>
+<span class="w">  </span><span class="kd">override</span><span class="w"> </span><span class="kd">fun</span><span class="w"> </span><span class="nf">present</span><span class="p">(</span><span class="n">input</span><span class="p">:</span><span class="w"> </span><span class="kt">Unit</span><span class="p">):</span><span class="w"> </span><span class="n">Model</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="nv">backstack</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">remember</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="n">mutableStateListOf</span><span class="o">&lt;</span><span class="n">MoleculePresenter</span><span class="o">&lt;</span><span class="kt">Unit</span><span class="p">,</span><span class="w"> </span><span class="k">out</span><span class="w"> </span><span class="n">BaseModel</span><span class="o">&gt;&gt;</span><span class="p">().</span><span class="na">apply</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="c1">// There must be always one element.</span>
+<span class="w">        </span><span class="n">add</span><span class="p">(</span><span class="n">SwiftUiChildPresenter</span><span class="p">(</span><span class="n">index</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">0</span><span class="p">,</span><span class="w"> </span><span class="n">backstack</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">this</span><span class="p">))</span>
+<span class="w">      </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">Model</span><span class="p">(</span><span class="n">modelBackstack</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">backstack</span><span class="p">.</span><span class="na">map</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nb">it</span><span class="p">.</span><span class="na">present</span><span class="p">(</span><span class="kt">Unit</span><span class="p">)</span><span class="w"> </span><span class="p">})</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="k">when</span><span class="w"> </span><span class="p">(</span><span class="nb">it</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">is</span><span class="w"> </span><span class="n">Event</span><span class="p">.</span><span class="na">BackstackModificationEvent</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">          </span><span class="kd">val</span><span class="w"> </span><span class="nv">updatedBackstack</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">it</span><span class="p">.</span><span class="na">indicesBackstack</span><span class="p">.</span><span class="na">map</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">index</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">backstack</span><span class="o">[</span><span class="n">index</span><span class="o">]</span><span class="w"> </span><span class="p">}</span>
+
+<span class="w">          </span><span class="n">backstack</span><span class="p">.</span><span class="na">clear</span><span class="p">()</span>
+<span class="w">          </span><span class="n">backstack</span><span class="p">.</span><span class="na">addAll</span><span class="p">(</span><span class="n">updatedBackstack</span><span class="p">)</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">      </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">}</span>
+</code></pre></div>
+The <code>Presenter</code> forwards the <code>Models</code> and event callbacks to a SwiftUI <code>View</code>, which
+integrates these models with a <a href="https://github.com/amzn/app-platform/blob/main/recipes/recipesIosApp/recipesIosApp/SwiftUI/SwiftUiHomePresenterView.swift"><code>NavigationStack</code></a>.
+Note that to integrate we create a <a href="https://developer.apple.com/documentation/swiftui/binding"><code>Binding</code></a> that is passed
+in to the <code>NavigationStack</code>. The <code>Binding's</code> value type must conform to <code>Hashable</code> and by default <code>BaseModel</code> does not
+conform. To resolve this in the recipe we simply represent each <code>Model</code> by the index of its position in the <code>Model</code>
+backstack as we do not require more complex identifiers.</p>
+<div class="highlight"><pre><span></span><code><span class="kd">extension</span><span class="w"> </span><span class="nc">SwiftUiHomePresenter</span><span class="p">.</span><span class="n">Model</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kd">func</span><span class="w"> </span><span class="nf">pathBinding</span><span class="p">()</span><span class="w"> </span><span class="p">-&gt;</span><span class="w"> </span><span class="n">Binding</span><span class="o">&lt;</span><span class="p">[</span><span class="nb">Int</span><span class="p">]</span><span class="o">&gt;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="p">.</span><span class="kd">init</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="c1">// drop the first value of the backstack from the path because that should be the root view</span>
+<span class="w">            </span><span class="nb">Array</span><span class="p">(</span><span class="kc">self</span><span class="p">.</span><span class="n">modelBackstack</span><span class="p">.</span><span class="bp">indices</span><span class="p">.</span><span class="bp">dropFirst</span><span class="p">())</span>
+<span class="w">        </span><span class="p">}</span><span class="w"> </span><span class="kr">set</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">modifiedIndices</span><span class="w"> </span><span class="k">in</span>
+
+<span class="w">            </span><span class="c1">// the resulting backstack indices the presenter should compute on is the first index (0) that was</span>
+<span class="w">            </span><span class="c1">// dropped as well as the remaining indices post modification</span>
+<span class="w">            </span><span class="kd">let</span><span class="w"> </span><span class="nv">indicesBackstack</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">modifiedIndices</span><span class="p">.</span><span class="bp">map</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nv">$0</span><span class="p">.</span><span class="n">toKotlinInt</span><span class="p">()</span><span class="w"> </span><span class="p">}</span>
+
+<span class="w">            </span><span class="kc">self</span><span class="p">.</span><span class="n">onEvent</span><span class="p">(</span>
+<span class="w">                </span><span class="n">SwiftUiHomePresenterEventBackstackModificationEvent</span><span class="w"> </span><span class="p">(</span>
+<span class="w">                    </span><span class="n">indicesBackstack</span><span class="p">:</span><span class="w"> </span><span class="n">indicesBackstack</span>
+<span class="w">                </span><span class="p">)</span>
+<span class="w">            </span><span class="p">)</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kd">private</span><span class="w"> </span><span class="kd">struct</span><span class="w"> </span><span class="nc">NavigationStackView</span><span class="p">:</span><span class="w"> </span><span class="n">View</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kd">var</span><span class="w"> </span><span class="nv">backstack</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="n">BaseModel</span><span class="p">]</span>
+<span class="w">    </span><span class="kd">var</span><span class="w"> </span><span class="nv">model</span><span class="p">:</span><span class="w"> </span><span class="n">SwiftUiHomePresenter</span><span class="p">.</span><span class="n">Model</span>
+
+<span class="w">    </span><span class="kd">init</span><span class="p">(</span><span class="n">model</span><span class="p">:</span><span class="w"> </span><span class="n">SwiftUiHomePresenter</span><span class="p">.</span><span class="n">Model</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="kc">self</span><span class="p">.</span><span class="n">backstack</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">model</span><span class="p">.</span><span class="n">modelBackstack</span>
+<span class="w">        </span><span class="kc">self</span><span class="p">.</span><span class="n">model</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">model</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="kd">var</span><span class="w"> </span><span class="nv">body</span><span class="p">:</span><span class="w"> </span><span class="n">some</span><span class="w"> </span><span class="n">View</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">NavigationStack</span><span class="p">(</span><span class="n">path</span><span class="p">:</span><span class="w"> </span><span class="n">model</span><span class="p">.</span><span class="n">pathBinding</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n">backstack</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">getViewRenderer</span><span class="p">()</span>
+<span class="w">                </span><span class="p">.</span><span class="n">navigationDestination</span><span class="p">(</span><span class="k">for</span><span class="p">:</span><span class="w"> </span><span class="nb">Int</span><span class="p">.</span><span class="kc">self</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">index</span><span class="w"> </span><span class="k">in</span>
+<span class="w">                    </span><span class="n">backstack</span><span class="p">[</span><span class="n">index</span><span class="p">].</span><span class="n">getViewRenderer</span><span class="p">()</span>
+<span class="w">                </span><span class="p">}</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+  <script>var tabs=__md_get("__tabs");if(Array.isArray(tabs))e:for(var set of document.querySelectorAll(".tabbed-set")){var labels=set.querySelector(".tabbed-labels");for(var tab of tabs)for(var label of labels.getElementsByTagName("label"))if(label.innerText.trim()===tab){var input=document.getElementById(label.htmlFor);input.checked=!0;continue e}}</script>
+
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
+    </div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["content.code.annotate", "content.code.copy", "content.code.select", "content.tooltips", "navigation.tabs", "navigation.tabs.sticky", "navigation.top", "toc.follow", "toc.integrate", "content.tabs.link", "content.action.edit"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>

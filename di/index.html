@@ -1,0 +1,1663 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="A lightweight application framework for state and memory management suitable for Kotlin Multiplatform projects.">
+      
+      
+      
+        <link rel="canonical" href="https://amzn.github.io/app-platform/di/">
+      
+      
+        <link rel="prev" href="../template/">
+      
+      
+        <link rel="next" href="../testing/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.1">
+    
+    
+      
+        <title>DI Framework - App Platform</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inter:300,300i,400,400i,700,700i%7CFira+Code:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Inter";--md-code-font:"Fira Code"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  
+<meta property="og:type" content="website" />
+<meta property="og:title" content="DI Framework - App Platform" />
+<meta property="og:description" content="A lightweight application framework for state and memory management suitable for Kotlin Multiplatform projects." />
+<meta property="og:image" content="https://amzn.github.io/app-platform/assets/images/social/di.png" />
+<meta property="og:image:type" content="image/png" />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta property="og:url" content="https://amzn.github.io/app-platform/di/" />
+<meta property="twitter:card" content="summary_large_image" />
+<meta property="twitter:title" content="DI Framework - App Platform" />
+<meta property="twitter:description" content="A lightweight application framework for state and memory management suitable for Kotlin Multiplatform projects." />
+<meta property="twitter:image" content="https://amzn.github.io/app-platform/assets/images/social/di.png" />
+</head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="blue-grey" data-md-color-accent="blue">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#di-framework" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow md-header--lifted" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="App Platform" class="md-header__button md-logo" aria-label="App Platform" data-md-component="logo">
+      
+  <img src="../images/logo.svg" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            App Platform
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              DI Framework
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="blue-grey" data-md-color-accent="blue"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="blue-grey" data-md-color-accent="blue"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/amzn/app-platform" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    app-platform
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+    
+      
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href=".." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Introduction
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../setup/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Setup
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../module-structure/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Module Structure
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../scope/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Scope
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../presenter/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Presenter
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../renderer/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Renderer
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../template/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Template
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    <li class="md-tabs__item md-tabs__item--active">
+      <a href="./" class="md-tabs__link">
+        
+  
+  
+    
+  
+  DI Framework
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../testing/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Testing
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../faq/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  FAQ
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../changelog/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Changelog
+
+      </a>
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+    
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+  
+
+<nav class="md-nav md-nav--primary md-nav--lifted md-nav--integrated" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="App Platform" class="md-nav__button md-logo" aria-label="App Platform" data-md-component="logo">
+      
+  <img src="../images/logo.svg" alt="logo">
+
+    </a>
+    App Platform
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/amzn/app-platform" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    app-platform
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Introduction
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../setup/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Setup
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../module-structure/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module Structure
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../scope/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Scope
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../presenter/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Presenter
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../renderer/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Renderer
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../template/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Template
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    DI Framework
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    DI Framework
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#kotlin-inject-anvil" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        kotlin-inject-anvil
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="kotlin-inject-anvil">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#component" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Component
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#platform-implementations" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Platform implementations
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#injecting-dependencies" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Injecting dependencies
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#default-bindings" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Default bindings
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#metro" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Metro
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Metro">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#dependency-graph" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Dependency graph
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#platform-implementations_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Platform implementations
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#injecting-dependencies_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Injecting dependencies
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#default-bindings_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Default bindings
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#contriubtesscoped" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        @ContriubtesScoped
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#bugs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Bugs
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Bugs">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#no-full-kmp-support" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        No full KMP support
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#incremental-compilation-issues" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Incremental compilation issues
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#missing-integrations" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Missing integrations
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#migration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Migration
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#kotlin-inject-anvil-or-metro" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        kotlin-inject-anvil or Metro
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../testing/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Testing
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../faq/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    FAQ
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../changelog/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Changelog
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+    <a href="https://github.com/amzn/app-platform/edit/main/docs/di.md" title="Edit this page" class="md-content__button md-icon" rel="edit">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75z"/></svg>
+    </a>
+  
+  
+
+
+<h1 id="di-framework">DI Framework<a class="headerlink" href="#di-framework" title="Permanent link">&para;</a></h1>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>App Platform provides support for <a href="https://github.com/amzn/kotlin-inject-anvil">kotlin-inject-anvil</a> and 
+<a href="https://zacsweers.github.io/metro">Metro</a> as dependency injection framework. You can choose which one to use and
+even mix them if needed. Both frameworks are compile-time injection frameworks and ready for Kotlin Multiplatform 
+(Metro still runs into issues). They verify correctness of the object graph at build time and avoid crashes at 
+runtime.</p>
+<p>Enabling dependency injection is an opt-in feature through the Gradle DSL. The default value is <code>false</code>.
+<div class="highlight"><pre><span></span><code><span class="n">appPlatform</span><span class="w"> </span><span class="o">{</span>
+<span class="w">  </span><span class="n">enableKotlinInject</span><span class="w"> </span><span class="kc">true</span>
+<span class="w">  </span><span class="n">enableMetro</span><span class="w"> </span><span class="kc">true</span>
+<span class="o">}</span>
+</code></pre></div></p>
+</div>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>Consider taking a look at the <a href="https://github.com/amzn/kotlin-inject-anvil">kotlin-inject-anvil documentation</a> or
+<a href="https://zacsweers.github.io/metro">Metro documentation</a> first. App Platform makes heavy use the of 
+<code>@ContributesBinding</code> and <code>@ContributesTo</code> annotations to decompose and assemble components / object graphs.</p>
+</div>
+<h2 id="kotlin-inject-anvil">kotlin-inject-anvil<a class="headerlink" href="#kotlin-inject-anvil" title="Permanent link">&para;</a></h2>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p><code>kotlin-inject-anvil</code> is an opt-in feature through the Gradle DSL. The default value is <code>false</code>.
+<div class="highlight"><pre><span></span><code><span class="n">appPlatform</span><span class="w"> </span><span class="o">{</span>
+<span class="w">  </span><span class="n">enableKotlinInject</span><span class="w"> </span><span class="kc">true</span>
+<span class="o">}</span>
+</code></pre></div></p>
+</div>
+<h3 id="component">Component<a class="headerlink" href="#component" title="Permanent link">&para;</a></h3>
+<p>Components are added as a service to the <code>Scope</code> class and can be obtained using the <code>kotlinInjectComponent()</code> extension
+function:</p>
+<div class="highlight"><pre><span></span><code><span class="n">scope</span><span class="p">.</span><span class="na">kotlinInjectComponent</span><span class="o">&lt;</span><span class="n">AppComponent</span><span class="o">&gt;</span><span class="p">()</span>
+</code></pre></div>
+<p>In modularized projects, final components are defined in the <code>:app</code> modules, because the object graph has to
+know about all features of the app. It is strongly recommended to create a component in each platform specific
+folder to provide platform specific types.</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="1:4"><input checked="checked" id="android" name="__tabbed_1" type="radio" /><input id="ios" name="__tabbed_1" type="radio" /><input id="desktop" name="__tabbed_1" type="radio" /><input id="wasmjs" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="android">Android</label><label for="ios">iOS</label><label for="desktop">Desktop</label><label for="wasmjs">WasmJs</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<div class="highlight"><span class="filename">androidMain</span><pre><span></span><code><span class="nd">@SingleIn</span><span class="p">(</span><span class="n">AppScope</span><span class="o">::</span><span class="n">class</span><span class="p">)</span>
+<span class="nd">@MergeComponent</span><span class="p">(</span><span class="n">AppScope</span><span class="o">::</span><span class="n">class</span><span class="p">)</span>
+<span class="kd">abstract</span><span class="w"> </span><span class="kd">class</span><span class="w"> </span><span class="nc">AndroidAppComponent</span><span class="p">(</span>
+<span class="w">  </span><span class="nd">@get</span><span class="p">:</span><span class="n">Provides</span><span class="w"> </span><span class="kd">val</span><span class="w"> </span><span class="nv">application</span><span class="p">:</span><span class="w"> </span><span class="n">Application</span><span class="p">,</span>
+<span class="w">  </span><span class="nd">@get</span><span class="p">:</span><span class="n">Provides</span><span class="w"> </span><span class="kd">val</span><span class="w"> </span><span class="nv">rootScopeProvider</span><span class="p">:</span><span class="w"> </span><span class="n">RootScopeProvider</span><span class="p">,</span>
+<span class="p">)</span>
+</code></pre></div>
+</div>
+<div class="tabbed-block">
+<div class="highlight"><span class="filename">iosMain</span><pre><span></span><code><span class="nd">@SingleIn</span><span class="p">(</span><span class="n">AppScope</span><span class="o">::</span><span class="n">class</span><span class="p">)</span>
+<span class="nd">@MergeComponent</span><span class="p">(</span><span class="n">AppScope</span><span class="o">::</span><span class="n">class</span><span class="p">)</span>
+<span class="kd">abstract</span><span class="w"> </span><span class="kd">class</span><span class="w"> </span><span class="nc">IosAppComponent</span><span class="p">(</span>
+<span class="w">  </span><span class="nd">@get</span><span class="p">:</span><span class="n">Provides</span><span class="w"> </span><span class="kd">val</span><span class="w"> </span><span class="nv">uiApplication</span><span class="p">:</span><span class="w"> </span><span class="n">UIApplication</span><span class="p">,</span>
+<span class="w">  </span><span class="nd">@get</span><span class="p">:</span><span class="n">Provides</span><span class="w"> </span><span class="kd">val</span><span class="w"> </span><span class="nv">rootScopeProvider</span><span class="p">:</span><span class="w"> </span><span class="n">RootScopeProvider</span><span class="p">,</span>
+<span class="p">)</span>
+</code></pre></div>
+</div>
+<div class="tabbed-block">
+<div class="highlight"><span class="filename">desktopMain</span><pre><span></span><code><span class="nd">@SingleIn</span><span class="p">(</span><span class="n">AppScope</span><span class="o">::</span><span class="n">class</span><span class="p">)</span>
+<span class="nd">@MergeComponent</span><span class="p">(</span><span class="n">AppScope</span><span class="o">::</span><span class="n">class</span><span class="p">)</span>
+<span class="kd">abstract</span><span class="w"> </span><span class="kd">class</span><span class="w"> </span><span class="nc">DesktopAppComponent</span><span class="p">(</span>
+<span class="w">  </span><span class="nd">@get</span><span class="p">:</span><span class="n">Provides</span><span class="w"> </span><span class="kd">val</span><span class="w"> </span><span class="nv">rootScopeProvider</span><span class="p">:</span><span class="w"> </span><span class="n">RootScopeProvider</span>
+<span class="p">)</span>
+</code></pre></div>
+</div>
+<div class="tabbed-block">
+<div class="highlight"><span class="filename">wasmJsMain</span><pre><span></span><code><span class="nd">@MergeComponent</span><span class="p">(</span><span class="n">AppScope</span><span class="o">::</span><span class="n">class</span><span class="p">)</span>
+<span class="nd">@SingleIn</span><span class="p">(</span><span class="n">AppScope</span><span class="o">::</span><span class="n">class</span><span class="p">)</span>
+<span class="kd">abstract</span><span class="w"> </span><span class="kd">class</span><span class="w"> </span><span class="nc">WasmJsAppComponent</span><span class="p">(</span>
+<span class="w">  </span><span class="nd">@get</span><span class="p">:</span><span class="n">Provides</span><span class="w"> </span><span class="kd">val</span><span class="w"> </span><span class="nv">rootScopeProvider</span><span class="p">:</span><span class="w"> </span><span class="n">RootScopeProvider</span>
+<span class="p">)</span>
+</code></pre></div>
+</div>
+</div>
+</div>
+<h3 id="platform-implementations">Platform implementations<a class="headerlink" href="#platform-implementations" title="Permanent link">&para;</a></h3>
+<p><code>kotlin-inject-anvil</code> makes it simple to provide platform specific implementations for abstract APIs without needing
+to use <code>expect / actual</code> declarations or any specific wiring. Since the final components live in the platform specific
+source folders, all contributions for a platform are automatically picked up. Platform specific implementations can
+use and inject types from the platform.</p>
+<div class="highlight"><span class="filename">commonMain</span><pre><span></span><code><span class="kd">interface</span><span class="w"> </span><span class="nc">LocationProvider</span>
+</code></pre></div>
+<div class="tabbed-set tabbed-alternate" data-tabs="2:4"><input checked="checked" id="android_1" name="__tabbed_2" type="radio" /><input id="ios_1" name="__tabbed_2" type="radio" /><input id="desktop_1" name="__tabbed_2" type="radio" /><input id="wasmjs_1" name="__tabbed_2" type="radio" /><div class="tabbed-labels"><label for="android_1">Android</label><label for="ios_1">iOS</label><label for="desktop_1">Desktop</label><label for="wasmjs_1">WasmJs</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<div class="highlight"><span class="filename">androidMain</span><pre><span></span><code><span class="nd">@Inject</span>
+<span class="nd">@SingleIn</span><span class="p">(</span><span class="n">AppScope</span><span class="o">::</span><span class="n">class</span><span class="p">)</span>
+<span class="nd">@ContributesBinding</span><span class="p">(</span><span class="n">AppScope</span><span class="o">::</span><span class="n">class</span><span class="p">)</span>
+<span class="kd">class</span><span class="w"> </span><span class="nc">AndroidLocationProvider</span><span class="p">(</span>
+<span class="w">  </span><span class="kd">val</span><span class="w"> </span><span class="nv">application</span><span class="p">:</span><span class="w"> </span><span class="n">Application</span><span class="p">,</span>
+<span class="p">)</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">LocationProvider</span>
+</code></pre></div>
+</div>
+<div class="tabbed-block">
+<div class="highlight"><span class="filename">iosMain</span><pre><span></span><code><span class="nd">@Inject</span>
+<span class="nd">@SingleIn</span><span class="p">(</span><span class="n">AppScope</span><span class="o">::</span><span class="n">class</span><span class="p">)</span>
+<span class="nd">@ContributesBinding</span><span class="p">(</span><span class="n">AppScope</span><span class="o">::</span><span class="n">class</span><span class="p">)</span>
+<span class="kd">class</span><span class="w"> </span><span class="nc">IosLocationProvider</span><span class="p">(</span>
+<span class="w">  </span><span class="kd">val</span><span class="w"> </span><span class="nv">uiApplication</span><span class="p">:</span><span class="w"> </span><span class="n">UIApplication</span><span class="p">,</span>
+<span class="p">)</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">LocationProvider</span>
+</code></pre></div>
+</div>
+<div class="tabbed-block">
+<div class="highlight"><span class="filename">desktopMain</span><pre><span></span><code><span class="nd">@Inject</span>
+<span class="nd">@SingleIn</span><span class="p">(</span><span class="n">AppScope</span><span class="o">::</span><span class="n">class</span><span class="p">)</span>
+<span class="nd">@ContributesBinding</span><span class="p">(</span><span class="n">AppScope</span><span class="o">::</span><span class="n">class</span><span class="p">)</span>
+<span class="kd">class</span><span class="w"> </span><span class="nc">DesktopLocationProvider</span><span class="p">(</span>
+<span class="w">  </span><span class="p">...</span>
+<span class="p">)</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">LocationProvider</span>
+</code></pre></div>
+</div>
+<div class="tabbed-block">
+<div class="highlight"><span class="filename">wasmJsMain</span><pre><span></span><code><span class="nd">@Inject</span>
+<span class="nd">@SingleIn</span><span class="p">(</span><span class="n">AppScope</span><span class="o">::</span><span class="n">class</span><span class="p">)</span>
+<span class="nd">@ContributesBinding</span><span class="p">(</span><span class="n">AppScope</span><span class="o">::</span><span class="n">class</span><span class="p">)</span>
+<span class="kd">class</span><span class="w"> </span><span class="nc">WasmLocationProvider</span><span class="p">(</span>
+<span class="w">  </span><span class="p">...</span>
+<span class="p">)</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">LocationProvider</span>
+</code></pre></div>
+</div>
+</div>
+</div>
+<p>Other common code within <code>commonMain</code> can safely inject and use <code>LocationProvider</code>.</p>
+<h3 id="injecting-dependencies">Injecting dependencies<a class="headerlink" href="#injecting-dependencies" title="Permanent link">&para;</a></h3>
+<p>It&rsquo;s recommended to rely on constructor injection as much as possible, because it removes boilerplate and makes
+testing easier. But it some cases it&rsquo;s required to get a dependency from a component where constructor injection
+is not possible, e.g. in a static context or types created by the platform. In this case a contributed component
+interface with access to the <code>Scope</code> help:</p>
+<div class="highlight"><span class="filename">androidMain</span><pre><span></span><code><span class="kd">class</span><span class="w"> </span><span class="nc">MainActivityViewModel</span><span class="p">(</span><span class="n">application</span><span class="p">:</span><span class="w"> </span><span class="n">Application</span><span class="p">)</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">AndroidViewModel</span><span class="p">(</span><span class="n">application</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+
+<span class="w">  </span><span class="kd">private</span><span class="w"> </span><span class="kd">val</span><span class="w"> </span><span class="nv">component</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">application</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="n">RootScopeProvider</span><span class="p">).</span><span class="na">rootScope</span><span class="p">.</span><span class="na">kotlinInjectComponent</span><span class="o">&lt;</span><span class="n">Component</span><span class="o">&gt;</span><span class="p">()</span>
+<span class="w">  </span><span class="kd">private</span><span class="w"> </span><span class="kd">val</span><span class="w"> </span><span class="nv">templateProvider</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">component</span><span class="p">.</span><span class="na">templateProviderFactory</span><span class="p">.</span><span class="na">createTemplateProvider</span><span class="p">()</span>
+
+<span class="w">  </span><span class="nd">@ContributesTo</span><span class="p">(</span><span class="n">AppScope</span><span class="o">::</span><span class="n">class</span><span class="p">)</span>
+<span class="w">  </span><span class="kd">interface</span><span class="w"> </span><span class="nc">Component</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="nv">templateProviderFactory</span><span class="p">:</span><span class="w"> </span><span class="n">TemplateProvider</span><span class="p">.</span><span class="na">Factory</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>This sample shows an Android <code>ViewModel</code> that doesn&rsquo;t use constructor injection. Instead, the <code>Scope</code> is retrieved
+from the <code>Application</code> class and the <code>kotlin-inject-anvil</code> component is found through the <code>kotlinInjectComponent()</code> function.</p>
+<details class="example">
+<summary>Sample</summary>
+<p>The <code>ViewModel</code> example comes from the <a href="https://github.com/amzn/app-platform/blob/main/sample/app/src/androidMain/kotlin/software/amazon/app/platform/sample/MainActivityViewModel.kt">sample app</a>.
+<code>ViewModels</code> can use constructor injection, but this requires more setup. This approach of using a component
+interface was simpler and faster.</p>
+<p>Another example where this approach is handy is in <a href="https://github.com/amzn/app-platform/blob/main/sample/navigation/impl/src/commonMain/kotlin/software/amazon/app/platform/sample/navigation/NavigationPresenterImpl.kt"><code>NavigationPresenterImpl</code></a>.
+This class waits for the user scope to be available and then optionally retrieves the <code>Presenter</code> that is part
+of the user component. Constructor injection cannot be used, because <code>NavigationPresenterImpl</code> is part of the app
+scope and cannot inject dependencies from the user scope, which is a child scope of app scope. This would violate
+dependency inversion rules.</p>
+<div class="highlight"><pre><span></span><code><span class="nd">@ContributesTo</span><span class="p">(</span><span class="n">UserScope</span><span class="o">::</span><span class="n">class</span><span class="p">)</span>
+<span class="kd">interface</span><span class="w"> </span><span class="nc">UserComponent</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kd">val</span><span class="w"> </span><span class="nv">userPresenter</span><span class="p">:</span><span class="w"> </span><span class="n">UserPagePresenter</span>
+<span class="p">}</span>
+
+<span class="nd">@Composable</span>
+<span class="kd">override</span><span class="w"> </span><span class="kd">fun</span><span class="w"> </span><span class="nf">present</span><span class="p">(</span><span class="n">input</span><span class="p">:</span><span class="w"> </span><span class="kt">Unit</span><span class="p">):</span><span class="w"> </span><span class="n">BaseModel</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kd">val</span><span class="w"> </span><span class="nv">scope</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">getUserScope</span><span class="p">()</span>
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">scope</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="kc">null</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="c1">// If no user is logged in, then show the logged in screen.</span>
+<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="nv">presenter</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">remember</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">loginPresenter</span><span class="p">()</span><span class="w"> </span><span class="p">}</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">presenter</span><span class="p">.</span><span class="na">present</span><span class="p">(</span><span class="kt">Unit</span><span class="p">)</span>
+<span class="w">  </span><span class="p">}</span>
+
+<span class="w">  </span><span class="c1">// A user is logged in. Use the user component to get an instance of UserPagePresenter, which is only</span>
+<span class="w">  </span><span class="c1">// part of the user scope.</span>
+<span class="hll"><span class="w">  </span><span class="kd">val</span><span class="w"> </span><span class="nv">userPresenter</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">remember</span><span class="p">(</span><span class="n">scope</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">scope</span><span class="p">.</span><span class="na">kotlinInjectComponent</span><span class="o">&lt;</span><span class="n">UserComponent</span><span class="o">&gt;</span><span class="p">().</span><span class="na">userPresenter</span><span class="w"> </span><span class="p">}</span>
+</span><span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="n">userPresenter</span><span class="p">.</span><span class="na">present</span><span class="p">(</span><span class="kt">Unit</span><span class="p">)</span>
+<span class="p">}</span>
+</code></pre></div>
+</details>
+<h3 id="default-bindings">Default bindings<a class="headerlink" href="#default-bindings" title="Permanent link">&para;</a></h3>
+<p>App Platform provides a few defaults that can be injected, including a <code>CoroutineScope</code> and <code>CoroutineDispatchers</code>.</p>
+<div class="highlight"><pre><span></span><code><span class="nd">@Inject</span>
+<span class="kd">class</span><span class="w"> </span><span class="nc">SampleClass</span><span class="p">(</span>
+<span class="w">  </span><span class="nd">@ForScope</span><span class="p">(</span><span class="n">AppScope</span><span class="o">::</span><span class="n">class</span><span class="p">)</span><span class="w"> </span><span class="n">appScope</span><span class="p">:</span><span class="w"> </span><span class="n">CoroutineScope</span><span class="p">,</span>
+
+<span class="w">  </span><span class="nd">@IoCoroutineDispatcher</span><span class="w"> </span><span class="n">ioDispatcher</span><span class="p">:</span><span class="w"> </span><span class="n">CoroutineDispatcher</span><span class="p">,</span>
+<span class="w">  </span><span class="nd">@DefaultCoroutineDispatcher</span><span class="w"> </span><span class="n">defaultDispatcher</span><span class="p">:</span><span class="w"> </span><span class="n">CoroutineDispatcher</span><span class="p">,</span>
+<span class="w">  </span><span class="nd">@MainCoroutineDispatcher</span><span class="w"> </span><span class="n">mainDispatcher</span><span class="p">:</span><span class="w"> </span><span class="n">CoroutineDispatcher</span><span class="p">,</span>
+<span class="p">)</span>
+</code></pre></div>
+<div class="admonition info">
+<p class="admonition-title">CoroutineScope</p>
+<p>The <code>CoroutineScope</code> uses the IO dispatcher by default. The qualifier <code>@ForScope(AppScope::class)</code> is needed to
+allow other scopes to have their own <code>CoroutineScope</code>. For example, the sample app provides a <code>CoroutineScope</code>
+<a href="https://github.com/amzn/app-platform/blob/main/sample/user/impl/src/commonMain/kotlin/software/amazon/app/platform/sample/user/UserComponent.kt">for the user scope</a>,
+which gets canceled when the user scope gets destroyed. The <code>CoroutineScope</code> for the user scope uses the qualifier
+`@ForScope(UserScope::class)</p>
+<div class="highlight"><pre><span></span><code><span class="cm">/**</span>
+<span class="cm"> * Provides the [CoroutineScopeScoped] for the user scope. This is a single instance for the user</span>
+<span class="cm"> * scope.</span>
+<span class="cm"> */</span>
+<span class="nd">@Provides</span>
+<span class="nd">@SingleIn</span><span class="p">(</span><span class="n">UserScope</span><span class="o">::</span><span class="n">class</span><span class="p">)</span>
+<span class="nd">@ForScope</span><span class="p">(</span><span class="n">UserScope</span><span class="o">::</span><span class="n">class</span><span class="p">)</span>
+<span class="kd">fun</span><span class="w"> </span><span class="nf">provideUserScopeCoroutineScopeScoped</span><span class="p">(</span>
+<span class="w">  </span><span class="nd">@IoCoroutineDispatcher</span><span class="w"> </span><span class="n">dispatcher</span><span class="p">:</span><span class="w"> </span><span class="n">CoroutineDispatcher</span>
+<span class="p">):</span><span class="w"> </span><span class="n">CoroutineScopeScoped</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="n">CoroutineScopeScoped</span><span class="p">(</span><span class="n">dispatcher</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">SupervisorJob</span><span class="p">()</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">CoroutineName</span><span class="p">(</span><span class="s">&quot;UserScope&quot;</span><span class="p">))</span>
+<span class="p">}</span>
+
+<span class="cm">/**</span>
+<span class="cm"> * Provides the [CoroutineScope] for the user scope. A new child scope is created every time an</span>
+<span class="cm"> * instance is injected so that the parent cannot be canceled accidentally.</span>
+<span class="cm"> */</span>
+<span class="nd">@Provides</span>
+<span class="nd">@ForScope</span><span class="p">(</span><span class="n">UserScope</span><span class="o">::</span><span class="n">class</span><span class="p">)</span>
+<span class="kd">fun</span><span class="w"> </span><span class="nf">provideUserCoroutineScope</span><span class="p">(</span>
+<span class="w">  </span><span class="nd">@ForScope</span><span class="p">(</span><span class="n">UserScope</span><span class="o">::</span><span class="n">class</span><span class="p">)</span><span class="w"> </span><span class="n">userScopeCoroutineScopeScoped</span><span class="p">:</span><span class="w"> </span><span class="n">CoroutineScopeScoped</span>
+<span class="p">):</span><span class="w"> </span><span class="n">CoroutineScope</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="n">userScopeCoroutineScopeScoped</span><span class="p">.</span><span class="na">createChild</span><span class="p">()</span>
+<span class="p">}</span>
+</code></pre></div>
+</div>
+<div class="admonition info">
+<p class="admonition-title">CoroutineDispatcher</p>
+<p>It&rsquo;s recommended to inject <code>CoroutineDispatcher</code> through the constructor instead of using <code>Dispatcher.*</code>. This
+allows to easily swap them within unit tests to remove concurrency and improve stability.</p>
+</div>
+<h2 id="metro">Metro<a class="headerlink" href="#metro" title="Permanent link">&para;</a></h2>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Metro is an opt-in feature through the Gradle DSL. The default value is <code>false</code>.
+<div class="highlight"><pre><span></span><code><span class="n">appPlatform</span><span class="w"> </span><span class="o">{</span>
+<span class="w">  </span><span class="n">enableMetro</span><span class="w"> </span><span class="kc">true</span>
+<span class="o">}</span>
+</code></pre></div></p>
+</div>
+<div class="admonition bug">
+<p class="admonition-title">Bug</p>
+<p>There are several bugs and issues related to Metro and the integration is considered experimental until these
+problems are resolved and Metro itself becomes stable. More details are listed in the <a href="./#bugs">bugs section</a>. </p>
+</div>
+<h3 id="dependency-graph">Dependency graph<a class="headerlink" href="#dependency-graph" title="Permanent link">&para;</a></h3>
+<p>Dependency graphs are added as a service to the <code>Scope</code> class and can be obtained using the <code>metroDependencyGraph()</code> 
+extension function:</p>
+<div class="highlight"><pre><span></span><code><span class="n">scope</span><span class="p">.</span><span class="na">metroDependencyGraph</span><span class="o">&lt;</span><span class="n">AppGraph</span><span class="o">&gt;</span><span class="p">()</span>
+</code></pre></div>
+<p>In modularized projects, final graphs are defined in the <code>:app</code> modules, because the object graph has to
+know about all features of the app. It is strongly recommended to create an object graph in each platform specific
+folder to provide platform specific types.</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="3:4"><input checked="checked" id="android_2" name="__tabbed_3" type="radio" /><input id="ios_2" name="__tabbed_3" type="radio" /><input id="desktop_2" name="__tabbed_3" type="radio" /><input id="wasmjs_2" name="__tabbed_3" type="radio" /><div class="tabbed-labels"><label for="android_2">Android</label><label for="ios_2">iOS</label><label for="desktop_2">Desktop</label><label for="wasmjs_2">WasmJs</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<div class="highlight"><span class="filename">androidMain</span><pre><span></span><code><span class="nd">@DependencyGraph</span><span class="p">(</span><span class="n">AppScope</span><span class="o">::</span><span class="n">class</span><span class="p">)</span>
+<span class="kd">interface</span><span class="w"> </span><span class="nc">AndroidAppGraph</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="nd">@DependencyGraph.Factory</span>
+<span class="w">  </span><span class="kd">fun</span><span class="w"> </span><span class="kd">interface</span><span class="w"> </span><span class="nc">Factory</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kd">fun</span><span class="w"> </span><span class="nf">create</span><span class="p">(</span>
+<span class="w">      </span><span class="nd">@Provides</span><span class="w"> </span><span class="n">application</span><span class="p">:</span><span class="w"> </span><span class="n">Application</span><span class="p">,</span>
+<span class="w">      </span><span class="nd">@Provides</span><span class="w"> </span><span class="n">rootScopeProvider</span><span class="p">:</span><span class="w"> </span><span class="n">RootScopeProvider</span><span class="p">,</span>
+<span class="w">    </span><span class="p">):</span><span class="w"> </span><span class="n">AndroidAppGraph</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+</div>
+<div class="tabbed-block">
+<div class="highlight"><span class="filename">iosMain</span><pre><span></span><code><span class="nd">@DependencyGraph</span><span class="p">(</span><span class="n">AppScope</span><span class="o">::</span><span class="n">class</span><span class="p">)</span>
+<span class="kd">interface</span><span class="w"> </span><span class="nc">IosAppGraph</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="nd">@DependencyGraph.Factory</span>
+<span class="w">  </span><span class="kd">fun</span><span class="w"> </span><span class="kd">interface</span><span class="w"> </span><span class="nc">Factory</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kd">fun</span><span class="w"> </span><span class="nf">create</span><span class="p">(</span>
+<span class="w">      </span><span class="nd">@Provides</span><span class="w"> </span><span class="n">uiApplication</span><span class="p">:</span><span class="w"> </span><span class="n">UIApplication</span><span class="p">,</span>
+<span class="w">      </span><span class="nd">@Provides</span><span class="w"> </span><span class="n">rootScopeProvider</span><span class="p">:</span><span class="w"> </span><span class="n">RootScopeProvider</span><span class="p">,</span>
+<span class="w">    </span><span class="p">):</span><span class="w"> </span><span class="n">IosAppGraph</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+</div>
+<div class="tabbed-block">
+<div class="highlight"><span class="filename">desktopMain</span><pre><span></span><code><span class="nd">@DependencyGraph</span><span class="p">(</span><span class="n">AppScope</span><span class="o">::</span><span class="n">class</span><span class="p">)</span>
+<span class="kd">interface</span><span class="w"> </span><span class="nc">DesktopAppGraph</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="nd">@DependencyGraph.Factory</span>
+<span class="w">  </span><span class="kd">fun</span><span class="w"> </span><span class="kd">interface</span><span class="w"> </span><span class="nc">Factory</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kd">fun</span><span class="w"> </span><span class="nf">create</span><span class="p">(</span><span class="nd">@Provides</span><span class="w"> </span><span class="n">rootScopeProvider</span><span class="p">:</span><span class="w"> </span><span class="n">RootScopeProvider</span><span class="p">):</span><span class="w"> </span><span class="n">DesktopAppGraph</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+</div>
+<div class="tabbed-block">
+<div class="highlight"><span class="filename">wasmJsMain</span><pre><span></span><code><span class="nd">@DependencyGraph</span><span class="p">(</span><span class="n">AppScope</span><span class="o">::</span><span class="n">class</span><span class="p">)</span>
+<span class="kd">interface</span><span class="w"> </span><span class="nc">WasmJsAppGraph</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="nd">@DependencyGraph.Factory</span>
+<span class="w">  </span><span class="kd">fun</span><span class="w"> </span><span class="kd">interface</span><span class="w"> </span><span class="nc">Factory</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kd">fun</span><span class="w"> </span><span class="nf">create</span><span class="p">(</span><span class="nd">@Provides</span><span class="w"> </span><span class="n">rootScopeProvider</span><span class="p">:</span><span class="w"> </span><span class="n">RootScopeProvider</span><span class="p">):</span><span class="w"> </span><span class="n">WasmJsAppGraph</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+</div>
+</div>
+</div>
+<h3 id="platform-implementations_1">Platform implementations<a class="headerlink" href="#platform-implementations_1" title="Permanent link">&para;</a></h3>
+<p>Metro makes it simple to provide platform specific implementations for abstract APIs without needing
+to use <code>expect / actual</code> declarations or any specific wiring. Since the final object graphs live in the platform 
+specific source folders, all contributions for a platform are automatically picked up. Platform specific 
+implementations can use and inject types from the platform.</p>
+<div class="highlight"><span class="filename">commonMain</span><pre><span></span><code><span class="kd">interface</span><span class="w"> </span><span class="nc">LocationProvider</span>
+</code></pre></div>
+<div class="tabbed-set tabbed-alternate" data-tabs="4:4"><input checked="checked" id="android_3" name="__tabbed_4" type="radio" /><input id="ios_3" name="__tabbed_4" type="radio" /><input id="desktop_3" name="__tabbed_4" type="radio" /><input id="wasmjs_3" name="__tabbed_4" type="radio" /><div class="tabbed-labels"><label for="android_3">Android</label><label for="ios_3">iOS</label><label for="desktop_3">Desktop</label><label for="wasmjs_3">WasmJs</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<div class="highlight"><span class="filename">androidMain</span><pre><span></span><code><span class="nd">@Inject</span>
+<span class="nd">@SingleIn</span><span class="p">(</span><span class="n">AppScope</span><span class="o">::</span><span class="n">class</span><span class="p">)</span>
+<span class="nd">@ContributesBinding</span><span class="p">(</span><span class="n">AppScope</span><span class="o">::</span><span class="n">class</span><span class="p">)</span>
+<span class="kd">class</span><span class="w"> </span><span class="nc">AndroidLocationProvider</span><span class="p">(</span>
+<span class="w">  </span><span class="kd">val</span><span class="w"> </span><span class="nv">application</span><span class="p">:</span><span class="w"> </span><span class="n">Application</span><span class="p">,</span>
+<span class="p">)</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">LocationProvider</span>
+</code></pre></div>
+</div>
+<div class="tabbed-block">
+<div class="highlight"><span class="filename">iosMain</span><pre><span></span><code><span class="nd">@Inject</span>
+<span class="nd">@SingleIn</span><span class="p">(</span><span class="n">AppScope</span><span class="o">::</span><span class="n">class</span><span class="p">)</span>
+<span class="nd">@ContributesBinding</span><span class="p">(</span><span class="n">AppScope</span><span class="o">::</span><span class="n">class</span><span class="p">)</span>
+<span class="kd">class</span><span class="w"> </span><span class="nc">IosLocationProvider</span><span class="p">(</span>
+<span class="w">  </span><span class="kd">val</span><span class="w"> </span><span class="nv">uiApplication</span><span class="p">:</span><span class="w"> </span><span class="n">UIApplication</span><span class="p">,</span>
+<span class="p">)</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">LocationProvider</span>
+</code></pre></div>
+</div>
+<div class="tabbed-block">
+<div class="highlight"><span class="filename">desktopMain</span><pre><span></span><code><span class="nd">@Inject</span>
+<span class="nd">@SingleIn</span><span class="p">(</span><span class="n">AppScope</span><span class="o">::</span><span class="n">class</span><span class="p">)</span>
+<span class="nd">@ContributesBinding</span><span class="p">(</span><span class="n">AppScope</span><span class="o">::</span><span class="n">class</span><span class="p">)</span>
+<span class="kd">class</span><span class="w"> </span><span class="nc">DesktopLocationProvider</span><span class="p">(</span>
+<span class="w">  </span><span class="p">...</span>
+<span class="p">)</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">LocationProvider</span>
+</code></pre></div>
+</div>
+<div class="tabbed-block">
+<div class="highlight"><span class="filename">wasmJsMain</span><pre><span></span><code><span class="nd">@Inject</span>
+<span class="nd">@SingleIn</span><span class="p">(</span><span class="n">AppScope</span><span class="o">::</span><span class="n">class</span><span class="p">)</span>
+<span class="nd">@ContributesBinding</span><span class="p">(</span><span class="n">AppScope</span><span class="o">::</span><span class="n">class</span><span class="p">)</span>
+<span class="kd">class</span><span class="w"> </span><span class="nc">WasmLocationProvider</span><span class="p">(</span>
+<span class="w">  </span><span class="p">...</span>
+<span class="p">)</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">LocationProvider</span>
+</code></pre></div>
+</div>
+</div>
+</div>
+<p>Other common code within <code>commonMain</code> can safely inject and use <code>LocationProvider</code>.</p>
+<h3 id="injecting-dependencies_1">Injecting dependencies<a class="headerlink" href="#injecting-dependencies_1" title="Permanent link">&para;</a></h3>
+<p>It&rsquo;s recommended to rely on constructor injection as much as possible, because it removes boilerplate and makes
+testing easier. But it some cases it&rsquo;s required to get a dependency from an object graph where constructor injection
+is not possible, e.g. in a static context or types created by the platform. In this case a contributed object graph
+interface with access to the <code>Scope</code> help:</p>
+<div class="highlight"><span class="filename">androidMain</span><pre><span></span><code><span class="kd">class</span><span class="w"> </span><span class="nc">MainActivityViewModel</span><span class="p">(</span><span class="n">application</span><span class="p">:</span><span class="w"> </span><span class="n">Application</span><span class="p">)</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">AndroidViewModel</span><span class="p">(</span><span class="n">application</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+
+<span class="w">  </span><span class="kd">private</span><span class="w"> </span><span class="kd">val</span><span class="w"> </span><span class="nv">graph</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">application</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="n">RootScopeProvider</span><span class="p">).</span><span class="na">rootScope</span><span class="p">.</span><span class="na">metroDependencyGraph</span><span class="o">&lt;</span><span class="n">Graph</span><span class="o">&gt;</span><span class="p">()</span>
+<span class="w">  </span><span class="kd">private</span><span class="w"> </span><span class="kd">val</span><span class="w"> </span><span class="nv">templateProvider</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">graph</span><span class="p">.</span><span class="na">templateProviderFactory</span><span class="p">.</span><span class="na">createTemplateProvider</span><span class="p">()</span>
+
+<span class="w">  </span><span class="nd">@ContributesTo</span><span class="p">(</span><span class="n">AppScope</span><span class="o">::</span><span class="n">class</span><span class="p">)</span>
+<span class="w">  </span><span class="kd">interface</span><span class="w"> </span><span class="nc">Graph</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="nv">templateProviderFactory</span><span class="p">:</span><span class="w"> </span><span class="n">TemplateProvider</span><span class="p">.</span><span class="na">Factory</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>This sample shows an Android <code>ViewModel</code> that doesn&rsquo;t use constructor injection. Instead, the <code>Scope</code> is retrieved
+from the <code>Application</code> class and the Metro object graph is found through the <code>metroDependencyGraph()</code> function.</p>
+<details class="example">
+<summary>Sample</summary>
+<p>The <code>ViewModel</code> example comes from the <a href="https://github.com/amzn/app-platform/blob/main/sample/app/src/androidMain/kotlin/software/amazon/app/platform/sample/MainActivityViewModel.kt">sample app</a>.
+<code>ViewModels</code> can use constructor injection, but this requires more setup. This approach of using a graph
+interface was simpler and faster.</p>
+<p>Another example where this approach is handy is in <a href="https://github.com/amzn/app-platform/blob/main/sample/navigation/impl/src/commonMain/kotlin/software/amazon/app/platform/sample/navigation/NavigationPresenterImpl.kt"><code>NavigationPresenterImpl</code></a>.
+This class waits for the user scope to be available and then optionally retrieves the <code>Presenter</code> that is part
+of the user graph. Constructor injection cannot be used, because <code>NavigationPresenterImpl</code> is part of the app
+scope and cannot inject dependencies from the user scope, which is a child scope of app scope. This would violate
+dependency inversion rules.</p>
+<div class="highlight"><pre><span></span><code><span class="nd">@ContributesTo</span><span class="p">(</span><span class="n">UserScope</span><span class="o">::</span><span class="n">class</span><span class="p">)</span>
+<span class="kd">interface</span><span class="w"> </span><span class="nc">UserGraph</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kd">val</span><span class="w"> </span><span class="nv">userPresenter</span><span class="p">:</span><span class="w"> </span><span class="n">UserPagePresenter</span>
+<span class="p">}</span>
+
+<span class="nd">@Composable</span>
+<span class="kd">override</span><span class="w"> </span><span class="kd">fun</span><span class="w"> </span><span class="nf">present</span><span class="p">(</span><span class="n">input</span><span class="p">:</span><span class="w"> </span><span class="kt">Unit</span><span class="p">):</span><span class="w"> </span><span class="n">BaseModel</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kd">val</span><span class="w"> </span><span class="nv">scope</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">getUserScope</span><span class="p">()</span>
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">scope</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="kc">null</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="c1">// If no user is logged in, then show the logged in screen.</span>
+<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="nv">presenter</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">remember</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">loginPresenter</span><span class="p">()</span><span class="w"> </span><span class="p">}</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">presenter</span><span class="p">.</span><span class="na">present</span><span class="p">(</span><span class="kt">Unit</span><span class="p">)</span>
+<span class="w">  </span><span class="p">}</span>
+
+<span class="w">  </span><span class="c1">// A user is logged in. Use the user graph to get an instance of UserPagePresenter, which is only</span>
+<span class="w">  </span><span class="c1">// part of the user scope.</span>
+<span class="hll"><span class="w">  </span><span class="kd">val</span><span class="w"> </span><span class="nv">userPresenter</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">remember</span><span class="p">(</span><span class="n">scope</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">scope</span><span class="p">.</span><span class="na">metroDependencyGraph</span><span class="o">&lt;</span><span class="n">UserGraph</span><span class="o">&gt;</span><span class="p">().</span><span class="na">userPresenter</span><span class="w"> </span><span class="p">}</span>
+</span><span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="n">userPresenter</span><span class="p">.</span><span class="na">present</span><span class="p">(</span><span class="kt">Unit</span><span class="p">)</span>
+<span class="p">}</span>
+</code></pre></div>
+</details>
+<h3 id="default-bindings_1">Default bindings<a class="headerlink" href="#default-bindings_1" title="Permanent link">&para;</a></h3>
+<p>App Platform provides a few defaults that can be injected, including a <code>CoroutineScope</code> and <code>CoroutineDispatchers</code>.</p>
+<div class="highlight"><pre><span></span><code><span class="nd">@Inject</span>
+<span class="kd">class</span><span class="w"> </span><span class="nc">SampleClass</span><span class="p">(</span>
+<span class="w">  </span><span class="nd">@ForScope</span><span class="p">(</span><span class="n">AppScope</span><span class="o">::</span><span class="n">class</span><span class="p">)</span><span class="w"> </span><span class="n">appScope</span><span class="p">:</span><span class="w"> </span><span class="n">CoroutineScope</span><span class="p">,</span>
+
+<span class="w">  </span><span class="nd">@IoCoroutineDispatcher</span><span class="w"> </span><span class="n">ioDispatcher</span><span class="p">:</span><span class="w"> </span><span class="n">CoroutineDispatcher</span><span class="p">,</span>
+<span class="w">  </span><span class="nd">@DefaultCoroutineDispatcher</span><span class="w"> </span><span class="n">defaultDispatcher</span><span class="p">:</span><span class="w"> </span><span class="n">CoroutineDispatcher</span><span class="p">,</span>
+<span class="w">  </span><span class="nd">@MainCoroutineDispatcher</span><span class="w"> </span><span class="n">mainDispatcher</span><span class="p">:</span><span class="w"> </span><span class="n">CoroutineDispatcher</span><span class="p">,</span>
+<span class="p">)</span>
+</code></pre></div>
+<div class="admonition info">
+<p class="admonition-title">CoroutineScope</p>
+<p>The <code>CoroutineScope</code> uses the IO dispatcher by default. The qualifier <code>@ForScope(AppScope::class)</code> is needed to
+allow other scopes to have their own <code>CoroutineScope</code>. For example, the sample app provides a <code>CoroutineScope</code>
+<a href="https://github.com/amzn/app-platform/blob/main/sample/user/impl/src/commonMain/kotlin/software/amazon/app/platform/sample/user/UserComponent.kt">for the user scope</a>,
+which gets canceled when the user scope gets destroyed. The <code>CoroutineScope</code> for the user scope uses the qualifier
+`@ForScope(UserScope::class)</p>
+<div class="highlight"><pre><span></span><code><span class="cm">/**</span>
+<span class="cm"> * Provides the [CoroutineScopeScoped] for the user scope. This is a single instance for the user</span>
+<span class="cm"> * scope.</span>
+<span class="cm"> */</span>
+<span class="nd">@Provides</span>
+<span class="nd">@SingleIn</span><span class="p">(</span><span class="n">UserScope</span><span class="o">::</span><span class="n">class</span><span class="p">)</span>
+<span class="nd">@ForScope</span><span class="p">(</span><span class="n">UserScope</span><span class="o">::</span><span class="n">class</span><span class="p">)</span>
+<span class="kd">fun</span><span class="w"> </span><span class="nf">provideUserScopeCoroutineScopeScoped</span><span class="p">(</span>
+<span class="w">  </span><span class="nd">@IoCoroutineDispatcher</span><span class="w"> </span><span class="n">dispatcher</span><span class="p">:</span><span class="w"> </span><span class="n">CoroutineDispatcher</span>
+<span class="p">):</span><span class="w"> </span><span class="n">CoroutineScopeScoped</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="n">CoroutineScopeScoped</span><span class="p">(</span><span class="n">dispatcher</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">SupervisorJob</span><span class="p">()</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">CoroutineName</span><span class="p">(</span><span class="s">&quot;UserScope&quot;</span><span class="p">))</span>
+<span class="p">}</span>
+
+<span class="cm">/**</span>
+<span class="cm"> * Provides the [CoroutineScope] for the user scope. A new child scope is created every time an</span>
+<span class="cm"> * instance is injected so that the parent cannot be canceled accidentally.</span>
+<span class="cm"> */</span>
+<span class="nd">@Provides</span>
+<span class="nd">@ForScope</span><span class="p">(</span><span class="n">UserScope</span><span class="o">::</span><span class="n">class</span><span class="p">)</span>
+<span class="kd">fun</span><span class="w"> </span><span class="nf">provideUserCoroutineScope</span><span class="p">(</span>
+<span class="w">  </span><span class="nd">@ForScope</span><span class="p">(</span><span class="n">UserScope</span><span class="o">::</span><span class="n">class</span><span class="p">)</span><span class="w"> </span><span class="n">userScopeCoroutineScopeScoped</span><span class="p">:</span><span class="w"> </span><span class="n">CoroutineScopeScoped</span>
+<span class="p">):</span><span class="w"> </span><span class="n">CoroutineScope</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="n">userScopeCoroutineScopeScoped</span><span class="p">.</span><span class="na">createChild</span><span class="p">()</span>
+<span class="p">}</span>
+</code></pre></div>
+</div>
+<div class="admonition info">
+<p class="admonition-title">CoroutineDispatcher</p>
+<p>It&rsquo;s recommended to inject <code>CoroutineDispatcher</code> through the constructor instead of using <code>Dispatcher.*</code>. This
+allows to easily swap them within unit tests to remove concurrency and improve stability.</p>
+</div>
+<h3 id="contriubtesscoped"><code>@ContriubtesScoped</code><a class="headerlink" href="#contriubtesscoped" title="Permanent link">&para;</a></h3>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>This is different between <code>kotlin-inject-anvil</code> and Metro. In <code>kotlin-inject-anvil</code> we repurpose the 
+<code>@ContributesBinding</code> annotation to make it understand the semantics for the <code>Scoped</code> interface and generate custom
+code using a custom code generator. Metro doesn&rsquo;t support this kind of integration and therefore we had to 
+introduce <code>@ContributesScoped</code> for a similar usage.</p>
+</div>
+<p>The <a href="../scope/#scoped"><code>Scoped</code></a> interface is used to notify implementations when a <code>Scope</code> gets created and destroyed. </p>
+<p><div class="highlight"><pre><span></span><code><span class="kd">class</span><span class="w"> </span><span class="nc">AndroidLocationProvider</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">LocationProvider</span><span class="p">,</span><span class="w"> </span><span class="n">Scoped</span><span class="w"> </span><span class="p">{</span>
+
+<span class="w">  </span><span class="kd">override</span><span class="w"> </span><span class="kd">fun</span><span class="w"> </span><span class="nf">onEnterScope</span><span class="p">(</span><span class="n">scope</span><span class="p">:</span><span class="w"> </span><span class="n">Scope</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="p">...</span>
+<span class="w">  </span><span class="p">}</span>
+
+<span class="w">  </span><span class="kd">override</span><span class="w"> </span><span class="kd">fun</span><span class="w"> </span><span class="nf">onExitScope</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="p">...</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+The implementation class <code>AndroidLocationProvider</code> needs to be bound to the super type <code>LocationProvider</code> and use
+multi-bindings for the <code>Scoped</code> interface. This is a lot of boilerplate to write that be auto-generated using
+<code>@ContributesScoped</code> instead. When using <code>@ContributesScoped</code>, all bindings are generated and <code>@ContributesBinding</code>
+doesn&rsquo;t need to be added. A typical implementation looks like this:</p>
+<div class="highlight"><pre><span></span><code><span class="nd">@Inject</span>
+<span class="nd">@SingleIn</span><span class="p">(</span><span class="n">AppScope</span><span class="o">::</span><span class="n">class</span><span class="p">)</span>
+<span class="hll"><span class="nd">@ContributesBinding</span><span class="p">(</span><span class="n">AppScope</span><span class="o">::</span><span class="n">class</span><span class="p">)</span>
+</span><span class="kd">class</span><span class="w"> </span><span class="nc">AndroidLocationProvider</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">LocationProvider</span><span class="p">,</span><span class="w"> </span><span class="n">Scoped</span>
+</code></pre></div>
+<p>See the documentation for <a href="../scope/#scoped"><code>Scoped</code></a> for more details.</p>
+<h3 id="bugs">Bugs<a class="headerlink" href="#bugs" title="Permanent link">&para;</a></h3>
+<p>Metro is in an early stage and there are several bugs blocking a full roll out.</p>
+<h4 id="no-full-kmp-support">No full KMP support<a class="headerlink" href="#no-full-kmp-support" title="Permanent link">&para;</a></h4>
+<p>Metro is ready to support KMP, but targets other than JVM/Android fail to merge types contributed with 
+<code>@ContributesTo</code> and <code>@ContributesBinding</code>. App Platform makes heavy use of them. This is called out in the 
+<a href="https://zacsweers.github.io/metro/latest/multiplatform.html#multiplatform">Metro documentation</a>. There is a chance
+this will be fixed in Kotlin 2.3.</p>
+<blockquote>
+<p>There is one issue in the repo right now where the compiler appears to have a bug with generated FIR declarations where it doesn’t deserialize them correctly on non-JVM targets. Waiting for feedback from JB.</p>
+</blockquote>
+<h4 id="incremental-compilation-issues">Incremental compilation issues<a class="headerlink" href="#incremental-compilation-issues" title="Permanent link">&para;</a></h4>
+<p>While testing Metro in App Platform, we encountered incremental compilation issues that impacted merging components
+and generated wrong code. This ticket is <a href="https://github.com/ZacSweers/metro/issues/997">metro/997</a>.</p>
+<p>Other IC issues are reported under <a href="https://youtrack.jetbrains.com/issue/KT-75865">KT-75865</a>.</p>
+<h4 id="missing-integrations">Missing integrations<a class="headerlink" href="#missing-integrations" title="Permanent link">&para;</a></h4>
+<p>Almost all App Platform specific custom extensions for <code>kotlin-inject-anvil</code> were migrated to Metro, including
+<code>@ContributesRenderer</code> and <code>@ContributesRobot</code>. However the integration for <code>@ContributesRealImpl</code> and 
+<code>@ContributesMockImpl</code> is missing and still needs to be ported. </p>
+<h3 id="migration">Migration<a class="headerlink" href="#migration" title="Permanent link">&para;</a></h3>
+<p>Metro and <code>kotlin-inject-anvil</code> are conceptionally very similar. A migration is mostly mechanical. Errors will be 
+reported at compile time and not runtime. </p>
+<p>Steps could like this. <a href="https://github.com/amzn/app-platform/pull/129">PR/129</a> highlights this migration for the 
+<code>:sample</code> application. </p>
+<ul>
+<li>It&rsquo;s strongly recommended to use the latest Kotlin and Metro version. Metro is a compiler plugin and tied to the compiler to a certain degree.</li>
+<li>Enable Metro in the Gradle DSL:
+<div class="highlight"><pre><span></span><code><span class="n">appPlatform</span><span class="w"> </span><span class="o">{</span>
+<span class="w">    </span><span class="n">enableMetro</span><span class="w"> </span><span class="kc">true</span>
+<span class="o">}</span>
+</code></pre></div></li>
+<li>Change kotlin-inject specific imports to Metro:
+<div class="highlight"><pre><span></span><code>me.tatarka.inject.annotations.IntoSet -&gt; dev.zacsweers.metro.IntoSet
+me.tatarka.inject.annotations.Provides -&gt; dev.zacsweers.metro.Provides
+software.amazon.lastmile.kotlin.inject.anvil.AppScope -&gt; dev.zacsweers.metro.AppScope
+software.amazon.lastmile.kotlin.inject.anvil.ContributesTo -&gt; dev.zacsweers.metro.ContributesTo
+software.amazon.lastmile.kotlin.inject.anvil.ForScope -&gt; dev.zacsweers.metro.ForScope
+software.amazon.lastmile.kotlin.inject.anvil.SingleIn -&gt; dev.zacsweers.metro.SingleIn
+</code></pre></div></li>
+<li>Update the final kotlin-inject components to Metro. The Metro docs explain the API very well. E.g. this component had to adopt a factory:
+<div class="highlight"><pre><span></span><code><span class="c1">// Old:</span>
+<span class="nd">@Component</span>
+<span class="nd">@MergeComponent</span><span class="p">(</span><span class="n">AppScope</span><span class="o">::</span><span class="n">class</span><span class="p">)</span>
+<span class="nd">@SingleIn</span><span class="p">(</span><span class="n">AppScope</span><span class="o">::</span><span class="n">class</span><span class="p">)</span>
+<span class="kd">abstract</span><span class="w"> </span><span class="kd">class</span><span class="w"> </span><span class="nc">DesktopAppComponent</span><span class="p">(</span><span class="nd">@get</span><span class="p">:</span><span class="n">Provides</span><span class="w"> </span><span class="kd">val</span><span class="w"> </span><span class="nv">rootScopeProvider</span><span class="p">:</span><span class="w"> </span><span class="n">RootScopeProvider</span><span class="p">)</span><span class="w"> </span><span class="p">:</span>
+<span class="w">  </span><span class="n">DesktopAppComponentMerged</span>
+
+<span class="c1">// New:</span>
+<span class="nd">@DependencyGraph</span><span class="p">(</span><span class="n">AppScope</span><span class="o">::</span><span class="n">class</span><span class="p">)</span>
+<span class="kd">interface</span><span class="w"> </span><span class="nc">DesktopAppComponent</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="nd">@DependencyGraph.Factory</span>
+<span class="w">  </span><span class="kd">fun</span><span class="w"> </span><span class="kd">interface</span><span class="w"> </span><span class="nc">Factory</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kd">fun</span><span class="w"> </span><span class="nf">create</span><span class="p">(</span><span class="nd">@Provides</span><span class="w"> </span><span class="n">rootScopeProvider</span><span class="p">:</span><span class="w"> </span><span class="n">RootScopeProvider</span><span class="p">):</span><span class="w"> </span><span class="n">DesktopAppComponent</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></li>
+<li>Change usages of <code>addKotlinInjectComponent()</code> to <code>addMetroDependencyGraph()</code> and usages of <code>kotlinInjectComponent()</code> to <code>metroDependencyGraph()</code>.</li>
+</ul>
+<h2 id="kotlin-inject-anvil-or-metro"><code>kotlin-inject-anvil</code> or Metro<a class="headerlink" href="#kotlin-inject-anvil-or-metro" title="Permanent link">&para;</a></h2>
+<p>Given the <a href="./#bugs">issues highlighted</a> with Metro, it is strongly advised to use <code>kotlin-inject-anvil</code> for 
+production and Metro only for experiments.  </p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+  <script>var tabs=__md_get("__tabs");if(Array.isArray(tabs))e:for(var set of document.querySelectorAll(".tabbed-set")){var labels=set.querySelector(".tabbed-labels");for(var tab of tabs)for(var label of labels.getElementsByTagName("label"))if(label.innerText.trim()===tab){var input=document.getElementById(label.htmlFor);input.checked=!0;continue e}}</script>
+
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
+    </div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["content.code.annotate", "content.code.copy", "content.code.select", "content.tooltips", "navigation.tabs", "navigation.tabs.sticky", "navigation.top", "toc.follow", "toc.integrate", "content.tabs.link", "content.action.edit"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>

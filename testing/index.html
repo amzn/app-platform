@@ -1,0 +1,1320 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="A lightweight application framework for state and memory management suitable for Kotlin Multiplatform projects.">
+      
+      
+      
+        <link rel="canonical" href="https://amzn.github.io/app-platform/testing/">
+      
+      
+        <link rel="prev" href="../di/">
+      
+      
+        <link rel="next" href="../faq/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.1">
+    
+    
+      
+        <title>Testing - App Platform</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inter:300,300i,400,400i,700,700i%7CFira+Code:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Inter";--md-code-font:"Fira Code"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  
+<meta property="og:type" content="website" />
+<meta property="og:title" content="Testing - App Platform" />
+<meta property="og:description" content="A lightweight application framework for state and memory management suitable for Kotlin Multiplatform projects." />
+<meta property="og:image" content="https://amzn.github.io/app-platform/assets/images/social/testing.png" />
+<meta property="og:image:type" content="image/png" />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta property="og:url" content="https://amzn.github.io/app-platform/testing/" />
+<meta property="twitter:card" content="summary_large_image" />
+<meta property="twitter:title" content="Testing - App Platform" />
+<meta property="twitter:description" content="A lightweight application framework for state and memory management suitable for Kotlin Multiplatform projects." />
+<meta property="twitter:image" content="https://amzn.github.io/app-platform/assets/images/social/testing.png" />
+</head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="blue-grey" data-md-color-accent="blue">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#testing" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow md-header--lifted" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="App Platform" class="md-header__button md-logo" aria-label="App Platform" data-md-component="logo">
+      
+  <img src="../images/logo.svg" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            App Platform
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Testing
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="blue-grey" data-md-color-accent="blue"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="blue-grey" data-md-color-accent="blue"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/amzn/app-platform" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    app-platform
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+    
+      
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href=".." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Introduction
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../setup/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Setup
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../module-structure/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Module Structure
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../scope/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Scope
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../presenter/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Presenter
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../renderer/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Renderer
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../template/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Template
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../di/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  DI Framework
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    <li class="md-tabs__item md-tabs__item--active">
+      <a href="./" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Testing
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../faq/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  FAQ
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../changelog/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Changelog
+
+      </a>
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+    
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+  
+
+<nav class="md-nav md-nav--primary md-nav--lifted md-nav--integrated" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="App Platform" class="md-nav__button md-logo" aria-label="App Platform" data-md-component="logo">
+      
+  <img src="../images/logo.svg" alt="logo">
+
+    </a>
+    App Platform
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/amzn/app-platform" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    app-platform
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Introduction
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../setup/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Setup
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../module-structure/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module Structure
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../scope/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Scope
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../presenter/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Presenter
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../renderer/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Renderer
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../template/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Template
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../di/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    DI Framework
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Testing
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Testing
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#fakes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Fakes
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#robots" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Robots
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Robots">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#robot-types" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Robot types
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#-robots-modules" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        :*-robots modules
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mocks" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Mocks
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../faq/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    FAQ
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../changelog/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Changelog
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+    <a href="https://github.com/amzn/app-platform/edit/main/docs/testing.md" title="Edit this page" class="md-content__button md-icon" rel="edit">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75z"/></svg>
+    </a>
+  
+  
+
+
+<h1 id="testing">Testing<a class="headerlink" href="#testing" title="Permanent link">&para;</a></h1>
+<p>A fundamental design pattern to make testing effective is dependency inversion, which means that high-level
+APIs don’t depend on low-level details and low-level details only import other high-level APIs.
+It significantly reduces coupling between components.</p>
+<p>App Platform implements the pattern in its <a href="../module-structure/#gradle-modules">module structure</a> and in
+<a href="../module-structure/#kotlin-code">Kotlin code</a>. By relying on dependency inversion, we decouple projects from
+their dependencies and enable testing in isolation. This approach is important for unit tests, instrumented tested
+and integration tests. These three types of tests rely on a chain of trust, where we assume that dependencies
+are functioning and tests don’t need to be repeated.</p>
+<p><img alt="Testing pyramid" src="../images/testing-pyramid.png" width="400" /></p>
+<div class="admonition info">
+<p class="admonition-title">Instrumented tests</p>
+<p>The sample application implements instrumented tests for two screens and navigates between the tests. The
+<a href="https://github.com/amzn/app-platform/blob/main/sample/app/src/desktopTest/kotlin/software/amazon/app/platform/sample/LoginUiTest.kt">tests for Desktop</a>
+highlight how templates are rendered and robots are used for verification. It also sets up a <code>kotlin-inject-anvil</code>
+<a href="https://github.com/amzn/app-platform/blob/main/sample/app/src/desktopTest/kotlin/software/amazon/app/platform/sample/TestDesktopAppComponent.kt"><code>TestAppComponent</code></a>,
+which replaces the main <code>AppComponent</code>.</p>
+<p>The same UI test is <a href="https://github.com/amzn/app-platform/blob/main/sample/app/src/androidInstrumentedTest/kotlin/software/amazon/app/platform/sample/AndroidLoginUiTest.kt">implemented for Android</a>.
+The Android tests reuse the same robots for verification and set up a
+<a href="https://github.com/amzn/app-platform/blob/main/sample/app/src/androidInstrumentedTest/kotlin/software/amazon/app/platform/sample/TestAndroidAppComponent.kt"><code>TestAppComponent</code></a>
+in a similar way.</p>
+</div>
+<h2 id="fakes">Fakes<a class="headerlink" href="#fakes" title="Permanent link">&para;</a></h2>
+<p>Unit tests build the foundation of the testing pyramid. They verify the smallest components of our app, which
+usually are single classes or functions and we rarely test multiple classes in combination. Dependencies of
+these classes are typically replaced by fakes. Due to this low coupling unit tests tend to be very stable.</p>
+<div class="admonition info">
+<p class="admonition-title">Fakes vs real implementations</p>
+<p>Using real implementations of dependencies for the unit under test is a valid option as it brings the
+tested code close to production, increases confidence and removes isolation.
+A <a href="https://abseil.io/resources/swe-book/html/ch13.html">best practice from Google</a> is summarized as:</p>
+<blockquote>
+<p>A real implementation is preferred if it is fast, deterministic, and has simple dependencies. For example,
+a real implementation should be used for a value object. Examples include an amount of money, a date, a
+geographical address, or a collection class such as a list or a map.</p>
+<p>However, for more complex code, using a real implementation often isn’t feasible. There might not be an
+exact answer on when to use a real implementation or a test double given that there are trade-offs to be made.</p>
+</blockquote>
+<p>The trade-offs include execution time, determinism and dependency construction. Fakes improve all three points
+by avoiding slow IO, returning stable results and breaking dependency chains at the cost of diverging from the
+behavior in production and reduced confidence.</p>
+</div>
+<div class="highlight"><pre><span></span><code><span class="kd">interface</span><span class="w"> </span><span class="nc">LocationProvider</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kd">val</span><span class="w"> </span><span class="nv">location</span><span class="p">:</span><span class="w"> </span><span class="n">StateFlow</span><span class="o">&lt;</span><span class="n">Location</span><span class="o">&gt;</span>
+<span class="p">}</span>
+
+<span class="kd">class</span><span class="w"> </span><span class="nc">RoutingRepository</span><span class="p">(</span>
+<span class="w">  </span><span class="kd">private</span><span class="w"> </span><span class="kd">val</span><span class="w"> </span><span class="nv">locationProvider</span><span class="p">:</span><span class="w"> </span><span class="n">LocationProvider</span>
+<span class="p">)</span>
+</code></pre></div>
+<p>Imagine to test <code>RoutingRepository</code>. To create an new instance under test, we must provide a <code>LocationProvider</code>.
+Since we use dependency inversion and didn’t hardcode a concrete implementation, it is simple to implement a fake
+for this interface:</p>
+<div class="highlight"><pre><span></span><code><span class="kd">class</span><span class="w"> </span><span class="nc">FakeLocationProvider</span><span class="p">(</span>
+<span class="w">  </span><span class="kd">val</span><span class="w"> </span><span class="nv">currentLocation</span><span class="p">:</span><span class="w"> </span><span class="n">Location</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Location</span><span class="p">(..)</span>
+<span class="p">)</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">LocationProvider</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kd">private</span><span class="w"> </span><span class="kd">val</span><span class="w"> </span><span class="nv">_location</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">MutableStateFlow</span><span class="p">(</span><span class="n">currentLocation</span><span class="p">)</span>
+<span class="w">  </span><span class="kd">override</span><span class="w"> </span><span class="kd">val</span><span class="w"> </span><span class="nv">location</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">_location</span>
+
+<span class="w">  </span><span class="kd">fun</span><span class="w"> </span><span class="nf">updateLocation</span><span class="p">(</span><span class="n">newLocation</span><span class="p">:</span><span class="w"> </span><span class="n">Location</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">_location</span><span class="p">.</span><span class="na">value</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">newLocation</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>Now we can instantiate our <code>RoutingRepository</code>:</p>
+<div class="highlight"><pre><span></span><code><span class="nd">@Test</span>
+<span class="kd">fun</span><span class="w"> </span><span class="nf">`the route is updated when the driver doesn&#39;t follow directions`</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kd">val</span><span class="w"> </span><span class="nv">locationProvider</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">FakeLocationProvider</span><span class="p">()</span>
+<span class="w">  </span><span class="kd">val</span><span class="w"> </span><span class="nv">routingRepository</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">RoutingRepository</span><span class="p">(</span><span class="n">locationProvider</span><span class="p">)</span>
+
+<span class="w">  </span><span class="n">locationProvider</span><span class="p">.</span><span class="na">updateLocation</span><span class="p">(...)</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>Good fake implementations are valuable. It’s best practice and strongly encouraged as an API provider to implement
+fakes for APIs and share them with consumers. The <a href="../module-structure/">App Platform module structure</a> provides
+<a href="../module-structure/#testing"><code>:testing</code> modules</a> for this purpose. For example, the owner of <code>LocationProvider</code>
+is encouraged to use this structure:</p>
+<div class="highlight"><pre><span></span><code>:location-provider:public   src/commonMain/kotlin/.../LocationProvider.kt
+:location-provider:testing  src/commonMain/kotlin/.../FakeLocationProvider.kt
+</code></pre></div>
+<p>The owner of <code>RoutingRepository</code> can import <code>:location-provider:testing</code> and reuse the provided fake in tests.
+This avoids duplication.</p>
+<details class="example">
+<summary>Sample</summary>
+<p>The sample app uses <code>:testing</code> modules to implement and share fakes across modules, e.g.
+<a href="https://github.com/amzn/app-platform/tree/main/sample/user/testing"><code>:sample:user:testing</code></a>. In other modules
+fakes are created next to the tests ad-hoc, e.g. <a href="https://github.com/amzn/app-platform/blob/0f3e242ae08bb242fbd7080d33caa069c8fae2b4/sample/navigation/impl/src/commonTest/kotlin/software/amazon/app/platform/sample/navigation/NavigationPresenterImplTest.kt#L51-L58"><code>FakeUserPagePresenter</code></a>
+and <a href="https://github.com/amzn/app-platform/blob/main/sample/user/impl/src/commonTest/kotlin/software/amazon/app/platform/sample/user/FakeAnimationHelper.kt"><code>FakeAnimationHelper</code></a>.</p>
+<div class="highlight"><pre><span></span><code><span class="kd">private</span><span class="w"> </span><span class="kd">class</span><span class="w"> </span><span class="nc">FakeUserPagePresenter</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">UserPagePresenter</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="nd">@Composable</span>
+<span class="w">  </span><span class="kd">override</span><span class="w"> </span><span class="kd">fun</span><span class="w"> </span><span class="nf">present</span><span class="p">(</span><span class="n">input</span><span class="p">:</span><span class="w"> </span><span class="kt">Unit</span><span class="p">):</span><span class="w"> </span><span class="n">UserPagePresenter</span><span class="p">.</span><span class="na">Model</span><span class="w"> </span><span class="o">=</span>
+<span class="w">    </span><span class="n">UserPagePresenter</span><span class="p">.</span><span class="na">Model</span><span class="p">(</span>
+<span class="w">      </span><span class="n">listModel</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">object</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="nc">BaseModel</span><span class="w"> </span><span class="p">{},</span>
+<span class="w">      </span><span class="n">detailModel</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">object</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="nc">BaseModel</span><span class="w"> </span><span class="p">{},</span>
+<span class="w">    </span><span class="p">)</span>
+<span class="p">}</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="kd">object</span><span class="w"> </span><span class="nc">FakeAnimationHelper</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">AnimationHelper</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kd">override</span><span class="w"> </span><span class="kd">fun</span><span class="w"> </span><span class="nf">isAnimationsEnabled</span><span class="p">():</span><span class="w"> </span><span class="kt">Boolean</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">true</span>
+<span class="p">}</span>
+</code></pre></div>
+</details>
+<h2 id="robots">Robots<a class="headerlink" href="#robots" title="Permanent link">&para;</a></h2>
+<p>Test <a href="https://jakewharton.com/testing-robots/"><code>Robots</code></a> are an abstraction between test interactions and the
+underlying implementation. Imagine several tests clicking the <em>Logout</em> button use the label to find the UI element
+on the screen. If the copy changes from <em>Logout</em> to <em>Sign out</em>, then all these tests would need to be updated.
+That is tedious and makes tests harder to maintain. A test robot would hide how the <em>Logout</em> button can be found
+on screen and only provides an option for the necessary interaction:</p>
+<div class="highlight"><pre><span></span><code><span class="kd">class</span><span class="w"> </span><span class="nc">LogoutRobot</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">Robot</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kd">fun</span><span class="w"> </span><span class="nf">clickLogoutButton</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="p">..</span><span class="w"> </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>Test <a href="https://github.com/amzn/app-platform/blob/main/robot/public/src/commonMain/kotlin/software/amazon/app/platform/robot/Robot.kt"><code>Robots</code></a>
+are not limited to UI interactions such as verifying UI elements are shown or hidden and invoking
+actions on them. They can also be used to change fake implementations or make assertions on them. Imagine a
+robot toggling network connectivity. Tests do not interact with fake implementations directly similar to them
+not interacting with UI elements directly.</p>
+<div class="highlight"><pre><span></span><code><span class="kd">class</span><span class="w"> </span><span class="nc">NetworkRobot</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">Robot</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kd">var</span><span class="w"> </span><span class="nv">networkEnabled</span><span class="p">:</span><span class="w"> </span><span class="kt">Boolean</span>
+<span class="w">  </span><span class="kd">var</span><span class="w"> </span><span class="nv">connectivity</span><span class="p">:</span><span class="w"> </span><span class="n">Connectivity</span>
+
+<span class="w">  </span><span class="kd">var</span><span class="w"> </span><span class="nv">throwErrorOnSendingRequest</span><span class="p">:</span><span class="w"> </span><span class="kt">Boolean</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">false</span>
+
+<span class="w">  </span><span class="kd">enum</span><span class="w"> </span><span class="kd">class</span><span class="w"> </span><span class="nc">Connectivity</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">LTE</span><span class="p">,</span><span class="w"> </span><span class="m">3</span><span class="n">G</span><span class="p">,</span><span class="w"> </span><span class="n">WIFI</span><span class="p">,</span><span class="w"> </span><span class="p">...</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>Another use case is verifying metrics and analytics events. In instrumented tests we’d use a fake metrics
+implementation rather than sending events to our backend system. The robot would interact with the fake
+implementation and make assertions:</p>
+<div class="highlight"><pre><span></span><code><span class="kd">class</span><span class="w"> </span><span class="nc">FakeMetricsService</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">MetricsService</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kd">val</span><span class="w"> </span><span class="nv">metrics</span><span class="p">:</span><span class="w"> </span><span class="n">List</span><span class="o">&lt;</span><span class="n">Metric</span><span class="o">&gt;</span>
+<span class="p">}</span>
+
+<span class="kd">class</span><span class="w"> </span><span class="nc">MetricsRobot</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">Robot</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kd">private</span><span class="w"> </span><span class="kd">val</span><span class="w"> </span><span class="nv">service</span><span class="p">:</span><span class="w"> </span><span class="n">FakeMetricsService</span><span class="w"> </span><span class="p">...</span>
+
+<span class="w">  </span><span class="kd">fun</span><span class="w"> </span><span class="nf">assertMetricTracked</span><span class="p">(</span><span class="n">metric</span><span class="p">:</span><span class="w"> </span><span class="n">Metric</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">assertThat</span><span class="p">(</span><span class="n">service</span><span class="p">.</span><span class="na">metrics</span><span class="p">).</span><span class="na">contains</span><span class="p">(</span><span class="n">metric</span><span class="p">)</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>Fake implementations and test robots help verifying interactions with hardware or devices that are not available
+during an instrumented test run. For example, interactions with other devices can be simulated using a fake
+connection.</p>
+<div class="highlight"><pre><span></span><code><span class="kd">interface</span><span class="w"> </span><span class="nc">WebSocketConnection</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kd">suspend</span><span class="w"> </span><span class="kd">fun</span><span class="w"> </span><span class="nf">send</span><span class="p">(</span><span class="n">message</span><span class="p">:</span><span class="w"> </span><span class="n">ByteArray</span><span class="p">)</span>
+<span class="p">}</span>
+
+<span class="kd">class</span><span class="w"> </span><span class="nc">FakeWebSocketConnection</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">WebSocketConnection</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kd">var</span><span class="w"> </span><span class="nv">throwError</span><span class="p">:</span><span class="w"> </span><span class="kt">Boolean</span>
+
+<span class="w">  </span><span class="kd">override</span><span class="w"> </span><span class="kd">suspend</span><span class="w"> </span><span class="kd">fun</span><span class="w"> </span><span class="nf">send</span><span class="p">(</span><span class="n">message</span><span class="p">:</span><span class="w"> </span><span class="n">ByteArray</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">throwError</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="k">throw</span><span class="w"> </span><span class="n">Exception</span><span class="p">(</span><span class="s">&quot;...&quot;</span>
+<span class="w">    </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="n">trackMessage</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kd">class</span><span class="w"> </span><span class="nc">ConnectionRobot</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">Robot</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kd">private</span><span class="w"> </span><span class="kd">val</span><span class="w"> </span><span class="nv">webSocketConnection</span><span class="p">:</span><span class="w"> </span><span class="n">FakeWebSocketConnection</span>
+
+<span class="w">  </span><span class="kd">fun</span><span class="w"> </span><span class="nf">sendingMessageFails</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">webSocketConnection</span><span class="p">.</span><span class="na">throwError</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">true</span>
+<span class="w">  </span><span class="p">}</span>
+
+<span class="w">  </span><span class="kd">fun</span><span class="w"> </span><span class="nf">sendingMessageSucceeds</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">webSocketConnection</span><span class="p">.</span><span class="na">throwError</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">false</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+<h3 id="robot-types">Robot types<a class="headerlink" href="#robot-types" title="Permanent link">&para;</a></h3>
+<dl>
+<dt><a href="https://github.com/amzn/app-platform/blob/main/robot/public/src/commonMain/kotlin/software/amazon/app/platform/robot/Robot.kt"><code>Robot</code></a>.</dt>
+<dd>
+<p>Use this common interface for robots that don&rsquo;t interact with any UI, whether that&rsquo;s Compose Multiplatform or
+Android Views. To obtain an instance of such a robot use the <code>robot&lt;Type&gt;()</code> function:</p>
+<div class="highlight"><pre><span></span><code><span class="nd">@Inject</span>
+<span class="nd">@ContributesRobot</span><span class="p">(</span><span class="n">AppScope</span><span class="o">::</span><span class="n">class</span><span class="p">)</span>
+<span class="kd">class</span><span class="w"> </span><span class="nc">MetricsRobot</span><span class="p">(</span>
+<span class="w">  </span><span class="kd">private</span><span class="w"> </span><span class="kd">val</span><span class="w"> </span><span class="nv">metricsService</span><span class="p">:</span><span class="w"> </span><span class="n">FakeMetricsService</span>
+<span class="p">)</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">Robot</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kd">fun</span><span class="w"> </span><span class="nf">assertMetricTracked</span><span class="p">(</span><span class="n">metric</span><span class="p">:</span><span class="w"> </span><span class="n">Metric</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">assertThat</span><span class="p">(</span><span class="n">metricsService</span><span class="p">.</span><span class="na">metrics</span><span class="p">).</span><span class="na">contains</span><span class="p">(</span><span class="n">metric</span><span class="p">)</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+
+<span class="nd">@Test</span>
+<span class="kd">fun</span><span class="w"> </span><span class="nf">verify_analytics_event_tracked</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="p">...</span>
+<span class="w">  </span><span class="n">robot</span><span class="o">&lt;</span><span class="n">MetricsRobot</span><span class="o">&gt;</span><span class="p">().</span><span class="na">assertMetricTracked</span><span class="p">(..)</span>
+<span class="p">}</span>
+</code></pre></div>
+</dd>
+<dt><a href="https://github.com/amzn/app-platform/blob/main/robot-compose-multiplatform/public/src/commonMain/kotlin/software/amazon/app/platform/robot/ComposeRobot.kt"><code>ComposeRobot</code></a></dt>
+<dd>
+<p><code>ComposeRobot</code> should be used as parent type when the robot interacts with Compose UI elements. These robots need
+access to a <code>SemanticsNodeInteractionsProvider</code> instance, which is for example provided by calling
+<code>runComposeUiTest { ... }</code> within a test. To forward the <code>SemanticsNodeInteractionsProvider</code> instance to the robot
+call <code>composeRobot&lt;Type&gt;()</code> instead of <code>robot&lt;Type&gt;()</code>.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Calling <code>robot&lt;Type&gt;()</code> for a <code>ComposeRobot</code> will result in a crash. Always use <code>composeRobot&lt;Type&gt;()</code> instead.</p>
+</div>
+<div class="highlight"><pre><span></span><code><span class="nd">@ContributesRobot</span><span class="p">(</span><span class="n">AppScope</span><span class="o">::</span><span class="n">class</span><span class="p">)</span>
+<span class="kd">class</span><span class="w"> </span><span class="nc">LoginRobot</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">ComposeRobot</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+
+<span class="w">  </span><span class="kd">private</span><span class="w"> </span><span class="kd">val</span><span class="w"> </span><span class="nv">loginButtonNode</span>
+<span class="w">    </span><span class="k">get</span><span class="p">()</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">compose</span><span class="p">.</span><span class="na">onNodeWithTag</span><span class="p">(</span><span class="s">&quot;loginButton&quot;</span><span class="p">)</span>
+
+<span class="w">  </span><span class="cm">/** Verify that login button is displayed. */</span>
+<span class="w">  </span><span class="kd">fun</span><span class="w"> </span><span class="nf">seeLoginButton</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">loginButtonNode</span><span class="p">.</span><span class="na">assertIsDisplayed</span><span class="p">()</span>
+<span class="w">  </span><span class="p">}</span>
+
+<span class="w">  </span><span class="cm">/** Clicks the login button and starts the login process. */</span>
+<span class="w">  </span><span class="kd">fun</span><span class="w"> </span><span class="nf">clickLoginButton</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">loginButtonNode</span><span class="p">.</span><span class="na">performClick</span><span class="p">()</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+
+<span class="nd">@Test</span>
+<span class="kd">fun</span><span class="w"> </span><span class="nf">`sample test`</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="n">runComposeUiTest</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">composeRobot</span><span class="o">&lt;</span><span class="n">LoginRobot</span><span class="o">&gt;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="n">seeLoginButton</span><span class="p">()</span>
+<span class="w">      </span><span class="n">clickLoginButton</span><span class="p">()</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+</dd>
+<dt><a href="https://github.com/amzn/app-platform/blob/main/robot/public/src/androidMain/kotlin/software/amazon/app/platform/robot/AndroidViewRobot.kt"><code>AndroidViewRobot</code></a></dt>
+<dd>
+<p><code>AndroidViewRobot</code> should be used as parent type when the robot interacts with Android Views.
+To obtain an instance of such a robot use the <code>robot&lt;Type&gt;()</code> function:</p>
+<div class="highlight"><pre><span></span><code><span class="nd">@ContributesRobot</span><span class="p">(</span><span class="n">AppScope</span><span class="o">::</span><span class="n">class</span><span class="p">)</span>
+<span class="kd">class</span><span class="w"> </span><span class="nc">AndroidCounterRobot</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">AndroidViewRobot</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kd">fun</span><span class="w"> </span><span class="nf">seeCounterView</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">onView</span><span class="p">(</span><span class="n">withText</span><span class="p">(</span><span class="n">containsString</span><span class="p">(</span><span class="s">&quot;Counter: &quot;</span><span class="p">))).</span><span class="na">check</span><span class="p">(</span><span class="n">matches</span><span class="p">(</span><span class="n">isDisplayed</span><span class="p">()))</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+
+<span class="nd">@Test</span>
+<span class="kd">fun</span><span class="w"> </span><span class="nf">counter_is_shown</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="n">robot</span><span class="o">&lt;</span><span class="n">AndroidCounterRobot</span><span class="o">&gt;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">seeCounterView</span><span class="p">()</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+</dd>
+</dl>
+<p><code>Robots</code> must be annotated with <code>@ContributesRobot</code> in order to find them during tests when using the <code>robot&lt;Type&gt;()</code>
+or <code>composeRobot&lt;Type&gt;()</code> function. The annotation makes sure that the robots are added to the <code>kotlin-inject-anvil</code>
+or Metro dependency graph.</p>
+<details class="info">
+<summary>Generated code</summary>
+<p>The <code>@ContributesRobot</code> annotation generates following code.</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="1:2"><input checked="checked" id="kotlin-inject-anvil" name="__tabbed_1" type="radio" /><input id="metro" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="kotlin-inject-anvil">kotlin-inject-anvil</label><label for="metro">Metro</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code><span class="nd">@ContributesTo</span><span class="p">(</span><span class="n">AppScope</span><span class="o">::</span><span class="n">class</span><span class="p">)</span>
+<span class="kd">public</span><span class="w"> </span><span class="kd">interface</span><span class="w"> </span><span class="nc">LoginRobotComponent</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="nd">@Provides</span><span class="w"> </span><span class="kd">public</span><span class="w"> </span><span class="kd">fun</span><span class="w"> </span><span class="nf">provideLoginRobot</span><span class="p">():</span><span class="w"> </span><span class="n">LoginRobot</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">LoginRobot</span><span class="p">()</span>
+
+<span class="w">  </span><span class="nd">@Provides</span>
+<span class="w">  </span><span class="nd">@IntoMap</span>
+<span class="w">  </span><span class="kd">public</span><span class="w"> </span><span class="kd">fun</span><span class="w"> </span><span class="nf">provideLoginRobotIntoMap</span><span class="p">(</span>
+<span class="w">    </span><span class="n">robot</span><span class="p">:</span><span class="w"> </span><span class="p">()</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">LoginRobot</span>
+<span class="w">  </span><span class="p">):</span><span class="w"> </span><span class="n">Pair</span><span class="o">&lt;</span><span class="n">KClass</span><span class="o">&lt;</span><span class="k">out</span><span class="w"> </span><span class="n">Robot</span><span class="o">&gt;</span><span class="p">,</span><span class="w"> </span><span class="p">()</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">Robot</span><span class="o">&gt;</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">LoginRobot</span><span class="o">::</span><span class="kd">class</span><span class="w"> </span><span class="nc">to</span><span class="w"> </span><span class="n">robot</span>
+<span class="p">}</span>
+</code></pre></div>
+</div>
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code><span class="nd">@ContributesTo</span><span class="p">(</span><span class="n">AppScope</span><span class="o">::</span><span class="n">class</span><span class="p">)</span>
+<span class="kd">public</span><span class="w"> </span><span class="kd">interface</span><span class="w"> </span><span class="nc">LoginRobotGraph</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="nd">@Provides</span><span class="w"> </span><span class="kd">public</span><span class="w"> </span><span class="kd">fun</span><span class="w"> </span><span class="nf">provideLoginRobot</span><span class="p">():</span><span class="w"> </span><span class="n">LoginRobot</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">LoginRobot</span><span class="p">()</span>
+
+<span class="w">  </span><span class="nd">@Provides</span>
+<span class="w">  </span><span class="nd">@IntoMap</span>
+<span class="w">  </span><span class="nd">@RobotKey</span><span class="p">(</span><span class="n">LoginRobot</span><span class="o">::</span><span class="n">class</span><span class="p">)</span>
+<span class="w">  </span><span class="kd">public</span><span class="w"> </span><span class="kd">fun</span><span class="w"> </span><span class="nf">provideLoginRobotIntoMap</span><span class="p">(</span>
+<span class="w">    </span><span class="n">robot</span><span class="p">:</span><span class="w"> </span><span class="n">Provider</span><span class="o">&lt;</span><span class="n">LoginRobot</span><span class="o">&gt;</span>
+<span class="w">  </span><span class="p">):</span><span class="w"> </span><span class="n">Robot</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">robot</span><span class="p">()</span>
+<span class="p">}</span>
+</code></pre></div>
+</div>
+</div>
+</div>
+</details>
+<p>If a <code>Robot</code> needs to inject other types such a fake implementations, then it needs to be additionally annotated with
+<code>@Inject</code>, e.g.</p>
+<div class="highlight"><pre><span></span><code><span class="nd">@Inject</span>
+<span class="nd">@ContributesRobot</span><span class="p">(</span><span class="n">AppScope</span><span class="o">::</span><span class="n">class</span><span class="p">)</span>
+<span class="kd">class</span><span class="w"> </span><span class="nc">MetricsRobot</span><span class="p">(</span>
+<span class="w">  </span><span class="kd">private</span><span class="w"> </span><span class="kd">val</span><span class="w"> </span><span class="nv">metricsService</span><span class="p">:</span><span class="w"> </span><span class="n">FakeMetricsService</span>
+<span class="p">)</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">Robot</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kd">fun</span><span class="w"> </span><span class="nf">assertMetricTracked</span><span class="p">(</span><span class="n">metric</span><span class="p">:</span><span class="w"> </span><span class="n">Metric</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">assertThat</span><span class="p">(</span><span class="n">metricsService</span><span class="p">.</span><span class="na">metrics</span><span class="p">).</span><span class="na">contains</span><span class="p">(</span><span class="n">metric</span><span class="p">)</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+<h3 id="-robots-modules"><code>:*-robots</code> modules<a class="headerlink" href="#-robots-modules" title="Permanent link">&para;</a></h3>
+<p>Similar to sharing fakes for unit tests by leveraging <code>:testing</code> modules, the module structure of App Platform
+provides <a href="../module-structure/#robots"><code>:*-robots</code> modules</a> to share code for instrumented tests across projects.
+It’s strongly encouraged for features to create <code>:*-robots</code> modules and share robot implementations.</p>
+<details class="example">
+<summary>Sample</summary>
+<p>The sample application comes with two robot implementations <a href="https://github.com/amzn/app-platform/blob/main/sample/login/impl-robots/src/commonMain/kotlin/software/amazon/app/platform/sample/login/LoginRobot.kt"><code>LoginRobot</code></a>
+and <a href="https://github.com/amzn/app-platform/blob/main/sample/user/impl-robots/src/commonMain/kotlin/software/amazon/app/platform/sample/user/UserPageRobot.kt"><code>UserPageRobot</code></a>,
+each living in its feature specific <code>:robots</code> module.</p>
+</details>
+<h2 id="mocks">Mocks<a class="headerlink" href="#mocks" title="Permanent link">&para;</a></h2>
+<p><strong>Which mocking framework is recommended?</strong></p>
+<p>None.</p>
+<p>Mocking frameworks in general are discouraged and the downside outweigh the little conveniences they offer.
+By following the principle of dependency inversion we can easily avoid using mocking frameworks and implement
+fakes instead. There are many good resources available describing the advantages of fakes over mocking framework.
+We recommend reading the provided resources in-order:</p>
+<ul>
+<li><a href="https://github.com/androidx/androidx/blob/acb603e0857476b17e605fd1384c1f45e7991665/docs/api_guidelines/testing.md">AndroidX</a> strongly discourages mocking frameworks and banned them from new code. This guide explains in more detail their reasoning and it resonates well.</li>
+<li><a href="https://abseil.io/resources/swe-book/html/ch13.html">Google engineers</a> compare test doubles and give excellent advice for how to fake dependencies (this article is longer, but it’s likely the best one available).</li>
+<li><a href="https://developer.android.com/training/testing/fundamentals/test-doubles#types">developer.android.com</a> prefers fakes over mocks for test doubles: “Fakes don&rsquo;t require a mocking framework and are lightweight. They are preferred.”</li>
+<li><a href="https://www.billjings.net/posts/title/fakes-are-great-but-mocks-i-hate/?up=technical">CashApp</a> banned mocking frameworks in the Android codebase, because mocks are a maintenance burden.</li>
+<li><a href="https://ryanharter.com/blog/2020/06/replacing-mocks/">Ryan Harter</a> calls out easy traps when using mocks.</li>
+<li><a href="https://medium.com/@june.pravin/mocking-is-not-practical-use-fakes-e30cc6eaaf4e">Pravin Sonawane</a> makes similar arguments and highlights how mocks encourage testing the “how” rather than focusing on the “what” (inputs and outputs).</li>
+<li>Google blog <a href="https://testing.googleblog.com/2013/05/testing-on-toilet-dont-overuse-mocks.html">Don’t overuse mocks</a> highlights some downsides of mocks and presents real or fake implementations as alternative.</li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+  <script>var tabs=__md_get("__tabs");if(Array.isArray(tabs))e:for(var set of document.querySelectorAll(".tabbed-set")){var labels=set.querySelector(".tabbed-labels");for(var tab of tabs)for(var label of labels.getElementsByTagName("label"))if(label.innerText.trim()===tab){var input=document.getElementById(label.htmlFor);input.checked=!0;continue e}}</script>
+
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
+    </div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["content.code.annotate", "content.code.copy", "content.code.select", "content.tooltips", "navigation.tabs", "navigation.tabs.sticky", "navigation.top", "toc.follow", "toc.integrate", "content.tabs.link", "content.action.edit"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>

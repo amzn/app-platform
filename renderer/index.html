@@ -1,0 +1,1388 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="A lightweight application framework for state and memory management suitable for Kotlin Multiplatform projects.">
+      
+      
+      
+        <link rel="canonical" href="https://amzn.github.io/app-platform/renderer/">
+      
+      
+        <link rel="prev" href="../presenter/">
+      
+      
+        <link rel="next" href="../template/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.1">
+    
+    
+      
+        <title>Renderer - App Platform</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inter:300,300i,400,400i,700,700i%7CFira+Code:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Inter";--md-code-font:"Fira Code"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  
+<meta property="og:type" content="website" />
+<meta property="og:title" content="Renderer - App Platform" />
+<meta property="og:description" content="A lightweight application framework for state and memory management suitable for Kotlin Multiplatform projects." />
+<meta property="og:image" content="https://amzn.github.io/app-platform/assets/images/social/renderer.png" />
+<meta property="og:image:type" content="image/png" />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta property="og:url" content="https://amzn.github.io/app-platform/renderer/" />
+<meta property="twitter:card" content="summary_large_image" />
+<meta property="twitter:title" content="Renderer - App Platform" />
+<meta property="twitter:description" content="A lightweight application framework for state and memory management suitable for Kotlin Multiplatform projects." />
+<meta property="twitter:image" content="https://amzn.github.io/app-platform/assets/images/social/renderer.png" />
+</head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="blue-grey" data-md-color-accent="blue">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#renderer" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow md-header--lifted" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="App Platform" class="md-header__button md-logo" aria-label="App Platform" data-md-component="logo">
+      
+  <img src="../images/logo.svg" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            App Platform
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Renderer
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="blue-grey" data-md-color-accent="blue"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="blue-grey" data-md-color-accent="blue"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/amzn/app-platform" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    app-platform
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+    
+      
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href=".." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Introduction
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../setup/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Setup
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../module-structure/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Module Structure
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../scope/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Scope
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../presenter/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Presenter
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    <li class="md-tabs__item md-tabs__item--active">
+      <a href="./" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Renderer
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../template/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Template
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../di/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  DI Framework
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../testing/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Testing
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../faq/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  FAQ
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../changelog/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Changelog
+
+      </a>
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+    
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+  
+
+<nav class="md-nav md-nav--primary md-nav--lifted md-nav--integrated" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="App Platform" class="md-nav__button md-logo" aria-label="App Platform" data-md-component="logo">
+      
+  <img src="../images/logo.svg" alt="logo">
+
+    </a>
+    App Platform
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/amzn/app-platform" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    app-platform
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Introduction
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../setup/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Setup
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../module-structure/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module Structure
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../scope/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Scope
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../presenter/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Presenter
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Renderer
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Renderer
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#renderer-basics" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Renderer basics
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rendererfactory" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        RendererFactory
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="RendererFactory">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#contributesrenderer" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        @ContributesRenderer
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#creating-rendererfactory" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Creating RendererFactory
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#creating-renderers" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Creating Renderers
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#injecting-rendererfactory" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Injecting RendererFactory
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#android-support" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Android support
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Android support">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#compose-interop" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Compose interop
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#viewrenderer-subtypes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ViewRenderer subtypes
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#unit-tests" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Unit tests
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../template/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Template
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../di/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    DI Framework
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../testing/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Testing
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../faq/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    FAQ
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../changelog/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Changelog
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+    <a href="https://github.com/amzn/app-platform/edit/main/docs/renderer.md" title="Edit this page" class="md-content__button md-icon" rel="edit">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75z"/></svg>
+    </a>
+  
+  
+
+
+<h1 id="renderer">Renderer<a class="headerlink" href="#renderer" title="Permanent link">&para;</a></h1>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>App Platform has a generic <code>Renderer</code> interface that can be used for multiple UI layer implementations.
+Compose Multiplatform and Android Views are stable and supported out of the box. However, Compose Multiplatform is
+an opt-in feature through the Gradle DSL and must be explicitly enabled. The default value is <code>false</code>.</p>
+<div class="highlight"><pre><span></span><code><span class="n">appPlatform</span><span class="w"> </span><span class="o">{</span>
+<span class="w">  </span><span class="n">enableComposeUi</span><span class="w"> </span><span class="kc">true</span>
+<span class="o">}</span>
+</code></pre></div>
+</div>
+<h2 id="renderer-basics">Renderer basics<a class="headerlink" href="#renderer-basics" title="Permanent link">&para;</a></h2>
+<p>A <a href="https://github.com/amzn/app-platform/blob/main/renderer/public/src/commonMain/kotlin/software/amazon/app/platform/renderer/Renderer.kt"><code>Renderer</code></a>
+is the counterpart to a <code>Presenter</code>. It consumes <code>Models</code> and turns them into UI, which is shown on screen.</p>
+<div class="highlight"><pre><span></span><code><span class="kd">interface</span><span class="w"> </span><span class="nc">Renderer</span><span class="o">&lt;</span><span class="k">in</span><span class="w"> </span><span class="n">ModelT</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">BaseModel</span><span class="o">&gt;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kd">fun</span><span class="w"> </span><span class="nf">render</span><span class="p">(</span><span class="n">model</span><span class="p">:</span><span class="w"> </span><span class="n">ModelT</span><span class="p">)</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>The <code>Renderer</code> interface is rarely used directly, instead platform specific implementations like
+<a href="https://github.com/amzn/app-platform/blob/main/renderer-compose-multiplatform/public/src/commonMain/kotlin/software/amazon/app/platform/renderer/ComposeRenderer.kt"><code>ComposeRenderer</code></a>
+for <a href="https://www.jetbrains.com/compose-multiplatform/">Compose Multiplatform</a> and
+<a href="https://github.com/amzn/app-platform/blob/main/renderer-android-view/public/src/androidMain/kotlin/software/amazon/app/platform/renderer/ViewRenderer.kt"><code>ViewRenderer</code></a>
+for Android are used. App Platform doesn’t provide any other implementations for now, e.g. a SwiftUI or UIKit
+implementation for iOS is missing.</p>
+<div class="highlight"><span class="filename">ComposeRenderer</span><pre><span></span><code><span class="nd">@ContributesRenderer</span>
+<span class="kd">class</span><span class="w"> </span><span class="nc">LoginRenderer</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">ComposeRenderer</span><span class="o">&lt;</span><span class="n">Model</span><span class="o">&gt;</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="nd">@Composable</span>
+<span class="w">  </span><span class="kd">override</span><span class="w"> </span><span class="kd">fun</span><span class="w"> </span><span class="nf">Compose</span><span class="p">(</span><span class="n">model</span><span class="p">:</span><span class="w"> </span><span class="n">Model</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">model</span><span class="p">.</span><span class="na">loginInProgress</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="n">CircularProgressIndicator</span><span class="p">()</span>
+<span class="w">    </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="n">Text</span><span class="p">(</span><span class="s">&quot;Login&quot;</span><span class="p">)</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+<div class="highlight"><span class="filename">ViewRenderer</span><pre><span></span><code><span class="nd">@ContributesRenderer</span>
+<span class="kd">class</span><span class="w"> </span><span class="nc">LoginRenderer</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">ViewRenderer</span><span class="o">&lt;</span><span class="n">Model</span><span class="o">&gt;</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="kd">lateinit</span><span class="w"> </span><span class="kd">var</span><span class="w"> </span><span class="nv">textView</span><span class="p">:</span><span class="w"> </span><span class="n">TextView</span>
+
+<span class="w">    </span><span class="kd">override</span><span class="w"> </span><span class="kd">fun</span><span class="w"> </span><span class="nf">inflate</span><span class="p">(</span>
+<span class="w">        </span><span class="n">activity</span><span class="p">:</span><span class="w"> </span><span class="n">Activity</span><span class="p">,</span>
+<span class="w">        </span><span class="n">parent</span><span class="p">:</span><span class="w"> </span><span class="n">ViewGroup</span><span class="p">,</span>
+<span class="w">        </span><span class="n">layoutInflater</span><span class="p">:</span><span class="w"> </span><span class="n">LayoutInflater</span><span class="p">,</span>
+<span class="w">        </span><span class="n">initialModel</span><span class="p">:</span><span class="w"> </span><span class="n">Model</span><span class="p">,</span>
+<span class="w">    </span><span class="p">):</span><span class="w"> </span><span class="n">View</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">TextView</span><span class="p">(</span><span class="n">activity</span><span class="p">).</span><span class="na">also</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">textView</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">it</span><span class="w"> </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="kd">override</span><span class="w"> </span><span class="kd">fun</span><span class="w"> </span><span class="nf">renderModel</span><span class="p">(</span><span class="n">model</span><span class="p">:</span><span class="w"> </span><span class="n">Model</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">textView</span><span class="p">.</span><span class="na">text</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;Login&quot;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Note that <code>ComposeRenderer</code> like <code>ViewRenderer</code> implements the common <code>Renderer</code> interface, but calling the
+<code>render(model)</code> function <a href="https://github.com/amzn/app-platform/blob/0f3e242ae08bb242fbd7080d33caa069c8fae2b4/renderer-compose-multiplatform/public/src/commonMain/kotlin/software/amazon/app/platform/renderer/ComposeRenderer.kt#L52-L58">is an error</a>.
+Instead, <code>ComposeRenderer</code> defines its own function to preserve the composable context:</p>
+<div class="highlight"><pre><span></span><code><span class="nd">@Composable</span>
+<span class="kd">fun</span><span class="w"> </span><span class="nf">renderCompose</span><span class="p">(</span><span class="n">model</span><span class="p">:</span><span class="w"> </span><span class="n">ModelT</span><span class="p">)</span>
+</code></pre></div>
+<p>In practice this is less of a concern, because the <code>render(model)</code> function is deprecated and hidden and callers
+only see the <code>renderCompose(model)</code> function.</p>
+</div>
+<p>Renderers are composable and can build hierarchies similar to <code>Presenters</code>. The parent renderer is responsible for
+calling <code>render()</code> on the child renderer:</p>
+<div class="highlight"><pre><span></span><code><span class="kd">data</span><span class="w"> </span><span class="kd">class</span><span class="w"> </span><span class="nc">ParentModel</span><span class="p">(</span>
+<span class="w">  </span><span class="kd">val</span><span class="w"> </span><span class="nv">childModel</span><span class="p">:</span><span class="w"> </span><span class="n">ChildModel</span>
+<span class="p">):</span><span class="w"> </span><span class="n">BaseModel</span>
+
+<span class="kd">class</span><span class="w"> </span><span class="nc">ParentRenderer</span><span class="p">(</span>
+<span class="w">  </span><span class="kd">private</span><span class="w"> </span><span class="kd">val</span><span class="w"> </span><span class="nv">childRenderer</span><span class="p">:</span><span class="w"> </span><span class="n">ChildRenderer</span>
+<span class="p">):</span><span class="w"> </span><span class="n">Renderer</span><span class="o">&lt;</span><span class="n">ParentModel</span><span class="o">&gt;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kd">override</span><span class="w"> </span><span class="kd">fun</span><span class="w"> </span><span class="nf">render</span><span class="p">(</span><span class="n">model</span><span class="p">:</span><span class="w"> </span><span class="n">ParentModel</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">childRenderer</span><span class="p">.</span><span class="na">render</span><span class="p">(</span><span class="n">model</span><span class="p">.</span><span class="na">childModel</span><span class="p">)</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Injecting concrete child <code>Renderers</code> is possible, but less common. More frequently <code>RendererFactory</code> is injected
+to obtain a <code>Renderer</code> instance for a <code>Model</code>.</p>
+</div>
+<p>A <code>Renderer</code> sends events back to the <code>Presenter</code> through the <code>onEvent</code> lambda on a Model.</p>
+<div class="highlight"><pre><span></span><code><span class="nd">@ContributesRenderer</span>
+<span class="kd">class</span><span class="w"> </span><span class="nc">LoginRenderer</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">ComposeRenderer</span><span class="o">&lt;</span><span class="n">Model</span><span class="o">&gt;</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="nd">@Composable</span>
+<span class="w">  </span><span class="kd">override</span><span class="w"> </span><span class="kd">fun</span><span class="w"> </span><span class="nf">Compose</span><span class="p">(</span><span class="n">model</span><span class="p">:</span><span class="w"> </span><span class="n">Model</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">Button</span><span class="p">(</span>
+<span class="hll"><span class="w">      </span><span class="n">onClick</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">model</span><span class="p">.</span><span class="na">onEvent</span><span class="p">(</span><span class="n">LoginPresenter</span><span class="p">.</span><span class="na">Event</span><span class="p">.</span><span class="na">Login</span><span class="p">(</span><span class="s">&quot;Demo&quot;</span><span class="p">))</span><span class="w"> </span><span class="p">},</span>
+</span><span class="w">    </span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="n">Text</span><span class="p">(</span><span class="s">&quot;Login&quot;</span><span class="p">)</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+<details class="example">
+<summary>Sample</summary>
+<p>The sample app implements multiple <code>ComposeRenderers</code>, e.g. <a href="https://github.com/amzn/app-platform/blob/main/sample/login/impl/src/commonMain/kotlin/software/amazon/app/platform/sample/login/LoginRenderer.kt"><code>LoginRenderer</code></a>,
+<a href="https://github.com/amzn/app-platform/blob/main/sample/user/impl/src/commonMain/kotlin/software/amazon/app/platform/sample/user/UserPageListRenderer.kt"><code>UserPageListRenderer</code></a>
+and <a href="https://github.com/amzn/app-platform/blob/main/sample/user/impl/src/commonMain/kotlin/software/amazon/app/platform/sample/user/UserPageDetailRenderer.kt"><code>UserPageDetailRenderer</code></a>.</p>
+</details>
+<h2 id="rendererfactory"><code>RendererFactory</code><a class="headerlink" href="#rendererfactory" title="Permanent link">&para;</a></h2>
+<p>How <code>Renderers</code> are initialized depends on <a href="https://github.com/amzn/app-platform/blob/main/renderer/public/src/commonMain/kotlin/software/amazon/app/platform/renderer/RendererFactory.kt"><code>RendererFactory</code></a>,
+which only responsibility is to create and cache <code>Renderers</code> based on the given model. App Platform comes with three
+different implementations:</p>
+<dl>
+<dt><a href="https://github.com/amzn/app-platform/blob/main/renderer-compose-multiplatform/public/src/commonMain/kotlin/software/amazon/app/platform/renderer/ComposeRendererFactory.kt"><code>ComposeRendererFactory</code></a></dt>
+<dd>
+<p><code>ComposeRendererFactory</code> is an implementation for Compose Multiplatform and can be used on all supported
+platforms. It can only create instances of <code>ComposeRenderer</code>.</p>
+</dd>
+<dt><a href="https://github.com/amzn/app-platform/blob/main/renderer-android-view/public/src/androidMain/kotlin/software/amazon/app/platform/renderer/AndroidRendererFactory.kt"><code>AndroidRendererFactory</code></a></dt>
+<dd>
+<p><code>AndroidRendererFactory</code> is only suitable for Android. It can be used to create <code>ViewRenderer</code> instances and its
+subtypes. It does not support <code>ComposeRenderer</code>. Use <code>ComposeAndroidRendererFactory</code> if you need to mix and
+match <code>ViewRenderer</code> with <code>ComposeRenderer</code>.</p>
+</dd>
+<dt><a href="https://github.com/amzn/app-platform/blob/main/renderer-compose-multiplatform/public/src/androidMain/kotlin/software/amazon/app/platform/renderer/ComposeAndroidRendererFactory.kt"><code>ComposeAndroidRendererFactory</code></a></dt>
+<dd>
+<p><code>ComposeAndroidRendererFactory</code> is only suitable for Android when using <code>ComposeRenderer</code> together with
+<code>ViewRenderer</code>. The factory wraps the Renderers for seamless interop.</p>
+</dd>
+</dl>
+<h3 id="contributesrenderer"><code>@ContributesRenderer</code><a class="headerlink" href="#contributesrenderer" title="Permanent link">&para;</a></h3>
+<p>All factory implementations rely on the dependency injection framework <code>kotlin-inject-anvil</code> or Metro to discover and 
+initialize renderers. When the factory is created, it builds the <code>RendererComponent</code>, which parent is the app component.
+The <code>RendererComponent</code> lazily provides all renderers using the multibindings feature. To participate in the lookup,
+renderers must tell <code>kotlin-inject-anvil</code> or Metro which models they can render. This is done through a component 
+interface, which automatically gets generated and added to the renderer scope by using the
+<a href="https://github.com/amzn/app-platform/blob/main/kotlin-inject-extensions/contribute/public/src/commonMain/kotlin/software/amazon/app/platform/inject/ContributesRenderer.kt"><code>@ContributesRenderer</code> annotation</a>.</p>
+<p>Which <code>Model</code> type is used for the binding is determined based on the super type. In the following example
+<code>LoginPresenter.Model</code> is used.</p>
+<div class="highlight"><pre><span></span><code><span class="nd">@ContributesRenderer</span>
+<span class="kd">class</span><span class="w"> </span><span class="nc">LoginRenderer</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">ComposeRenderer</span><span class="o">&lt;</span><span class="n">LoginPresenter</span><span class="p">.</span><span class="na">Model</span><span class="o">&gt;</span><span class="p">()</span>
+</code></pre></div>
+<details class="info">
+<summary>Generated code</summary>
+<div class="tabbed-set tabbed-alternate" data-tabs="1:2"><input checked="checked" id="kotlin-inject-anvil" name="__tabbed_1" type="radio" /><input id="metro" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="kotlin-inject-anvil">kotlin-inject-anvil</label><label for="metro">Metro</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<p>The <code>@ContributesRenderer</code> annotation generates following code.</p>
+<div class="highlight"><pre><span></span><code><span class="nd">@ContributesTo</span><span class="p">(</span><span class="n">RendererScope</span><span class="o">::</span><span class="n">class</span><span class="p">)</span>
+<span class="kd">interface</span><span class="w"> </span><span class="nc">LoginRendererComponent</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="nd">@Provides</span>
+<span class="w">  </span><span class="kd">public</span><span class="w"> </span><span class="kd">fun</span><span class="w"> </span><span class="nf">provideSoftwareAmazonAppPlatformSampleLoginLoginRenderer</span><span class="p">():</span><span class="w"> </span><span class="n">LoginRenderer</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">LoginRenderer</span><span class="p">()</span>
+
+<span class="w">  </span><span class="nd">@Provides</span>
+<span class="w">  </span><span class="nd">@IntoMap</span>
+<span class="w">  </span><span class="kd">public</span><span class="w"> </span><span class="kd">fun</span><span class="w"> </span><span class="nf">provideSoftwareAmazonAppPlatformSampleLoginLoginRendererLoginPresenterModel</span><span class="p">(</span><span class="n">renderer</span><span class="p">:</span><span class="w"> </span><span class="p">()</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">LoginRenderer</span><span class="p">):</span><span class="w"> </span><span class="n">Pair</span><span class="o">&lt;</span><span class="n">KClass</span><span class="o">&lt;</span><span class="k">out</span><span class="w"> </span><span class="n">BaseModel</span><span class="o">&gt;</span><span class="p">,</span><span class="w"> </span><span class="p">()</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">Renderer</span><span class="o">&lt;*&gt;&gt;</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">LoginPresenter</span><span class="p">.</span><span class="na">Model</span><span class="o">::</span><span class="kd">class</span><span class="w"> </span><span class="nc">to</span><span class="w"> </span><span class="n">renderer</span>
+
+<span class="w">  </span><span class="nd">@Provides</span>
+<span class="w">  </span><span class="nd">@IntoMap</span>
+<span class="w">  </span><span class="nd">@ForScope</span><span class="p">(</span><span class="n">scope</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">RendererScope</span><span class="o">::</span><span class="n">class</span><span class="p">)</span>
+<span class="w">  </span><span class="kd">public</span><span class="w"> </span><span class="kd">fun</span><span class="w"> </span><span class="nf">provideSoftwareAmazonAppPlatformSampleLoginLoginRendererLoginPresenterModelKey</span><span class="p">():</span><span class="w"> </span><span class="n">Pair</span><span class="o">&lt;</span><span class="n">KClass</span><span class="o">&lt;</span><span class="k">out</span><span class="w"> </span><span class="n">BaseModel</span><span class="o">&gt;</span><span class="p">,</span><span class="w"> </span><span class="n">KClass</span><span class="o">&lt;</span><span class="k">out</span><span class="w"> </span><span class="n">Renderer</span><span class="o">&lt;*&gt;&gt;&gt;</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">LoginPresenter</span><span class="p">.</span><span class="na">Model</span><span class="o">::</span><span class="kd">class</span><span class="w"> </span><span class="nc">to</span><span class="w"> </span><span class="n">LoginRenderer</span><span class="o">::</span><span class="kd">class</span>
+<span class="err">}</span>
+</code></pre></div>
+</div>
+<div class="tabbed-block">
+<p>The <code>@ContributesRenderer</code> annotation generates following code.</p>
+<div class="highlight"><pre><span></span><code><span class="nd">@ContributesTo</span><span class="p">(</span><span class="n">RendererScope</span><span class="o">::</span><span class="n">class</span><span class="p">)</span>
+<span class="kd">interface</span><span class="w"> </span><span class="nc">LoginRendererGraph</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="nd">@Provides</span>
+<span class="w">  </span><span class="kd">public</span><span class="w"> </span><span class="kd">fun</span><span class="w"> </span><span class="nf">provideSoftwareAmazonAppPlatformSampleLoginLoginRenderer</span><span class="p">():</span><span class="w"> </span><span class="n">LoginRenderer</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">LoginRenderer</span><span class="p">()</span>
+
+<span class="w">  </span><span class="nd">@Provides</span>
+<span class="w">  </span><span class="nd">@IntoMap</span>
+<span class="w">  </span><span class="nd">@RendererKey</span><span class="p">(</span><span class="n">LoginPresenter</span><span class="p">.</span><span class="na">Model</span><span class="o">::</span><span class="n">class</span><span class="p">)</span>
+<span class="w">  </span><span class="kd">public</span><span class="w"> </span><span class="kd">fun</span><span class="w"> </span><span class="nf">provideSoftwareAmazonAppPlatformSampleLoginLoginRendererLoginPresenterModel</span><span class="p">(</span><span class="n">renderer</span><span class="p">:</span><span class="w"> </span><span class="n">Provider</span><span class="o">&lt;</span><span class="n">LoginRenderer</span><span class="o">&gt;</span><span class="p">):</span><span class="w"> </span><span class="n">Renderer</span><span class="o">&lt;*&gt;</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">renderer</span><span class="p">()</span>
+
+<span class="w">  </span><span class="nd">@Provides</span>
+<span class="w">  </span><span class="nd">@IntoMap</span>
+<span class="w">  </span><span class="nd">@ForScope</span><span class="p">(</span><span class="n">scope</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">RendererScope</span><span class="o">::</span><span class="n">class</span><span class="p">)</span>
+<span class="w">  </span><span class="nd">@RendererKey</span><span class="p">(</span><span class="n">LoginPresenter</span><span class="p">.</span><span class="na">Model</span><span class="o">::</span><span class="n">class</span><span class="p">)</span>
+<span class="w">  </span><span class="kd">public</span><span class="w"> </span><span class="kd">fun</span><span class="w"> </span><span class="nf">provideSoftwareAmazonAppPlatformSampleLoginLoginRendererLoginPresenterModelKey</span><span class="p">():</span><span class="w"> </span><span class="n">KClass</span><span class="o">&lt;</span><span class="k">out</span><span class="w"> </span><span class="n">Renderer</span><span class="o">&lt;*&gt;&gt;</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">LoginRenderer</span><span class="o">::</span><span class="kd">class</span>
+<span class="err">}</span>
+</code></pre></div>
+</div>
+</div>
+</div>
+</details>
+<h3 id="creating-rendererfactory">Creating <code>RendererFactory</code><a class="headerlink" href="#creating-rendererfactory" title="Permanent link">&para;</a></h3>
+<p>The <code>RendererFactory</code> should be created and cached in the platform specific UI context, e.g. an iOS <code>UIViewController</code>
+or Android <code>Activity</code>.</p>
+<div class="highlight"><span class="filename">iOS Compose Multiplatform</span><pre><span></span><code><span class="kd">fun</span><span class="w"> </span><span class="nf">mainViewController</span><span class="p">(</span><span class="n">rootScopeProvider</span><span class="p">:</span><span class="w"> </span><span class="n">RootScopeProvider</span><span class="p">):</span><span class="w"> </span><span class="n">UIViewController</span><span class="w"> </span><span class="o">=</span>
+<span class="w">  </span><span class="n">ComposeUIViewController</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="c1">// Only a single factory is needed.</span>
+<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="nv">rendererFactory</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">remember</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">ComposeRendererFactory</span><span class="p">(</span><span class="n">rootScopeProvider</span><span class="p">)</span><span class="w"> </span><span class="p">}</span>
+<span class="w">    </span><span class="p">...</span>
+<span class="w">  </span><span class="p">}</span>
+</code></pre></div>
+<div class="highlight"><span class="filename">Android Activity</span><pre><span></span><code><span class="kd">class</span><span class="w"> </span><span class="nc">MainActivity</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">ComponentActivity</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+
+<span class="w">  </span><span class="kd">override</span><span class="w"> </span><span class="kd">fun</span><span class="w"> </span><span class="nf">onCreate</span><span class="p">(</span><span class="n">savedInstanceState</span><span class="p">:</span><span class="w"> </span><span class="n">Bundle?)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">super</span><span class="p">.</span><span class="na">onCreate</span><span class="p">(</span><span class="n">savedInstanceState</span><span class="p">)</span>
+<span class="w">    </span><span class="n">setContentView</span><span class="p">(</span><span class="n">R</span><span class="p">.</span><span class="na">layout</span><span class="p">.</span><span class="na">activity_main</span><span class="p">)</span>
+
+<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="nv">rendererFactory</span><span class="w"> </span><span class="o">=</span>
+<span class="w">      </span><span class="n">ComposeAndroidRendererFactory</span><span class="p">(</span>
+<span class="w">        </span><span class="n">rootScopeProvider</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">application</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="n">RootScopeProvider</span><span class="p">,</span>
+<span class="w">        </span><span class="n">activity</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">this</span><span class="p">,</span>
+<span class="w">        </span><span class="n">parent</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">findViewById</span><span class="p">(</span><span class="n">R</span><span class="p">.</span><span class="na">id</span><span class="p">.</span><span class="na">main_container</span><span class="p">),</span>
+<span class="w">      </span><span class="p">)</span>
+<span class="w">    </span><span class="p">...</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+<details class="example">
+<summary>Sample</summary>
+<p>The sample app uses <code>ComposeAndroidRendererFactory</code> in <a href="https://github.com/amzn/app-platform/blob/0f3e242ae08bb242fbd7080d33caa069c8fae2b4/sample/app/src/androidMain/kotlin/software/amazon/app/platform/sample/MainActivity.kt#L30-L35">Android application</a>
+and <code>ComposeRendererFactory</code> for <a href="https://github.com/amzn/app-platform/blob/0f3e242ae08bb242fbd7080d33caa069c8fae2b4/sample/app/src/iosMain/kotlin/software/amazon/app/platform/sample/MainViewController.kt#L40">iOS</a>
+and <a href="https://github.com/amzn/app-platform/blob/0f3e242ae08bb242fbd7080d33caa069c8fae2b4/sample/app/src/desktopMain/kotlin/software/amazon/app/platform/sample/DesktopApp.kt#L36">Desktop</a>.</p>
+</details>
+<h3 id="creating-renderers">Creating <code>Renderers</code><a class="headerlink" href="#creating-renderers" title="Permanent link">&para;</a></h3>
+<p>Based on a <code>Model</code> instance or <code>Model</code> type a <code>RendererFactory</code> can create a new <code>Renderer</code> instance. The
+<code>getRenderer()</code> function creates a <code>Renderer</code> only once and caches the instance after that. This makes the caller side
+simpler. Whenever a new <code>Model</code> is available get the <code>Renderer</code> for the <code>Model</code> and render the content on screen.</p>
+<div class="highlight"><span class="filename">iOS Compose Multiplatform</span><pre><span></span><code><span class="kd">fun</span><span class="w"> </span><span class="nf">mainViewController</span><span class="p">(</span><span class="n">rootScopeProvider</span><span class="p">:</span><span class="w"> </span><span class="n">RootScopeProvider</span><span class="p">):</span><span class="w"> </span><span class="n">UIViewController</span><span class="w"> </span><span class="o">=</span>
+<span class="w">  </span><span class="n">ComposeUIViewController</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="c1">// Only a single factory is needed.</span>
+<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="nv">rendererFactory</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">remember</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">ComposeRendererFactory</span><span class="p">(</span><span class="n">rootScopeProvider</span><span class="p">)</span><span class="w"> </span><span class="p">}</span>
+
+<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="nv">model</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">presenter</span><span class="p">.</span><span class="na">present</span><span class="p">(</span><span class="kt">Unit</span><span class="p">)</span>
+
+<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="nv">renderer</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">factory</span><span class="p">.</span><span class="na">getComposeRenderer</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
+<span class="w">    </span><span class="n">renderer</span><span class="p">.</span><span class="na">renderCompose</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
+<span class="w">  </span><span class="p">}</span>
+</code></pre></div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Note that <code>getRenderer()</code> for <code>ComposeRendererFactory</code> returns a <code>ComposeRenderer</code>. For a <code>ComposeRenderer</code> the
+<code>renderCompose(model)</code> function must be called and not <code>render(model)</code>.</p>
+</div>
+<div class="highlight"><span class="filename">Android Activity</span><pre><span></span><code><span class="kd">class</span><span class="w"> </span><span class="nc">MainActivity</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">ComponentActivity</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+
+<span class="w">  </span><span class="kd">override</span><span class="w"> </span><span class="kd">fun</span><span class="w"> </span><span class="nf">onCreate</span><span class="p">(</span><span class="n">savedInstanceState</span><span class="p">:</span><span class="w"> </span><span class="n">Bundle?)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">super</span><span class="p">.</span><span class="na">onCreate</span><span class="p">(</span><span class="n">savedInstanceState</span><span class="p">)</span>
+<span class="w">    </span><span class="n">setContentView</span><span class="p">(</span><span class="n">R</span><span class="p">.</span><span class="na">layout</span><span class="p">.</span><span class="na">activity_main</span><span class="p">)</span>
+
+<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="nv">rendererFactory</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ComposeAndroidRendererFactory</span><span class="p">(...)</span>
+<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="nv">models</span><span class="p">:</span><span class="w"> </span><span class="n">StateFlow</span><span class="o">&lt;</span><span class="n">Model</span><span class="o">&gt;</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">...</span>
+<span class="w">    </span><span class="p">...</span>
+
+<span class="w">    </span><span class="n">lifecycleScope</span><span class="p">.</span><span class="na">launch</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="n">repeatOnLifecycle</span><span class="p">(</span><span class="n">Lifecycle</span><span class="p">.</span><span class="na">State</span><span class="p">.</span><span class="na">STARTED</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">models</span><span class="p">.</span><span class="na">collect</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">model</span><span class="w"> </span><span class="o">-&gt;</span>
+<span class="w">          </span><span class="kd">val</span><span class="w"> </span><span class="nv">renderer</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">rendererFactory</span><span class="p">.</span><span class="na">getRenderer</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
+<span class="w">          </span><span class="n">renderer</span><span class="p">.</span><span class="na">render</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">      </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+<h3 id="injecting-rendererfactory">Injecting <code>RendererFactory</code><a class="headerlink" href="#injecting-rendererfactory" title="Permanent link">&para;</a></h3>
+<p>The <code>RendererFactory</code> is provided in the <code>RendererComponent</code>, meaning it can be injected by any <code>Renderer</code>. This
+allows you to create child renderers without knowing the concrete type of the model and injecting the child
+renderers ahead of time:</p>
+<div class="highlight"><pre><span></span><code><span class="nd">@Inject</span>
+<span class="nd">@ContributesRenderer</span>
+<span class="kd">class</span><span class="w"> </span><span class="nc">SampleRenderer</span><span class="p">(</span>
+<span class="w">  </span><span class="kd">private</span><span class="w"> </span><span class="kd">val</span><span class="w"> </span><span class="nv">rendererFactory</span><span class="p">:</span><span class="w"> </span><span class="n">RendererFactory</span>
+<span class="p">)</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">ComposeRenderer</span><span class="o">&lt;</span><span class="n">Model</span><span class="o">&gt;</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+
+<span class="w">  </span><span class="nd">@Composable</span>
+<span class="w">  </span><span class="kd">override</span><span class="w"> </span><span class="kd">fun</span><span class="w"> </span><span class="nf">Compose</span><span class="p">(</span><span class="n">model</span><span class="p">:</span><span class="w"> </span><span class="n">Model</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="nv">childRenderer</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">rendererFactory</span><span class="p">.</span><span class="na">getComposeRenderer</span><span class="p">(</span><span class="n">model</span><span class="p">.</span><span class="na">childModel</span><span class="p">)</span>
+<span class="w">    </span><span class="n">childRenderer</span><span class="p">.</span><span class="na">renderCompose</span><span class="p">(</span><span class="n">model</span><span class="p">.</span><span class="na">childModel</span><span class="p">)</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+<details class="example">
+<summary>Sample</summary>
+<p>The sample app injects <code>RendererFactory</code> in <a href="https://github.com/amzn/app-platform/blob/main/sample/templates/impl/src/commonMain/kotlin/software/amazon/app/platform/sample/template/ComposeSampleAppTemplateRenderer.kt"><code>ComposeSampleAppTemplateRenderer</code></a>
+to create <code>Renderers</code> dynamically for unknown <code>Model</code> types. There is also an <a href="https://github.com/amzn/app-platform/blob/main/sample/templates/impl/src/androidMain/kotlin/software/amazon/app/platform/sample/template/AndroidSampleAppTemplateRenderer.kt">Android sample implementation</a>.</p>
+</details>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Whenever a <code>Renderer</code> has an injected constructor parameter like <code>rendererFactory</code> in the sample above, then
+the class must be annotated with <code>@Inject</code> in addition to <code>@ContributesRenderer</code>.</p>
+</div>
+<h2 id="android-support">Android support<a class="headerlink" href="#android-support" title="Permanent link">&para;</a></h2>
+<p>Android Views are supported out of the box using <code>ViewRenderer</code>.</p>
+<h3 id="compose-interop">Compose interop<a class="headerlink" href="#compose-interop" title="Permanent link">&para;</a></h3>
+<p>If an Android app uses only Compose UI with <code>ComposeRenderer</code>, then it can use <code>ComposeRendererFactory</code> similar to
+iOS and Desktop to create <code>ComposeRenderer</code> instances. However, if interop with Android Views is needed, then
+<code>ComposeAndroidRendererFactory</code> must be used. <code>ComposeAndroidRendererFactory</code> makes it transparent which <code>Renderer</code>
+implementation is used and interop is seamless. A <code>ComposeRenderer</code> that has a child <code>ViewRenderer</code> wraps the Android
+view within a <code>AndroidView</code> composable function call. A <code>ViewRenderer</code> that has a child <code>ComposeRenderer</code> wraps the
+Compose UI within a <code>ComposeView</code> Android View.</p>
+<div class="highlight"><pre><span></span><code><span class="kd">val</span><span class="w"> </span><span class="nv">rendererFactory</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ComposeAndroidRendererFactory</span><span class="p">(...)</span>
+
+<span class="kd">val</span><span class="w"> </span><span class="nv">renderer</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">rendererFactory</span><span class="p">.</span><span class="na">getRenderer</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
+<span class="n">render</span><span class="p">.</span><span class="na">render</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
+</code></pre></div>
+<p>In this example the returned <code>Renderer</code> can be a <code>ComposeRenderer</code> or <code>ViewRenderer</code>, it would not matter and either
+the Compose UI or Android Views would be rendered on screen. With the seamless interop it becomes easier to migrate
+from Android Views to Compose UI by simply migrating renderers one by one.</p>
+<h3 id="viewrenderer-subtypes"><code>ViewRenderer</code> subtypes<a class="headerlink" href="#viewrenderer-subtypes" title="Permanent link">&para;</a></h3>
+<dl>
+<dt><a href="https://github.com/amzn/app-platform/blob/main/renderer-android-view/public/src/androidMain/kotlin/software/amazon/app/platform/renderer/ViewBindingRenderer.kt"><code>ViewBindingRenderer</code></a>.</dt>
+<dd>
+<p>View binding is supported out of the box using <code>ViewBindingRenderer</code>.</p>
+</dd>
+<dt><a href="https://github.com/amzn/app-platform/blob/main/renderer-android-view/public/src/androidMain/kotlin/software/amazon/app/platform/renderer/RecyclerViewViewHolderRenderer.kt"><code>RecyclerViewViewHolderRenderer</code></a></dt>
+<dd>
+<p><code>RecyclerViewViewHolderRenderer</code> allows you to implement elements of a <code>RecyclerView</code> as a <code>Renderer</code>.</p>
+</dd>
+</dl>
+<h2 id="unit-tests">Unit tests<a class="headerlink" href="#unit-tests" title="Permanent link">&para;</a></h2>
+<p><code>ComposeRenderer</code> can easily be tested as unit tests on Desktop and iOS. In particular tests for Desktop are helpful
+due to the fast build times. Various fake <code>Models</code> can be passed to the <code>Renderer</code> and the UI state based on the
+model verified.</p>
+<p>Testing <code>ComposeRenderer</code> or <code>ViewRenderer</code> for Android requires an Android device or emulator.</p>
+<p>This test runs as a unit test on iOS and Desktop.</p>
+<div class="highlight"><pre><span></span><code><span class="kd">class</span><span class="w"> </span><span class="nc">LoginRendererTest</span><span class="w"> </span><span class="p">{</span>
+
+<span class="w">  </span><span class="nd">@Test</span>
+<span class="w">  </span><span class="kd">fun</span><span class="w"> </span><span class="nf">`the login button is rendered when not logging in`</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">runComposeUiTest</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="n">setContent</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="kd">val</span><span class="w"> </span><span class="nv">renderer</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">LoginRenderer</span><span class="p">()</span>
+<span class="w">        </span><span class="n">renderer</span><span class="p">.</span><span class="na">renderCompose</span><span class="p">(</span><span class="n">LoginPresenter</span><span class="p">.</span><span class="na">Model</span><span class="p">(</span><span class="n">loginInProgress</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">false</span><span class="p">)</span><span class="w"> </span><span class="p">{})</span>
+<span class="w">      </span><span class="p">}</span>
+
+<span class="w">      </span><span class="n">onNodeWithTag</span><span class="p">(</span><span class="s">&quot;loginProgress&quot;</span><span class="p">).</span><span class="na">assertDoesNotExist</span><span class="p">()</span>
+<span class="w">      </span><span class="n">onNodeWithTag</span><span class="p">(</span><span class="s">&quot;loginButton&quot;</span><span class="p">).</span><span class="na">assertIsDisplayed</span><span class="p">()</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+<details class="example">
+<summary>Sample</summary>
+<p>The sample app demonstrates this with the <a href="https://github.com/amzn/app-platform/blob/main/sample/login/impl/src/appleAndDesktopTest/kotlin/software/amazon/app/platform/sample/login/LoginRendererTest.kt"><code>LoginRendererTest</code></a>.
+To avoid duplicating the test in the <code>desktopTest</code> and <code>iosTest</code> source folders, the sample app has a custom
+source set <code>appleAndDesktop</code>, which is a shared parent source set for <code>apple</code> and <code>desktop</code>.</p>
+</details>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+  <script>var tabs=__md_get("__tabs");if(Array.isArray(tabs))e:for(var set of document.querySelectorAll(".tabbed-set")){var labels=set.querySelector(".tabbed-labels");for(var tab of tabs)for(var label of labels.getElementsByTagName("label"))if(label.innerText.trim()===tab){var input=document.getElementById(label.htmlFor);input.checked=!0;continue e}}</script>
+
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
+    </div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["content.code.annotate", "content.code.copy", "content.code.select", "content.tooltips", "navigation.tabs", "navigation.tabs.sticky", "navigation.top", "toc.follow", "toc.integrate", "content.tabs.link", "content.action.edit"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>
