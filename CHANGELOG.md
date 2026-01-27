@@ -4,16 +4,7 @@
 
 ### Added
 
-- Added a recipe for `Presenter` integration with SwiftUI, see #154.
-
 ### Changed
-
-- Kotlin to `2.2.21`, see #161
-- KSP to `2.3.4`
-- kotlin-inject to `0.9.0`
-- kotlin-inject-anvil to `0.1.7`
-- metro to `0.10.1`
-- Remove testing for KSP1 and use KSP2
 
 ### Deprecated
 
@@ -25,7 +16,26 @@
 
 ### Other Notes & Contributions
 
+
+## [0.0.8] - 2025-01-27
+
+### Added
+
+- Added a recipe for `Presenter` integration with SwiftUI, see #154.
+
+### Changed
+
+- Kotlin to `2.2.21`, see #161
+- KSP to `2.3.4`
+- kotlin-inject to `0.9.0`
+- kotlin-inject-anvil to `0.1.7`
+- metro to `0.10.1`
+- Remove testing for KSP1 and use KSP2
+
+### Other Notes & Contributions
+
 - Special thanks to [@rvenable](https://github.com/rvenable) for creating the original Swift APIs that served as the foundation for #154!
+
 
 ## [0.0.7] - 2025-09-26
 
@@ -126,7 +136,8 @@
 
 - Initial release.
 
-[Unreleased]: https://github.com/amzn/app-platform/compare/0.0.7...HEAD
+[Unreleased]: https://github.com/amzn/app-platform/compare/0.0.8...HEAD
+[0.0.8]: https://github.com/amzn/app-platform/compare/0.0.8
 [0.0.7]: https://github.com/amzn/app-platform/compare/0.0.7
 [0.0.6]: https://github.com/amzn/app-platform/compare/0.0.6
 [0.0.5]: https://github.com/amzn/app-platform/compare/0.0.5
