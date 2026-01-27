@@ -11,6 +11,7 @@
 - Kotlin to `2.2.21`, see #161
 - KSP to `2.3.4`
 - kotlin-inject to `0.9.0`
+- kotlin-inject-anvil to `0.1.7`
 - metro to `0.10.1`
 - Remove testing for KSP1 and use KSP2
 
