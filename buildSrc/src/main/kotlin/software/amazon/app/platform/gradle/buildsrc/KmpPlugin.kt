@@ -1,7 +1,6 @@
 package software.amazon.app.platform.gradle.buildsrc
 
 import com.google.devtools.ksp.gradle.KspExtension
-import com.google.devtools.ksp.gradle.KspTask
 import com.ncorti.ktfmt.gradle.KtfmtExtension
 import com.ncorti.ktfmt.gradle.TrailingCommaManagementStrategy
 import guru.nidi.graphviz.engine.Format
@@ -17,7 +16,6 @@ import org.gradle.api.tasks.SourceTask
 import org.jetbrains.compose.ComposeExtension
 import org.jetbrains.compose.ComposePlugin
 import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import software.amazon.app.platform.gradle.buildsrc.AppPlatformExtension.Companion.appPlatformBuildSrc
 import software.amazon.app.platform.gradle.buildsrc.Platform.Companion.allPlatforms
 
@@ -297,12 +295,6 @@ public open class KmpPlugin : Plugin<Project> {
 
     private fun Project.enableKsp() {
       plugins.apply(Plugins.KSP)
-
-      tasks.withType(KspTask::class.java).configureEach { kspTask ->
-        if (kspTask is KotlinCompile) {
-          kspTask.compilerOptions.jvmTarget.set(javaTarget)
-        }
-      }
     }
 
     fun Project.enableMolecule() {

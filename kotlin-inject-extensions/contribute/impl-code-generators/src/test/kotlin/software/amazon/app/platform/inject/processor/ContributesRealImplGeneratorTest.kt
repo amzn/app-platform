@@ -16,6 +16,7 @@ import org.jetbrains.kotlin.descriptors.runtime.structure.parameterizedTypeArgum
 import org.junit.jupiter.api.Test
 import software.amazon.app.platform.inject.APP_PLATFORM_LOOKUP_PACKAGE
 import software.amazon.app.platform.inject.compile
+import software.amazon.app.platform.inject.declaredNonSyntheticMethods
 import software.amazon.app.platform.inject.mock.MockMode
 import software.amazon.app.platform.inject.mock.RealImpl
 import software.amazon.app.platform.ksp.capitalize
@@ -46,7 +47,7 @@ class ContributesRealImplGeneratorTest {
       assertThat(component.getAnnotation(ContributesTo::class.java)?.scope)
         .isEqualTo(AppScope::class)
 
-      val providesMethod = component.declaredMethods.single()
+      val providesMethod = component.declaredNonSyntheticMethods.single()
       assertThat(providesMethod.parameters[0].type).isEqualTo(realImpl)
       assertThat(providesMethod.returnType).isEqualTo(base)
 
@@ -77,7 +78,7 @@ class ContributesRealImplGeneratorTest {
       assertThat(component.getAnnotation(ContributesTo::class.java)?.scope)
         .isEqualTo(AppScope::class)
 
-      val providesMethod = component.declaredMethods.single()
+      val providesMethod = component.declaredNonSyntheticMethods.single()
       assertThat(providesMethod.parameters[0].type).isEqualTo(realImpl.inner)
       assertThat(providesMethod.returnType).isEqualTo(base)
 
@@ -108,8 +109,10 @@ class ContributesRealImplGeneratorTest {
       assertThat(component.getAnnotation(ContributesTo::class.java)?.scope)
         .isEqualTo(AppScope::class)
 
-      val providesMethod1 = component.declaredMethods.single { it.name == "provideBaseRealImpl" }
-      val providesMethod2 = component.declaredMethods.single { it.name == "provideBase2RealImpl" }
+      val providesMethod1 =
+        component.declaredNonSyntheticMethods.single { it.name == "provideBaseRealImpl" }
+      val providesMethod2 =
+        component.declaredNonSyntheticMethods.single { it.name == "provideBase2RealImpl" }
 
       assertThat(providesMethod1.parameters[0].type).isEqualTo(realImpl)
       assertThat(providesMethod1.returnType).isEqualTo(base)
@@ -228,7 +231,7 @@ class ContributesRealImplGeneratorTest {
       assertThat(component.getAnnotation(ContributesTo::class.java)?.scope)
         .isEqualTo(AppScope::class)
 
-      val providesMethod = component.declaredMethods.single()
+      val providesMethod = component.declaredNonSyntheticMethods.single()
       assertThat(providesMethod.parameters[0].type).isEqualTo(realImpl)
       assertThat(providesMethod.returnType).isEqualTo(base2)
       assertThat(providesMethod.name).isEqualTo("provideBase2RealImpl")
@@ -284,7 +287,7 @@ class ContributesRealImplGeneratorTest {
       assertThat(component.getAnnotation(ContributesTo::class.java)?.scope)
         .isEqualTo(AppScope::class)
 
-      with(component.declaredMethods.single { it.name == "provideBaseRealImpl" }) {
+      with(component.declaredNonSyntheticMethods.single { it.name == "provideBaseRealImpl" }) {
         assertThat(parameters[0].type).isEqualTo(realImpl)
         assertThat(returnType).isEqualTo(base)
 
@@ -292,7 +295,7 @@ class ContributesRealImplGeneratorTest {
         assertThat(getAnnotation(RealImpl::class.java)).isNotNull()
       }
 
-      with(component.declaredMethods.single { it.name == "provideRealImplScoped" }) {
+      with(component.declaredNonSyntheticMethods.single { it.name == "provideRealImplScoped" }) {
         assertThat(parameters[0].annotations.single().annotationClass).isEqualTo(MockMode::class)
         assertThat(parameters[1].parameterizedType.parameterizedTypeArguments.single())
           .isEqualTo(realImpl)
@@ -325,7 +328,7 @@ class ContributesRealImplGeneratorTest {
     ) {
       val component = realImpl.component
 
-      with(component.declaredMethods.single { it.name == "provideBaseRealImpl" }) {
+      with(component.declaredNonSyntheticMethods.single { it.name == "provideBaseRealImpl" }) {
         assertThat(parameters[0].type).isEqualTo(realImpl)
         assertThat(returnType).isEqualTo(base)
 
@@ -333,7 +336,9 @@ class ContributesRealImplGeneratorTest {
         assertThat(getAnnotation(RealImpl::class.java)).isNotNull()
       }
 
-      assertThat(component.declaredMethods.firstOrNull { it.name == "provideRealImplScoped" })
+      assertThat(
+          component.declaredNonSyntheticMethods.firstOrNull { it.name == "provideRealImplScoped" }
+        )
         .isNull()
     }
   }

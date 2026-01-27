@@ -21,6 +21,7 @@ import org.intellij.lang.annotations.Language
 import org.jetbrains.kotlin.compiler.plugin.ExperimentalCompilerApi
 import org.junit.jupiter.api.Test
 import software.amazon.app.platform.inject.metro.compile
+import software.amazon.app.platform.inject.metro.declaredNonSyntheticMethods
 import software.amazon.app.platform.inject.metro.graphInterface
 import software.amazon.app.platform.inject.metro.newMetroGraph
 import software.amazon.app.platform.ksp.capitalize
@@ -52,14 +53,14 @@ class ContributesRobotGeneratorTest {
       assertThat(robotGraph.getAnnotation(ContributesTo::class.java).scope)
         .isEqualTo(AppScope::class)
 
-      with(robotGraph.declaredMethods.single { it.name == "provideTestRobot" }) {
+      with(robotGraph.declaredNonSyntheticMethods.single { it.name == "provideTestRobot" }) {
         assertThat(parameters).isEmpty()
         assertThat(returnType).isEqualTo(testRobot)
         assertThat(this).isAnnotatedWith(Provides::class)
         assertThat(getAnnotation(SingleIn::class.java)).isNull()
       }
 
-      with(robotGraph.declaredMethods.single { it.name == "provideTestRobotIntoMap" }) {
+      with(robotGraph.declaredNonSyntheticMethods.single { it.name == "provideTestRobotIntoMap" }) {
         assertThat(parameters.single().type).isEqualTo(Provider::class.java)
         assertThat(returnType).isEqualTo(Robot::class.java)
         assertThat(this).isAnnotatedWith(Provides::class)
@@ -94,9 +95,12 @@ class ContributesRobotGeneratorTest {
       assertThat(robotGraph.getAnnotation(ContributesTo::class.java).scope)
         .isEqualTo(AppScope::class)
 
-      assertThat(robotGraph.declaredMethods.singleOrNull { it.name == "provideTestRobot" }).isNull()
+      assertThat(
+          robotGraph.declaredNonSyntheticMethods.singleOrNull { it.name == "provideTestRobot" }
+        )
+        .isNull()
 
-      with(robotGraph.declaredMethods.single { it.name == "provideTestRobotIntoMap" }) {
+      with(robotGraph.declaredNonSyntheticMethods.single { it.name == "provideTestRobotIntoMap" }) {
         assertThat(parameters.single().type).isEqualTo(Provider::class.java)
         assertThat(returnType).isEqualTo(Robot::class.java)
         assertThat(this).isAnnotatedWith(Provides::class)

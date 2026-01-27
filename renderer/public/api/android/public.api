@@ -38,7 +38,7 @@ public abstract interface class software/amazon/app/platform/renderer/RendererGr
 	public abstract fun getRenderers ()Ljava/util/Map;
 }
 
-public abstract class software/amazon/app/platform/renderer/RendererGraph$$$BindsMirror {
+public abstract class software/amazon/app/platform/renderer/RendererGraph$BindsMirror {
 	public abstract fun modelToRendererMapping9894420054205200196 ()Ljava/util/Map;
 	public abstract fun renderers4205200196 ()Ljava/util/Map;
 }
@@ -47,7 +47,7 @@ public abstract interface class software/amazon/app/platform/renderer/RendererGr
 	public abstract fun createRendererGraph (Lsoftware/amazon/app/platform/renderer/RendererFactory;)Lsoftware/amazon/app/platform/renderer/RendererGraph;
 }
 
-public abstract interface class software/amazon/app/platform/renderer/RendererGraph$Factory$$$MetroContributionToAppScope : software/amazon/app/platform/renderer/RendererGraph$Factory {
+public abstract interface class software/amazon/app/platform/renderer/RendererGraph$Factory$MetroContributionToAppScope : software/amazon/app/platform/renderer/RendererGraph$Factory {
 }
 
 public abstract class software/amazon/app/platform/renderer/RendererScope {

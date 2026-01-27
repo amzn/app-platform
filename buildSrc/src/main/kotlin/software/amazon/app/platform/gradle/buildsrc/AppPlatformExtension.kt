@@ -91,16 +91,7 @@ constructor(objects: ObjectFactory, private val project: Project) {
       .property(Boolean::class.java)
       .convention(
         project.provider {
-          val useKsp2 =
-            project.providers.gradleProperty("ksp.useKSP2").map { it.toBooleanStrict() }.get()
-
-          if (useKsp2) {
-            project.ci || project.gradle.taskGraph.hasTask("${project.path}:release")
-          } else {
-            // With KSP1 the Kotlin compiler produces warnings. We still want to test KSP1,
-            // therefore warnings should not be errors in this mode.
-            false
-          }
+          project.ci || project.gradle.taskGraph.hasTask("${project.path}:release")
         }
       )
 

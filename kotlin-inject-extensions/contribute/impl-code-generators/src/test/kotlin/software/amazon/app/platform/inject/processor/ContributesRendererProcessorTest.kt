@@ -22,6 +22,7 @@ import org.junit.jupiter.api.Test
 import software.amazon.app.platform.inject.APP_PLATFORM_LOOKUP_PACKAGE
 import software.amazon.app.platform.inject.compile
 import software.amazon.app.platform.inject.componentInterface
+import software.amazon.app.platform.inject.declaredNonSyntheticMethods
 import software.amazon.app.platform.inject.newComponent
 import software.amazon.app.platform.inject.origin
 import software.amazon.app.platform.ksp.inner
@@ -58,7 +59,7 @@ class ContributesRendererProcessorTest {
       assertThat(generatedComponent.origin).isEqualTo(testRenderer)
 
       with(
-        generatedComponent.declaredMethods.single {
+        generatedComponent.declaredNonSyntheticMethods.single {
           it.name == "provideSoftwareAmazonTestTestRenderer"
         }
       ) {
@@ -69,7 +70,7 @@ class ContributesRendererProcessorTest {
       }
 
       with(
-        generatedComponent.declaredMethods.single {
+        generatedComponent.declaredNonSyntheticMethods.single {
           it.name == "provideSoftwareAmazonTestTestRendererModel"
         }
       ) {
@@ -81,7 +82,7 @@ class ContributesRendererProcessorTest {
       }
 
       with(
-        generatedComponent.declaredMethods.single {
+        generatedComponent.declaredNonSyntheticMethods.single {
           it.name == "provideSoftwareAmazonTestTestRendererModelKey"
         }
       ) {
@@ -130,7 +131,7 @@ class ContributesRendererProcessorTest {
       assertThat(generatedComponent.origin).isEqualTo(testRenderer.inner)
 
       with(
-        generatedComponent.declaredMethods.single {
+        generatedComponent.declaredNonSyntheticMethods.single {
           it.name == "provideSoftwareAmazonTestTestRendererInner"
         }
       ) {
@@ -141,7 +142,7 @@ class ContributesRendererProcessorTest {
       }
 
       with(
-        generatedComponent.declaredMethods.single {
+        generatedComponent.declaredNonSyntheticMethods.single {
           it.name == "provideSoftwareAmazonTestTestRendererInnerModel"
         }
       ) {
@@ -184,7 +185,7 @@ class ContributesRendererProcessorTest {
       assertThat(generatedComponent.origin).isEqualTo(testRenderer)
 
       with(
-        generatedComponent.declaredMethods.single {
+        generatedComponent.declaredNonSyntheticMethods.single {
           it.name == "provideSoftwareAmazonTestTestRenderer"
         }
       ) {
@@ -195,7 +196,7 @@ class ContributesRendererProcessorTest {
       }
 
       with(
-        generatedComponent.declaredMethods.single {
+        generatedComponent.declaredNonSyntheticMethods.single {
           it.name == "provideSoftwareAmazonTestTestRendererPresenterModel"
         }
       ) {
@@ -351,7 +352,7 @@ class ContributesRendererProcessorTest {
       val generatedComponent = testRenderer.rendererComponent
 
       with(
-        generatedComponent.declaredMethods.single {
+        generatedComponent.declaredNonSyntheticMethods.single {
           it.name == "provideSoftwareAmazonTestTestRenderer"
         }
       ) {
@@ -362,7 +363,7 @@ class ContributesRendererProcessorTest {
       }
 
       val bindingMethods =
-        generatedComponent.declaredMethods.filter {
+        generatedComponent.declaredNonSyntheticMethods.filter {
           it.name.startsWith("provideSoftwareAmazonTestTestRendererPresenterModel") &&
             !it.name.endsWith("Key")
         }
@@ -393,7 +394,7 @@ class ContributesRendererProcessorTest {
         )
 
       val keyBindingMethods =
-        generatedComponent.declaredMethods.filter {
+        generatedComponent.declaredNonSyntheticMethods.filter {
           it.name.startsWith("provideSoftwareAmazonTestTestRendererPresenterModel") &&
             it.name.endsWith("Key")
         }
@@ -461,7 +462,7 @@ class ContributesRendererProcessorTest {
       val generatedComponent = testRenderer.rendererComponent
 
       assertThat(
-          generatedComponent.declaredMethods
+          generatedComponent.declaredNonSyntheticMethods
             .filter {
               it.name.startsWith("provideSoftwareAmazonTestTestRendererPresenterModel") &&
                 !it.name.endsWith("Key")
@@ -471,7 +472,7 @@ class ContributesRendererProcessorTest {
         .containsOnly("provideSoftwareAmazonTestTestRendererPresenterModel")
 
       assertThat(
-          generatedComponent.declaredMethods
+          generatedComponent.declaredNonSyntheticMethods
             .filter { it.name.startsWith("provideSoftwareAmazonTestTestRendererPresenterModelKey") }
             .map { it.name }
         )
@@ -514,7 +515,7 @@ class ContributesRendererProcessorTest {
       assertThat(generatedComponent.packageName).startsWith(APP_PLATFORM_LOOKUP_PACKAGE)
       assertThat(generatedComponent.origin).isEqualTo(testRenderer)
 
-      assertThat(generatedComponent.declaredMethods.map { it.name })
+      assertThat(generatedComponent.declaredNonSyntheticMethods.map { it.name })
         .containsOnly(
           "provideSoftwareAmazonTestTestRendererModel",
           "provideSoftwareAmazonTestTestRendererModelKey",

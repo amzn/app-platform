@@ -14,11 +14,11 @@ public abstract interface class software/amazon/app/platform/robot/RobotGraph {
 	public abstract fun getRobots ()Ljava/util/Map;
 }
 
-public abstract class software/amazon/app/platform/robot/RobotGraph$$$BindsMirror {
+public abstract class software/amazon/app/platform/robot/RobotGraph$BindsMirror {
 	public abstract fun robots4205200196 ()Ljava/util/Map;
 }
 
-public abstract interface class software/amazon/app/platform/robot/RobotGraph$$$MetroContributionToAppScope : software/amazon/app/platform/robot/RobotGraph {
+public abstract interface class software/amazon/app/platform/robot/RobotGraph$MetroContributionToAppScope : software/amazon/app/platform/robot/RobotGraph {
 }
 
 public final class software/amazon/app/platform/robot/RobotKt {

@@ -22,6 +22,7 @@ import org.intellij.lang.annotations.Language
 import org.jetbrains.kotlin.compiler.plugin.ExperimentalCompilerApi
 import org.junit.jupiter.api.Test
 import software.amazon.app.platform.inject.metro.compile
+import software.amazon.app.platform.inject.metro.declaredNonSyntheticMethods
 import software.amazon.app.platform.inject.metro.graphInterface
 import software.amazon.app.platform.inject.metro.newMetroGraph
 import software.amazon.app.platform.ksp.inner
@@ -58,7 +59,9 @@ class ContributesRendererProcessorTest {
       assertThat(generatedGraph.packageName).startsWith(METRO_LOOKUP_PACKAGE)
 
       with(
-        generatedGraph.declaredMethods.single { it.name == "provideSoftwareAmazonTestTestRenderer" }
+        generatedGraph.declaredNonSyntheticMethods.single {
+          it.name == "provideSoftwareAmazonTestTestRenderer"
+        }
       ) {
         assertThat(parameters).isEmpty()
         assertThat(returnType).isEqualTo(testRenderer)
@@ -67,7 +70,7 @@ class ContributesRendererProcessorTest {
       }
 
       with(
-        generatedGraph.declaredMethods.single {
+        generatedGraph.declaredNonSyntheticMethods.single {
           it.name == "provideSoftwareAmazonTestTestRendererModel"
         }
       ) {
@@ -79,7 +82,7 @@ class ContributesRendererProcessorTest {
       }
 
       with(
-        generatedGraph.declaredMethods.single {
+        generatedGraph.declaredNonSyntheticMethods.single {
           it.name == "provideSoftwareAmazonTestTestRendererModelKey"
         }
       ) {
@@ -128,7 +131,7 @@ class ContributesRendererProcessorTest {
       assertThat(generatedGraph.packageName).startsWith(METRO_LOOKUP_PACKAGE)
 
       with(
-        generatedGraph.declaredMethods.single {
+        generatedGraph.declaredNonSyntheticMethods.single {
           it.name == "provideSoftwareAmazonTestTestRendererInner"
         }
       ) {
@@ -139,7 +142,7 @@ class ContributesRendererProcessorTest {
       }
 
       with(
-        generatedGraph.declaredMethods.single {
+        generatedGraph.declaredNonSyntheticMethods.single {
           it.name == "provideSoftwareAmazonTestTestRendererInnerModel"
         }
       ) {
@@ -181,7 +184,9 @@ class ContributesRendererProcessorTest {
       assertThat(generatedGraph.packageName).startsWith(METRO_LOOKUP_PACKAGE)
 
       with(
-        generatedGraph.declaredMethods.single { it.name == "provideSoftwareAmazonTestTestRenderer" }
+        generatedGraph.declaredNonSyntheticMethods.single {
+          it.name == "provideSoftwareAmazonTestTestRenderer"
+        }
       ) {
         assertThat(parameters).isEmpty()
         assertThat(returnType).isEqualTo(testRenderer)
@@ -190,7 +195,7 @@ class ContributesRendererProcessorTest {
       }
 
       with(
-        generatedGraph.declaredMethods.single {
+        generatedGraph.declaredNonSyntheticMethods.single {
           it.name == "provideSoftwareAmazonTestTestRendererPresenterModel"
         }
       ) {
@@ -345,7 +350,9 @@ class ContributesRendererProcessorTest {
       val generatedGraph = testRenderer.rendererGraph
 
       with(
-        generatedGraph.declaredMethods.single { it.name == "provideSoftwareAmazonTestTestRenderer" }
+        generatedGraph.declaredNonSyntheticMethods.single {
+          it.name == "provideSoftwareAmazonTestTestRenderer"
+        }
       ) {
         assertThat(parameters).isEmpty()
         assertThat(returnType).isEqualTo(testRenderer)
@@ -354,7 +361,7 @@ class ContributesRendererProcessorTest {
       }
 
       val bindingMethods =
-        generatedGraph.declaredMethods.filter {
+        generatedGraph.declaredNonSyntheticMethods.filter {
           it.name.startsWith("provideSoftwareAmazonTestTestRendererPresenterModel") &&
             !it.name.endsWith("Key")
         }
@@ -385,7 +392,7 @@ class ContributesRendererProcessorTest {
         )
 
       val keyBindingMethods =
-        generatedGraph.declaredMethods.filter {
+        generatedGraph.declaredNonSyntheticMethods.filter {
           it.name.startsWith("provideSoftwareAmazonTestTestRendererPresenterModel") &&
             it.name.endsWith("Key")
         }
@@ -449,7 +456,7 @@ class ContributesRendererProcessorTest {
       val generatedGraph = testRenderer.rendererGraph
 
       assertThat(
-          generatedGraph.declaredMethods
+          generatedGraph.declaredNonSyntheticMethods
             .filter {
               it.name.startsWith("provideSoftwareAmazonTestTestRendererPresenterModel") &&
                 !it.name.endsWith("Key")
@@ -459,7 +466,7 @@ class ContributesRendererProcessorTest {
         .containsOnly("provideSoftwareAmazonTestTestRendererPresenterModel")
 
       assertThat(
-          generatedGraph.declaredMethods
+          generatedGraph.declaredNonSyntheticMethods
             .filter { it.name.startsWith("provideSoftwareAmazonTestTestRendererPresenterModelKey") }
             .map { it.name }
         )
@@ -501,7 +508,7 @@ class ContributesRendererProcessorTest {
 
       assertThat(generatedGraph.packageName).startsWith(METRO_LOOKUP_PACKAGE)
 
-      assertThat(generatedGraph.declaredMethods.map { it.name })
+      assertThat(generatedGraph.declaredNonSyntheticMethods.map { it.name })
         .containsOnly(
           "provideSoftwareAmazonTestTestRendererModel",
           "provideSoftwareAmazonTestTestRendererModelKey",
@@ -661,7 +668,7 @@ class ContributesRendererProcessorTest {
 
   private val Class<*>.modelType: KClass<*>
     get() =
-      rendererGraph.declaredMethods
+      rendererGraph.declaredNonSyntheticMethods
         .single { it.name == "provideSoftwareAmazonTestTestRendererModel" }
         .getAnnotation(RendererKey::class.java)
         .value

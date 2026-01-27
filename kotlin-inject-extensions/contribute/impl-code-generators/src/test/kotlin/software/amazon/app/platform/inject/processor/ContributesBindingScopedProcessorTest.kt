@@ -14,6 +14,7 @@ import org.junit.jupiter.api.Test
 import software.amazon.app.platform.inject.APP_PLATFORM_LOOKUP_PACKAGE
 import software.amazon.app.platform.inject.compile
 import software.amazon.app.platform.inject.componentInterface
+import software.amazon.app.platform.inject.declaredNonSyntheticMethods
 import software.amazon.app.platform.inject.generatedComponent
 import software.amazon.app.platform.inject.newComponent
 import software.amazon.app.platform.inject.origin
@@ -53,7 +54,9 @@ class ContributesBindingScopedProcessorTest {
       assertThat(generatedComponent.getAnnotation(ContributesTo::class.java).scope)
         .isEqualTo(AppScope::class)
 
-      with(generatedComponent.declaredMethods.single { it.name == "provideImplScoped" }) {
+      with(
+        generatedComponent.declaredNonSyntheticMethods.single { it.name == "provideImplScoped" }
+      ) {
         assertThat(parameters.single().type).isEqualTo(impl)
         assertThat(returnType).isEqualTo(scoped)
         assertThat(this).isAnnotatedWith(Provides::class)
@@ -89,7 +92,11 @@ class ContributesBindingScopedProcessorTest {
       assertThat(generatedComponent.getAnnotation(ContributesTo::class.java).scope)
         .isEqualTo(Unit::class)
 
-      with(generatedComponent.declaredMethods.single { it.name == "provideImplInnerScoped" }) {
+      with(
+        generatedComponent.declaredNonSyntheticMethods.single {
+          it.name == "provideImplInnerScoped"
+        }
+      ) {
         assertThat(parameters.single().type).isEqualTo(impl.inner)
         assertThat(returnType).isEqualTo(scoped)
         assertThat(this).isAnnotatedWith(Provides::class)
@@ -123,7 +130,9 @@ class ContributesBindingScopedProcessorTest {
     ) {
       val generatedComponent = impl.scopedComponent
 
-      with(generatedComponent.declaredMethods.single { it.name == "provideImplScoped" }) {
+      with(
+        generatedComponent.declaredNonSyntheticMethods.single { it.name == "provideImplScoped" }
+      ) {
         assertThat(parameters.single().type).isEqualTo(impl)
         assertThat(returnType).isEqualTo(scoped)
         assertThat(this).isAnnotatedWith(Provides::class)
@@ -152,7 +161,7 @@ class ContributesBindingScopedProcessorTest {
             """
     ) {
       val generatedComponent = impl.scopedComponent
-      with(generatedComponent.declaredMethods.single()) {
+      with(generatedComponent.declaredNonSyntheticMethods.single()) {
         assertThat(name).isEqualTo("provideImplScoped")
         assertThat(parameters.single().type).isEqualTo(impl)
         assertThat(returnType).isEqualTo(scoped)
@@ -192,7 +201,7 @@ class ContributesBindingScopedProcessorTest {
             class Impl2 : Base
             """
     ) {
-      with(impl.generatedComponent.declaredMethods.single()) {
+      with(impl.generatedComponent.declaredNonSyntheticMethods.single()) {
         assertThat(name).isEqualTo("provideImplBase")
         assertThat(parameters.single().type).isEqualTo(impl)
         assertThat(returnType).isEqualTo(base)
@@ -201,12 +210,14 @@ class ContributesBindingScopedProcessorTest {
       // Because Scoped is not a direct super type.
       assertFailsWith<ClassNotFoundException> { impl.scopedComponent }
 
-      with(impl2.generatedComponent.declaredMethods.single()) {
+      with(impl2.generatedComponent.declaredNonSyntheticMethods.single()) {
         assertThat(parameters.single().type).isEqualTo(impl2)
         assertThat(returnType).isEqualTo(base)
         assertThat(this).isAnnotatedWith(Provides::class)
       }
-      with(impl2.scopedComponent.declaredMethods.single { it.name == "provideImpl2Scoped" }) {
+      with(
+        impl2.scopedComponent.declaredNonSyntheticMethods.single { it.name == "provideImpl2Scoped" }
+      ) {
         assertThat(parameters.single().type).isEqualTo(impl2)
         assertThat(returnType).isEqualTo(scoped)
         assertThat(this).isAnnotatedWith(Provides::class)
@@ -266,8 +277,11 @@ class ContributesBindingScopedProcessorTest {
 
       @Suppress("UNCHECKED_CAST")
       val scoped =
-        component::class.java.declaredMethods.single { it.name == "getScoped" }.invoke(component)
-          as Set<Scoped>
+        component::class
+          .java
+          .declaredNonSyntheticMethods
+          .single { it.name == "getScoped" }
+          .invoke(component) as Set<Scoped>
 
       assertThat(scoped).hasSize(1)
       assertThat(scoped.single()::class.java).isEqualTo(impl)
@@ -276,8 +290,11 @@ class ContributesBindingScopedProcessorTest {
 
       @Suppress("UNCHECKED_CAST")
       val scoped2 =
-        component2::class.java.declaredMethods.single { it.name == "getScoped" }.invoke(component2)
-          as Set<Scoped>
+        component2::class
+          .java
+          .declaredNonSyntheticMethods
+          .single { it.name == "getScoped" }
+          .invoke(component2) as Set<Scoped>
 
       assertThat(scoped2).hasSize(1)
       assertThat(scoped2.single()::class.java).isEqualTo(impl2)
