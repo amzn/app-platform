@@ -19,6 +19,7 @@ import org.junit.jupiter.api.Test
 import software.amazon.app.platform.inject.APP_PLATFORM_LOOKUP_PACKAGE
 import software.amazon.app.platform.inject.compile
 import software.amazon.app.platform.inject.componentInterface
+import software.amazon.app.platform.inject.declaredNonSyntheticMethods
 import software.amazon.app.platform.inject.newComponent
 import software.amazon.app.platform.inject.origin
 import software.amazon.app.platform.ksp.capitalize
@@ -51,14 +52,16 @@ class ContributesRobotGeneratorTest {
         .isEqualTo(AppScope::class)
       assertThat(robotComponent.origin).isEqualTo(testRobot)
 
-      with(robotComponent.declaredMethods.single { it.name == "provideTestRobot" }) {
+      with(robotComponent.declaredNonSyntheticMethods.single { it.name == "provideTestRobot" }) {
         assertThat(parameters).isEmpty()
         assertThat(returnType).isEqualTo(testRobot)
         assertThat(this).isAnnotatedWith(Provides::class)
         assertThat(getAnnotation(SingleIn::class.java)).isNull()
       }
 
-      with(robotComponent.declaredMethods.single { it.name == "provideTestRobotIntoMap" }) {
+      with(
+        robotComponent.declaredNonSyntheticMethods.single { it.name == "provideTestRobotIntoMap" }
+      ) {
         assertThat(parameters.single().type.canonicalName)
           .isEqualTo("kotlin.jvm.functions.Function0")
         assertThat(returnType).isEqualTo(Pair::class.java)
@@ -94,10 +97,14 @@ class ContributesRobotGeneratorTest {
         .isEqualTo(AppScope::class)
       assertThat(robotComponent.origin).isEqualTo(testRobot)
 
-      assertThat(robotComponent.declaredMethods.singleOrNull { it.name == "provideTestRobot" })
+      assertThat(
+          robotComponent.declaredNonSyntheticMethods.singleOrNull { it.name == "provideTestRobot" }
+        )
         .isNull()
 
-      with(robotComponent.declaredMethods.single { it.name == "provideTestRobotIntoMap" }) {
+      with(
+        robotComponent.declaredNonSyntheticMethods.single { it.name == "provideTestRobotIntoMap" }
+      ) {
         assertThat(parameters.single().type.canonicalName)
           .isEqualTo("kotlin.jvm.functions.Function0")
         assertThat(returnType).isEqualTo(Pair::class.java)

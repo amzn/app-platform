@@ -19,6 +19,7 @@ import org.junit.jupiter.api.Test
 import software.amazon.app.platform.inject.APP_PLATFORM_LOOKUP_PACKAGE
 import software.amazon.app.platform.inject.compile
 import software.amazon.app.platform.inject.componentInterface
+import software.amazon.app.platform.inject.declaredNonSyntheticMethods
 import software.amazon.app.platform.inject.mock.MockMode
 import software.amazon.app.platform.inject.mock.RealImpl
 import software.amazon.app.platform.inject.newComponent
@@ -51,7 +52,7 @@ class ContributesMockImplGeneratorTest {
       assertThat(component.getAnnotation(ContributesTo::class.java)?.scope)
         .isEqualTo(AppScope::class)
 
-      val providesMethod = component.declaredMethods.single()
+      val providesMethod = component.declaredNonSyntheticMethods.single()
       assertThat(providesMethod.parameters[0].type).isEqualTo(Boolean::class.java)
       assertThat(providesMethod.parameters[1].parameterizedType.parameterizedTypeArguments.single())
         .isEqualTo(mockImpl)
@@ -93,7 +94,7 @@ class ContributesMockImplGeneratorTest {
       assertThat(component.getAnnotation(ContributesTo::class.java)?.scope)
         .isEqualTo(AppScope::class)
 
-      val providesMethod = component.declaredMethods.single()
+      val providesMethod = component.declaredNonSyntheticMethods.single()
       assertThat(providesMethod.parameters[0].type).isEqualTo(Boolean::class.java)
       assertThat(providesMethod.parameters[1].parameterizedType.parameterizedTypeArguments.single())
         .isEqualTo(mockImpl)
@@ -137,7 +138,7 @@ class ContributesMockImplGeneratorTest {
       assertThat(component.getAnnotation(ContributesTo::class.java)?.scope)
         .isEqualTo(AppScope::class)
 
-      val providesMethod = component.declaredMethods.single()
+      val providesMethod = component.declaredNonSyntheticMethods.single()
       assertThat(providesMethod.parameters[0].type).isEqualTo(Boolean::class.java)
       assertThat(providesMethod.parameters[1].parameterizedType.parameterizedTypeArguments.single())
         .isEqualTo(mockImpl.inner)
@@ -200,8 +201,8 @@ class ContributesMockImplGeneratorTest {
       assertThat(component.getAnnotation(ContributesTo::class.java)?.scope)
         .isEqualTo(AppScope::class)
 
-      assertThat(component.declaredMethods.map { it.name }).contains("provideBase")
-      assertThat(component.declaredMethods.map { it.name }).contains("provideBase2")
+      assertThat(component.declaredNonSyntheticMethods.map { it.name }).contains("provideBase")
+      assertThat(component.declaredNonSyntheticMethods.map { it.name }).contains("provideBase2")
     }
   }
 
@@ -291,7 +292,7 @@ class ContributesMockImplGeneratorTest {
       assertThat(component.getAnnotation(ContributesTo::class.java)?.scope)
         .isEqualTo(AppScope::class)
 
-      val providesMethod = component.declaredMethods.single()
+      val providesMethod = component.declaredNonSyntheticMethods.single()
       assertThat(providesMethod.parameters[0].type).isEqualTo(Boolean::class.java)
       assertThat(providesMethod.parameters[1].parameterizedType.parameterizedTypeArguments.single())
         .isEqualTo(mockImpl)
@@ -359,7 +360,7 @@ class ContributesMockImplGeneratorTest {
       assertThat(component.getAnnotation(ContributesTo::class.java)?.scope)
         .isEqualTo(AppScope::class)
 
-      with(component.declaredMethods.single { it.name == "provideBase" }) {
+      with(component.declaredNonSyntheticMethods.single { it.name == "provideBase" }) {
         assertThat(parameters[0].type).isEqualTo(Boolean::class.java)
         assertThat(parameters[1].parameterizedType.parameterizedTypeArguments.single())
           .isEqualTo(mockImpl)
@@ -379,7 +380,7 @@ class ContributesMockImplGeneratorTest {
         assertThat(getAnnotation(Provides::class.java)).isNotNull()
       }
 
-      with(component.declaredMethods.single { it.name == "provideMockImplScoped" }) {
+      with(component.declaredNonSyntheticMethods.single { it.name == "provideMockImplScoped" }) {
         assertThat(parameters[0].annotations.single().annotationClass).isEqualTo(MockMode::class)
         assertThat(parameters[1].parameterizedType.parameterizedTypeArguments.single())
           .isEqualTo(mockImpl)
@@ -412,9 +413,12 @@ class ContributesMockImplGeneratorTest {
     ) {
       val component = mockImpl.component
 
-      assertThat(component.declaredMethods.firstOrNull { it.name == "provideBase" }).isNotNull()
+      assertThat(component.declaredNonSyntheticMethods.firstOrNull { it.name == "provideBase" })
+        .isNotNull()
 
-      assertThat(component.declaredMethods.firstOrNull { it.name == "provideMockImplScoped" })
+      assertThat(
+          component.declaredNonSyntheticMethods.firstOrNull { it.name == "provideMockImplScoped" }
+        )
         .isNull()
     }
   }
@@ -484,7 +488,7 @@ class ContributesMockImplGeneratorTest {
       assertThat(
           componentMockModeTrue::class
               .java
-              .declaredMethods
+              .declaredNonSyntheticMethods
               .single { it.name == "getBase" }
               .invoke(componentMockModeTrue)::class
             .java
@@ -494,7 +498,7 @@ class ContributesMockImplGeneratorTest {
       assertThat(
           componentMockModeFalse::class
               .java
-              .declaredMethods
+              .declaredNonSyntheticMethods
               .single { it.name == "getBase" }
               .invoke(componentMockModeFalse)::class
             .java
@@ -555,7 +559,7 @@ class ContributesMockImplGeneratorTest {
       with(
         componentMockModeTrue::class
           .java
-          .declaredMethods
+          .declaredNonSyntheticMethods
           .single { it.name == "getScoped" }
           .invoke(componentMockModeTrue) as Set<Scoped>
       ) {
@@ -568,7 +572,7 @@ class ContributesMockImplGeneratorTest {
       with(
         componentMockModeFalse::class
           .java
-          .declaredMethods
+          .declaredNonSyntheticMethods
           .single { it.name == "getScoped" }
           .invoke(componentMockModeFalse) as Set<Scoped>
       ) {
@@ -677,8 +681,11 @@ class ContributesMockImplGeneratorTest {
 
       @Suppress("UNCHECKED_CAST")
       val scoped =
-        component::class.java.declaredMethods.single { it.name == "getScoped" }.invoke(component)
-          as Set<Scoped>
+        component::class
+          .java
+          .declaredNonSyntheticMethods
+          .single { it.name == "getScoped" }
+          .invoke(component) as Set<Scoped>
 
       assertThat(scoped.single().javaClass.canonicalName)
         .isEqualTo("software.amazon.test.TestScoped")

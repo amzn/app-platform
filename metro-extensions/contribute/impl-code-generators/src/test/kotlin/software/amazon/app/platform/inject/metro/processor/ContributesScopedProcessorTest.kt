@@ -14,6 +14,7 @@ import dev.zacsweers.metro.ContributesTo
 import org.jetbrains.kotlin.compiler.plugin.ExperimentalCompilerApi
 import org.junit.jupiter.api.Test
 import software.amazon.app.platform.inject.metro.compile
+import software.amazon.app.platform.inject.metro.declaredNonSyntheticMethods
 import software.amazon.app.platform.inject.metro.graphInterface
 import software.amazon.app.platform.inject.metro.newMetroGraph
 import software.amazon.app.platform.ksp.capitalize
@@ -67,12 +68,12 @@ class ContributesScopedProcessorTest {
       // The annotations for these functions are defined in other kotlinc generated classes.
       // Instead of relying on reflection, we verify them by running the Metro compiler and
       // instantiating the Metro graph below.
-      with(scopedGraph.declaredMethods.single { it.name == "getBindSuperType" }) {
+      with(scopedGraph.declaredNonSyntheticMethods.single { it.name == "getBindSuperType" }) {
         assertThat(parameters.single().type).isEqualTo(testClass)
         assertThat(returnType).isEqualTo(superType)
       }
 
-      with(scopedGraph.declaredMethods.single { it.name == "getBindTestClassScoped" }) {
+      with(scopedGraph.declaredNonSyntheticMethods.single { it.name == "getBindTestClassScoped" }) {
         assertThat(parameters.single().type).isEqualTo(testClass)
         assertThat(returnType).isEqualTo(Scoped::class.java)
       }
@@ -81,13 +82,14 @@ class ContributesScopedProcessorTest {
 
       @Suppress("UNCHECKED_CAST")
       val scopedInstances =
-        graphInterface.declaredMethods.single { it.name == "getAllScoped" }.invoke(graph)
-          as Set<Scoped>
+        graphInterface.declaredNonSyntheticMethods
+          .single { it.name == "getAllScoped" }
+          .invoke(graph) as Set<Scoped>
       assertThat(scopedInstances.single()::class.java).isEqualTo(testClass)
 
       @Suppress("UNCHECKED_CAST")
       assertThat(
-          graphInterface.declaredMethods
+          graphInterface.declaredNonSyntheticMethods
               .single { it.name == "getSuperTypeInstance" }
               .invoke(graph)::class
             .java
@@ -123,12 +125,14 @@ class ContributesScopedProcessorTest {
       assertThat(scopedGraph.getAnnotation(ContributesTo::class.java).scope)
         .isEqualTo(AppScope::class)
 
-      with(scopedGraph.declaredMethods.single { it.name == "getBindSuperType" }) {
+      with(scopedGraph.declaredNonSyntheticMethods.single { it.name == "getBindSuperType" }) {
         assertThat(parameters.single().type).isEqualTo(testClass.inner)
         assertThat(returnType).isEqualTo(superType)
       }
 
-      with(scopedGraph.declaredMethods.single { it.name == "getBindTestClassInnerScoped" }) {
+      with(
+        scopedGraph.declaredNonSyntheticMethods.single { it.name == "getBindTestClassInnerScoped" }
+      ) {
         assertThat(parameters.single().type).isEqualTo(testClass.inner)
         assertThat(returnType).isEqualTo(Scoped::class.java)
       }
@@ -158,9 +162,9 @@ class ContributesScopedProcessorTest {
       assertThat(scopedGraph.getAnnotation(ContributesTo::class.java).scope)
         .isEqualTo(AppScope::class)
 
-      assertThat(scopedGraph.declaredMethods).hasSize(1)
+      assertThat(scopedGraph.declaredNonSyntheticMethods).hasSize(1)
 
-      with(scopedGraph.declaredMethods.single { it.name == "getBindTestClassScoped" }) {
+      with(scopedGraph.declaredNonSyntheticMethods.single { it.name == "getBindTestClassScoped" }) {
         assertThat(parameters.single().type).isEqualTo(testClass)
         assertThat(returnType).isEqualTo(Scoped::class.java)
       }
