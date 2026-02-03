@@ -3,7 +3,7 @@ package software.amazon.app.platform.sample
 import software.amazon.app.platform.scope.RootScopeProvider
 import software.amazon.app.platform.scope.Scope
 import software.amazon.app.platform.scope.coroutine.addCoroutineScopeScoped
-import software.amazon.app.platform.scope.di.addKotlinInjectComponent
+import software.amazon.app.platform.scope.di.metro.addMetroDependencyGraph
 import software.amazon.app.platform.scope.register
 
 /**
@@ -18,19 +18,19 @@ class DemoApplication : RootScopeProvider {
     get() = checkNotNull(_rootScope) { "Must call create() first." }
 
   /** Creates the root scope and remembers the instance. */
-  fun create(appComponent: AppComponent) {
+  fun create(appGraph: AppGraph) {
     check(_rootScope == null) { "create() should be called only once." }
 
     _rootScope =
       Scope.buildRootScope {
-        addKotlinInjectComponent(appComponent)
+        addMetroDependencyGraph(appGraph)
 
-        addCoroutineScopeScoped(appComponent.appScopeCoroutineScopeScoped)
+        addCoroutineScopeScoped(appGraph.appScopeCoroutineScopeScoped)
       }
 
     // Register instances after the rootScope has been set to avoid race conditions for Scoped
     // instances that may use the rootScope.
-    rootScope.register(appComponent.appScopedInstances)
+    rootScope.register(appGraph.appScopedInstances)
   }
 
   /** Destroys the root scope. */

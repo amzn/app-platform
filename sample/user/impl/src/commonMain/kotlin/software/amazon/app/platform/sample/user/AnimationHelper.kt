@@ -5,8 +5,7 @@ package software.amazon.app.platform.sample.user
  *
  * The interesting part is that this interface is part of the `:impl` module, because it doesn't
  * need to be shared with other modules. The implementations live in the platform specific folders
- * like `androidMain`. kotlin-inject-anvil will use the right implementation on each platform
- * automatically.
+ * like `androidMain`. Metro will use the right implementation on each platform automatically.
  */
 interface AnimationHelper {
 

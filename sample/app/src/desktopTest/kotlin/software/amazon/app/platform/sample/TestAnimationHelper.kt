@@ -1,10 +1,10 @@
 package software.amazon.app.platform.sample
 
-import me.tatarka.inject.annotations.Inject
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.ContributesBinding
+import dev.zacsweers.metro.Inject
 import software.amazon.app.platform.sample.user.AnimationHelper
 import software.amazon.app.platform.sample.user.DefaultAnimationsHelper
-import software.amazon.lastmile.kotlin.inject.anvil.AppScope
-import software.amazon.lastmile.kotlin.inject.anvil.ContributesBinding
 
 /**
  * This implementation replaces [DefaultAnimationsHelper] in UI tests to disable animations and make

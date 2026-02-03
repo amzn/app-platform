@@ -1,8 +1,9 @@
 package software.amazon.app.platform.sample
 
+import dev.zacsweers.metro.Assisted
+import dev.zacsweers.metro.AssistedFactory
+import dev.zacsweers.metro.Inject
 import kotlinx.coroutines.flow.StateFlow
-import me.tatarka.inject.annotations.Assisted
-import me.tatarka.inject.annotations.Inject
 import software.amazon.app.platform.presenter.molecule.MoleculeScope
 import software.amazon.app.platform.presenter.molecule.MoleculeScopeFactory
 import software.amazon.app.platform.presenter.molecule.launchMoleculePresenter
@@ -40,6 +41,16 @@ class TemplateProvider(
     moleculeScope.cancel()
   }
 
+  /**
+   * The assisted factory for Metro to create a new [TemplateProvider]. This factory is wrapped by
+   * [Factory], which should be used instead.
+   */
+  @AssistedFactory
+  fun interface InternalFactory {
+    /** Create a new instance of [TemplateProvider] with the given [MoleculeScope]. */
+    fun create(moleculeScope: MoleculeScope): TemplateProvider
+  }
+
   /** Factory class to create a new instance of [TemplateProvider]. */
   // Note that the Factory class technically is not required. But since TemplateProvider
   // contains a MoleculeScope that needs to be canceled explicitly, this Factory helps to
@@ -47,14 +58,14 @@ class TemplateProvider(
   @Inject
   class Factory(
     private val moleculeScopeFactory: MoleculeScopeFactory,
-    private val templateProvider: (MoleculeScope) -> TemplateProvider,
+    private val templateProviderFactory: InternalFactory,
   ) {
     /**
      * Creates a new instance of [TemplateProvider]. Call [TemplateProvider.cancel] when the
      * instance not needed anymore to avoid leaking resources.
      */
     fun createTemplateProvider(): TemplateProvider {
-      return templateProvider(moleculeScopeFactory.createMoleculeScope())
+      return templateProviderFactory.create(moleculeScopeFactory.createMoleculeScope())
     }
   }
 }

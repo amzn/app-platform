@@ -1,8 +1,9 @@
 package software.amazon.app.platform.sample.template
 
 import androidx.compose.runtime.Composable
-import me.tatarka.inject.annotations.Assisted
-import me.tatarka.inject.annotations.Inject
+import dev.zacsweers.metro.Assisted
+import dev.zacsweers.metro.AssistedFactory
+import dev.zacsweers.metro.Inject
 import software.amazon.app.platform.presenter.BaseModel
 import software.amazon.app.platform.presenter.molecule.MoleculePresenter
 import software.amazon.app.platform.presenter.molecule.backgesture.BackGestureDispatcherPresenter
@@ -33,13 +34,9 @@ class SampleAppTemplatePresenter(
     }
   }
 
-  /**
-   * A factory to instantiate a new [SampleAppTemplatePresenter] instance. This implementation hides
-   * that assisted injection with kotlin-inject is used. It's easier to inject this [Factory] than
-   * the lambda provided by kotlin-inject.
-   */
-  @Inject
-  class Factory(private val factory: (MoleculePresenter<Unit, *>) -> SampleAppTemplatePresenter) {
+  /** A factory to instantiate a new [SampleAppTemplatePresenter] instance. */
+  @AssistedFactory
+  fun interface Factory {
     /**
      * Create a new [SampleAppTemplatePresenter]. The given [presenter] will be wrapped and its
      * models are transformed into a [SampleAppTemplate] with [SampleAppTemplate.FullScreenTemplate]
@@ -48,8 +45,6 @@ class SampleAppTemplatePresenter(
      */
     fun createSampleAppTemplatePresenter(
       presenter: MoleculePresenter<Unit, *>
-    ): SampleAppTemplatePresenter {
-      return factory(presenter)
-    }
+    ): SampleAppTemplatePresenter
   }
 }

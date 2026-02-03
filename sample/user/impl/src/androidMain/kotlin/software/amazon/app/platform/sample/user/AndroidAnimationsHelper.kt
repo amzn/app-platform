@@ -2,9 +2,9 @@ package software.amazon.app.platform.sample.user
 
 import android.app.Application
 import android.provider.Settings
-import me.tatarka.inject.annotations.Inject
-import software.amazon.lastmile.kotlin.inject.anvil.AppScope
-import software.amazon.lastmile.kotlin.inject.anvil.ContributesBinding
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.ContributesBinding
+import dev.zacsweers.metro.Inject
 
 /**
  * Android implementation of [AnimationHelper] which queries the device state to determine whether

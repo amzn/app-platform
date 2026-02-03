@@ -1,14 +1,14 @@
 package software.amazon.app.platform.sample.user
 
 import androidx.compose.runtime.Composable
-import me.tatarka.inject.annotations.Inject
+import dev.zacsweers.metro.ContributesBinding
+import dev.zacsweers.metro.Inject
 import software.amazon.app.platform.presenter.BaseModel
 import software.amazon.app.platform.presenter.molecule.backgesture.BackHandlerPresenter
 import software.amazon.app.platform.presenter.template.ModelDelegate
 import software.amazon.app.platform.renderer.Renderer
 import software.amazon.app.platform.sample.template.SampleAppTemplate
 import software.amazon.app.platform.sample.user.UserPagePresenter.Model
-import software.amazon.lastmile.kotlin.inject.anvil.ContributesBinding
 
 /**
  * Production implementation of [UserPagePresenter].

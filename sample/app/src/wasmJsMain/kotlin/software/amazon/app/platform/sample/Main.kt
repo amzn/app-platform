@@ -7,9 +7,10 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.window.ComposeViewport
+import dev.zacsweers.metro.createGraphFactory
 import kotlinx.browser.document
 import software.amazon.app.platform.renderer.ComposeRendererFactory
-import software.amazon.app.platform.scope.di.kotlinInjectComponent
+import software.amazon.app.platform.scope.di.metro.metroDependencyGraph
 
 /** The entry point of our sample app. */
 @OptIn(ExperimentalComposeUiApi::class)
@@ -20,13 +21,13 @@ fun main() {
 @Composable
 private fun AppPlatform() {
   val application = remember {
-    DemoApplication().apply { create(WasmJsAppComponent::class.create(this)) }
+    DemoApplication().apply { createGraphFactory<WasmJsAppGraph.Factory>().create(this) }
   }
 
   // Create a single instance.
   val templateProvider = remember {
     application.rootScope
-      .kotlinInjectComponent<WasmJsAppComponent>()
+      .metroDependencyGraph<WasmJsAppGraph>()
       .templateProviderFactory
       .createTemplateProvider()
   }
