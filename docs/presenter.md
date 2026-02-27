@@ -680,13 +680,7 @@ hierarchy anymore:
 @Composable
 fun present(input: Unit): Model {
   val showLogin = ...
-
-  val model = if (showLogin) {
-    loginPresenter.present(Unit)
-  } else {
-    registerPresenter.present(Unit)
-  }
-
+    
   val saveableStateHolder = rememberReturningSaveableStateHolder()
 
   val presenter = if (showLogin) loginPresenter else registerPresenter
