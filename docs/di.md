@@ -551,27 +551,33 @@ See the documentation for [`Scoped`](scope.md#scoped) for more details.
 
 Metro is in an early stage and there are several bugs blocking a full roll out.
 
-#### No full KMP support
-
-Metro is ready to support KMP, but targets other than JVM/Android fail to merge types contributed with 
-`@ContributesTo` and `@ContributesBinding`. App Platform makes heavy use of them. This is called out in the 
-[Metro documentation](https://zacsweers.github.io/metro/latest/multiplatform.html#multiplatform). There is a chance
-this will be fixed in Kotlin 2.3.
-
-> There is one issue in the repo right now where the compiler appears to have a bug with generated FIR declarations where it doesn’t deserialize them correctly on non-JVM targets. Waiting for feedback from JB.
-
-#### Incremental compilation issues
-
-While testing Metro in App Platform, we encountered incremental compilation issues that impacted merging components
-and generated wrong code. This ticket is [metro/997](https://github.com/ZacSweers/metro/issues/997).
-
-Other IC issues are reported under [KT-75865](https://youtrack.jetbrains.com/issue/KT-75865).
 
 #### Missing integrations
 
 Almost all App Platform specific custom extensions for `kotlin-inject-anvil` were migrated to Metro, including
 `@ContributesRenderer` and `@ContributesRobot`. However the integration for `@ContributesRealImpl` and 
-`@ContributesMockImpl` is missing and still needs to be ported. 
+`@ContributesMockImpl` is missing and still needs to be ported.
+
+### Solved bugs
+
+#### No full KMP support
+
+Metro is ready to support KMP, but targets other than JVM/Android fail to merge types contributed with 
+`@ContributesTo` and `@ContributesBinding`. App Platform makes heavy use of them. This is called out in the 
+[Metro documentation](https://zacsweers.github.io/metro/0.7.7/multiplatform/). There is a chance 
+this will be fixed in Kotlin 2.3.
+
+> There is one issue in the repo right now where the compiler appears to have a bug with generated FIR declarations where it doesn’t deserialize them correctly on non-JVM targets. Waiting for feedback from JB.
+
+The ticket [metro/460](https://github.com/ZacSweers/metro/issues/460) and related in Kotlin [KT-58886](https://youtrack.jetbrains.com/issue/KT-58886) are closed.
+
+#### Incremental compilation issues
+
+While testing Metro in App Platform, we encountered incremental compilation issues that impacted merging components
+and generated wrong code. This ticket is [metro/997](https://github.com/ZacSweers/metro/issues/997) (closed).
+
+Other IC issues are reported under [KT-75865](https://youtrack.jetbrains.com/issue/KT-75865) (closed).
+
 
 ### Migration
 
