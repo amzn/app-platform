@@ -558,7 +558,7 @@ Almost all App Platform specific custom extensions for `kotlin-inject-anvil` wer
 `@ContributesRenderer` and `@ContributesRobot`. However the integration for `@ContributesRealImpl` and 
 `@ContributesMockImpl` is missing and still needs to be ported.
 
-### Solved bugs
+### Solved bugs in 2.3.20. Older versions won't receive the fix.
 
 #### No full KMP support
 
