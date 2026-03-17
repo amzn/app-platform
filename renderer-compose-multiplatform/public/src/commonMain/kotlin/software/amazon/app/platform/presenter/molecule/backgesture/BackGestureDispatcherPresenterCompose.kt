@@ -7,6 +7,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.navigationevent.NavigationEventInfo
@@ -14,6 +15,7 @@ import androidx.navigationevent.NavigationEventTransitionState
 import androidx.navigationevent.compose.NavigationBackHandler
 import androidx.navigationevent.compose.rememberNavigationEventState
 import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.CoroutineStart
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.consumeAsFlow
 import kotlinx.coroutines.launch
@@ -46,12 +48,23 @@ public fun BackGestureDispatcherPresenter.ForwardBackPressEventsToPresenters() {
   val count by listenersCount.collectAsState()
   val navState = rememberNavigationEventState(NavigationEventInfo.None)
   var activeGestureChannel by remember { mutableStateOf<Channel<BackEventPresenter>?>(null) }
+  val scope = rememberCoroutineScope()
+
+  fun ensureGestureSession(): Channel<BackEventPresenter> {
+    activeGestureChannel?.let { return it }
+    val channel = Channel<BackEventPresenter>(Channel.BUFFERED)
+    activeGestureChannel = channel
+    scope.launch(start = CoroutineStart.UNDISPATCHED) {
+      onPredictiveBack(channel.consumeAsFlow())
+    }
+    return channel
+  }
 
   NavigationBackHandler(
     state = navState,
     isBackEnabled = count > 0,
     onBackCompleted = {
-      activeGestureChannel?.close()
+      ensureGestureSession().close()
       activeGestureChannel = null
     },
     onBackCancelled = {
@@ -65,15 +78,10 @@ public fun BackGestureDispatcherPresenter.ForwardBackPressEventsToPresenters() {
     snapshotFlow { navState.transitionState }
       .collect { transitionState ->
         if (transitionState is NavigationEventTransitionState.InProgress) {
-          if (activeGestureChannel == null) {
-            val channel = Channel<BackEventPresenter>(Channel.BUFFERED)
-            activeGestureChannel = channel
-
-            launch { onPredictiveBack(channel.consumeAsFlow()) }
-          }
+          val channel = ensureGestureSession()
 
           val event = transitionState.latestEvent
-          activeGestureChannel?.trySend(
+          channel.trySend(
             BackEventPresenter(
               touchX = event.touchX,
               touchY = event.touchY,
