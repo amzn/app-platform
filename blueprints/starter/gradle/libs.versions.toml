@@ -1,13 +1,13 @@
 [versions]
 assertk = "0.28.1"
-app-platfrom = "0.0.6"
-agp = "8.12.2"
+app-platfrom = "0.0.8"
+agp = "8.13.2"
 android-compileSdk = "36"
-android-minSdk = "21"
+android-minSdk = "23"
 android-targetSdk = "36"
 androidx-activity-compose = "1.10.1"
 androidx-lifecycle = "2.9.3"
-compose = "1.10.2"
+compose-material3 = "1.10.0-alpha05"
 compose-multiplatform = "1.10.2"
 coroutines = "1.10.2"
 kotlin = "2.3.20"
@@ -17,7 +17,7 @@ material = "1.7.3"
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "androidx-activity-compose" }
 androidx-lifecycle-viewmodel = { group = "org.jetbrains.androidx.lifecycle", name = "lifecycle-viewmodel", version.ref = "androidx-lifecycle" }
 assertk = { module = "com.willowtreeapps.assertk:assertk", version.ref = "assertk" }
-compose-material = { module = "org.jetbrains.compose.material3:material3", version.ref = "compose" }
+compose-material = { module = "org.jetbrains.compose.material3:material3", version.ref = "compose-material3" }
 compose-material-icons = { module = "org.jetbrains.compose.material:material-icons-extended", version.ref = "material" }
 kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "coroutines" }
 coroutines-swing = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-swing", version.ref = "coroutines" }
