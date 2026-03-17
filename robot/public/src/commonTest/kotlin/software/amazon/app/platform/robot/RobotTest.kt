@@ -11,8 +11,6 @@ import dev.zacsweers.metro.provider
 import kotlin.reflect.KClass
 import kotlin.test.Test
 import kotlin.test.assertFailsWith
-import software.amazon.app.platform.internal.Platform
-import software.amazon.app.platform.internal.platform
 import software.amazon.app.platform.scope.Scope
 import software.amazon.app.platform.scope.di.addKotlinInjectComponent
 import software.amazon.app.platform.scope.di.metro.addMetroDependencyGraph
@@ -29,19 +27,11 @@ class RobotTest {
     val message =
       exception.message?.replace("RobotTest\$KiTestRobot", "RobotTest.KiTestRobot").toString()
 
-    when (platform) {
-      Platform.JVM,
-      Platform.Native -> {
-        assertThat(message)
-          .contains(
-            "Could not find Robot of type class software.amazon.app.platform." +
-              "robot.RobotTest.KiTestRobot"
-          )
-      }
-      Platform.Web -> {
-        assertThat(message).contains("Could not find Robot of type class KiTestRobot")
-      }
-    }
+    assertThat(message)
+      .contains(
+        "Could not find Robot of type class software.amazon.app.platform." +
+          "robot.RobotTest.KiTestRobot"
+      )
     assertThat(message).contains("Did you forget to add the @ContributesRobot annotation?")
   }
 
