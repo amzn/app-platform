@@ -3,7 +3,7 @@ agp = "8.13.2"
 android-compileSdk = "36"
 # https://developer.android.com/jetpack/androidx/releases/compose-ui
 # https://maven.google.com/web/index.html#androidx.compose.ui:ui
-android-compose-version = "1.9.2"
+android-compose-version = "1.10.4"
 android-minSdk = "23"
 android-targetSdk = "36"
 #noinspection GradleDependency
@@ -25,17 +25,16 @@ assertk = "0.28.1"
 auto-service = "1.1.1"
 auto-service-ksp = "1.2.0"
 build-config = "5.6.8"
-compose-hot-reload-plugin = "1.0.0-beta08"
 # https://www.jetbrains.com/help/kotlin-multiplatform-dev/compose-compatibility-and-versioning.html#kotlin-compatibility
 # https://mvnrepository.com/artifact/org.jetbrains.compose/compose-gradle-plugin
 # https://github.com/JetBrains/compose-multiplatform/releases
-compose-multiplatform = "1.9.3"
+compose-multiplatform = "1.10.2"
 coroutines = "1.10.2"
 detekt = "1.23.8"
 graphviz-java = "0.18.1"
 jvm-compatibility = "11"
 jvm-gradle = "17"
-kotlin = "2.2.21"
+kotlin = "2.3.20"
 kotlin-atomicfu = "0.31.0"
 kotlin-compile-testing = "0.12.1"
 kotlin-hierarchy = "1.1"
@@ -44,9 +43,9 @@ kotlin-inject-anvil = "0.1.7"
 kotlin-poet = "2.2.0"
 kotlinx-binaryCompatibilityValidator = "0.18.1"
 ktfmt-gradle = "0.24.0"
-ksp = "2.3.4"
+ksp = "2.3.6"
 maven-publish = "0.34.0"
-metro = "0.10.1"
+metro = "0.11.3"
 molecule = "2.2.0"
 navigation3 = "1.0.0"
 #noinspection GradleDependency
@@ -131,7 +130,6 @@ android-library = { id = "com.android.library", version.ref = "agp" }
 android-lint = { id = "com.android.lint", version.ref = "agp" }
 app-platform = { id = "software.amazon.app.platform" }
 build-config = { id = "com.github.gmazzo.buildconfig", version.ref = "build-config" }
-compose-hot-reload = { id = "org.jetbrains.compose.hot-reload", version.ref = "compose-hot-reload-plugin" }
 detekt = { id = "io.gitlab.arturbosch.detekt", version.ref = "detekt" }
 kotlin-hierarchy = { id = "io.github.terrakok.kmp-hierarchy", version.ref = "kotlin-hierarchy" }
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }

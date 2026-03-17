@@ -7,11 +7,10 @@ android-minSdk = "21"
 android-targetSdk = "36"
 androidx-activity-compose = "1.10.1"
 androidx-lifecycle = "2.9.3"
-compose = "1.8.2"
-compose-hot-reload = "1.0.0-beta06"
-compose-multiplatform = "1.8.2"
+compose = "1.10.2"
+compose-multiplatform = "1.10.2"
 coroutines = "1.10.2"
-kotlin = "2.2.10"
+kotlin = "2.3.20"
 material = "1.7.3"
 
 [libraries]
@@ -29,6 +28,5 @@ androidApplication = { id = "com.android.application", version.ref = "agp" }
 androidKmpLibrary = { id = "com.android.kotlin.multiplatform.library", version.ref = "agp" }
 appPlatform = { id = "software.amazon.app.platform", version.ref = "app-platfrom" }
 kotlinMultiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
-composeHotReload = { id = "org.jetbrains.compose.hot-reload", version.ref = "compose-hot-reload" }
 composeMultiplatform = { id = "org.jetbrains.compose", version.ref = "compose-multiplatform" }
 composeCompiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }

@@ -4,6 +4,7 @@ import com.google.devtools.ksp.gradle.KspExtension
 import gradle_plugin.BuildConfig.ANDROID_COMPOSE_VERSION
 import gradle_plugin.BuildConfig.APP_PLATFORM_GROUP
 import gradle_plugin.BuildConfig.APP_PLATFORM_VERSION
+import gradle_plugin.BuildConfig.COMPOSE_MULTIPLATFORM_VERSION
 import gradle_plugin.BuildConfig.KOTLIN_INJECT_ANVIL_VERSION
 import gradle_plugin.BuildConfig.KOTLIN_INJECT_VERSION
 import gradle_plugin.BuildConfig.MOLECULE_VERSION
@@ -308,8 +309,8 @@ private fun Project.enableComposeUi() {
     plugins.apply(PluginIds.COMPOSE_MULTIPLATFORM)
 
     kmpExtension.sourceSets.getByName("commonMain").dependencies {
-      implementation(composeDependencies.foundation)
-      implementation(composeDependencies.runtime)
+      implementation("org.jetbrains.compose.foundation:foundation:$COMPOSE_MULTIPLATFORM_VERSION")
+      implementation("org.jetbrains.compose.runtime:runtime:$COMPOSE_MULTIPLATFORM_VERSION")
 
       implementation(
         "$APP_PLATFORM_GROUP:renderer-compose-multiplatform-public:$APP_PLATFORM_VERSION"
@@ -366,14 +367,16 @@ private fun Project.addKspDependenciesWhenConfigExists(
     target.compilations.configureEach { compilation ->
       fun configExists(name: String): Boolean = configurations.any { it.name == name }
 
-      // The implementationConfigurationName name is
-      // 'iosSimulatorArm64CompilationImplementation', 'wasmJsTestCompileClasspath' or
-      // 'desktopCompileClasspath'.
-      //
-      // E.g. 'desktopCompileClasspath' with give use 'kspDesktop'
+      // Derive the KSP configuration name from the target name and compilation name.
+      // For main compilations: ksp<TargetName> (e.g. kspDesktop, kspIosSimulatorArm64)
+      // For test compilations: ksp<TargetName>Test (e.g. kspDesktopTest)
+      val targetName = target.name.capitalize()
       var configName =
-        "ksp" +
-          compilation.implementationConfigurationName.substringBefore("Compilation").capitalize()
+        if (compilation.name == "main") {
+          "ksp$targetName"
+        } else {
+          "ksp$targetName${compilation.name.capitalize()}"
+        }
 
       if (!configExists(configName) && target.platformType == KotlinPlatformType.androidJvm) {
         // Android has different naming for some reason.

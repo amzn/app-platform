@@ -11,5 +11,5 @@ dependencies {
 
     androidMainImplementation libs.androidx.test.monitor
 
-    commonTestApi project(':scope:testing')
+    commonTestImplementation project(':scope:testing')
 }
