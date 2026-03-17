@@ -51,12 +51,12 @@ public fun BackGestureDispatcherPresenter.ForwardBackPressEventsToPresenters() {
   val scope = rememberCoroutineScope()
 
   fun ensureGestureSession(): Channel<BackEventPresenter> {
-    activeGestureChannel?.let { return it }
+    activeGestureChannel?.let {
+      return it
+    }
     val channel = Channel<BackEventPresenter>(Channel.BUFFERED)
     activeGestureChannel = channel
-    scope.launch(start = CoroutineStart.UNDISPATCHED) {
-      onPredictiveBack(channel.consumeAsFlow())
-    }
+    scope.launch(start = CoroutineStart.UNDISPATCHED) { onPredictiveBack(channel.consumeAsFlow()) }
     return channel
   }
 
