@@ -7,7 +7,7 @@ android-compose-version = "1.10.4"
 android-minSdk = "23"
 android-targetSdk = "36"
 #noinspection GradleDependency
-androidx-activity = "1.8.2"
+androidx-activity = "1.13.0"
 androidx-annotations = "1.9.1"
 androidx-collection = "1.5.0"
 #noinspection GradleDependency
@@ -47,6 +47,7 @@ ksp = "2.3.6"
 maven-publish = "0.34.0"
 metro = "0.11.3"
 molecule = "2.2.0"
+navigation-event = "1.0.1"
 navigation3 = "1.0.0"
 #noinspection GradleDependency
 recyclerView = "1.2.1"
@@ -114,6 +115,7 @@ metro-compiler = { module = "dev.zacsweers.metro:compiler", version.ref = "metro
 metro-gradle-plugin = { module = "dev.zacsweers.metro:gradle-plugin", version.ref = "metro" }
 metro-runtime = { module = "dev.zacsweers.metro:runtime", version.ref = "metro" }
 molecule-runtime = { module = "app.cash.molecule:molecule-runtime", version.ref = "molecule" }
+navigation-event-compose = { module = "org.jetbrains.androidx.navigationevent:navigationevent-compose", version.ref = "navigation-event" }
 navigation3-runtime = { module = "androidx.navigation3:navigation3-runtime", version.ref = "navigation3" }
 navigation3-ui = { module = "androidx.navigation3:navigation3-ui", version.ref = "navigation3" }
 recyclerView = { module = "androidx.recyclerview:recyclerview", version.ref = "recyclerView" }

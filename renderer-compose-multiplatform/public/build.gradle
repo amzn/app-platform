@@ -14,7 +14,7 @@ dependencies {
     commonMainApi project(':scope:public')
 
     commonMainImplementation project(':presenter-molecule:public')
-    commonMainImplementation libs.compose.ui.back.handler
+    commonMainImplementation libs.navigation.event.compose
 
     androidMainApi project(':renderer-android-view:public')
 
