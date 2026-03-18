@@ -10,7 +10,6 @@ import org.gradle.api.UnknownTaskException
 import org.gradle.api.plugins.PluginContainer
 import org.gradle.api.project.IsolatedProject
 import org.gradle.api.tasks.TaskContainer
-import org.jetbrains.compose.ComposePlugin
 import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
 
 internal fun PluginContainer.withIds(vararg pluginIds: String, action: (Plugin<*>) -> Unit) {
@@ -37,9 +36,6 @@ internal val Project.androidComponents: AndroidComponentsExtension<*, *, *>
 
 internal val Project.kmpExtension: KotlinMultiplatformExtension
   get() = extensions.getByType(KotlinMultiplatformExtension::class.java)
-
-internal val Project.composeDependencies: ComposePlugin.Dependencies
-  get() = ComposePlugin.Dependencies(this)
 
 internal fun TaskContainer.namedOptional(name: String, configurationAction: (Task) -> Unit) {
   try {

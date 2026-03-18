@@ -10,7 +10,6 @@ plugins {
   alias(libs.plugins.appPlatform)
   alias(libs.plugins.androidApplication)
   alias(libs.plugins.kotlinMultiplatform)
-  alias(libs.plugins.composeHotReload)
   alias(libs.plugins.composeMultiplatform)
   alias(libs.plugins.composeCompiler)
 }

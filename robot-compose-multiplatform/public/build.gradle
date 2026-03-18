@@ -14,9 +14,9 @@ dependencies {
 
     commonMainImplementation project(':robot-internal:public')
 
-    commonTestApi project(':metro:public')
-    commonTestApi project(':scope:testing')
-    commonTestApi libs.metro.runtime
+    commonTestImplementation project(':metro:public')
+    commonTestImplementation project(':scope:testing')
+    commonTestImplementation libs.metro.runtime
 
     desktopTestImplementation compose.material
     iosTestImplementation compose.material

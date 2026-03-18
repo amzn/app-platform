@@ -5,7 +5,6 @@ import org.gradle.api.plugins.JavaPluginExtension
 import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget
 import software.amazon.app.platform.gradle.buildsrc.AppPlugin.App.Companion.app
 import software.amazon.app.platform.gradle.buildsrc.AppPlugin.Companion.allExportedDependencies
-import software.amazon.app.platform.gradle.buildsrc.KmpPlugin.Companion.composeDependencies
 import software.amazon.app.platform.gradle.buildsrc.KmpPlugin.Companion.kmpExtension
 import software.amazon.app.platform.gradle.isAppModule
 
@@ -84,13 +83,31 @@ internal sealed interface Platform {
     }
 
     override fun configureCompose() {
+      val composeVersion = project.libs.findVersion("compose.multiplatform").get().requiredVersion
+
       project.kmpExtension.sourceSets.getByName("desktopMain").dependencies {
-        implementation(project.composeDependencies.desktop.currentOs)
+        implementation(
+          "org.jetbrains.compose.desktop:desktop-jvm-${currentOsTarget()}:$composeVersion"
+        )
       }
 
       project.kmpExtension.sourceSets.getByName("desktopTest").dependencies {
-        implementation(project.composeDependencies.desktop.uiTestJUnit4)
-        implementation(project.composeDependencies.desktop.currentOs)
+        implementation("org.jetbrains.compose.ui:ui-test-junit4:$composeVersion")
+        implementation(
+          "org.jetbrains.compose.desktop:desktop-jvm-${currentOsTarget()}:$composeVersion"
+        )
+      }
+    }
+
+    private fun currentOsTarget(): String {
+      val os = System.getProperty("os.name").lowercase()
+      val arch = System.getProperty("os.arch").lowercase()
+      return when {
+        os.contains("mac") || os.contains("darwin") ->
+          if (arch.contains("aarch64") || arch.contains("arm")) "macos-arm64" else "macos-x64"
+        os.contains("win") ->
+          if (arch.contains("aarch64") || arch.contains("arm")) "windows-arm64" else "windows-x64"
+        else -> if (arch.contains("aarch64") || arch.contains("arm")) "linux-arm64" else "linux-x64"
       }
     }
   }

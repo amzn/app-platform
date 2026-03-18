@@ -14,7 +14,6 @@ import org.gradle.api.artifacts.dsl.DependencyHandler
 import org.gradle.api.plugins.ExtensionAware
 import org.gradle.api.tasks.SourceTask
 import org.jetbrains.compose.ComposeExtension
-import org.jetbrains.compose.ComposePlugin
 import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
 import software.amazon.app.platform.gradle.buildsrc.AppPlatformExtension.Companion.appPlatformBuildSrc
 import software.amazon.app.platform.gradle.buildsrc.Platform.Companion.allPlatforms
@@ -95,8 +94,17 @@ public open class KmpPlugin : Plugin<Project> {
 
     testingSourceSets.forEach { sourceSetName ->
       kmpExtension.sourceSets.getByName(sourceSetName).dependencies {
-        api(libs.findLibrary("coroutines.test").get().get().toString())
-        api(libs.findLibrary("turbine").get().get().toString())
+        // Use api for main source sets (testing utility modules) so downstream modules
+        // get transitive access. Use implementation for test source sets since api is
+        // deprecated there in Kotlin 2.3.
+        val isTestSourceSet = sourceSetName.contains("Test", ignoreCase = true)
+        if (isTestSourceSet) {
+          implementation(libs.findLibrary("coroutines.test").get().get().toString())
+          implementation(libs.findLibrary("turbine").get().get().toString())
+        } else {
+          api(libs.findLibrary("coroutines.test").get().get().toString())
+          api(libs.findLibrary("turbine").get().get().toString())
+        }
       }
     }
 
@@ -106,8 +114,14 @@ public open class KmpPlugin : Plugin<Project> {
   private fun Project.configureTests() {
     testingSourceSets.forEach { sourceSetName ->
       kmpExtension.sourceSets.getByName(sourceSetName).dependencies {
-        api(kotlin("test"))
-        api(libs.findLibrary("assertk").get().get().toString())
+        val isTestSourceSet = sourceSetName.contains("Test", ignoreCase = true)
+        if (isTestSourceSet) {
+          implementation(kotlin("test"))
+          implementation(libs.findLibrary("assertk").get().get().toString())
+        } else {
+          api(kotlin("test"))
+          api(libs.findLibrary("assertk").get().get().toString())
+        }
       }
     }
 
@@ -158,9 +172,6 @@ public open class KmpPlugin : Plugin<Project> {
     val Project.kmpExtension: KotlinMultiplatformExtension
       get() = extensions.getByType(KotlinMultiplatformExtension::class.java)
 
-    val Project.composeDependencies: ComposePlugin.Dependencies
-      get() = ComposePlugin.Dependencies(this)
-
     val Project.composeMultiplatform: ComposeExtension
       get() = extensions.getByType(ComposeExtension::class.java)
 
@@ -168,9 +179,11 @@ public open class KmpPlugin : Plugin<Project> {
       plugins.apply(Plugins.COMPOSE_COMPILER)
       plugins.apply(Plugins.COMPOSE_MULTIPLATFORM)
 
+      val composeVersion = libs.findVersion("compose.multiplatform").get().requiredVersion
+
       kmpExtension.sourceSets.getByName("commonMain").dependencies {
-        implementation(composeDependencies.runtime)
-        implementation(composeDependencies.foundation)
+        implementation("org.jetbrains.compose.runtime:runtime:$composeVersion")
+        implementation("org.jetbrains.compose.foundation:foundation:$composeVersion")
       }
 
       allPlatforms().forEach { platform -> platform.configureCompose() }
