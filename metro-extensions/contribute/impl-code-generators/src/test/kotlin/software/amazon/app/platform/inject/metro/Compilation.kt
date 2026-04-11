@@ -6,6 +6,7 @@ import assertk.assertThat
 import com.google.devtools.ksp.processing.SymbolProcessorProvider
 import com.tschuchort.compiletesting.JvmCompilationResult
 import com.tschuchort.compiletesting.KotlinCompilation
+import com.tschuchort.compiletesting.PluginOption
 import com.tschuchort.compiletesting.SourceFile
 import com.tschuchort.compiletesting.addPreviousResultToClasspath
 import com.tschuchort.compiletesting.configureKsp
@@ -36,12 +37,19 @@ class Compilation internal constructor(val kotlinCompilation: KotlinCompilation)
 
     processorsConfigured = true
 
+    val metroCommandLineProcessor = MetroCommandLineProcessor()
     kotlinCompilation.compilerPluginRegistrars = listOf(MetroCompilerPluginRegistrar())
-    kotlinCompilation.commandLineProcessors = listOf(MetroCommandLineProcessor())
+    kotlinCompilation.commandLineProcessors = listOf(metroCommandLineProcessor)
+    kotlinCompilation.pluginOptions +=
+      PluginOption(
+        pluginId = metroCommandLineProcessor.pluginId,
+        optionName = "unused-graph-inputs-severity",
+        optionValue = "NONE",
+      )
 
     // KSP1 isn't supported with Metro, likely because we run KSP within the kotlinc. That's fine,
     // we shouldn't bother about KSP1 anymore.
-    kotlinCompilation.configureKsp() {
+    kotlinCompilation.configureKsp {
       symbolProcessorProviders +=
         ServiceLoader.load(
           SymbolProcessorProvider::class.java,
@@ -112,7 +120,7 @@ class Compilation internal constructor(val kotlinCompilation: KotlinCompilation)
         KotlinCompilation().apply {
           // Sensible default behaviors
           inheritClassPath = true
-          jvmTarget = JvmTarget.JVM_11.description
+          jvmTarget = JvmTarget.JVM_21.description
           verbose = false
         }
       )

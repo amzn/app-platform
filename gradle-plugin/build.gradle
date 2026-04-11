@@ -63,9 +63,6 @@ dependencies {
     // are guarded by checks when the plugin is applied.
     compileOnly libs.kotlin.multiplatform.gradle.plugin
 
-    // compileOnly to not force this dependency.
-    compileOnly libs.metro.gradle.plugin
-
     lintChecks libs.androidx.lint.gradle
 }
 
