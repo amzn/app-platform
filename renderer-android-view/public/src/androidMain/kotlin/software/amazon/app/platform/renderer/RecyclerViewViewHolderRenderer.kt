@@ -146,6 +146,5 @@ public abstract class RecyclerViewViewHolderRenderer<ModelT : BaseModel> :
    * ```
    */
   public class ViewHolder<M : BaseModel>
-  internal constructor(view: View, public val renderer: Renderer<M>) :
-    RecyclerView.ViewHolder(view)
+  internal constructor(view: View, public val renderer: Renderer<M>) : RecyclerView.ViewHolder(view)
 }

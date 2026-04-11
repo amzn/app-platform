@@ -141,12 +141,11 @@ private class OnBackInstance(
   onBack: suspend (progress: Flow<BackEventCompat>) -> Unit,
 ) {
   val channel = Channel<BackEventCompat>(capacity = BUFFERED, onBufferOverflow = SUSPEND)
-  val job =
-    scope.launch {
-      var completed = false
-      onBack(channel.consumeAsFlow().onCompletion { completed = true })
-      check(completed) { "You must collect the progress flow" }
-    }
+  val job = scope.launch {
+    var completed = false
+    onBack(channel.consumeAsFlow().onCompletion { completed = true })
+    check(completed) { "You must collect the progress flow" }
+  }
 
   fun send(backEvent: BackEventCompat) = channel.trySend(backEvent)
 

@@ -26,12 +26,11 @@ class DemoApplication : RootScopeProvider {
   fun create(appComponent: AppComponent) {
     check(_rootScope == null) { "create() should be called only once." }
 
-    _rootScope =
-      Scope.buildRootScope {
-        addKotlinInjectComponent(appComponent)
+    _rootScope = Scope.buildRootScope {
+      addKotlinInjectComponent(appComponent)
 
-        addCoroutineScopeScoped(appComponent.appScopeCoroutineScopeScoped)
-      }
+      addCoroutineScopeScoped(appComponent.appScopeCoroutineScopeScoped)
+    }
 
     // Register instances after the rootScope has been set to avoid race conditions for Scoped
     // instances that may use the rootScope.

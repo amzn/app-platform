@@ -14,11 +14,10 @@ class TestApplication : Application(), RootScopeProvider {
 
   var rendererComponent: RendererComponent? = null
 
-  override val rootScope: Scope =
-    Scope.buildRootScope {
-      addKotlinInjectComponent(Component())
-      addCoroutineScopeScoped(CoroutineScopeScoped(Job() + CoroutineName("test")))
-    }
+  override val rootScope: Scope = Scope.buildRootScope {
+    addKotlinInjectComponent(Component())
+    addCoroutineScopeScoped(CoroutineScopeScoped(Job() + CoroutineName("test")))
+  }
 
   private inner class Component : RendererComponent.Parent {
     override fun rendererComponent(factory: RendererFactory): RendererComponent =
