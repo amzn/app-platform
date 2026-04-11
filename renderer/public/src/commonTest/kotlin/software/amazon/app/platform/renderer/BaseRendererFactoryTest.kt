@@ -149,39 +149,38 @@ class BaseRendererFactoryTest {
     BaseRendererFactory(
       rootScopeProvider =
         object : RootScopeProvider {
-          override val rootScope: Scope =
-            Scope.buildRootScope {
-              if (useKotlinInject) {
-                addKotlinInjectComponent(
-                  object : RendererComponent.Parent {
-                    override fun rendererComponent(factory: RendererFactory): RendererComponent =
-                      object : RendererComponent {
-                        override val renderers: Map<KClass<out BaseModel>, () -> Renderer<*>> =
-                          kotlinInjectRenderers
+          override val rootScope: Scope = Scope.buildRootScope {
+            if (useKotlinInject) {
+              addKotlinInjectComponent(
+                object : RendererComponent.Parent {
+                  override fun rendererComponent(factory: RendererFactory): RendererComponent =
+                    object : RendererComponent {
+                      override val renderers: Map<KClass<out BaseModel>, () -> Renderer<*>> =
+                        kotlinInjectRenderers
 
-                        override val modelToRendererMapping:
-                          Map<KClass<out BaseModel>, KClass<out Renderer<*>>> =
-                          kotlinInjectModelToRendererMapping
-                      }
-                  }
-                )
-              }
-
-              if (useMetro) {
-                addMetroDependencyGraph(
-                  object : RendererGraph.Factory {
-                    override fun createRendererGraph(factory: RendererFactory): RendererGraph =
-                      object : RendererGraph {
-                        override val renderers: Map<KClass<out BaseModel>, Provider<Renderer<*>>> =
-                          metroRenderers
-                        override val modelToRendererMapping:
-                          Map<KClass<out BaseModel>, KClass<out Renderer<*>>> =
-                          metroModelToRendererMapping
-                      }
-                  }
-                )
-              }
+                      override val modelToRendererMapping:
+                        Map<KClass<out BaseModel>, KClass<out Renderer<*>>> =
+                        kotlinInjectModelToRendererMapping
+                    }
+                }
+              )
             }
+
+            if (useMetro) {
+              addMetroDependencyGraph(
+                object : RendererGraph.Factory {
+                  override fun createRendererGraph(factory: RendererFactory): RendererGraph =
+                    object : RendererGraph {
+                      override val renderers: Map<KClass<out BaseModel>, Provider<Renderer<*>>> =
+                        metroRenderers
+                      override val modelToRendererMapping:
+                        Map<KClass<out BaseModel>, KClass<out Renderer<*>>> =
+                        metroModelToRendererMapping
+                    }
+                }
+              )
+            }
+          }
         }
     )
 

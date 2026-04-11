@@ -78,8 +78,9 @@ public abstract class ModuleStructureDependencyCheckTask : DefaultTask() {
   }
 
   private fun checkNoTestingImport() {
-    val forbiddenDependencies =
-      moduleCompileClasspath.filter { it.moduleType == ModuleType.TESTING }
+    val forbiddenDependencies = moduleCompileClasspath.filter {
+      it.moduleType == ModuleType.TESTING
+    }
 
     if (forbiddenDependencies.isNotEmpty()) {
       throw GradleException(

@@ -50,15 +50,14 @@ class RobotTest {
 
   @Test
   fun `a new robot is instantiated every time the robot function is invoked`() {
-    val rootScope =
-      Scope.buildRootScope {
-        addKotlinInjectComponent(
-          object : RobotComponent {
-            override val robots: Map<KClass<out Robot>, () -> Robot> =
-              mapOf(KiTestRobot::class to { KiTestRobot() })
-          }
-        )
-      }
+    val rootScope = Scope.buildRootScope {
+      addKotlinInjectComponent(
+        object : RobotComponent {
+          override val robots: Map<KClass<out Robot>, () -> Robot> =
+            mapOf(KiTestRobot::class to { KiTestRobot() })
+        }
+      )
+    }
 
     lateinit var robot1: KiTestRobot
     lateinit var robot2: KiTestRobot
@@ -118,24 +117,25 @@ class RobotTest {
   private fun rootScope(
     kiRobot: Robot? = KiTestRobot(),
     metroRobot: Robot? = MetroTestRobot(),
-  ): Scope =
-    Scope.buildRootScope {
-      if (kiRobot != null) {
-        addKotlinInjectComponent(Component(kiRobot))
-      }
-      if (metroRobot != null) {
-        addMetroDependencyGraph(Graph(metroRobot))
-      }
+  ): Scope = Scope.buildRootScope {
+    if (kiRobot != null) {
+      addKotlinInjectComponent(Component(kiRobot))
     }
+    if (metroRobot != null) {
+      addMetroDependencyGraph(Graph(metroRobot))
+    }
+  }
 
   private class Component(vararg robots: Robot) : RobotComponent {
-    override val robots: Map<KClass<out Robot>, () -> Robot> =
-      robots.associate { robot -> robot::class to { robot } }
+    override val robots: Map<KClass<out Robot>, () -> Robot> = robots.associate { robot ->
+      robot::class to { robot }
+    }
   }
 
   private class Graph(vararg robots: Robot) : RobotGraph {
-    override val robots: Map<KClass<*>, Provider<Robot>> =
-      robots.associate { robot -> robot::class to provider { robot } }
+    override val robots: Map<KClass<*>, Provider<Robot>> = robots.associate { robot ->
+      robot::class to provider { robot }
+    }
   }
 
   private class KiTestRobot : Robot {

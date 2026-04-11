@@ -14,11 +14,10 @@ class TestApplication : Application(), RootScopeProvider {
 
   var rendererGraph: RendererGraph? = null
 
-  override val rootScope: Scope =
-    Scope.buildRootScope {
-      addMetroDependencyGraph(Graph())
-      addCoroutineScopeScoped(CoroutineScopeScoped(Job() + CoroutineName("test")))
-    }
+  override val rootScope: Scope = Scope.buildRootScope {
+    addMetroDependencyGraph(Graph())
+    addCoroutineScopeScoped(CoroutineScopeScoped(Job() + CoroutineName("test")))
+  }
 
   private inner class Graph : RendererGraph.Factory {
     override fun createRendererGraph(factory: RendererFactory): RendererGraph =

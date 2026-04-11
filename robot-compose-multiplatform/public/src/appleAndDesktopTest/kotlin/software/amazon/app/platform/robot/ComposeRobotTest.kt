@@ -62,8 +62,9 @@ class ComposeRobotTest {
       .messageContains("lateinit property interactionsProvider has not been initialized")
   }
 
-  private fun rootScope(vararg robots: Robot): Scope =
-    Scope.buildRootScope { addMetroDependencyGraph(Component(*robots)) }
+  private fun rootScope(vararg robots: Robot): Scope = Scope.buildRootScope {
+    addMetroDependencyGraph(Component(*robots))
+  }
 
   private fun ComposeUiTest.interactionProvider(): ComposeInteractionsProvider {
     val interactionsProvider = this
@@ -74,8 +75,9 @@ class ComposeRobotTest {
   }
 
   private class Component(vararg robots: Robot) : RobotGraph {
-    override val robots: Map<KClass<*>, Provider<Robot>> =
-      robots.associate { robot -> robot::class to provider { robot } }
+    override val robots: Map<KClass<*>, Provider<Robot>> = robots.associate { robot ->
+      robot::class to provider { robot }
+    }
   }
 
   private class TestRobot : ComposeRobot() {

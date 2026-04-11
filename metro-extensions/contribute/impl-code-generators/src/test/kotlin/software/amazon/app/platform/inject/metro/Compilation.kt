@@ -57,24 +57,23 @@ class Compilation internal constructor(val kotlinCompilation: KotlinCompilation)
   /** Adds the given sources to this compilation with their packages and names inferred. */
   fun addSources(@Language("kotlin") vararg sources: String): Compilation = apply {
     checkNotCompiled()
-    kotlinCompilation.sources +=
-      sources.mapIndexed { index, content ->
-        val packageDir =
-          content
-            .lines()
-            .firstOrNull { it.trim().startsWith("package ") }
-            ?.substringAfter("package ")
-            ?.replace('.', '/')
-            ?.let { "$it/" } ?: ""
+    kotlinCompilation.sources += sources.mapIndexed { index, content ->
+      val packageDir =
+        content
+          .lines()
+          .firstOrNull { it.trim().startsWith("package ") }
+          ?.substringAfter("package ")
+          ?.replace('.', '/')
+          ?.let { "$it/" } ?: ""
 
-        val name =
-          "${kotlinCompilation.workingDir.absolutePath}/sources/src/main/java/" +
-            "$packageDir/Source$index.kt"
+      val name =
+        "${kotlinCompilation.workingDir.absolutePath}/sources/src/main/java/" +
+          "$packageDir/Source$index.kt"
 
-        Files.createDirectories(File(name).parentFile.toPath())
+      Files.createDirectories(File(name).parentFile.toPath())
 
-        SourceFile.kotlin(name, contents = content, trimIndent = true)
-      }
+      SourceFile.kotlin(name, contents = content, trimIndent = true)
+    }
   }
 
   fun addPreviousCompilationResult(result: JvmCompilationResult): Compilation = apply {
