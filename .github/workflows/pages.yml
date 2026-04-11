@@ -70,6 +70,7 @@ jobs:
 
   deploy-mkdocs:
     needs: build-mkdocs
+    if: github.repository == 'amzn/app-platform'
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
