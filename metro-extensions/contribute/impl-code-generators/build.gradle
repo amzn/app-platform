@@ -1,3 +1,4 @@
+//file:noinspection UnnecessaryQualifiedReference
 plugins {
     id 'software.amazon.app.platform.lib.jvm'
     id 'com.google.devtools.ksp'
@@ -53,4 +54,42 @@ tasks.named('apiCheck').configure {
 }
 tasks.named('apiDump').configure {
     it.enabled = false
+}
+
+// Configure the JVM target only for tests. We need 21 for unit tests, because they import the Metro compiler,
+// which requires 21.
+def jvmTarget = org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_21
+
+configurations.named('testCompileClasspath').configure {
+    attributes.attribute(
+            org.gradle.api.attributes.java.TargetJvmVersion.TARGET_JVM_VERSION_ATTRIBUTE,
+            jvmTarget.target.toInteger(),
+    )
+}
+
+configurations.named('testRuntimeClasspath').configure {
+    attributes.attribute(
+            org.gradle.api.attributes.java.TargetJvmVersion.TARGET_JVM_VERSION_ATTRIBUTE,
+            jvmTarget.target.toInteger(),
+    )
+}
+
+tasks.named('compileTestKotlin', org.jetbrains.kotlin.gradle.tasks.KotlinJvmCompile).configure {
+    compilerOptions {
+        it.jvmTarget.set(jvmTarget)
+    }
+}
+
+tasks.named('compileTestJava', JavaCompile).configure {
+    sourceCompatibility = jvmTarget.target
+    targetCompatibility = jvmTarget.target
+    javaCompiler = javaToolchains.compilerFor {
+        languageVersion = JavaLanguageVersion.of(jvmTarget.target)
+    }
+}
+
+tasks.named('test', Test).configure {
+    javaLauncher = javaToolchains.launcherFor {
+        languageVersion = JavaLanguageVersion.of(jvmTarget.target)
+    }
 }

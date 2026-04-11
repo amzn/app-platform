@@ -17,13 +17,13 @@ ktfmt {
 }
 
 java {
-    sourceCompatibility = libs.versions.jvm.gradle.get()
-    targetCompatibility = libs.versions.jvm.gradle.get()
+    sourceCompatibility = libs.versions.jvm.buildsrc.get()
+    targetCompatibility = libs.versions.jvm.buildsrc.get()
 }
 
 kotlin {
     compilerOptions {
-        jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.fromTarget(libs.versions.jvm.gradle.get()))
+        jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.fromTarget(libs.versions.jvm.buildsrc.get()))
     }
 
     explicitApi()
