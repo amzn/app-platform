@@ -59,6 +59,7 @@ public open class BaseAndroidPlugin : Plugin<Project> {
           "ObsoleteLintCustomCheck",
           "NewerVersionAvailable",
           "AndroidGradlePluginVersion",
+          "OldTargetApi",
         )
     }
 
