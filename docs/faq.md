@@ -9,22 +9,25 @@ for an incremental adoption. Apps can leverage the concepts and the framework wi
 once.
 
 For example, instead of going all in on the unidirectional dataflow, Android apps can start adopting `Presenters` and
-`Renderers` on an Activity by Activity or Fragment by Fragment basis. Our Android app initially used
-[Dagger 2](https://dagger.dev/) and [Anvil](https://github.com/square/anvil) as dependency injection framework and
-made it interop with `kotlin-inject-anvil` before switching fully.
+`Renderers` on an Activity by Activity or Fragment by Fragment basis. Today we recommend starting
+new App Platform code with Metro. Earlier, our Android app initially used
+[Dagger 2](https://dagger.dev/) and [Anvil](https://github.com/square/anvil) as dependency
+injection framework and later made it interop with `kotlin-inject-anvil` before switching fully.
 
 
 #### Can I use [Dagger 2](https://dagger.dev/) or any other DI framework?
 
-It depends, but likely yes. We've chosen [kotlin-inject-anvil](https://github.com/amzn/kotlin-inject-anvil) because
-it supports Kotlin Multiplatform and verifies the dependency graph at compile time.
+It depends, but likely yes. App Platform recommends [Metro](di.md) as the default DI framework because
+it supports Kotlin Multiplatform, verifies the dependency graph at compile time, and is the direction
+the framework docs and examples assume.
 
-App Platform provides support for [Metro](di.md) out of the box, but there are still rough edges around the KMP
-support. Long term we may consider moving App Platform to Metro alone.
+[kotlin-inject-anvil](https://github.com/amzn/kotlin-inject-anvil) remains supported as the
+alternative, especially for existing codebases or when you need compatibility with older App Platform
+examples.
 
-Dagger 2 is more challenging, because it only supports Android and JVM application. That said, App Platform started on
-Android we used to use Dagger 2. We bridged the Dagger 2 components with the `kotlin-inject-anvil` components for
-interop and this served us well for a long time until we fully migrated to `kotlin-inject-anvil`.
+Dagger 2 is more challenging, because it only supports Android and JVM application. Metro is the
+recommended default today, though App Platform started on Android with Dagger 2 and we first
+bridged those Dagger 2 components with `kotlin-inject-anvil` for interop.
 
 
 #### How does App Platform compare to [Circuit](https://slackhq.github.io/circuit/)?
