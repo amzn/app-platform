@@ -16,14 +16,15 @@ are functioning and tests don’t need to be repeated.
 
     The sample application implements instrumented tests for two screens and navigates between the tests. The
     [tests for Desktop](https://github.com/amzn/app-platform/blob/main/sample/app/src/desktopTest/kotlin/software/amazon/app/platform/sample/LoginUiTest.kt)
-    highlight how templates are rendered and robots are used for verification. It also sets up a `kotlin-inject-anvil`
-    [`TestAppComponent`](https://github.com/amzn/app-platform/blob/main/sample/app/src/desktopTest/kotlin/software/amazon/app/platform/sample/TestDesktopAppComponent.kt),
-    which replaces the main `AppComponent`.
+    highlight how templates are rendered and robots are used for verification. They also set up a Metro
+    [`TestDesktopAppGraph`](https://github.com/amzn/app-platform/blob/main/sample/app/src/desktopTest/kotlin/software/amazon/app/platform/sample/TestDesktopAppGraph.kt),
+    which replaces the main desktop graph.
 
     The same UI test is [implemented for Android](https://github.com/amzn/app-platform/blob/main/sample/app/src/androidInstrumentedTest/kotlin/software/amazon/app/platform/sample/AndroidLoginUiTest.kt).
     The Android tests reuse the same robots for verification and set up a
-    [`TestAppComponent`](https://github.com/amzn/app-platform/blob/main/sample/app/src/androidInstrumentedTest/kotlin/software/amazon/app/platform/sample/TestAndroidAppComponent.kt)
-    in a similar way.
+    [`TestAndroidAppGraph`](https://github.com/amzn/app-platform/blob/main/sample/app/src/androidInstrumentedTest/kotlin/software/amazon/app/platform/sample/TestAndroidAppGraph.kt)
+    in a similar way. The sample now uses Metro throughout, while `kotlin-inject-anvil` remains
+    available as the alternative path.
 
 ## Fakes
 
@@ -296,30 +297,15 @@ class ConnectionRobot : Robot {
     ```
 
 `Robots` must be annotated with `@ContributesRobot` in order to find them during tests when using the `robot<Type>()`
-or `composeRobot<Type>()` function. The annotation makes sure that the robots are added to the `kotlin-inject-anvil`
-or Metro dependency graph.
+or `composeRobot<Type>()` function. The annotation makes sure that the robots are added to the Metro
+or `kotlin-inject-anvil` dependency graph.
 
 ??? info "Generated code"
 
     The `@ContributesRobot` annotation generates following code.
-    
-    === "kotlin-inject-anvil"
 
-        ```kotlin
-        @ContributesTo(AppScope::class)
-        public interface LoginRobotComponent {
-          @Provides public fun provideLoginRobot(): LoginRobot = LoginRobot()
-    
-          @Provides
-          @IntoMap
-          public fun provideLoginRobotIntoMap(
-            robot: () -> LoginRobot
-          ): Pair<KClass<out Robot>, () -> Robot> = LoginRobot::class to robot
-        }
-        ```
-    
     === "Metro"
-    
+
         ```kotlin
         @ContributesTo(AppScope::class)
         public interface LoginRobotGraph {
@@ -331,6 +317,21 @@ or Metro dependency graph.
           public fun provideLoginRobotIntoMap(
             robot: Provider<LoginRobot>
           ): Robot = robot()
+        }
+        ```
+
+    === "kotlin-inject-anvil"
+
+        ```kotlin
+        @ContributesTo(AppScope::class)
+        public interface LoginRobotComponent {
+          @Provides public fun provideLoginRobot(): LoginRobot = LoginRobot()
+
+          @Provides
+          @IntoMap
+          public fun provideLoginRobotIntoMap(
+            robot: () -> LoginRobot
+          ): Pair<KClass<out Robot>, () -> Robot> = LoginRobot::class to robot
         }
         ```
 

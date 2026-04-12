@@ -19,11 +19,11 @@ are explained in more detail in many of the following sections.
       // false by default. Helpful for final application modules that must consume concrete implementations and not only APIs.
       addImplModuleDependencies true
 
-      // false by default. Configures KSP and adds the kotlin-inject-anvil library as dependency.
-      enableKotlinInject true
-
-      // false by default. Configures Metro and adds App Platform specific extensions as dependency.
+      // false by default. Recommended DI option. Configures Metro and adds App Platform specific extensions as dependency.
       enableMetro true
+
+      // false by default. Alternative DI option. Configures KSP and adds the kotlin-inject-anvil library as dependency.
+      enableKotlinInject true
 
       // false by default. Configures Molecule and provides access to the MoleculePresenter API.
       enableMoleculePresenters true
@@ -51,11 +51,11 @@ are explained in more detail in many of the following sections.
       // false by default. Helpful for final application modules that must consume concrete implementations and not only APIs.
       addImplModuleDependencies(true)
 
-      // false by default. Configures KSP and adds the kotlin-inject-anvil library as dependency.
-      enableKotlinInject(true)
-
-      // false by default. Configures Metro and adds App Platform specific extensions as dependency.
+      // false by default. Recommended DI option. Configures Metro and adds App Platform specific extensions as dependency.
       enableMetro(true)
+
+      // false by default. Alternative DI option. Configures KSP and adds the kotlin-inject-anvil library as dependency.
+      enableKotlinInject(true)
 
       // false by default. Configures Molecule and provides access to the MoleculePresenter API.
       enableMoleculePresenters(true)
@@ -72,7 +72,8 @@ are explained in more detail in many of the following sections.
 !!! note
 
     All settings of App Platform are optional and opt-in, e.g. you can use Molecule Presenters without enabling
-    the opinionated module structure. Compose UI can be enabled without using `kotlin-inject-anvil` or `Metro`.
+    the opinionated module structure. Compose UI can be enabled without using `Metro` or
+    `kotlin-inject-anvil`. When you do want DI, Metro is the recommended default.
 
 ## Snapshot
 
