@@ -17,7 +17,20 @@
 ### Other Notes & Contributions
 
 
-## [0.0.8] - 2025-01-27
+## [0.0.9] - 2026-04-13
+
+### Added
+
+- Convert the sample app to [Metro](https://zacsweers.github.io/metro/), see #173. With the recent Kotlin and Metro version updates, issues we saw with Metro and targets other than Android/JVM are solved, and Metro is now the [recommended default](https://amzn.github.io/app-platform/di/) for dependency injection.
+
+### Changed
+
+- Kotlin to `2.3.20`
+- Gradle to `9.4.1`
+- metro to `0.13.2`
+
+
+## [0.0.8] - 2026-01-27
 
 ### Added
 
@@ -136,7 +149,8 @@
 
 - Initial release.
 
-[Unreleased]: https://github.com/amzn/app-platform/compare/0.0.8...HEAD
+[Unreleased]: https://github.com/amzn/app-platform/compare/0.0.9...HEAD
+[0.0.9]: https://github.com/amzn/app-platform/compare/0.0.9
 [0.0.8]: https://github.com/amzn/app-platform/compare/0.0.8
 [0.0.7]: https://github.com/amzn/app-platform/compare/0.0.7
 [0.0.6]: https://github.com/amzn/app-platform/compare/0.0.6
