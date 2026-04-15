@@ -1,24 +1,22 @@
 [versions]
 assertk = "0.28.1"
-app-platfrom = "0.0.8"
+app-platform = "0.0.9"
 agp = "8.13.2"
 android-compileSdk = "36"
 android-minSdk = "23"
 android-targetSdk = "36"
-androidx-activity-compose = "1.10.1"
-androidx-lifecycle = "2.9.3"
-compose-material3 = "1.10.0-alpha05"
-compose-multiplatform = "1.10.2"
+androidx-activity = "1.13.0"
+compose-material-icons = "1.7.3"
+compose-material3 = "1.9.0"
+compose-multiplatform = "1.10.3"
 coroutines = "1.10.2"
 kotlin = "2.3.20"
-material = "1.7.3"
 
 [libraries]
-androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "androidx-activity-compose" }
-androidx-lifecycle-viewmodel = { group = "org.jetbrains.androidx.lifecycle", name = "lifecycle-viewmodel", version.ref = "androidx-lifecycle" }
+androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "androidx-activity" }
 assertk = { module = "com.willowtreeapps.assertk:assertk", version.ref = "assertk" }
 compose-material = { module = "org.jetbrains.compose.material3:material3", version.ref = "compose-material3" }
-compose-material-icons = { module = "org.jetbrains.compose.material:material-icons-extended", version.ref = "material" }
+compose-material-icons = { module = "org.jetbrains.compose.material:material-icons-extended", version.ref = "compose-material-icons" }
 kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "coroutines" }
 coroutines-swing = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-swing", version.ref = "coroutines" }
 coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "coroutines" }
@@ -26,7 +24,7 @@ coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", ve
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }
 androidKmpLibrary = { id = "com.android.kotlin.multiplatform.library", version.ref = "agp" }
-appPlatform = { id = "software.amazon.app.platform", version.ref = "app-platfrom" }
+appPlatform = { id = "software.amazon.app.platform", version.ref = "app-platform" }
 kotlinMultiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
 composeMultiplatform = { id = "org.jetbrains.compose", version.ref = "compose-multiplatform" }
 composeCompiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }

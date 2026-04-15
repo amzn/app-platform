@@ -31,8 +31,9 @@ choose_application() {
 Which application do you want to run?
 1) sample
 2) recipes
+3) starter blueprint
 EOF
-    printf "Enter selection [1-2]: "
+    printf "Enter selection [1-3]: "
     read -r selection
 
     case "$selection" in
@@ -50,6 +51,14 @@ EOF
         PROJECT_PATH="$ROOT_DIR/recipes/recipesIosApp/recipesIosApp.xcodeproj"
         SCHEME="recipesIosApp"
         DERIVED_DATA_PATH="/tmp/app-platform-ios-run-recipes"
+        return
+        ;;
+      3)
+        APP_KEY="starter"
+        APP_LABEL="starter blueprint"
+        PROJECT_PATH="$ROOT_DIR/blueprints/starter/iosApp/iosApp.xcodeproj"
+        SCHEME="iosApp"
+        DERIVED_DATA_PATH="/tmp/app-platform-ios-run-starter"
         return
         ;;
       *)
