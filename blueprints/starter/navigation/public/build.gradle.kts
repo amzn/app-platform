@@ -11,7 +11,6 @@ plugins {
 
 appPlatform {
   enableModuleStructure(true)
-  enableKotlinInject(true)
   enableMoleculePresenters(true)
 }
 

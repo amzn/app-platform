@@ -7,9 +7,9 @@ This is a Kotlin Multiplatform template application built using the [Amazon App 
 This template demonstrates:
 
 - Kotlin Multiplatform targeting Android, iOS, WebAssembly (WASM), and Desktop (JVM)
-- [App Platform](https://github.com/amzn/app-platform) conventions for DI, state, rendering, and navigation
+- [App Platform](https://github.com/amzn/app-platform) conventions for Metro DI, state, rendering, and navigation
 - Molecule-powered presenters
-- Scoped dependency injection using `@ContributesBinding`, `@SingleIn`, and `@ContributesRenderer`
+- Scoped dependency injection using Metro graphs, `@ContributesBinding`, `@SingleIn`, `@ContributesScoped`, and `@ContributesRenderer`
 - Reactive state with `StateFlow`
 - Compose UI for Android, Desktop, and WASM
 - Modular code structure for feature separation
@@ -23,7 +23,7 @@ This template demonstrates:
 
 ## Modules
 
-- `:app` – Main app entrypoint using Compose + App Platform
+- `:app` – Main app entrypoint using Compose + App Platform + Metro
 - `:templates` – Main module for templates and the entry point into the application
 - `:navigation` – Example feature module
 

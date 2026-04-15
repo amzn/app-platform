@@ -1,8 +1,10 @@
 package software.amazon.app.platform.template
 
+import dev.zacsweers.metro.Assisted
+import dev.zacsweers.metro.AssistedFactory
+import dev.zacsweers.metro.AssistedInject
+import dev.zacsweers.metro.Inject
 import kotlinx.coroutines.flow.StateFlow
-import me.tatarka.inject.annotations.Assisted
-import me.tatarka.inject.annotations.Inject
 import software.amazon.app.platform.presenter.molecule.MoleculeScope
 import software.amazon.app.platform.presenter.molecule.MoleculeScopeFactory
 import software.amazon.app.platform.presenter.molecule.launchMoleculePresenter
@@ -17,7 +19,7 @@ import software.amazon.app.platform.template.templates.AppTemplatePresenter
  *
  * [NavigationPresenter] serves as the root presenter and gets wrapped in a [AppTemplatePresenter].
  */
-@Inject
+@AssistedInject
 class TemplateProvider(
   presenter: NavigationPresenter,
   templatePresenterFactory: AppTemplatePresenter.Factory,
@@ -38,18 +40,28 @@ class TemplateProvider(
     moleculeScope.cancel()
   }
 
+  /**
+   * The assisted factory for Metro to create a new [TemplateProvider]. This factory is wrapped by
+   * [Factory], which should be used instead.
+   */
+  @AssistedFactory
+  fun interface InternalFactory {
+    /** Create a new instance of [TemplateProvider] with the given [MoleculeScope]. */
+    fun create(moleculeScope: MoleculeScope): TemplateProvider
+  }
+
   /** Factory class to create a new instance of [TemplateProvider]. */
   @Inject
   class Factory(
     private val moleculeScopeFactory: MoleculeScopeFactory,
-    private val templateProvider: (MoleculeScope) -> TemplateProvider,
+    private val templateProviderFactory: InternalFactory,
   ) {
     /**
      * Creates a new instance of [TemplateProvider]. Call [TemplateProvider.cancel] when the
      * instance not needed anymore to avoid leaking resources.
      */
     fun createTemplateProvider(): TemplateProvider {
-      return templateProvider(moleculeScopeFactory.createMoleculeScope())
+      return templateProviderFactory.create(moleculeScopeFactory.createMoleculeScope())
     }
   }
 }
