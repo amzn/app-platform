@@ -47,13 +47,13 @@ kotlin {
   }
 
   wasmJs {
+    outputModuleName = project.path.removePrefix(":").replace(":", "-")
     binaries.executable()
 
     browser {
       commonWebpackConfig {
         outputFileName = "template-app.js"
       }
-      outputModuleName = project.name.replace("-", "")
     }
   }
 
@@ -61,12 +61,8 @@ kotlin {
     val desktopMain by getting
     commonMain {
       dependencies {
-        implementation(libs.androidx.lifecycle.viewmodel)
-
         implementation(project(":navigation:impl"))
-        implementation(project(":navigation:public"))
         implementation(project(":templates:impl"))
-        implementation(project(":navigation:public"))
 
         AppPlatformPlugin.exportedDependencies().forEach { api(it) }
       }

@@ -30,9 +30,6 @@ kotlin {
     compilerOptions {
       jvmTarget.set(JvmTarget.JVM_11)
     }
-    withHostTest {
-      isReturnDefaultValues = true
-    }
   }
 
   iosX64()
@@ -40,9 +37,9 @@ kotlin {
   iosSimulatorArm64()
 
   wasmJs {
-    browser {
-      outputModuleName = project.name.replace("-", "")
-    }
+    outputModuleName = project.path.removePrefix(":").replace(":", "-")
+
+    browser()
   }
 
   sourceSets {
