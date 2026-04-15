@@ -1,5 +1,7 @@
 @file:OptIn(ExperimentalWasmDsl::class)
 
+import dev.zacsweers.metro.gradle.DiagnosticSeverity
+import dev.zacsweers.metro.gradle.MetroPluginExtension
 import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 import org.jetbrains.kotlin.gradle.ExperimentalWasmDsl
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
@@ -12,14 +14,19 @@ plugins {
   alias(libs.plugins.kotlinMultiplatform)
   alias(libs.plugins.composeMultiplatform)
   alias(libs.plugins.composeCompiler)
+  alias(libs.plugins.metro) 
 }
 
 appPlatform {
   enableComposeUi(true)
-  enableKotlinInject(true)
+  enableMetro(true)
   enableModuleStructure(true)
   enableMoleculePresenters(true)
   addImplModuleDependencies(true)
+}
+
+configure<MetroPluginExtension> {
+  unusedGraphInputsSeverity.set(DiagnosticSeverity.NONE)
 }
 
 kotlin {

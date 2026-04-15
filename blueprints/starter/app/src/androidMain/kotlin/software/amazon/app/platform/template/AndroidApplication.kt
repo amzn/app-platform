@@ -1,6 +1,7 @@
 package software.amazon.app.platform.template
 
 import android.app.Application
+import dev.zacsweers.metro.createGraphFactory
 import software.amazon.app.platform.scope.RootScopeProvider
 import software.amazon.app.platform.scope.Scope
 
@@ -9,20 +10,20 @@ import software.amazon.app.platform.scope.Scope
  * This is helpful to get access to the root scope from Android components such as activities.
  */
 open class AndroidApplication : Application(), RootScopeProvider {
-  private val application = software.amazon.app.platform.template.Application()
+  private val templateApplication = software.amazon.app.platform.template.Application()
 
   override val rootScope: Scope
-    get() = application.rootScope
+    get() = templateApplication.rootScope
 
   override fun onCreate() {
-    application.create(component(application))
+    templateApplication.create(metroGraph(templateApplication))
     super.onCreate()
   }
 
-  /** Create the [AppComponent]. In UI tests we use a different instance. */
-  protected open fun component(
-    application: software.amazon.app.platform.template.Application
-  ): AppComponent {
-    return AndroidAppComponent::class.create(this, application)
+  /** Create the [AppGraph]. In UI tests we use a different instance. */
+  protected open fun metroGraph(
+    templateApplication: software.amazon.app.platform.template.Application
+  ): AppGraph {
+    return createGraphFactory<AndroidAppGraph.Factory>().create(this, templateApplication)
   }
 }

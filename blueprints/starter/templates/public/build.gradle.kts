@@ -7,11 +7,12 @@ plugins {
   alias(libs.plugins.appPlatform)
   alias(libs.plugins.androidKmpLibrary)
   alias(libs.plugins.kotlinMultiplatform)
+  alias(libs.plugins.metro) 
 }
 
 appPlatform {
   enableModuleStructure(true)
-  enableKotlinInject(true)
+  enableMetro(true)
   enableMoleculePresenters(true)
 }
 

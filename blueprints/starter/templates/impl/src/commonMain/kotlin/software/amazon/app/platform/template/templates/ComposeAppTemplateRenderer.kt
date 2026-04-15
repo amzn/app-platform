@@ -10,7 +10,7 @@ import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import me.tatarka.inject.annotations.Inject
+import dev.zacsweers.metro.Inject
 import software.amazon.app.platform.inject.ContributesRenderer
 import software.amazon.app.platform.renderer.ComposeRenderer
 import software.amazon.app.platform.renderer.RendererFactory
