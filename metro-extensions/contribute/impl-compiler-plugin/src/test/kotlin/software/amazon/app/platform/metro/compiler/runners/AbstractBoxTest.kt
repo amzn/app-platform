@@ -12,6 +12,7 @@ import org.jetbrains.kotlin.test.services.KotlinStandardLibrariesPathProvider
 import software.amazon.app.platform.metro.compiler.services.configureKotlinTestImports
 import software.amazon.app.platform.metro.compiler.services.configureMetroImports
 import software.amazon.app.platform.metro.compiler.services.configurePlugin
+import software.amazon.app.platform.metro.compiler.services.configureTestSupportClasspath
 
 open class AbstractBoxTest : AbstractFirBlackBoxCodegenTestBase(FirParser.LightTree) {
   override fun createKotlinStandardLibrariesPathProvider(): KotlinStandardLibrariesPathProvider {
@@ -30,6 +31,7 @@ open class AbstractBoxTest : AbstractFirBlackBoxCodegenTestBase(FirParser.LightT
       }
 
       configurePlugin()
+      configureTestSupportClasspath()
       configureMetroImports()
       configureKotlinTestImports()
     }

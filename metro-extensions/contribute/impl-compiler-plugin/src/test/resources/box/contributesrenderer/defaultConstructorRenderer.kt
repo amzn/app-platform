@@ -1,0 +1,35 @@
+package com.test
+
+import software.amazon.app.platform.inject.ContributesRenderer
+import software.amazon.app.platform.metro.compiler.support.UnusedRendererFactory
+import software.amazon.app.platform.presenter.BaseModel
+import software.amazon.app.platform.renderer.Renderer
+import software.amazon.app.platform.renderer.RendererGraph
+
+class Model : BaseModel
+
+@ContributesRenderer
+class TestRenderer : Renderer<Model> {
+  override fun render(model: Model) = Unit
+}
+
+@DependencyGraph(AppScope::class)
+interface AppGraph
+
+fun box(): String {
+  val factory = createGraph<AppGraph>() as RendererGraph.Factory
+  val graph = factory.createRendererGraph(UnusedRendererFactory)
+  val rendererProvider = graph.renderers.getValue(Model::class)
+  val renderer = rendererProvider()
+  if (renderer !is TestRenderer) {
+    return "FAIL: expected TestRenderer but got $renderer"
+  }
+  if (graph.renderers.keys != setOf(Model::class)) {
+    return "FAIL: unexpected renderer keys ${graph.renderers.keys}"
+  }
+  if (graph.modelToRendererMapping != mapOf(Model::class to TestRenderer::class)) {
+    return "FAIL: unexpected modelToRendererMapping ${graph.modelToRendererMapping}"
+  }
+
+  return "OK"
+}

@@ -22,6 +22,40 @@ public class FirDiagnosticTestGenerated extends AbstractFirDiagnosticTest {
   }
 
   @Nested
+  @TestMetadata("metro-extensions/contribute/impl-compiler-plugin/src/test/resources/diagnostics/contributesrenderer")
+  @TestDataPath("$PROJECT_ROOT")
+  public class Contributesrenderer {
+    @Test
+    public void testAllFilesPresentInContributesrenderer() {
+      KtTestUtil.assertAllTestsPresentByMetadataWithExcluded(this.getClass(), new File("metro-extensions/contribute/impl-compiler-plugin/src/test/resources/diagnostics/contributesrenderer"), Pattern.compile("^(.+)\\.kt$"), null, true);
+    }
+
+    @Test
+    @TestMetadata("missingInjectOnNonZeroArgConstructor.kt")
+    public void testMissingInjectOnNonZeroArgConstructor() {
+      runTest("metro-extensions/contribute/impl-compiler-plugin/src/test/resources/diagnostics/contributesrenderer/missingInjectOnNonZeroArgConstructor.kt");
+    }
+
+    @Test
+    @TestMetadata("modelTypeMustBeExplicitWhenNotInferable.kt")
+    public void testModelTypeMustBeExplicitWhenNotInferable() {
+      runTest("metro-extensions/contribute/impl-compiler-plugin/src/test/resources/diagnostics/contributesrenderer/modelTypeMustBeExplicitWhenNotInferable.kt");
+    }
+
+    @Test
+    @TestMetadata("redundantInjectOnZeroArgConstructor.kt")
+    public void testRedundantInjectOnZeroArgConstructor() {
+      runTest("metro-extensions/contribute/impl-compiler-plugin/src/test/resources/diagnostics/contributesrenderer/redundantInjectOnZeroArgConstructor.kt");
+    }
+
+    @Test
+    @TestMetadata("rendererMustNotBeSingleton.kt")
+    public void testRendererMustNotBeSingleton() {
+      runTest("metro-extensions/contribute/impl-compiler-plugin/src/test/resources/diagnostics/contributesrenderer/rendererMustNotBeSingleton.kt");
+    }
+  }
+
+  @Nested
   @TestMetadata("metro-extensions/contribute/impl-compiler-plugin/src/test/resources/diagnostics/contributesrobot")
   @TestDataPath("$PROJECT_ROOT")
   public class Contributesrobot {

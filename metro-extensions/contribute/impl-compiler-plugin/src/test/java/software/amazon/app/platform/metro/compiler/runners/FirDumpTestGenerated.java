@@ -22,6 +22,28 @@ public class FirDumpTestGenerated extends AbstractFirDumpTest {
   }
 
   @Nested
+  @TestMetadata("metro-extensions/contribute/impl-compiler-plugin/src/test/resources/dump/contributesrenderer")
+  @TestDataPath("$PROJECT_ROOT")
+  public class Contributesrenderer {
+    @Test
+    public void testAllFilesPresentInContributesrenderer() {
+      KtTestUtil.assertAllTestsPresentByMetadataWithExcluded(this.getClass(), new File("metro-extensions/contribute/impl-compiler-plugin/src/test/resources/dump/contributesrenderer"), Pattern.compile("^(.+)\\.kt$"), null, true);
+    }
+
+    @Test
+    @TestMetadata("defaultConstructorRenderer.kt")
+    public void testDefaultConstructorRenderer() {
+      runTest("metro-extensions/contribute/impl-compiler-plugin/src/test/resources/dump/contributesrenderer/defaultConstructorRenderer.kt");
+    }
+
+    @Test
+    @TestMetadata("defaultConstructorRendererIr.kt")
+    public void testDefaultConstructorRendererIr() {
+      runTest("metro-extensions/contribute/impl-compiler-plugin/src/test/resources/dump/contributesrenderer/defaultConstructorRendererIr.kt");
+    }
+  }
+
+  @Nested
   @TestMetadata("metro-extensions/contribute/impl-compiler-plugin/src/test/resources/dump/contributesrobot")
   @TestDataPath("$PROJECT_ROOT")
   public class Contributesrobot {

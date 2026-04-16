@@ -1,0 +1,1 @@
+/missingInjectOnNonZeroArgConstructor.kt:(278,298): error: When using @ContributesRenderer and you need to inject types in the constructor, then it's necessary to add the @Inject annotation.

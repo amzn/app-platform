@@ -1,0 +1,168 @@
+// FILE: defaultConstructorRendererIr.kt
+package com.test
+
+class Model : BaseModel {
+  constructor() /* primary */ {
+    super/*Any*/()
+    /* <init>() */
+
+  }
+
+}
+
+@ContributesRenderer
+class TestRenderer : Renderer<Model> {
+  @ContributesTo(scope = RendererScope::class)
+  @Origin(value = TestRenderer::class)
+  interface RendererContribution {
+    @Deprecated(message = "This synthesized declaration should not be used directly", level = DeprecationLevel.HIDDEN)
+    @ComptimeOnly
+    abstract class BindsMirror {
+      private constructor() /* primary */ {
+        super/*Any*/()
+        /* <init>() */
+
+      }
+
+      @Binds
+      @IntoMap
+      @RendererKey(value = Model::class)
+      @CallableMetadata(callableName = "provideComTestTestRendererModel", propertyName = "", startOffset = 290, endOffset = 394)
+      abstract fun provideComTestTestRendererModel1186685849_intomap(renderer: TestRenderer): Renderer<*>
+
+    }
+
+    @Deprecated(message = "This synthesized declaration should not be used directly", level = DeprecationLevel.HIDDEN)
+    @MetroContribution(scope = RendererScope::class)
+    interface MetroContributionToSoftwareamazonappplatformrendererrendererScope2FKSELE : RendererContribution {
+    }
+
+    @Deprecated(message = "This synthesized declaration should not be used directly", level = DeprecationLevel.HIDDEN)
+    @CallableMetadata(callableName = "provideComTestTestRenderer", propertyName = "", startOffset = 290, endOffset = 394, newInstanceName = "provideComTestTestRenderer")
+    class ProvideComTestTestRendererMetroFactory : Factory<TestRenderer> {
+      private /* final field */ val instance: RendererContribution = instance
+      companion object Companion {
+        private constructor() /* primary */ {
+          super/*Any*/()
+          /* <init>() */
+
+        }
+
+        @HiddenFromObjC
+        fun create(instance: RendererContribution): Factory<TestRenderer> {
+          return ProvideComTestTestRendererMetroFactory(instance = instance)
+        }
+
+        @HiddenFromObjC
+        fun provideComTestTestRenderer(instance: RendererContribution): TestRenderer {
+          return instance.provideComTestTestRenderer()
+        }
+
+      }
+
+      @HiddenFromObjC
+      private constructor(instance: RendererContribution) /* primary */ {
+        super/*Any*/()
+        /* <init>() */
+
+      }
+
+      @HiddenFromObjC
+      override operator fun invoke(): TestRenderer {
+        return Companion.provideComTestTestRenderer(instance = <this>.#instance)
+      }
+
+      @HiddenFromObjC
+      fun mirrorFunction(): TestRenderer {
+        return error(message = "Never called")
+      }
+
+    }
+
+    @Deprecated(message = "This synthesized declaration should not be used directly", level = DeprecationLevel.HIDDEN)
+    @CallableMetadata(callableName = "provideComTestTestRendererModelKey", propertyName = "", startOffset = 290, endOffset = 394, newInstanceName = "provideComTestTestRendererModelKey")
+    class ProvideComTestTestRendererModelKeyMetroFactory : Factory<KClass<out Renderer<*>>> {
+      private /* final field */ val instance: RendererContribution = instance
+      companion object Companion {
+        private constructor() /* primary */ {
+          super/*Any*/()
+          /* <init>() */
+
+        }
+
+        @HiddenFromObjC
+        fun create(instance: RendererContribution): Factory<KClass<out Renderer<*>>> {
+          return ProvideComTestTestRendererModelKeyMetroFactory(instance = instance)
+        }
+
+        @HiddenFromObjC
+        fun provideComTestTestRendererModelKey(instance: RendererContribution): KClass<out Renderer<*>> {
+          return instance.provideComTestTestRendererModelKey()
+        }
+
+      }
+
+      @HiddenFromObjC
+      private constructor(instance: RendererContribution) /* primary */ {
+        super/*Any*/()
+        /* <init>() */
+
+      }
+
+      @HiddenFromObjC
+      override operator fun invoke(): KClass<out Renderer<*>> {
+        return Companion.provideComTestTestRendererModelKey(instance = <this>.#instance)
+      }
+
+      @IntoMap
+      @ForScope(scope = RendererScope::class)
+      @RendererKey(value = Model::class)
+      @HiddenFromObjC
+      fun mirrorFunction(): KClass<out Renderer<*>> {
+        return error(message = "Never called")
+      }
+
+    }
+
+    @Provides
+    fun provideComTestTestRenderer(): TestRenderer {
+      return TestRenderer()
+    }
+
+    @Binds
+    @IntoMap
+    @RendererKey(value = Model::class)
+    @ComptimeOnly
+    fun provideComTestTestRendererModel(renderer: TestRenderer): Renderer<*> {
+      return error(message = "Never called")
+    }
+
+    @Provides
+    @IntoMap
+    @RendererKey(value = Model::class)
+    @ForScope(scope = RendererScope::class)
+    fun provideComTestTestRendererModelKey(): KClass<out Renderer<*>> {
+      return TestRenderer::class
+    }
+
+  }
+
+  constructor() /* primary */ {
+    super/*Any*/()
+    /* <init>() */
+
+  }
+
+  override fun render(model: Model) {
+    return Unit
+  }
+
+}
+
+// FILE: comTestTestRendererRendererContributionRendererScope.kt
+package metro.hints
+
+fun RendererScope(contributed: RendererContribution) {
+  return error(message = "Never called")
+}
+

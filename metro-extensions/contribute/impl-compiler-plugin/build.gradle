@@ -25,11 +25,15 @@ dependencies {
     ksp libs.auto.service.ksp
 
     annotationsRuntimeClasspath project(':di-common:public')
+    annotationsRuntimeClasspath project(':presenter:public')
+    annotationsRuntimeClasspath project(':renderer:public')
     annotationsRuntimeClasspath project(':metro:public')
     annotationsRuntimeClasspath project(':robot:public')
     metroRuntimeClasspath libs.metro.runtime
 
     testImplementation project(':di-common:public')
+    testImplementation project(':presenter:public')
+    testImplementation project(':renderer:public')
     testImplementation project(':metro:public')
     testImplementation project(':robot:public')
     testImplementation libs.kotlin.compiler
@@ -80,6 +84,7 @@ tasks.withType(JavaCompile).configureEach {
 def annotationsClasspathFiles = configurations.annotationsRuntimeClasspath
 def metroRuntimeClasspathFiles = configurations.metroRuntimeClasspath
 def testClasspathFiles = configurations.testRuntimeClasspath
+def testSupportClasspathFiles = sourceSets.test.output.classesDirs
 
 tasks.withType(Test).configureEach { testTask ->
     useJUnitPlatform()
@@ -99,6 +104,7 @@ tasks.withType(Test).configureEach { testTask ->
     doFirst {
         def annotationsClasspath = annotationsClasspathFiles.asPath
         def metroRuntimeClasspath = metroRuntimeClasspathFiles.asPath
+        def testSupportClasspath = testSupportClasspathFiles.asPath
         def classpathFiles = testClasspathFiles.files
 
         systemProperty(
@@ -106,6 +112,7 @@ tasks.withType(Test).configureEach { testTask ->
                 annotationsClasspath,
         )
         systemProperty('metroRuntime.classpath', metroRuntimeClasspath)
+        systemProperty('testSupport.classpath', testSupportClasspath)
 
         def setLib = { String propName, String jarName ->
             def prefix = "${jarName}-"
