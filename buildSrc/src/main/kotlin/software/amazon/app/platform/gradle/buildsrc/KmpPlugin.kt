@@ -15,6 +15,8 @@ import org.gradle.api.plugins.ExtensionAware
 import org.gradle.api.tasks.SourceTask
 import org.jetbrains.compose.ComposeExtension
 import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
+import org.jetbrains.kotlin.gradle.plugin.NATIVE_COMPILER_PLUGIN_CLASSPATH_CONFIGURATION_NAME
+import org.jetbrains.kotlin.gradle.plugin.PLUGIN_CLASSPATH_CONFIGURATION_NAME
 import software.amazon.app.platform.gradle.buildsrc.AppPlatformExtension.Companion.appPlatformBuildSrc
 import software.amazon.app.platform.gradle.buildsrc.Platform.Companion.allPlatforms
 
@@ -278,7 +280,21 @@ public open class KmpPlugin : Plugin<Project> {
     fun Project.enableMetro() {
       plugins.apply(Plugins.METRO)
 
-      // Enable KSP for our custom extensions.
+      val useMetroKsp =
+        providers
+          .gradleProperty("app.platform.metro.ksp")
+          .map(String::toBoolean)
+          .orElse(false)
+          .get()
+
+      if (useMetroKsp) {
+        enableMetroKsp()
+      } else {
+        enableMetroCompilerPlugin()
+      }
+    }
+
+    private fun Project.enableMetroKsp() {
       enableKsp()
 
       if (isKmpModule) {
@@ -304,6 +320,31 @@ public open class KmpPlugin : Plugin<Project> {
       } else {
         dependencies.addKspProcessorDependencies("ksp")
       }
+    }
+
+    private fun Project.enableMetroCompilerPlugin() {
+      if (isKmpModule) {
+        kmpExtension.sourceSets.getByName("commonMain").dependencies {
+          implementation(project(":di-common:public"))
+          implementation(project(":metro:public"))
+        }
+      } else {
+        dependencies.add("implementation", project(":metro:public"))
+      }
+
+      fun DependencyHandler.addCompilerPluginDependencies() {
+        add(
+          PLUGIN_CLASSPATH_CONFIGURATION_NAME,
+          project(":metro-extensions:contribute:impl-compiler-plugin"),
+        )
+        add(
+          NATIVE_COMPILER_PLUGIN_CLASSPATH_CONFIGURATION_NAME,
+          project(":metro-extensions:contribute:impl-compiler-plugin"),
+        )
+      }
+
+      plugins.withId(Plugins.KOTLIN_MULTIPLATFORM) { dependencies.addCompilerPluginDependencies() }
+      plugins.withId(Plugins.KOTLIN_JVM) { dependencies.addCompilerPluginDependencies() }
     }
 
     private fun Project.enableKsp() {
