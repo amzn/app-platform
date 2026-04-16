@@ -88,4 +88,44 @@ public class FirDiagnosticTestGenerated extends AbstractFirDiagnosticTest {
       runTest("metro-extensions/contribute/impl-compiler-plugin/src/test/resources/diagnostics/contributesrobot/robotMustNotBeSingleton.kt");
     }
   }
+
+  @Nested
+  @TestMetadata("metro-extensions/contribute/impl-compiler-plugin/src/test/resources/diagnostics/contributesscoped")
+  @TestDataPath("$PROJECT_ROOT")
+  public class Contributesscoped {
+    @Test
+    public void testAllFilesPresentInContributesscoped() {
+      KtTestUtil.assertAllTestsPresentByMetadataWithExcluded(this.getClass(), new File("metro-extensions/contribute/impl-compiler-plugin/src/test/resources/diagnostics/contributesscoped"), Pattern.compile("^(.+)\\.kt$"), null, true);
+    }
+
+    @Test
+    @TestMetadata("multipleOtherSupertypes.kt")
+    public void testMultipleOtherSupertypes() {
+      runTest("metro-extensions/contribute/impl-compiler-plugin/src/test/resources/diagnostics/contributesscoped/multipleOtherSupertypes.kt");
+    }
+
+    @Test
+    @TestMetadata("mustBeInject.kt")
+    public void testMustBeInject() {
+      runTest("metro-extensions/contribute/impl-compiler-plugin/src/test/resources/diagnostics/contributesscoped/mustBeInject.kt");
+    }
+
+    @Test
+    @TestMetadata("mustImplementScoped.kt")
+    public void testMustImplementScoped() {
+      runTest("metro-extensions/contribute/impl-compiler-plugin/src/test/resources/diagnostics/contributesscoped/mustImplementScoped.kt");
+    }
+
+    @Test
+    @TestMetadata("noSupertypes.kt")
+    public void testNoSupertypes() {
+      runTest("metro-extensions/contribute/impl-compiler-plugin/src/test/resources/diagnostics/contributesscoped/noSupertypes.kt");
+    }
+
+    @Test
+    @TestMetadata("useContributesScopedInsteadOfContributesBinding.kt")
+    public void testUseContributesScopedInsteadOfContributesBinding() {
+      runTest("metro-extensions/contribute/impl-compiler-plugin/src/test/resources/diagnostics/contributesscoped/useContributesScopedInsteadOfContributesBinding.kt");
+    }
+  }
 }

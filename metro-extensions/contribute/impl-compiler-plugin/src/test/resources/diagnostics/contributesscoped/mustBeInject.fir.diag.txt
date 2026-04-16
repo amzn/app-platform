@@ -1,0 +1,1 @@
+/mustBeInject.kt:(244,279): error: TestClass must be annotated with @Inject when using @ContributesScoped.

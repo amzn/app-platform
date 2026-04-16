@@ -29,6 +29,7 @@ dependencies {
     annotationsRuntimeClasspath project(':renderer:public')
     annotationsRuntimeClasspath project(':metro:public')
     annotationsRuntimeClasspath project(':robot:public')
+    annotationsRuntimeClasspath project(':scope:public')
     metroRuntimeClasspath libs.metro.runtime
 
     testImplementation project(':di-common:public')
@@ -36,6 +37,7 @@ dependencies {
     testImplementation project(':renderer:public')
     testImplementation project(':metro:public')
     testImplementation project(':robot:public')
+    testImplementation project(':scope:public')
     testImplementation libs.kotlin.compiler
     testImplementation libs.kotlin.compiler.internal.test.framework
     testImplementation libs.kotlin.test.junit5

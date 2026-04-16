@@ -1,5 +1,6 @@
 package software.amazon.app.platform.metro.compiler.robot
 
+import org.jetbrains.kotlin.descriptors.ClassKind
 import org.jetbrains.kotlin.diagnostics.DiagnosticReporter
 import org.jetbrains.kotlin.diagnostics.reportOn
 import org.jetbrains.kotlin.fir.FirSession
@@ -36,6 +37,16 @@ internal object ContributesRobotChecker : FirClassChecker(MppCheckerKind.Common)
       } ?: return
 
     val classSymbol = declaration.symbol as? FirRegularClassSymbol ?: return
+
+    if (declaration.classKind != ClassKind.CLASS) {
+      reporter.reportOn(
+        annotation.source ?: declaration.source,
+        AppPlatformMetroExtensionsDiagnostics.CONTRIBUTES_ROBOT_ERROR,
+        "@ContributesRobot can only be applied to classes, not " +
+          "${declaration.classKind.name.lowercase().replace('_', ' ')}s.",
+      )
+      return
+    }
 
     if (!implementsRobot(declaration, session)) {
       reporter.reportOn(

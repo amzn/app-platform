@@ -118,4 +118,38 @@ public class BoxTestGenerated extends AbstractBoxTest {
       runTest("metro-extensions/contribute/impl-compiler-plugin/src/test/resources/box/contributesrobot/injectConstructorRobot.kt");
     }
   }
+
+  @Nested
+  @TestMetadata("metro-extensions/contribute/impl-compiler-plugin/src/test/resources/box/contributesscoped")
+  @TestDataPath("$PROJECT_ROOT")
+  public class Contributesscoped {
+    @Test
+    public void testAllFilesPresentInContributesscoped() {
+      KtTestUtil.assertAllTestsPresentByMetadataWithExcluded(this.getClass(), new File("metro-extensions/contribute/impl-compiler-plugin/src/test/resources/box/contributesscoped"), Pattern.compile("^(.+)\\.kt$"), null, true);
+    }
+
+    @Test
+    @TestMetadata("defaultScoped.kt")
+    public void testDefaultScoped() {
+      runTest("metro-extensions/contribute/impl-compiler-plugin/src/test/resources/box/contributesscoped/defaultScoped.kt");
+    }
+
+    @Test
+    @TestMetadata("innerClass.kt")
+    public void testInnerClass() {
+      runTest("metro-extensions/contribute/impl-compiler-plugin/src/test/resources/box/contributesscoped/innerClass.kt");
+    }
+
+    @Test
+    @TestMetadata("onlyScoped.kt")
+    public void testOnlyScoped() {
+      runTest("metro-extensions/contribute/impl-compiler-plugin/src/test/resources/box/contributesscoped/onlyScoped.kt");
+    }
+
+    @Test
+    @TestMetadata("transitiveScoped.kt")
+    public void testTransitiveScoped() {
+      runTest("metro-extensions/contribute/impl-compiler-plugin/src/test/resources/box/contributesscoped/transitiveScoped.kt");
+    }
+  }
 }
