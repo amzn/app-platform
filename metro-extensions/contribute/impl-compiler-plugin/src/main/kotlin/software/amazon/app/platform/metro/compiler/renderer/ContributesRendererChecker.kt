@@ -1,5 +1,6 @@
 package software.amazon.app.platform.metro.compiler.renderer
 
+import org.jetbrains.kotlin.descriptors.ClassKind
 import org.jetbrains.kotlin.diagnostics.DiagnosticReporter
 import org.jetbrains.kotlin.diagnostics.reportOn
 import org.jetbrains.kotlin.fir.analysis.checkers.MppCheckerKind
@@ -26,6 +27,16 @@ internal object ContributesRendererChecker : FirClassChecker(MppCheckerKind.Comm
       } ?: return
 
     val classSymbol = declaration.symbol as? FirRegularClassSymbol ?: return
+
+    if (declaration.classKind != ClassKind.CLASS) {
+      reporter.reportOn(
+        annotation.source ?: declaration.source,
+        AppPlatformMetroExtensionsDiagnostics.CONTRIBUTES_RENDERER_ERROR,
+        "@ContributesRenderer can only be applied to classes, not " +
+          "${declaration.classKind.name.lowercase().replace('_', ' ')}s.",
+      )
+      return
+    }
 
     when (val modelTypeResolution = resolveRendererModelType(classSymbol, session)) {
       is RendererModelTypeResolution.Error -> {

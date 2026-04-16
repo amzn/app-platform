@@ -21,6 +21,15 @@ internal object ClassIds {
       Name.identifier("ContributesRobot"),
     )
 
+  val CONTRIBUTES_SCOPED =
+    ClassId(
+      FqName("software.amazon.app.platform.inject.metro"),
+      Name.identifier("ContributesScoped"),
+    )
+
+  val CONTRIBUTES_BINDING =
+    ClassId(FqName("dev.zacsweers.metro"), Name.identifier("ContributesBinding"))
+
   val CONTRIBUTES_TO = ClassId(FqName("dev.zacsweers.metro"), Name.identifier("ContributesTo"))
 
   val DEPENDENCY_GRAPH = ClassId(FqName("dev.zacsweers.metro"), Name.identifier("DependencyGraph"))
@@ -30,6 +39,8 @@ internal object ClassIds {
   val INJECT = ClassId(FqName("dev.zacsweers.metro"), Name.identifier("Inject"))
 
   val INTO_MAP = ClassId(FqName("dev.zacsweers.metro"), Name.identifier("IntoMap"))
+
+  val INTO_SET = ClassId(FqName("dev.zacsweers.metro"), Name.identifier("IntoSet"))
 
   val ORIGIN = ClassId(FqName("dev.zacsweers.metro"), Name.identifier("Origin"))
 
@@ -54,6 +65,8 @@ internal object ClassIds {
   val ROBOT_FQ_NAMES: Set<ClassId> = setOf(ROBOT)
 
   val SINGLE_IN = ClassId(FqName("dev.zacsweers.metro"), Name.identifier("SingleIn"))
+
+  val SCOPED = ClassId(FqName("software.amazon.app.platform.scope"), Name.identifier("Scoped"))
 
   val SCOPE = ClassId(FqName("dev.zacsweers.metro"), Name.identifier("Scope"))
 

@@ -1,0 +1,1 @@
+/mustImplementScoped.kt:(203,238): error: In order to use @ContributesScoped, TestClass must implement software.amazon.app.platform.scope.Scoped.

@@ -83,8 +83,7 @@ internal fun buildAnnotationCallWithArgument(
     (annotationClassSymbol as? FirClassSymbol<*>)
       ?.declarationSymbols
       ?.filterIsInstance<FirConstructorSymbol>()
-      ?.firstOrNull()
-      ?: error("No constructor found for annotation class $classId")
+      ?.firstOrNull() ?: error("No constructor found for annotation class $classId")
   val argumentParameter = constructorSymbol.fir.valueParameters.first { it.name == argName }
 
   return org.jetbrains.kotlin.fir.expressions.builder.buildAnnotationCall {
@@ -123,8 +122,7 @@ internal fun buildSimpleAnnotationCall(
     (annotationClassSymbol as? FirClassSymbol<*>)
       ?.declarationSymbols
       ?.filterIsInstance<FirConstructorSymbol>()
-      ?.firstOrNull()
-      ?: error("No constructor found for annotation class $classId")
+      ?.firstOrNull() ?: error("No constructor found for annotation class $classId")
 
   return org.jetbrains.kotlin.fir.expressions.builder.buildAnnotationCall {
     annotationTypeRef = annotationType.toFirResolvedTypeRef()
