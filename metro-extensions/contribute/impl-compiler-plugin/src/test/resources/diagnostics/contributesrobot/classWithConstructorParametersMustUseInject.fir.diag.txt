@@ -1,0 +1,1 @@
+/classWithConstructorParametersMustUseInject.kt:(217,251): error: TestRobot must be annotated with @Inject when injecting arguments into a robot.

@@ -41,6 +41,10 @@ Core framework module families:
 - `metro`, `metro-extensions`
 - `ksp-common`
 
+Compiler plugin work currently lives in:
+
+- `metro-extensions/contribute/impl-compiler-plugin/`: JVM-only Kotlin compiler plugin module for Metro-backed App Platform DI extensions such as `@ContributesRobot`. `src/main/` contains FIR generation and diagnostics. `src/test/resources/box`, `diagnostics`, and `dump` contain compiler test data. `src/test/java/.../runners/` contains generated JUnit test runners and must be regenerated with `generateTests` after adding or renaming test data files.
+
 ## Architecture Rules
 
 The most important repo rule is the module structure documented in `docs/module-structure.md`.
@@ -73,6 +77,12 @@ Representative entrypoints:
 Local development should match CI as closely as possible. These versions live in `gradle/libs.versions.toml`.
 
 Expected warning: Gradle prints a warning that configuration-on-demand is not supported for Wasm targets. This is noisy but currently normal in this repo.
+
+For Metro compiler-plugin work, prefer source over decompiled artifacts:
+
+- Reference implementation: `https://github.com/square/metro-extensions`
+- Metro source: use a local checkout if you have one, otherwise upstream Metro on GitHub
+- Avoid relying on `.gradle/caches` or decompiled JARs when the source is available
 
 ## Run The Apps
 
@@ -233,6 +243,33 @@ All sample app target tests:
 ./gradlew :sample:app:allTests
 ```
 
+### Metro compiler-plugin module
+
+Run these from the repo root:
+
+```bash
+./gradlew :metro-extensions:contribute:impl-compiler-plugin:test
+./gradlew :metro-extensions:contribute:impl-compiler-plugin:test --tests 'software.amazon.app.platform.metro.compiler.runners.BoxTestGenerated$Metro.testTinyGraph'
+./gradlew :metro-extensions:contribute:impl-compiler-plugin:test -PupdateTestData
+./gradlew :metro-extensions:contribute:impl-compiler-plugin:generateTests
+./gradlew :metro-extensions:contribute:impl-compiler-plugin:ktfmtCheck
+```
+
+Use this workflow for compiler tests:
+
+- Add new test data under `src/test/resources/box`, `diagnostics`, or `dump`
+- Run `:metro-extensions:contribute:impl-compiler-plugin:generateTests` after adding or renaming test data files
+- Run `:metro-extensions:contribute:impl-compiler-plugin:test`
+- Use `-PupdateTestData` when intentionally updating FIR or IR golden files
+
+Test data conventions for this module:
+
+- `box/`: compile-and-run tests. Each file exposes `fun box(): String` and should return `"OK"`.
+- `diagnostics/`: compiler error tests with inline diagnostic markers plus `.fir.diag.txt` golden files.
+- `dump/`: compiler dump tests with `.fir.txt` goldens, plus `.fir.kt.txt` files for IR text dumps.
+
+`apiCheck` and `apiDump` are disabled for this module, so do not use them as validation commands here.
+
 ### Where tests live
 
 - Android UI tests: `sample/app/src/androidInstrumentedTest/`
@@ -240,6 +277,8 @@ All sample app target tests:
 - Shared unit tests: `sample/*/src/commonTest/`
 - Shared fakes: `sample/user/testing/`
 - Shared robots: `sample/login/impl-robots/`, `sample/user/impl-robots/`
+- Compiler plugin test data: `metro-extensions/contribute/impl-compiler-plugin/src/test/resources/`
+- Generated compiler test runners: `metro-extensions/contribute/impl-compiler-plugin/src/test/java/software/amazon/app/platform/metro/compiler/runners/`
 
 ## Current Test Reality
 

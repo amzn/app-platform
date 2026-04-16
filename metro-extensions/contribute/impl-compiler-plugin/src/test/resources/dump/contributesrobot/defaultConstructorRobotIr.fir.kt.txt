@@ -1,0 +1,102 @@
+// FILE: defaultConstructorRobotIr.kt
+package com.test
+
+@ContributesRobot(scope = AppScope::class)
+class TestRobot : Robot {
+  @ContributesTo(scope = AppScope::class)
+  @Origin(value = TestRobot::class)
+  interface RobotContribution {
+    @Deprecated(message = "This synthesized declaration should not be used directly", level = DeprecationLevel.HIDDEN)
+    @ComptimeOnly
+    abstract class BindsMirror {
+      private constructor() /* primary */ {
+        super/*Any*/()
+        /* <init>() */
+
+      }
+
+      @Binds
+      @IntoMap
+      @RobotKey(value = TestRobot::class)
+      @CallableMetadata(callableName = "provideTestRobotIntoMap", propertyName = "", startOffset = 206, endOffset = 264)
+      abstract fun provideTestRobotIntoMap1666857635_intomap(robot: TestRobot): Robot
+
+    }
+
+    @Deprecated(message = "This synthesized declaration should not be used directly", level = DeprecationLevel.HIDDEN)
+    @MetroContribution(scope = AppScope::class)
+    interface MetroContributionToDevzacsweersmetroappScopeoxd1AHI : RobotContribution {
+    }
+
+    @Deprecated(message = "This synthesized declaration should not be used directly", level = DeprecationLevel.HIDDEN)
+    @CallableMetadata(callableName = "provideTestRobot", propertyName = "", startOffset = 206, endOffset = 264, newInstanceName = "provideTestRobot")
+    class ProvideTestRobotMetroFactory : Factory<TestRobot> {
+      private /* final field */ val instance: RobotContribution = instance
+      companion object Companion {
+        private constructor() /* primary */ {
+          super/*Any*/()
+          /* <init>() */
+
+        }
+
+        @HiddenFromObjC
+        fun create(instance: RobotContribution): Factory<TestRobot> {
+          return ProvideTestRobotMetroFactory(instance = instance)
+        }
+
+        @HiddenFromObjC
+        fun provideTestRobot(instance: RobotContribution): TestRobot {
+          return instance.provideTestRobot()
+        }
+
+      }
+
+      @HiddenFromObjC
+      private constructor(instance: RobotContribution) /* primary */ {
+        super/*Any*/()
+        /* <init>() */
+
+      }
+
+      @HiddenFromObjC
+      override operator fun invoke(): TestRobot {
+        return Companion.provideTestRobot(instance = <this>.#instance)
+      }
+
+      @HiddenFromObjC
+      fun mirrorFunction(): TestRobot {
+        return error(message = "Never called")
+      }
+
+    }
+
+    @Provides
+    fun provideTestRobot(): TestRobot {
+      return TestRobot()
+    }
+
+    @Binds
+    @IntoMap
+    @RobotKey(value = TestRobot::class)
+    @ComptimeOnly
+    fun provideTestRobotIntoMap(robot: TestRobot): Robot {
+      return error(message = "Never called")
+    }
+
+  }
+
+  constructor() /* primary */ {
+    super/*Any*/()
+    /* <init>() */
+
+  }
+
+}
+
+// FILE: comTestTestRobotRobotContributionAppScope.kt
+package metro.hints
+
+fun AppScope(contributed: RobotContribution) {
+  return error(message = "Never called")
+}
+

@@ -1,0 +1,156 @@
+//file:noinspection UnnecessaryQualifiedReference
+plugins {
+    id 'software.amazon.app.platform.lib.jvm'
+    id 'com.google.devtools.ksp'
+}
+
+appPlatformBuildSrc {
+    enablePublishing true
+}
+
+configurations {
+    annotationsRuntimeClasspath {
+        transitive = false
+    }
+    metroRuntimeClasspath {
+        transitive = false
+    }
+}
+
+dependencies {
+    compileOnly libs.kotlin.compiler.embeddable
+    compileOnly libs.metro.compiler
+
+    implementation libs.auto.service.annotations
+    ksp libs.auto.service.ksp
+
+    annotationsRuntimeClasspath project(':di-common:public')
+    annotationsRuntimeClasspath project(':metro:public')
+    annotationsRuntimeClasspath project(':robot:public')
+    metroRuntimeClasspath libs.metro.runtime
+
+    testImplementation project(':di-common:public')
+    testImplementation project(':metro:public')
+    testImplementation project(':robot:public')
+    testImplementation libs.kotlin.compiler
+    testImplementation libs.kotlin.compiler.internal.test.framework
+    testImplementation libs.kotlin.test.junit5
+    testImplementation libs.metro.compiler
+
+    testRuntimeOnly libs.kotlin.test
+    testRuntimeOnly libs.kotlin.annotations.jvm
+    testRuntimeOnly libs.kotlin.reflect
+    testRuntimeOnly libs.kotlin.script.runtime
+}
+
+tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).configureEach {
+    compilerOptions {
+        freeCompilerArgs.add('-Xcontext-parameters')
+        optIn.add('org.jetbrains.kotlin.compiler.plugin.ExperimentalCompilerApi')
+    }
+}
+
+def jvmTarget = org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_21
+
+configurations
+        .matching {
+            it.name in ['compileClasspath', 'runtimeClasspath', 'testCompileClasspath', 'testRuntimeClasspath']
+        }
+        .configureEach {
+            attributes.attribute(
+                    org.gradle.api.attributes.java.TargetJvmVersion.TARGET_JVM_VERSION_ATTRIBUTE,
+                    jvmTarget.target.toInteger(),
+            )
+        }
+
+tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinJvmCompile).configureEach {
+    compilerOptions {
+        it.jvmTarget.set(jvmTarget)
+    }
+}
+
+tasks.withType(JavaCompile).configureEach {
+    sourceCompatibility = jvmTarget.target
+    targetCompatibility = jvmTarget.target
+    javaCompiler = javaToolchains.compilerFor {
+        languageVersion = JavaLanguageVersion.of(jvmTarget.target)
+    }
+}
+
+def annotationsClasspathFiles = configurations.annotationsRuntimeClasspath
+def metroRuntimeClasspathFiles = configurations.metroRuntimeClasspath
+def testClasspathFiles = configurations.testRuntimeClasspath
+
+tasks.withType(Test).configureEach { testTask ->
+    useJUnitPlatform()
+    workingDir = rootDir
+    maxHeapSize = '2g'
+    javaLauncher = javaToolchains.launcherFor {
+        languageVersion = JavaLanguageVersion.of(jvmTarget.target)
+    }
+
+    systemProperty('idea.ignore.disabled.plugins', 'true')
+    systemProperty('idea.home.path', rootDir)
+
+    if (project.hasProperty('updateTestData')) {
+        systemProperty('kotlin.test.update.test.data', 'true')
+    }
+
+    doFirst {
+        def annotationsClasspath = annotationsClasspathFiles.asPath
+        def metroRuntimeClasspath = metroRuntimeClasspathFiles.asPath
+        def classpathFiles = testClasspathFiles.files
+
+        systemProperty(
+                'annotationsRuntime.classpath',
+                annotationsClasspath,
+        )
+        systemProperty('metroRuntime.classpath', metroRuntimeClasspath)
+
+        def setLib = { String propName, String jarName ->
+            def prefix = "${jarName}-"
+            def path = classpathFiles.find { file ->
+                file.name.startsWith(prefix) &&
+                        file.name.endsWith('.jar') &&
+                        Character.isDigit(file.name.substring(prefix.length()).charAt(0))
+            }?.absolutePath
+            if (path != null) {
+                systemProperty(propName, path)
+            }
+        }
+
+        setLib('org.jetbrains.kotlin.test.kotlin-stdlib', 'kotlin-stdlib')
+        setLib('org.jetbrains.kotlin.test.kotlin-stdlib-jdk8', 'kotlin-stdlib-jdk8')
+        setLib('org.jetbrains.kotlin.test.kotlin-reflect', 'kotlin-reflect')
+        setLib('org.jetbrains.kotlin.test.kotlin-test', 'kotlin-test')
+        setLib('org.jetbrains.kotlin.test.kotlin-script-runtime', 'kotlin-script-runtime')
+        setLib('org.jetbrains.kotlin.test.kotlin-annotations-jvm', 'kotlin-annotations-jvm')
+    }
+}
+
+tasks.register('generateTests', JavaExec) {
+    inputs
+            .dir(layout.projectDirectory.dir('src/test/resources'))
+            .withPropertyName('testData')
+            .withPathSensitivity(PathSensitivity.RELATIVE)
+
+    outputs
+            .dir(layout.projectDirectory.dir('src/test/java'))
+            .withPropertyName('generatedTests')
+
+    classpath = sourceSets.test.runtimeClasspath
+    mainClass = 'software.amazon.app.platform.metro.compiler.GenerateTestsKt'
+    workingDir = rootDir
+
+    minHeapSize = '128m'
+    maxHeapSize = '1g'
+    jvmArgs('-Xss1m')
+}
+
+// We don't need the apiCheck in this module.
+tasks.named('apiCheck').configure {
+    it.enabled = false
+}
+tasks.named('apiDump').configure {
+    it.enabled = false
+}
