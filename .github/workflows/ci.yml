@@ -222,6 +222,30 @@ jobs:
           name: test-results-${{ github.job }}
           path: ./**/build/reports/
 
+  test-emulator-sample-app-ksp:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup
+        uses: ./.github/actions/setup-action
+        with:
+          gradle-encryption-key: ${{ secrets.GRADLE_ENCRYPTION_KEY }}
+
+      - name: Prepare emulator
+        uses: ./.github/actions/prepare-emulator-action
+
+      - name: Test
+        run: ./gradlew :sample:app:emulatorCheck -Papp.platform.metro.ksp=true --stacktrace --show-version --continue
+
+      - name: Upload Test Results
+        uses: actions/upload-artifact@v4
+        if: ${{ failure() }}
+        with:
+          name: test-results-${{ github.job }}
+          path: ./**/build/reports/
+
   build-ios-sample-app:
     runs-on: macos-latest-xlarge
     timeout-minutes: 25

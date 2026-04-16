@@ -15,6 +15,8 @@ import org.gradle.api.model.ObjectFactory
 import org.gradle.api.provider.Property
 import org.jetbrains.kotlin.gradle.plugin.KotlinPlatformType
 import org.jetbrains.kotlin.gradle.plugin.KotlinTarget
+import org.jetbrains.kotlin.gradle.plugin.NATIVE_COMPILER_PLUGIN_CLASSPATH_CONFIGURATION_NAME
+import org.jetbrains.kotlin.gradle.plugin.PLUGIN_CLASSPATH_CONFIGURATION_NAME
 import software.amazon.app.platform.gradle.ModuleStructurePlugin.Companion.testingSourceSets
 
 /**
@@ -241,7 +243,17 @@ private fun Project.enableKotlinInject() {
 private fun Project.enableMetro() {
   plugins.apply(PluginIds.METRO)
 
-  // Enable KSP for our custom extensions.
+  val useMetroKsp =
+    providers.gradleProperty("app.platform.metro.ksp").map(String::toBoolean).orElse(false).get()
+
+  if (useMetroKsp) {
+    enableMetroKsp()
+  } else {
+    enableMetroCompilerPlugin()
+  }
+}
+
+private fun Project.enableMetroKsp() {
   plugins.apply(PluginIds.KSP)
 
   fun DependencyHandler.addKspProcessorDependencies(kspConfigurationName: String) {
@@ -255,13 +267,40 @@ private fun Project.enableMetro() {
     kmpExtension.sourceSets.getByName("commonMain").dependencies {
       implementation("$APP_PLATFORM_GROUP:di-common-public:$APP_PLATFORM_VERSION")
       implementation("$APP_PLATFORM_GROUP:metro-public:$APP_PLATFORM_VERSION")
+    }
 
-      kmpExtension.targets.configureEach { target ->
-        addKspDependenciesWhenConfigExists(target) { configName ->
-          dependencies.addKspProcessorDependencies(configName)
-        }
+    kmpExtension.targets.configureEach { target ->
+      addKspDependenciesWhenConfigExists(target) { configName ->
+        dependencies.addKspProcessorDependencies(configName)
       }
     }
+  }
+
+  plugins.withIds(PluginIds.KOTLIN_ANDROID, PluginIds.KOTLIN_JVM) {
+    dependencies.add("implementation", "$APP_PLATFORM_GROUP:di-common-public:$APP_PLATFORM_VERSION")
+    dependencies.add("implementation", "$APP_PLATFORM_GROUP:metro-public:$APP_PLATFORM_VERSION")
+    dependencies.addKspProcessorDependencies("ksp")
+  }
+}
+
+private fun Project.enableMetroCompilerPlugin() {
+  fun DependencyHandler.addCompilerPluginDependencies() {
+    add(
+      PLUGIN_CLASSPATH_CONFIGURATION_NAME,
+      "$APP_PLATFORM_GROUP:metro-contribute-impl-compiler-plugin:$APP_PLATFORM_VERSION",
+    )
+    add(
+      NATIVE_COMPILER_PLUGIN_CLASSPATH_CONFIGURATION_NAME,
+      "$APP_PLATFORM_GROUP:metro-contribute-impl-compiler-plugin:$APP_PLATFORM_VERSION",
+    )
+  }
+
+  plugins.withId(PluginIds.KOTLIN_MULTIPLATFORM) {
+    kmpExtension.sourceSets.getByName("commonMain").dependencies {
+      implementation("$APP_PLATFORM_GROUP:di-common-public:$APP_PLATFORM_VERSION")
+      implementation("$APP_PLATFORM_GROUP:metro-public:$APP_PLATFORM_VERSION")
+    }
+    dependencies.addCompilerPluginDependencies()
   }
 
   plugins.withIds(PluginIds.KOTLIN_ANDROID, PluginIds.KOTLIN_JVM) {
@@ -269,7 +308,7 @@ private fun Project.enableMetro() {
 
     dependencies.add("implementation", "$APP_PLATFORM_GROUP:metro-public:$APP_PLATFORM_VERSION")
 
-    dependencies.addKspProcessorDependencies("ksp")
+    dependencies.addCompilerPluginDependencies()
   }
 }
 
