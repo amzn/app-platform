@@ -254,7 +254,8 @@ public class ContributesRobotFir(session: FirSession) :
 
   private fun buildOriginAnnotation(owner: FirClassSymbol<*>) = buildAnnotation {
     val originSymbol =
-      session.symbolProvider.getClassLikeSymbolByClassId(ClassIds.ORIGIN) as FirRegularClassSymbol
+      session.symbolProvider.getClassLikeSymbolByClassId(ClassIds.ORIGIN) as? FirRegularClassSymbol
+        ?: error("Annotation class ${ClassIds.ORIGIN} not found on the classpath")
     annotationTypeRef = originSymbol.defaultType().toFirResolvedTypeRef()
     argumentMapping = buildAnnotationArgumentMapping {
       mapping[Name.identifier("value")] = buildClassExpression(owner, session)
@@ -264,7 +265,8 @@ public class ContributesRobotFir(session: FirSession) :
   private fun buildRobotKeyAnnotation(robotClassId: ClassId) = buildAnnotation {
     val robotKeySymbol =
       session.symbolProvider.getClassLikeSymbolByClassId(ClassIds.ROBOT_KEY)
-        as FirRegularClassSymbol
+        as? FirRegularClassSymbol
+        ?: error("Annotation class ${ClassIds.ROBOT_KEY} not found on the classpath")
     annotationTypeRef = robotKeySymbol.defaultType().toFirResolvedTypeRef()
     argumentMapping = buildAnnotationArgumentMapping {
       mapping[Name.identifier("value")] = buildClassExpression(robotClassId, session)

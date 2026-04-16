@@ -7,7 +7,13 @@ import org.jetbrains.kotlin.name.Name
 internal object ClassIds {
   val APP_SCOPE = ClassId(FqName("dev.zacsweers.metro"), Name.identifier("AppScope"))
 
+  val BASE_MODEL =
+    ClassId(FqName("software.amazon.app.platform.presenter"), Name.identifier("BaseModel"))
+
   val BINDS = ClassId(FqName("dev.zacsweers.metro"), Name.identifier("Binds"))
+
+  val CONTRIBUTES_RENDERER =
+    ClassId(FqName("software.amazon.app.platform.inject"), Name.identifier("ContributesRenderer"))
 
   val CONTRIBUTES_ROBOT =
     ClassId(
@@ -19,6 +25,8 @@ internal object ClassIds {
 
   val DEPENDENCY_GRAPH = ClassId(FqName("dev.zacsweers.metro"), Name.identifier("DependencyGraph"))
 
+  val FOR_SCOPE = ClassId(FqName("dev.zacsweers.metro"), Name.identifier("ForScope"))
+
   val INJECT = ClassId(FqName("dev.zacsweers.metro"), Name.identifier("Inject"))
 
   val INTO_MAP = ClassId(FqName("dev.zacsweers.metro"), Name.identifier("IntoMap"))
@@ -29,6 +37,15 @@ internal object ClassIds {
 
   val PROVIDES = ClassId(FqName("dev.zacsweers.metro"), Name.identifier("Provides"))
 
+  val RENDERER =
+    ClassId(FqName("software.amazon.app.platform.renderer"), Name.identifier("Renderer"))
+
+  val RENDERER_KEY =
+    ClassId(FqName("software.amazon.app.platform.renderer.metro"), Name.identifier("RendererKey"))
+
+  val RENDERER_SCOPE =
+    ClassId(FqName("software.amazon.app.platform.renderer"), Name.identifier("RendererScope"))
+
   val ROBOT = ClassId(FqName("software.amazon.app.platform.robot"), Name.identifier("Robot"))
 
   val ROBOT_KEY =
@@ -36,5 +53,9 @@ internal object ClassIds {
 
   val ROBOT_FQ_NAMES: Set<ClassId> = setOf(ROBOT)
 
+  val SINGLE_IN = ClassId(FqName("dev.zacsweers.metro"), Name.identifier("SingleIn"))
+
   val SCOPE = ClassId(FqName("dev.zacsweers.metro"), Name.identifier("Scope"))
+
+  val UNIT = ClassId(FqName("kotlin"), Name.identifier("Unit"))
 }

@@ -9,6 +9,9 @@ import org.jetbrains.kotlin.diagnostics.rendering.CommonRenderers
 import org.jetbrains.kotlin.psi.KtElement
 
 internal object AppPlatformMetroExtensionsDiagnostics : KtDiagnosticsContainer() {
+  val CONTRIBUTES_RENDERER_ERROR by
+    error1<KtElement, String>(SourceElementPositioningStrategies.NAME_IDENTIFIER)
+
   val CONTRIBUTES_ROBOT_ERROR by
     error1<KtElement, String>(SourceElementPositioningStrategies.NAME_IDENTIFIER)
 
@@ -20,6 +23,11 @@ internal object AppPlatformMetroExtensionsDiagnostics : KtDiagnosticsContainer()
 private object AppPlatformMetroExtensionsErrorMessages : BaseDiagnosticRendererFactory() {
   override val MAP by
     KtDiagnosticFactoryToRendererMap("AppPlatformMetroExtensions") { map ->
+      map.put(
+        AppPlatformMetroExtensionsDiagnostics.CONTRIBUTES_RENDERER_ERROR,
+        "{0}",
+        CommonRenderers.STRING,
+      )
       map.put(
         AppPlatformMetroExtensionsDiagnostics.CONTRIBUTES_ROBOT_ERROR,
         "{0}",

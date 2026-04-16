@@ -22,6 +22,76 @@ public class BoxTestGenerated extends AbstractBoxTest {
   }
 
   @Nested
+  @TestMetadata("metro-extensions/contribute/impl-compiler-plugin/src/test/resources/box/contributesrenderer")
+  @TestDataPath("$PROJECT_ROOT")
+  public class Contributesrenderer {
+    @Test
+    public void testAllFilesPresentInContributesrenderer() {
+      KtTestUtil.assertAllTestsPresentByMetadataWithExcluded(this.getClass(), new File("metro-extensions/contribute/impl-compiler-plugin/src/test/resources/box/contributesrenderer"), Pattern.compile("^(.+)\\.kt$"), null, true);
+    }
+
+    @Test
+    @TestMetadata("defaultConstructorRenderer.kt")
+    public void testDefaultConstructorRenderer() {
+      runTest("metro-extensions/contribute/impl-compiler-plugin/src/test/resources/box/contributesrenderer/defaultConstructorRenderer.kt");
+    }
+
+    @Test
+    @TestMetadata("explicitModelType.kt")
+    public void testExplicitModelType() {
+      runTest("metro-extensions/contribute/impl-compiler-plugin/src/test/resources/box/contributesrenderer/explicitModelType.kt");
+    }
+
+    @Test
+    @TestMetadata("inferredFromHierarchy.kt")
+    public void testInferredFromHierarchy() {
+      runTest("metro-extensions/contribute/impl-compiler-plugin/src/test/resources/box/contributesrenderer/inferredFromHierarchy.kt");
+    }
+
+    @Test
+    @TestMetadata("inferredFromHierarchyMultipleLevels.kt")
+    public void testInferredFromHierarchyMultipleLevels() {
+      runTest("metro-extensions/contribute/impl-compiler-plugin/src/test/resources/box/contributesrenderer/inferredFromHierarchyMultipleLevels.kt");
+    }
+
+    @Test
+    @TestMetadata("injectConstructorRenderer.kt")
+    public void testInjectConstructorRenderer() {
+      runTest("metro-extensions/contribute/impl-compiler-plugin/src/test/resources/box/contributesrenderer/injectConstructorRenderer.kt");
+    }
+
+    @Test
+    @TestMetadata("innerModel.kt")
+    public void testInnerModel() {
+      runTest("metro-extensions/contribute/impl-compiler-plugin/src/test/resources/box/contributesrenderer/innerModel.kt");
+    }
+
+    @Test
+    @TestMetadata("innerRenderer.kt")
+    public void testInnerRenderer() {
+      runTest("metro-extensions/contribute/impl-compiler-plugin/src/test/resources/box/contributesrenderer/innerRenderer.kt");
+    }
+
+    @Test
+    @TestMetadata("sealedHierarchy.kt")
+    public void testSealedHierarchy() {
+      runTest("metro-extensions/contribute/impl-compiler-plugin/src/test/resources/box/contributesrenderer/sealedHierarchy.kt");
+    }
+
+    @Test
+    @TestMetadata("sealedHierarchyDisabled.kt")
+    public void testSealedHierarchyDisabled() {
+      runTest("metro-extensions/contribute/impl-compiler-plugin/src/test/resources/box/contributesrenderer/sealedHierarchyDisabled.kt");
+    }
+
+    @Test
+    @TestMetadata("sealedHierarchyInDependencyModule.kt")
+    public void testSealedHierarchyInDependencyModule() {
+      runTest("metro-extensions/contribute/impl-compiler-plugin/src/test/resources/box/contributesrenderer/sealedHierarchyInDependencyModule.kt");
+    }
+  }
+
+  @Nested
   @TestMetadata("metro-extensions/contribute/impl-compiler-plugin/src/test/resources/box/contributesrobot")
   @TestDataPath("$PROJECT_ROOT")
   public class Contributesrobot {

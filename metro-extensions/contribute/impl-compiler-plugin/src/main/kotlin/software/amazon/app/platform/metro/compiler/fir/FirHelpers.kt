@@ -2,6 +2,12 @@ package software.amazon.app.platform.metro.compiler.fir
 
 import org.jetbrains.kotlin.fir.FirSession
 import org.jetbrains.kotlin.fir.declarations.DirectDeclarationsAccess
+import org.jetbrains.kotlin.fir.declarations.FirDeclaration
+import org.jetbrains.kotlin.fir.declarations.FirDeclarationOrigin
+import org.jetbrains.kotlin.fir.declarations.FirFile
+import org.jetbrains.kotlin.fir.declarations.FirRegularClass
+import org.jetbrains.kotlin.fir.declarations.FirResolvePhase
+import org.jetbrains.kotlin.fir.declarations.builder.buildValueParameter
 import org.jetbrains.kotlin.fir.declarations.toAnnotationClassIdSafe
 import org.jetbrains.kotlin.fir.expressions.FirAnnotation
 import org.jetbrains.kotlin.fir.expressions.FirAnnotationCall
@@ -13,9 +19,9 @@ import org.jetbrains.kotlin.fir.expressions.FirPropertyAccessExpression
 import org.jetbrains.kotlin.fir.expressions.FirResolvedQualifier
 import org.jetbrains.kotlin.fir.expressions.buildResolvedArgumentList
 import org.jetbrains.kotlin.fir.expressions.builder.buildAnnotationArgumentMapping
-import org.jetbrains.kotlin.fir.expressions.builder.buildArgumentList
 import org.jetbrains.kotlin.fir.expressions.builder.buildGetClassCall
 import org.jetbrains.kotlin.fir.expressions.builder.buildResolvedQualifier
+import org.jetbrains.kotlin.fir.moduleData
 import org.jetbrains.kotlin.fir.references.FirResolvedNamedReference
 import org.jetbrains.kotlin.fir.references.builder.buildResolvedNamedReference
 import org.jetbrains.kotlin.fir.resolve.fullyExpandedType
@@ -25,10 +31,10 @@ import org.jetbrains.kotlin.fir.resolve.toRegularClassSymbol
 import org.jetbrains.kotlin.fir.symbols.FirBasedSymbol
 import org.jetbrains.kotlin.fir.symbols.SymbolInternals
 import org.jetbrains.kotlin.fir.symbols.impl.ConeClassLikeLookupTagImpl
-import org.jetbrains.kotlin.fir.symbols.impl.FirClassLikeSymbol
 import org.jetbrains.kotlin.fir.symbols.impl.FirClassSymbol
 import org.jetbrains.kotlin.fir.symbols.impl.FirConstructorSymbol
 import org.jetbrains.kotlin.fir.symbols.impl.FirRegularClassSymbol
+import org.jetbrains.kotlin.fir.symbols.impl.FirValueParameterSymbol
 import org.jetbrains.kotlin.fir.toFirResolvedTypeRef
 import org.jetbrains.kotlin.fir.types.ConeKotlinType
 import org.jetbrains.kotlin.fir.types.impl.ConeClassLikeTypeImpl
@@ -70,12 +76,15 @@ internal fun buildAnnotationCallWithArgument(
       emptyArray(),
       isMarkedNullable = false,
     )
-  val annotationClassSymbol = session.symbolProvider.getClassLikeSymbolByClassId(classId)!!
+  val annotationClassSymbol =
+    session.symbolProvider.getClassLikeSymbolByClassId(classId)
+      ?: error("Annotation class $classId not found on the classpath")
   val constructorSymbol =
-    (annotationClassSymbol as FirClassSymbol<*>)
-      .declarationSymbols
-      .filterIsInstance<FirConstructorSymbol>()
-      .first()
+    (annotationClassSymbol as? FirClassSymbol<*>)
+      ?.declarationSymbols
+      ?.filterIsInstance<FirConstructorSymbol>()
+      ?.firstOrNull()
+      ?: error("No constructor found for annotation class $classId")
   val argumentParameter = constructorSymbol.fir.valueParameters.first { it.name == argName }
 
   return org.jetbrains.kotlin.fir.expressions.builder.buildAnnotationCall {
@@ -107,12 +116,15 @@ internal fun buildSimpleAnnotationCall(
       emptyArray(),
       isMarkedNullable = false,
     )
-  val annotationClassSymbol = session.symbolProvider.getClassLikeSymbolByClassId(classId)!!
+  val annotationClassSymbol =
+    session.symbolProvider.getClassLikeSymbolByClassId(classId)
+      ?: error("Annotation class $classId not found on the classpath")
   val constructorSymbol =
-    (annotationClassSymbol as FirClassSymbol<*>)
-      .declarationSymbols
-      .filterIsInstance<FirConstructorSymbol>()
-      .first()
+    (annotationClassSymbol as? FirClassSymbol<*>)
+      ?.declarationSymbols
+      ?.filterIsInstance<FirConstructorSymbol>()
+      ?.firstOrNull()
+      ?: error("No constructor found for annotation class $classId")
 
   return org.jetbrains.kotlin.fir.expressions.builder.buildAnnotationCall {
     annotationTypeRef = annotationType.toFirResolvedTypeRef()
@@ -154,45 +166,111 @@ internal fun extractScopeClassId(
       ?: annotationCall.argumentList.arguments.firstOrNull()
       ?: return null
 
-  val scopeExpression =
-    if (rawScopeExpression is FirNamedArgumentExpression) {
-      rawScopeExpression.expression
-    } else {
-      rawScopeExpression
-    }
+  return resolveClassIdArgument(rawScopeExpression, classSymbol, session)
+}
 
-  val getClassCall = scopeExpression as? FirGetClassCall ?: return null
+internal fun unwrapArgumentExpression(expression: FirExpression): FirExpression {
+  return if (expression is FirNamedArgumentExpression) expression.expression else expression
+}
+
+internal data class ResolvedClassReference(
+  val classId: ClassId,
+  val classSymbol: FirRegularClassSymbol?,
+)
+
+internal fun resolveClassIdArgument(
+  rawExpression: FirExpression,
+  classSymbol: FirRegularClassSymbol,
+  session: FirSession,
+): ClassId? {
+  return resolveClassReferenceArgument(rawExpression, classSymbol, session)?.classId
+}
+
+internal fun resolveClassReferenceArgument(
+  rawExpression: FirExpression,
+  classSymbol: FirRegularClassSymbol,
+  session: FirSession,
+): ResolvedClassReference? {
+  val expression = unwrapArgumentExpression(rawExpression)
+  val getClassCall = expression as? FirGetClassCall ?: return null
   val innerArgument = getClassCall.argumentList.arguments.firstOrNull() ?: return null
 
   return when (innerArgument) {
-    is FirResolvedQualifier -> innerArgument.classId
+    is FirResolvedQualifier ->
+      innerArgument.classId?.let { classId ->
+        ResolvedClassReference(
+          classId = classId,
+          classSymbol =
+            (innerArgument.symbol as? FirRegularClassSymbol)
+              ?: (session.symbolProvider.getClassLikeSymbolByClassId(classId)
+                as? FirRegularClassSymbol)
+              ?: findClassLikeSymbolInContainingFile(classSymbol, classId, session)
+              ?: findClassLikeSymbolInPackageFiles(
+                classSymbol.classId.packageFqName,
+                classId,
+                session,
+              ),
+        )
+      }
+
     is FirPropertyAccessExpression -> {
       val reference = innerArgument.calleeReference
       if (
-        reference is FirResolvedNamedReference && reference.resolvedSymbol is FirClassLikeSymbol<*>
+        reference is FirResolvedNamedReference && reference.resolvedSymbol is FirRegularClassSymbol
       ) {
-        (reference.resolvedSymbol as FirClassLikeSymbol<*>).classId
+        val resolvedSymbol = reference.resolvedSymbol as FirRegularClassSymbol
+        ResolvedClassReference(resolvedSymbol.classId, resolvedSymbol)
       } else {
         val name = reference.name
         val file = session.firProvider.getFirClassifierContainerFileIfAny(classSymbol)
-        file?.imports?.firstNotNullOfOrNull { import ->
-          val importedFqName = import.importedFqName ?: return@firstNotNullOfOrNull null
-          if (import.isAllUnder) {
-            val classId = ClassId(importedFqName, name)
-            session.symbolProvider.getClassLikeSymbolByClassId(classId)?.classId
-          } else if (importedFqName.shortName() == name) {
-            val classId = ClassId.topLevel(importedFqName)
-            session.symbolProvider.getClassLikeSymbolByClassId(classId)?.classId
+        val samePackageClassId =
+          if (name.asString() == "Unit") {
+            ClassId(FqName("kotlin"), name)
           } else {
-            null
+            ClassId(classSymbol.classId.packageFqName, name)
           }
-        }
-          ?: session.symbolProvider
-            .getClassLikeSymbolByClassId(ClassId(FqName("kotlin"), name))
-            ?.classId
-          ?: session.symbolProvider
-            .getClassLikeSymbolByClassId(ClassId(classSymbol.classId.packageFqName, name))
-            ?.classId
+        val explicitImportClassIds =
+          file
+            ?.imports
+            ?.filter { !it.isAllUnder }
+            ?.mapNotNull { import ->
+              val importedFqName = import.importedFqName ?: return@mapNotNull null
+              ClassId.topLevel(importedFqName).takeIf { importedFqName.shortName() == name }
+            }
+            .orEmpty()
+        val allUnderImportClassIds =
+          file
+            ?.imports
+            ?.filter { it.isAllUnder }
+            ?.mapNotNull { import ->
+              val importedFqName = import.importedFqName ?: return@mapNotNull null
+              ClassId(importedFqName, name)
+            }
+            .orEmpty()
+        val classId =
+          sequenceOf(samePackageClassId)
+            .plus(explicitImportClassIds.asSequence())
+            .plus(allUnderImportClassIds.asSequence())
+            .firstOrNull { candidateClassId ->
+              session.symbolProvider.getClassLikeSymbolByClassId(candidateClassId) != null ||
+                findClassLikeSymbolInContainingFile(classSymbol, candidateClassId, session) !=
+                  null ||
+                findClassLikeSymbolInPackageFiles(
+                  classSymbol.classId.packageFqName,
+                  candidateClassId,
+                  session,
+                ) != null
+            } ?: samePackageClassId
+        ResolvedClassReference(
+          classId,
+          (session.symbolProvider.getClassLikeSymbolByClassId(classId) as? FirRegularClassSymbol)
+            ?: findClassLikeSymbolInContainingFile(classSymbol, classId, session)
+            ?: findClassLikeSymbolInPackageFiles(
+              classSymbol.classId.packageFqName,
+              classId,
+              session,
+            ),
+        )
       }
     }
 
@@ -221,20 +299,30 @@ internal fun buildClassExpression(
 
   return buildGetClassCall {
     coneTypeOrNull = kClassType
-    argumentList = buildArgumentList {
-      arguments += buildResolvedQualifier {
-        packageFqName = classId.packageFqName
-        relativeClassFqName = classId.relativeClassName
-        coneTypeOrNull = classType
-        symbol = classSymbol
-        resolvedToCompanionObject = false
-        isFullyQualified = true
-      }
+    val qualifier = buildResolvedQualifier {
+      packageFqName = classId.packageFqName
+      relativeClassFqName = classId.relativeClassName
+      coneTypeOrNull = classType
+      symbol = classSymbol
+      resolvedToCompanionObject = false
+      isFullyQualified = true
     }
+    argumentList =
+      buildResolvedArgumentList(
+        original = null,
+        mapping =
+          linkedMapOf(
+            qualifier to buildSyntheticClassLiteralParameter(classType, classSymbol, session)
+          ),
+      )
   }
 }
 
-internal fun buildClassExpression(classId: ClassId, session: FirSession): FirExpression {
+internal fun buildClassExpression(
+  classId: ClassId,
+  session: FirSession,
+  ownerSymbol: FirRegularClassSymbol? = null,
+): FirExpression {
   val classType =
     ConeClassLikeTypeImpl(
       ConeClassLikeLookupTagImpl(classId),
@@ -249,19 +337,97 @@ internal fun buildClassExpression(classId: ClassId, session: FirSession): FirExp
       isMarkedNullable = false,
     )
 
+  val classSymbol =
+    session.symbolProvider.getClassLikeSymbolByClassId(classId)
+      ?: ownerSymbol?.let { findClassLikeSymbolInContainingFile(it, classId, session) }
+      ?: ownerSymbol?.let {
+        findClassLikeSymbolInPackageFiles(it.classId.packageFqName, classId, session)
+      }
+
   return buildGetClassCall {
     coneTypeOrNull = kClassType
-    argumentList = buildArgumentList {
-      arguments += buildResolvedQualifier {
-        packageFqName = classId.packageFqName
-        relativeClassFqName = classId.relativeClassName
-        coneTypeOrNull = classType
-        symbol = session.symbolProvider.getClassLikeSymbolByClassId(classId)!!
-        resolvedToCompanionObject = false
-        isFullyQualified = true
-      }
+    val qualifier = buildResolvedQualifier {
+      packageFqName = classId.packageFqName
+      relativeClassFqName = classId.relativeClassName
+      coneTypeOrNull = classType
+      symbol = classSymbol
+      resolvedToCompanionObject = false
+      isFullyQualified = classSymbol != null
+    }
+    argumentList =
+      buildResolvedArgumentList(
+        original = null,
+        mapping =
+          linkedMapOf(
+            qualifier to
+              buildSyntheticClassLiteralParameter(
+                classType = classType,
+                containingSymbol = classSymbol ?: ownerSymbol,
+                session = session,
+              )
+          ),
+      )
+  }
+}
+
+private fun buildSyntheticClassLiteralParameter(
+  classType: ConeClassLikeTypeImpl,
+  containingSymbol: FirBasedSymbol<*>?,
+  session: FirSession,
+) = buildValueParameter {
+  moduleData = session.moduleData
+  resolvePhase = FirResolvePhase.BODY_RESOLVE
+  origin = FirDeclarationOrigin.Synthetic.PluginFile
+  returnTypeRef = classType.toFirResolvedTypeRef()
+  name = Name.identifier("value")
+  symbol = FirValueParameterSymbol()
+  containingDeclarationSymbol =
+    containingSymbol ?: error("Unable to determine containing symbol for generated class literal")
+}
+
+@OptIn(DirectDeclarationsAccess::class)
+internal fun findClassLikeSymbolInContainingFile(
+  ownerSymbol: FirRegularClassSymbol,
+  classId: ClassId,
+  session: FirSession,
+): FirRegularClassSymbol? {
+  val file = session.firProvider.getFirClassifierContainerFileIfAny(ownerSymbol) ?: return null
+  return findClassLikeSymbolInFile(file, classId)
+}
+
+@OptIn(DirectDeclarationsAccess::class)
+internal fun findClassLikeSymbolInPackageFiles(
+  packageFqName: FqName,
+  classId: ClassId,
+  session: FirSession,
+): FirRegularClassSymbol? {
+  return session.firProvider.getFirFilesByPackage(packageFqName).firstNotNullOfOrNull { file ->
+    findClassLikeSymbolInFile(file, classId)
+  }
+}
+
+@OptIn(DirectDeclarationsAccess::class)
+private fun findClassLikeSymbolInFile(file: FirFile, classId: ClassId): FirRegularClassSymbol? {
+  return file.declarations.firstNotNullOfOrNull { declaration ->
+    findClassLikeSymbolInDeclaration(declaration, classId)
+  }
+}
+
+@OptIn(DirectDeclarationsAccess::class)
+private fun findClassLikeSymbolInDeclaration(
+  declaration: FirDeclaration,
+  classId: ClassId,
+): FirRegularClassSymbol? {
+  val regularClass = declaration as? FirRegularClass
+  if (regularClass?.symbol?.classId == classId) {
+    return regularClass.symbol
+  }
+  if (regularClass != null) {
+    return regularClass.declarations.firstNotNullOfOrNull { nestedDeclaration ->
+      findClassLikeSymbolInDeclaration(nestedDeclaration, classId)
     }
   }
+  return null
 }
 
 internal fun hasTransitiveSupertype(
