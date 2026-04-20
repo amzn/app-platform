@@ -17,6 +17,18 @@
 ### Other Notes & Contributions
 
 
+## [0.0.10] - 2026-04-20
+
+### Added
+
+- Migrate the blueprints/starter app from kotlin-inject to Metro, see #178
+- Add a compiler plugin for Metro extensions, see #179. The compiler plugin is now used by default, but the KSP implementations can be enabled by setting the Gradle property `-Papp.platform.metro.ksp=true`.
+
+## Changed
+
+- Metro to `1.0.0-RC2`
+
+
 ## [0.0.9] - 2026-04-13
 
 ### Added
@@ -149,7 +161,8 @@
 
 - Initial release.
 
-[Unreleased]: https://github.com/amzn/app-platform/compare/0.0.9...HEAD
+[Unreleased]: https://github.com/amzn/app-platform/compare/0.0.10...HEAD
+[0.0.10]: https://github.com/amzn/app-platform/compare/0.0.10
 [0.0.9]: https://github.com/amzn/app-platform/compare/0.0.9
 [0.0.8]: https://github.com/amzn/app-platform/compare/0.0.8
 [0.0.7]: https://github.com/amzn/app-platform/compare/0.0.7
