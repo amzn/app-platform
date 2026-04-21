@@ -149,13 +149,6 @@ internal sealed interface Platform {
     override val target: KotlinNativeTarget by lazy { project.kmpExtension.iosArm64() }
   }
 
-  private class IosX64(override val project: Project) : Ios() {
-
-    override val unitTestTaskName: String = "iosX64Test"
-
-    override val target: KotlinNativeTarget by lazy { project.kmpExtension.iosX64() }
-  }
-
   private class Wasm(private val project: Project) : Platform {
     override val unitTestTaskName: String = "wasmJsTest"
 
@@ -183,7 +176,6 @@ internal sealed interface Platform {
 
         add(IosSimulatorArm64(project = this@allPlatforms))
         add(IosArm64(project = this@allPlatforms))
-        add(IosX64(project = this@allPlatforms))
 
         add(Wasm(project = this@allPlatforms))
 

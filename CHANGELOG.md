@@ -10,6 +10,8 @@
 
 ### Removed
 
+- Removed Apple x86_64 targets from the repository builds by dropping `iosX64` where it was still configured, aligning with Compose Multiplatform's removal of Apple x86_64 target support: https://kotlinlang.org/docs/multiplatform/whats-new-compose-111.html#dropped-support-for-apple-x86-64-targets
+
 ### Fixed
 
 ### Security
