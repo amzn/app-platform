@@ -937,14 +937,14 @@ override fun present(input: Unit): Model {
 }
 ```
 
-The [`Renderer`](https://github.com/amzn/app-platform/blob/main/recipes/common/impl/src/androidMain/kotlin/software/amazon/app/platform/recipes/nav3/AndroidNavigation3HomeRenderer.kt) 
+The [`Renderer`](https://github.com/amzn/app-platform/blob/main/recipes/common/impl/src/commonMain/kotlin/software/amazon/app/platform/recipes/nav3/Navigation3HomeRenderer.kt) 
 wraps the backstack in a `NavDisplay` and forwards back gestures to the `Presenter`. There is a unique `NavEntry`
 for each position in the stack and the individual `Renderer` for each `Model` is invoked:
 
 ```kotlin
 @Inject
 @ContributesRenderer
-class AndroidNavigation3HomeRenderer(private val rendererFactory: RendererFactory) : ComposeRenderer<Model>() {
+class Navigation3HomeRenderer(private val rendererFactory: RendererFactory) : ComposeRenderer<Model>() {
   @Composable
   override fun Compose(model: Model) {
     // Use the position of the model in the backstack as key for `NavDisplay`. This way

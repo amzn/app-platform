@@ -12,14 +12,13 @@ import software.amazon.app.platform.renderer.RendererFactory
 import software.amazon.app.platform.renderer.getComposeRenderer
 
 /**
- * Navigation3 is only supported on Android, therefore this renderer lives in `androidMain`. This
- * Renderer integrates the Navigation3 library. The backstack is managed in the presenter for
- * idiomatic navigation with presenters, but interactions with the backstack are handled by the
- * Navigation3 library, e.g. back gestures.
+ * Renderer that integrates the multiplatform Navigation3 UI implementation. The backstack is
+ * managed in the presenter for idiomatic navigation with presenters, but interactions with the
+ * backstack are handled by the Navigation3 library, e.g. back gestures.
  */
 @Inject
 @ContributesRenderer
-class AndroidNavigation3HomeRenderer(private val rendererFactory: RendererFactory) :
+class Navigation3HomeRenderer(private val rendererFactory: RendererFactory) :
   ComposeRenderer<Model>() {
   @Composable
   override fun Compose(model: Model) {

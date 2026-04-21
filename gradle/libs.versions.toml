@@ -125,7 +125,7 @@ metro-runtime = { module = "dev.zacsweers.metro:runtime", version.ref = "metro" 
 molecule-runtime = { module = "app.cash.molecule:molecule-runtime", version.ref = "molecule" }
 navigation-event-compose = { module = "org.jetbrains.androidx.navigationevent:navigationevent-compose", version.ref = "navigation-event" }
 navigation3-runtime = { module = "androidx.navigation3:navigation3-runtime", version.ref = "navigation3" }
-navigation3-ui = { module = "androidx.navigation3:navigation3-ui", version.ref = "navigation3" }
+navigation3-ui = { module = "org.jetbrains.androidx.navigation3:navigation3-ui", version.ref = "navigation3" }
 recyclerView = { module = "androidx.recyclerview:recyclerview", version.ref = "recyclerView" }
 turbine = { module = "app.cash.turbine:turbine", version.ref = "turbine" }
 #noinspection SimilarGradleDependency
