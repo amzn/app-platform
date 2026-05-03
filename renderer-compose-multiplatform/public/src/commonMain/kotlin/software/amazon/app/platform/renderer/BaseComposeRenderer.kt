@@ -1,6 +1,7 @@
 package software.amazon.app.platform.renderer
 
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import software.amazon.app.platform.presenter.BaseModel
 
 /**
@@ -24,11 +25,10 @@ import software.amazon.app.platform.presenter.BaseModel
 // vs this BaseComposeRenderer API. Note that BaseComposeRenderer is not extending the Renderer
 // interface. This distinction is similar to Presenter and MoleculePresenter.
 public interface BaseComposeRenderer<in ModelT : BaseModel> {
-
   /** Render the given [model] on screen using Compose UI. */
   // Android Lint will complain that this function should start with an uppercase letter, but
   // the name "renderCompose" was chosen to align it with the "render" function from the
   // Renderer interface. Implementations will usually have a separate "Compose()" function, see
   // ComposeRenderer for example.
-  @Composable public fun renderCompose(model: ModelT)
+  @Composable public fun renderCompose(model: ModelT, modifier: Modifier = Modifier)
 }

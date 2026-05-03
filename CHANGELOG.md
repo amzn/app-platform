@@ -6,6 +6,8 @@
 
 ### Changed
 
+- **Breaking change:** Added an optional `Modifier` parameter to `BaseComposeRenderer.renderCompose()` and forwarded it to `ComposeRenderer.Compose()` so callers can apply standard Compose modifiers at the renderer boundary.
+
 ### Deprecated
 
 ### Removed

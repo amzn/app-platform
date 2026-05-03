@@ -1,6 +1,7 @@
 package software.amazon.app.platform.renderer
 
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import software.amazon.app.platform.presenter.BaseModel
 
 /**
@@ -58,14 +59,16 @@ public abstract class ComposeRenderer<in ModelT : BaseModel> :
   }
 
   @Composable
-  final override fun renderCompose(model: ModelT) {
+  final override fun renderCompose(model: ModelT, modifier: Modifier) {
     // This function seems redundant and implementations could implement it instead of the
     // separate Compose() function. However, it will allow us to intercept rendering calls
     // in the platform for future use cases. Compare this with ViewRenderer.render() and
     // ViewRenderer.renderModel().
-    Compose(model)
+    Compose(model, modifier)
   }
 
   /** Render the given [model] on screen using Compose UI. */
-  @Suppress("FunctionName") @Composable protected abstract fun Compose(model: ModelT)
+  @Suppress("FunctionName")
+  @Composable
+  protected abstract fun Compose(model: ModelT, modifier: Modifier)
 }

@@ -51,7 +51,7 @@ class RootPresenterRenderer(
   private val backGestureDispatcherPresenter: BackGestureDispatcherPresenter,
 ) : ComposeRenderer<RecipesAppTemplate>() {
   @Composable
-  override fun Compose(model: RecipesAppTemplate) {
+  override fun Compose(model: RecipesAppTemplate, modifier: Modifier) {
     backGestureDispatcherPresenter.ForwardBackPressEventsToPresenters()
 
     when (model) {

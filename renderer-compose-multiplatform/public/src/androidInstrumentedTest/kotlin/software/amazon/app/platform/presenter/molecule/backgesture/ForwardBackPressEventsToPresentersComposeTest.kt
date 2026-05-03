@@ -59,7 +59,7 @@ class ForwardBackPressEventsToPresentersComposeTest {
     private val testRenderer: TestRenderer,
   ) : ComposeRenderer<Model>() {
     @Composable
-    override fun Compose(model: Model) {
+    override fun Compose(model: Model, modifier: Modifier) {
       backGestureDispatcherPresenter.ForwardBackPressEventsToPresenters()
 
       testRenderer.renderCompose(model)
@@ -87,7 +87,7 @@ class ForwardBackPressEventsToPresentersComposeTest {
 
   private class TestRenderer : ComposeRenderer<Model>() {
     @Composable
-    override fun Compose(model: Model) {
+    override fun Compose(model: Model, modifier: Modifier) {
       BasicText(text = "Count: ${model.backPressCount}", modifier = Modifier.testTag("count"))
     }
   }

@@ -40,7 +40,7 @@ import software.amazon.app.platform.sample.user.UserPageDetailPresenter.Model
 class UserPageDetailRenderer : ComposeRenderer<Model>() {
 
   @Composable
-  override fun Compose(model: Model) {
+  override fun Compose(model: Model, modifier: Modifier) {
     if (model.showPictureFullscreen) {
       ProfilePicture(model)
     } else {

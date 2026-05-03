@@ -19,8 +19,8 @@ import software.amazon.app.platform.renderer.ComposeRenderer
 @ContributesRenderer
 class Navigation3ChildRenderer : ComposeRenderer<Model>() {
   @Composable
-  override fun Compose(model: Model) {
-    Box(modifier = Modifier.Companion.fillMaxSize().background(Color(model.color))) {
+  override fun Compose(model: Model, modifier: Modifier) {
+    Box(modifier = Modifier.fillMaxSize().background(Color(model.color))) {
       Column {
         Text("Index: ${model.index}")
         Text("Count: ${model.counter}")
@@ -28,7 +28,7 @@ class Navigation3ChildRenderer : ComposeRenderer<Model>() {
 
       Button(
         onClick = { model.onEvent(Navigation3ChildPresenter.Event.AddPresenter) },
-        modifier = Modifier.Companion.align(Alignment.Companion.Center),
+        modifier = Modifier.align(Alignment.Center),
       ) {
         Text("Add Presenter")
       }

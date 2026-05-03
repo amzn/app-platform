@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import assertk.assertFailure
 import assertk.assertThat
 import assertk.assertions.isInstanceOf
@@ -89,7 +90,7 @@ class ComposeAndroidRendererFactoryTest {
   private class UnsupportedModel : BaseModel
 
   private class TestComposeRenderer : ComposeRenderer<ComposeModel>() {
-    @Composable override fun Compose(model: ComposeModel) = Unit
+    @Composable override fun Compose(model: ComposeModel, modifier: Modifier) = Unit
   }
 
   private class TestAndroidRenderer : ViewRenderer<AndroidModel>() {

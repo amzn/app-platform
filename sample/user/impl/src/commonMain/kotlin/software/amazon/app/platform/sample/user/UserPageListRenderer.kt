@@ -28,7 +28,7 @@ import software.amazon.app.platform.sample.user.UserPageListPresenter.Model
 class UserPageListRenderer : ComposeRenderer<Model>() {
 
   @Composable
-  override fun Compose(model: Model) {
+  override fun Compose(model: Model, modifier: Modifier) {
     Column(modifier = Modifier.fillMaxWidth().fillMaxHeight()) {
       Text(
         text = "User: ${model.userId}",
