@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
 import kotlinx.coroutines.flow.MutableStateFlow
 import software.amazon.app.platform.presenter.BaseModel
@@ -46,7 +47,7 @@ internal abstract class BaseComposeWithinAndroidViewRenderer<in ModelT : BaseMod
 
   @Suppress("ComposableNaming")
   @Composable
-  final override fun renderCompose(model: ModelT) {
+  final override fun renderCompose(model: ModelT, modifier: Modifier) {
     Compose(model)
   }
 

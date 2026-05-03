@@ -17,7 +17,7 @@ import software.amazon.app.platform.renderer.ComposeRenderer
 @ContributesRenderer
 class LandingRenderer : ComposeRenderer<Model>() {
   @Composable
-  override fun Compose(model: Model) {
+  override fun Compose(model: Model, modifier: Modifier) {
     Column(
       modifier = Modifier.fillMaxSize().padding(top = 12.dp),
       horizontalAlignment = Alignment.CenterHorizontally,

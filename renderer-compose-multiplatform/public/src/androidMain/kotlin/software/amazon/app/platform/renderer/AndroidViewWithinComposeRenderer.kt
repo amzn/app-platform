@@ -4,6 +4,7 @@ import android.app.Activity
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.viewinterop.AndroidView
 import software.amazon.app.platform.presenter.BaseModel
 
@@ -41,7 +42,7 @@ internal class AndroidViewWithinComposeRenderer<in ModelT : BaseModel>(
 
   @Suppress("ComposableNaming")
   @Composable
-  override fun renderCompose(model: ModelT) {
+  override fun renderCompose(model: ModelT, modifier: Modifier) {
     AndroidView(
       factory = { context ->
         // Create a FrameLayout as parent. It's technically not needed, but the

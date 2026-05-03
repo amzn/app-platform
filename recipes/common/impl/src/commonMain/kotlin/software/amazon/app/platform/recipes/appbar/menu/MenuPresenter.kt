@@ -72,7 +72,7 @@ class MenuPresenter : MoleculePresenter<Unit, Model> {
 @ContributesRenderer
 class MenuRenderer : ComposeRenderer<Model>() {
   @Composable
-  override fun Compose(model: Model) {
+  override fun Compose(model: Model, modifier: Modifier) {
     Column(
       modifier = Modifier.fillMaxSize().padding(top = 12.dp),
       horizontalAlignment = Alignment.CenterHorizontally,

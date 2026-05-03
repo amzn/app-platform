@@ -1,6 +1,7 @@
 package software.amazon.app.platform.recipes.nav3
 
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import androidx.navigation3.runtime.NavEntry
 import androidx.navigation3.ui.NavDisplay
 import me.tatarka.inject.annotations.Inject
@@ -21,7 +22,7 @@ import software.amazon.app.platform.renderer.getComposeRenderer
 class Navigation3HomeRenderer(private val rendererFactory: RendererFactory) :
   ComposeRenderer<Model>() {
   @Composable
-  override fun Compose(model: Model) {
+  override fun Compose(model: Model, modifier: Modifier) {
     // Use the position of the model in the backstack as key for `NavDisplay`. This way
     // we can update models without Navigation 3 treating those changes as a new screen.
     val backstack = model.backstack.mapIndexed { index, _ -> index }

@@ -35,7 +35,7 @@ class CrossSlideBackstackRenderer(private val rendererFactory: RendererFactory) 
   ComposeRenderer<Model>() {
 
   @Composable
-  override fun Compose(model: Model) {
+  override fun Compose(model: Model, modifier: Modifier) {
     Column(modifier = Modifier.fillMaxSize()) {
       CrossSlide(
         targetState = model.delegate,

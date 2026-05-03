@@ -405,7 +405,7 @@ class ComposeAndroidRendererFactoryDeviceTest {
     }
 
     @Composable
-    override fun Compose(model: ComposeModel) {
+    override fun Compose(model: ComposeModel, modifier: Modifier) {
       Column {
         BasicText(text = "Compose test: ${model.value}", modifier = Modifier.testTag("testCompose"))
 

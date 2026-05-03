@@ -41,6 +41,17 @@ class ComposeRendererTest {
   }
 
   @Test
+  fun `renderCompose forwards its modifier to Compose`() {
+    runComposeUiTest {
+      val renderer = ModifierRenderer()
+
+      setContent { renderer.renderCompose(Model(1), Modifier.testTag("forwarded-modifier")) }
+
+      onNodeWithTag("forwarded-modifier").assertTextEquals("Argument 1")
+    }
+  }
+
+  @Test
   fun `a ComposeRenderer can nest other ComposeRenderers`() {
     runComposeUiTest {
       val renderer = OuterRenderer(TestRenderer())
@@ -64,14 +75,21 @@ class ComposeRendererTest {
 
   private class TestRenderer : ComposeRenderer<Model>() {
     @Composable
-    override fun Compose(model: Model) {
+    override fun Compose(model: Model, modifier: Modifier) {
       Text(text = "Argument ${model.value}", modifier = Modifier.testTag("text"))
+    }
+  }
+
+  private class ModifierRenderer : ComposeRenderer<Model>() {
+    @Composable
+    override fun Compose(model: Model, modifier: Modifier) {
+      Text(text = "Argument ${model.value}", modifier = modifier)
     }
   }
 
   private class OuterRenderer(private val testRenderer: TestRenderer) : ComposeRenderer<Model>() {
     @Composable
-    override fun Compose(model: Model) {
+    override fun Compose(model: Model, modifier: Modifier) {
       Column {
         Text(text = "Outer ${model.value}", modifier = Modifier.testTag("text-outer"))
         testRenderer.renderCompose(model)

@@ -1,6 +1,7 @@
 package software.amazon.app.platform.renderer
 
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import assertk.all
 import assertk.assertFailure
 import assertk.assertThat
@@ -92,7 +93,7 @@ class ComposeRendererFactoryTest {
   private class AndroidModel : BaseModel
 
   private class TestComposeRenderer : ComposeRenderer<ComposeModel>() {
-    @Composable override fun Compose(model: ComposeModel) = Unit
+    @Composable override fun Compose(model: ComposeModel, modifier: Modifier) = Unit
   }
 
   private class AndroidRenderer : Renderer<AndroidModel> {

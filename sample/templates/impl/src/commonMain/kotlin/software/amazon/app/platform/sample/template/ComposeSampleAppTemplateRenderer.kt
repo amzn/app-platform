@@ -38,7 +38,7 @@ class ComposeSampleAppTemplateRenderer(
 ) : ComposeRenderer<SampleAppTemplate>() {
 
   @Composable
-  override fun Compose(model: SampleAppTemplate) {
+  override fun Compose(model: SampleAppTemplate, modifier: Modifier) {
     backGestureDispatcherPresenter.ForwardBackPressEventsToPresenters()
 
     Box(Modifier.windowInsetsPadding(WindowInsets.safeDrawing)) {

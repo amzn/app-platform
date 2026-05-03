@@ -20,7 +20,7 @@ import software.amazon.app.platform.sample.login.LoginPresenter.Model
 @ContributesRenderer
 class LoginRenderer : ComposeRenderer<Model>() {
   @Composable
-  override fun Compose(model: Model) {
+  override fun Compose(model: Model, modifier: Modifier) {
     Column(
       modifier = Modifier.fillMaxSize(),
       verticalArrangement = Arrangement.Center,
