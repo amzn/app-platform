@@ -91,10 +91,12 @@ class ComposeSampleAppTemplateRenderer(
 ) : ComposeRenderer<SampleAppTemplate>() {
 
   @Composable
-  override fun Compose(model: SampleAppTemplate) {
-    when (model) {
-      is SampleAppTemplate.FullScreenTemplate -> FullScreen(model)
-      is SampleAppTemplate.ListDetailTemplate -> ListDetail(model)
+  override fun Compose(model: SampleAppTemplate, modifier: Modifier) {
+    Box(modifier = modifier) {
+      when (model) {
+        is SampleAppTemplate.FullScreenTemplate -> FullScreen(model)
+        is SampleAppTemplate.ListDetailTemplate -> ListDetail(model)
+      }
     }
   }
 

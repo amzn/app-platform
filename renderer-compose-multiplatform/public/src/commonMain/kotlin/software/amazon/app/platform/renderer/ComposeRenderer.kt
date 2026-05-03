@@ -15,9 +15,10 @@ import software.amazon.app.platform.presenter.BaseModel
  * @ContributesRenderer
  * class MyRenderer : ComposeRenderer<MyModel>() {
  *     @Composable
- *     override fun Compose(model: MyModel) {
+ *     override fun Compose(model: MyModel, modifier: Modifier) {
  *         Text(
  *             text = "MyModel value: ${model.value}",
+ *             modifier = modifier,
  *         )
  *     }
  * }
@@ -29,7 +30,7 @@ import software.amazon.app.platform.presenter.BaseModel
  * ```
  * // Do this
  * @Composable
- * override fun Compose(model: MyModel) {
+ * override fun Compose(model: MyModel, modifier: Modifier) {
  *     var string by remember { mutableStateOf(..) }
  * }
  *
@@ -37,7 +38,7 @@ import software.amazon.app.platform.presenter.BaseModel
  * private var string: String? = null
  *
  * @Composable
- * override fun Compose(model: MyModel) {
+ * override fun Compose(model: MyModel, modifier: Modifier) {
  *     string = ...
  * }
  * ```
