@@ -34,11 +34,11 @@ implementation for iOS is missing.
 @ContributesRenderer
 class LoginRenderer : ComposeRenderer<Model>() {
   @Composable
-  override fun Compose(model: Model) {
+  override fun Compose(model: Model, modifier: Modifier) {
     if (model.loginInProgress) {
-      CircularProgressIndicator()
+      CircularProgressIndicator(modifier = modifier)
     } else {
-      Text("Login")
+      Text("Login", modifier = modifier)
     }
   }
 }
@@ -72,11 +72,16 @@ class LoginRenderer : ViewRenderer<Model>() {
 
     ```kotlin
     @Composable
-    fun renderCompose(model: ModelT)
+    fun renderCompose(model: ModelT, modifier: Modifier = Modifier)
     ```
 
     In practice this is less of a concern, because the `render(model)` function is deprecated and hidden and callers
-    only see the `renderCompose(model)` function.
+    only see the `renderCompose(model, modifier)` function. The `modifier` parameter defaults to `Modifier`, so simple
+    call sites can continue to use `renderCompose(model)`.
+
+`ComposeRenderer.Compose()` also receives the `Modifier` from `renderCompose()`. Renderer implementations should apply
+this value to their root composable, matching the usual Compose convention for UI-emitting functions. This lets parents
+and platform entrypoints attach layout, testing, accessibility, or pointer-input behavior at the renderer boundary.
 
 Renderers are composable and can build hierarchies similar to `Presenters`. The parent renderer is responsible for
 calling `render()` on the child renderer:
@@ -106,9 +111,10 @@ A `Renderer` sends events back to the `Presenter` through the `onEvent` lambda o
 @ContributesRenderer
 class LoginRenderer : ComposeRenderer<Model>() {
   @Composable
-  override fun Compose(model: Model) {
+  override fun Compose(model: Model, modifier: Modifier) {
     Button(
       onClick = { model.onEvent(LoginPresenter.Event.Login("Demo")) },
+      modifier = modifier,
     ) {
       Text("Login")
     }
@@ -262,14 +268,15 @@ fun mainViewController(rootScopeProvider: RootScopeProvider): UIViewController =
     val model = presenter.present(Unit)
 
     val renderer = factory.getComposeRenderer(model)
-    renderer.renderCompose(model)
+    renderer.renderCompose(model, modifier = Modifier.fillMaxSize())
   }
 ```
 
 !!! note
 
     Note that `getRenderer()` for `ComposeRendererFactory` returns a `ComposeRenderer`. For a `ComposeRenderer` the
-    `renderCompose(model)` function must be called and not `render(model)`.
+    `renderCompose(model, modifier)` function must be called and not `render(model)`. The `modifier` argument is
+    optional.
 
 ```kotlin title="Android Activity"
 class MainActivity : ComponentActivity() {
@@ -308,9 +315,11 @@ class SampleRenderer(
 ) : ComposeRenderer<Model>() {
 
   @Composable
-  override fun Compose(model: Model) {
-    val childRenderer = rendererFactory.getComposeRenderer(model.childModel)
-    childRenderer.renderCompose(model.childModel)
+  override fun Compose(model: Model, modifier: Modifier) {
+    Column(modifier = modifier) {
+      val childRenderer = rendererFactory.getComposeRenderer(model.childModel)
+      childRenderer.renderCompose(model.childModel)
+    }
   }
 }
 ```

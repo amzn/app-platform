@@ -458,7 +458,7 @@ class RootPresenterRenderer(
   private val backGestureDispatcherPresenter: BackGestureDispatcherPresenter,
 ) : ComposeRenderer<Model>() {
   @Composable
-  override fun Compose(model: Model) {
+  override fun Compose(model: Model, modifier: Modifier) {
     backGestureDispatcherPresenter.ForwardBackPressEventsToPresenters()
 
     // Call other child renderers.
@@ -946,7 +946,7 @@ for each position in the stack and the individual `Renderer` for each `Model` is
 @ContributesRenderer
 class Navigation3HomeRenderer(private val rendererFactory: RendererFactory) : ComposeRenderer<Model>() {
   @Composable
-  override fun Compose(model: Model) {
+  override fun Compose(model: Model, modifier: Modifier) {
     // Use the position of the model in the backstack as key for `NavDisplay`. This way
     // we can update models without Navigation 3 treating those changes as a new screen.
     val backstack = model.backstack.mapIndexed { index, _ -> index }
@@ -985,7 +985,7 @@ With this integration handling of the backstack is managed in the `Presenter` an
       private val rendererFactory: RendererFactory,
     ) : ComposeRenderer<Model>() {
       @Composable
-      override fun Compose(model: Model) {
+      override fun Compose(model: Model, modifier: Modifier) {
         val backstack = remember { mutableStateListOf<Any>(List) }
 
         NavDisplay(
