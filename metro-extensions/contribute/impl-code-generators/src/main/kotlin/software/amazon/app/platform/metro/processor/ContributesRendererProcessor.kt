@@ -15,6 +15,7 @@ import com.squareup.kotlinpoet.AnnotationSpec
 import com.squareup.kotlinpoet.ClassName
 import com.squareup.kotlinpoet.FileSpec
 import com.squareup.kotlinpoet.FunSpec
+import com.squareup.kotlinpoet.LambdaTypeName
 import com.squareup.kotlinpoet.ParameterizedTypeName.Companion.parameterizedBy
 import com.squareup.kotlinpoet.STAR
 import com.squareup.kotlinpoet.TypeSpec
@@ -27,7 +28,6 @@ import dev.zacsweers.metro.ContributesTo
 import dev.zacsweers.metro.ForScope
 import dev.zacsweers.metro.Inject
 import dev.zacsweers.metro.IntoMap
-import dev.zacsweers.metro.Provider
 import dev.zacsweers.metro.Provides
 import dev.zacsweers.metro.SingleIn
 import kotlin.reflect.KClass
@@ -60,7 +60,7 @@ import software.amazon.app.platform.renderer.metro.RendererKey
  *     @IntoMap
  *     @RendererKey(Model::class)
  *     fun provideTestRendererIntoMap(
- *         renderer: Provider<TestRenderer>,
+ *         renderer: () -> TestRenderer,
  *     ): Renderer<*> = renderer()
  *
  *     @Provides
@@ -224,10 +224,7 @@ internal class ContributesRendererProcessor(
       .addAnnotation(
         AnnotationSpec.builder(rendererKey).addMember("%T::class", modelType.toClassName()).build()
       )
-      .addParameter(
-        name = "renderer",
-        type = Provider::class.asClassName().parameterizedBy(clazz.toClassName()),
-      )
+      .addParameter(name = "renderer", type = LambdaTypeName.get(returnType = clazz.toClassName()))
       .returns(rendererWildcard)
       .addStatement("return renderer()")
       .build()

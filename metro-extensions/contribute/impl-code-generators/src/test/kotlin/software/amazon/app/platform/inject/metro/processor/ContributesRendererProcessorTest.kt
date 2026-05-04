@@ -14,7 +14,6 @@ import com.tschuchort.compiletesting.JvmCompilationResult
 import com.tschuchort.compiletesting.KotlinCompilation.ExitCode.COMPILATION_ERROR
 import dev.zacsweers.metro.ForScope
 import dev.zacsweers.metro.IntoMap
-import dev.zacsweers.metro.Provider
 import dev.zacsweers.metro.Provides
 import dev.zacsweers.metro.SingleIn
 import kotlin.reflect.KClass
@@ -74,7 +73,7 @@ class ContributesRendererProcessorTest {
           it.name == "provideSoftwareAmazonTestTestRendererModel"
         }
       ) {
-        assertThat(parameters.single().type).isEqualTo(Provider::class.java)
+        assertThat(parameters.single().type).isEqualTo(Function0::class.java)
         assertThat(returnType).isEqualTo(Renderer::class.java)
         assertThat(this).isAnnotatedWith(Provides::class)
         assertThat(this).isAnnotatedWith(IntoMap::class)
@@ -146,7 +145,7 @@ class ContributesRendererProcessorTest {
           it.name == "provideSoftwareAmazonTestTestRendererInnerModel"
         }
       ) {
-        assertThat(parameters.single().type).isEqualTo(Provider::class.java)
+        assertThat(parameters.single().type).isEqualTo(Function0::class.java)
         assertThat(returnType).isEqualTo(Renderer::class.java)
         assertThat(this).isAnnotatedWith(Provides::class)
         assertThat(this).isAnnotatedWith(IntoMap::class)
@@ -199,7 +198,7 @@ class ContributesRendererProcessorTest {
           it.name == "provideSoftwareAmazonTestTestRendererPresenterModel"
         }
       ) {
-        assertThat(parameters.single().type).isEqualTo(Provider::class.java)
+        assertThat(parameters.single().type).isEqualTo(Function0::class.java)
         assertThat(returnType).isEqualTo(Renderer::class.java)
         assertThat(this).isAnnotatedWith(Provides::class)
         assertThat(this).isAnnotatedWith(IntoMap::class)
@@ -375,7 +374,7 @@ class ContributesRendererProcessorTest {
         )
 
       bindingMethods.forEach {
-        assertThat(it.parameters.single().type).isEqualTo(Provider::class.java)
+        assertThat(it.parameters.single().type).isEqualTo(Function0::class.java)
         assertThat(it.returnType).isEqualTo(Renderer::class.java)
         assertThat(it).isAnnotatedWith(Provides::class)
         assertThat(it).isAnnotatedWith(IntoMap::class)
@@ -624,7 +623,6 @@ class ContributesRendererProcessorTest {
         import dev.zacsweers.metro.createGraph
         import dev.zacsweers.metro.DependencyGraph
         import dev.zacsweers.metro.ForScope
-        import dev.zacsweers.metro.Provider
         import dev.zacsweers.metro.Provides
         import dev.zacsweers.metro.SingleIn
         import software.amazon.test.TestRendererGraph

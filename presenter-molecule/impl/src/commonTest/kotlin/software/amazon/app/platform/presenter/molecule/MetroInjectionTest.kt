@@ -7,7 +7,6 @@ import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.Binds
 import dev.zacsweers.metro.DependencyGraph
 import dev.zacsweers.metro.Inject
-import dev.zacsweers.metro.Provider
 import dev.zacsweers.metro.Provides
 import dev.zacsweers.metro.SingleIn
 import dev.zacsweers.metro.createGraphFactory
@@ -54,7 +53,7 @@ interface MetroTestComponent {
 @Inject
 @SingleIn(AppScope::class)
 class MetroTestMoleculeScopeFactory(
-  @PresenterCoroutineScope coroutineScopeFactory: Provider<CoroutineScope>
+  @PresenterCoroutineScope coroutineScopeFactory: () -> CoroutineScope
 ) :
   MoleculeScopeFactory by DefaultMoleculeScopeFactory(
     coroutineScopeFactory = { coroutineScopeFactory() },

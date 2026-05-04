@@ -14,7 +14,6 @@ import com.tschuchort.compiletesting.KotlinCompilation.ExitCode.COMPILATION_ERRO
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesTo
 import dev.zacsweers.metro.IntoMap
-import dev.zacsweers.metro.Provider
 import dev.zacsweers.metro.Provides
 import dev.zacsweers.metro.SingleIn
 import org.intellij.lang.annotations.Language
@@ -61,7 +60,7 @@ class ContributesRobotGeneratorTest {
       }
 
       with(robotGraph.declaredNonSyntheticMethods.single { it.name == "provideTestRobotIntoMap" }) {
-        assertThat(parameters.single().type).isEqualTo(Provider::class.java)
+        assertThat(parameters.single().type).isEqualTo(Function0::class.java)
         assertThat(returnType).isEqualTo(Robot::class.java)
         assertThat(this).isAnnotatedWith(Provides::class)
         assertThat(this).isAnnotatedWith(IntoMap::class)
@@ -101,7 +100,7 @@ class ContributesRobotGeneratorTest {
         .isNull()
 
       with(robotGraph.declaredNonSyntheticMethods.single { it.name == "provideTestRobotIntoMap" }) {
-        assertThat(parameters.single().type).isEqualTo(Provider::class.java)
+        assertThat(parameters.single().type).isEqualTo(Function0::class.java)
         assertThat(returnType).isEqualTo(Robot::class.java)
         assertThat(this).isAnnotatedWith(Provides::class)
         assertThat(this).isAnnotatedWith(IntoMap::class)

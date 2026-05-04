@@ -14,8 +14,6 @@ import assertk.assertThat
 import assertk.assertions.isFalse
 import assertk.assertions.isTrue
 import assertk.assertions.messageContains
-import dev.zacsweers.metro.Provider
-import dev.zacsweers.metro.provider
 import kotlin.reflect.KClass
 import kotlin.test.Test
 import software.amazon.app.platform.scope.Scope
@@ -75,8 +73,8 @@ class ComposeRobotTest {
   }
 
   private class Component(vararg robots: Robot) : RobotGraph {
-    override val robots: Map<KClass<*>, Provider<Robot>> = robots.associate { robot ->
-      robot::class to provider { robot }
+    override val robots: Map<KClass<*>, () -> Robot> = robots.associate { robot ->
+      robot::class to { robot }
     }
   }
 

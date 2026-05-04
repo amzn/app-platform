@@ -40,11 +40,15 @@ class TestRobot : Robot {
         }
 
         @HiddenFromObjC
+        @JvmStatic
+        @JsStatic
         fun create(instance: RobotContribution): Factory<TestRobot> {
           return ProvideTestRobotMetroFactory(instance = instance)
         }
 
         @HiddenFromObjC
+        @JvmStatic
+        @JsStatic
         fun provideTestRobot(instance: RobotContribution): TestRobot {
           return instance.provideTestRobot()
         }

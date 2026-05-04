@@ -315,7 +315,7 @@ or `kotlin-inject-anvil` dependency graph.
           @IntoMap
           @RobotKey(LoginRobot::class)
           public fun provideLoginRobotIntoMap(
-            robot: Provider<LoginRobot>
+            robot: () -> LoginRobot
           ): Robot = robot()
         }
         ```

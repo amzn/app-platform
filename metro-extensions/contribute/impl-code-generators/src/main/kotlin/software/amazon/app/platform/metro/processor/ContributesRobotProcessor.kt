@@ -13,7 +13,7 @@ import com.squareup.kotlinpoet.AnnotationSpec
 import com.squareup.kotlinpoet.ClassName
 import com.squareup.kotlinpoet.FileSpec
 import com.squareup.kotlinpoet.FunSpec
-import com.squareup.kotlinpoet.ParameterizedTypeName.Companion.parameterizedBy
+import com.squareup.kotlinpoet.LambdaTypeName
 import com.squareup.kotlinpoet.TypeSpec
 import com.squareup.kotlinpoet.asClassName
 import com.squareup.kotlinpoet.ksp.addOriginatingKSFile
@@ -23,7 +23,6 @@ import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesTo
 import dev.zacsweers.metro.Inject
 import dev.zacsweers.metro.IntoMap
-import dev.zacsweers.metro.Provider
 import dev.zacsweers.metro.Provides
 import software.amazon.app.platform.inject.robot.ContributesRobot
 import software.amazon.app.platform.ksp.decapitalize
@@ -50,7 +49,7 @@ import software.amazon.app.platform.renderer.metro.RobotKey
  *     @IntoMap
  *     @RobotKey(AbcRobot::class)
  *     fun provideAbcRobotIntoMap(
- *         robot: Provider<AbcRobot>,
+ *         robot: () -> AbcRobot,
  *     ): Robot = robot()
  * }
  * ```
@@ -119,7 +118,7 @@ internal class ContributesRobotProcessor(
                 )
                 .addParameter(
                   name = "robot",
-                  type = Provider::class.asClassName().parameterizedBy(clazz.toClassName()),
+                  type = LambdaTypeName.get(returnType = clazz.toClassName()),
                 )
                 .returns(robotClassName)
                 .addStatement("return robot()")
