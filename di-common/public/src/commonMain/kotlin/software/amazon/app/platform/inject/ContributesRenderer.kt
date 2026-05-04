@@ -35,7 +35,7 @@ import software.amazon.lastmile.kotlin.inject.anvil.extend.ContributingAnnotatio
  *     @IntoMap
  *     @RendererKey(IncrementPresenter.Model::class)
  *     fun provideIncrementRendererIncrementPresenterModel(
- *         renderer: Provider<IncrementRenderer>,
+ *         renderer: () -> IncrementRenderer,
  *     ): Renderer<*> = renderer()
  *
  *     @Provides

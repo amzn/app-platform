@@ -3,7 +3,6 @@ package software.amazon.app.platform.presenter.molecule
 import app.cash.molecule.RecompositionMode
 import dev.zacsweers.metro.AppScope as MetroAppScope
 import dev.zacsweers.metro.ContributesTo as MetroContributesTo
-import dev.zacsweers.metro.Provider
 import dev.zacsweers.metro.Provides as MetroProvides
 import dev.zacsweers.metro.SingleIn as MetroSingleIn
 import kotlinx.coroutines.CoroutineScope
@@ -41,6 +40,6 @@ public interface LinuxMoleculeScopeFactoryGraph {
   @MetroProvides
   @MetroSingleIn(MetroAppScope::class)
   public fun provideLinuxMoleculeScopeFactory(
-    @PresenterCoroutineScope coroutineScopeFactory: Provider<CoroutineScope>
+    @PresenterCoroutineScope coroutineScopeFactory: () -> CoroutineScope
   ): MoleculeScopeFactory = LinuxMoleculeScopeFactory { coroutineScopeFactory() }
 }

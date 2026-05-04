@@ -4,8 +4,6 @@ import assertk.assertThat
 import assertk.assertions.isEqualTo
 import assertk.assertions.isNotSameInstanceAs
 import assertk.assertions.isSameInstanceAs
-import dev.zacsweers.metro.Provider
-import dev.zacsweers.metro.provider
 import kotlin.reflect.KClass
 import kotlin.test.Test
 import kotlin.test.assertFailsWith
@@ -131,11 +129,11 @@ class BaseRendererFactoryTest {
       mapOf(TestModel::class to { TestRenderer() }),
     kotlinInjectModelToRendererMapping: Map<KClass<out BaseModel>, KClass<out Renderer<*>>> =
       mapOf(TestModel::class to TestRenderer::class),
-    metroRenderers: Map<KClass<out BaseModel>, Provider<Renderer<*>>> =
+    metroRenderers: Map<KClass<out BaseModel>, () -> Renderer<*>> =
       mapOf(
-        SealedTestModel::class to provider { SealedTestRenderer() },
-        SealedTestModel.Model1::class to provider { SealedTestRenderer() },
-        SealedTestModel.Model2::class to provider { SealedTestRenderer() },
+        SealedTestModel::class to { SealedTestRenderer() },
+        SealedTestModel.Model1::class to { SealedTestRenderer() },
+        SealedTestModel.Model2::class to { SealedTestRenderer() },
       ),
     metroModelToRendererMapping: Map<KClass<out BaseModel>, KClass<out Renderer<*>>> =
       mapOf(
@@ -171,7 +169,7 @@ class BaseRendererFactoryTest {
                 object : RendererGraph.Factory {
                   override fun createRendererGraph(factory: RendererFactory): RendererGraph =
                     object : RendererGraph {
-                      override val renderers: Map<KClass<out BaseModel>, Provider<Renderer<*>>> =
+                      override val renderers: Map<KClass<out BaseModel>, () -> Renderer<*>> =
                         metroRenderers
                       override val modelToRendererMapping:
                         Map<KClass<out BaseModel>, KClass<out Renderer<*>>> =

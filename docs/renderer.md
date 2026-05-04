@@ -183,7 +183,7 @@ class LoginRenderer : ComposeRenderer<LoginPresenter.Model>()
           @Provides
           @IntoMap
           @RendererKey(LoginPresenter.Model::class)
-          public fun provideSoftwareAmazonAppPlatformSampleLoginLoginRendererLoginPresenterModel(renderer: Provider<LoginRenderer>): Renderer<*> = renderer()
+          public fun provideSoftwareAmazonAppPlatformSampleLoginLoginRendererLoginPresenterModel(renderer: () -> LoginRenderer): Renderer<*> = renderer()
     
           @Provides
           @IntoMap

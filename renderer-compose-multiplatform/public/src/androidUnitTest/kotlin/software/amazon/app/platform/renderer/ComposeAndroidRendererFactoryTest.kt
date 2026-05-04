@@ -10,8 +10,6 @@ import assertk.assertFailure
 import assertk.assertThat
 import assertk.assertions.isInstanceOf
 import assertk.assertions.messageContains
-import dev.zacsweers.metro.Provider
-import dev.zacsweers.metro.provider
 import kotlin.reflect.KClass
 import kotlin.test.Test
 import kotlinx.coroutines.test.TestScope
@@ -60,11 +58,11 @@ class ComposeAndroidRendererFactoryTest {
           object : RendererGraph.Factory {
             override fun createRendererGraph(factory: RendererFactory): RendererGraph {
               return object : RendererGraph {
-                override val renderers: Map<KClass<out BaseModel>, Provider<Renderer<*>>> =
+                override val renderers: Map<KClass<out BaseModel>, () -> Renderer<*>> =
                   mapOf(
-                    ComposeModel::class to provider { TestComposeRenderer() },
-                    AndroidModel::class to provider { TestAndroidRenderer() },
-                    UnsupportedModel::class to provider { UnsupportedRenderer() },
+                    ComposeModel::class to { TestComposeRenderer() },
+                    AndroidModel::class to { TestAndroidRenderer() },
+                    UnsupportedModel::class to { UnsupportedRenderer() },
                   )
                 override val modelToRendererMapping:
                   Map<KClass<out BaseModel>, KClass<out Renderer<*>>> =

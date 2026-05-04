@@ -8,7 +8,6 @@ import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
 import dev.zacsweers.metro.ContributesTo
 import dev.zacsweers.metro.Inject
-import dev.zacsweers.metro.Provider
 import software.amazon.app.platform.presenter.BaseModel
 import software.amazon.app.platform.presenter.molecule.MoleculePresenter
 import software.amazon.app.platform.sample.login.LoginPresenter
@@ -28,7 +27,7 @@ import software.amazon.app.platform.scope.di.metro.metroDependencyGraph
 @ContributesBinding(AppScope::class)
 class NavigationPresenterImpl(
   private val userManager: UserManager,
-  private val loginPresenter: Provider<LoginPresenter>,
+  private val loginPresenter: () -> LoginPresenter,
 ) : NavigationPresenter {
 
   @Composable

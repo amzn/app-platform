@@ -6,8 +6,6 @@ import assertk.assertions.isFalse
 import assertk.assertions.isNotNull
 import assertk.assertions.isNotSameInstanceAs
 import assertk.assertions.isTrue
-import dev.zacsweers.metro.Provider
-import dev.zacsweers.metro.provider
 import kotlin.reflect.KClass
 import kotlin.test.Test
 import kotlin.test.assertFailsWith
@@ -133,8 +131,8 @@ class RobotTest {
   }
 
   private class Graph(vararg robots: Robot) : RobotGraph {
-    override val robots: Map<KClass<*>, Provider<Robot>> = robots.associate { robot ->
-      robot::class to provider { robot }
+    override val robots: Map<KClass<*>, () -> Robot> = robots.associate { robot ->
+      robot::class to { robot }
     }
   }
 
