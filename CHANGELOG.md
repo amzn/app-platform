@@ -6,19 +6,28 @@
 
 ### Changed
 
-- **Breaking change:** Added an optional `Modifier` parameter to `BaseComposeRenderer.renderCompose()` and forwarded it to `ComposeRenderer.Compose()` so callers can apply standard Compose modifiers at the renderer boundary.
-
 ### Deprecated
 
 ### Removed
-
-- Removed Apple x86_64 targets from the repository builds by dropping `iosX64` where it was still configured, aligning with Compose Multiplatform's removal of Apple x86_64 target support: https://kotlinlang.org/docs/multiplatform/whats-new-compose-111.html#dropped-support-for-apple-x86-64-targets
 
 ### Fixed
 
 ### Security
 
 ### Other Notes & Contributions
+
+
+## [0.0.11] - 2026-05-03
+
+### Changed
+
+- **Breaking change:** Added an optional `Modifier` parameter to `BaseComposeRenderer.renderCompose()` and forwarded it to `ComposeRenderer.Compose()` so callers can apply standard Compose modifiers at the renderer boundary.
+- Metro to `1.0.0`
+- Moved the Navigation 3 recipe to `commonMain` now that it is KMP ready.
+
+### Removed
+
+- Removed Apple x86_64 targets from the repository builds by dropping `iosX64` where it was still configured, aligning with Compose Multiplatform's removal of Apple x86_64 target support: https://kotlinlang.org/docs/multiplatform/whats-new-compose-111.html#dropped-support-for-apple-x86-64-targets
 
 
 ## [0.0.10] - 2026-04-20
@@ -165,7 +174,8 @@
 
 - Initial release.
 
-[Unreleased]: https://github.com/amzn/app-platform/compare/0.0.10...HEAD
+[Unreleased]: https://github.com/amzn/app-platform/compare/0.0.11...HEAD
+[0.0.11]: https://github.com/amzn/app-platform/compare/0.0.11
 [0.0.10]: https://github.com/amzn/app-platform/compare/0.0.10
 [0.0.9]: https://github.com/amzn/app-platform/compare/0.0.9
 [0.0.8]: https://github.com/amzn/app-platform/compare/0.0.8
