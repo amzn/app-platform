@@ -17,7 +17,7 @@ struct SwiftUiRootPresenterView: View {
             presenter: homePresenter,
             viewModelType: BaseModel.self,
             handleViewModelError: { error in
-                fatalError("View model error occured: \(error)")
+                fatalError("View model error occurred: \(error)")
             }
         )
     }
