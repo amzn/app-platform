@@ -6,6 +6,8 @@
 
 ### Changed
 
+- `@ContributesRobot` no longer requires `@Inject` for robots with constructor parameters. The generated contribution now provides a constructor-calling `@Provides` function that injects the same arguments.
+
 ### Deprecated
 
 ### Removed

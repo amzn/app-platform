@@ -101,6 +101,12 @@ public class BoxTestGenerated extends AbstractBoxTest {
     }
 
     @Test
+    @TestMetadata("constructorParametersWithoutInject.kt")
+    public void testConstructorParametersWithoutInject() {
+      runTest("metro-extensions/contribute/impl-compiler-plugin/src/test/resources/box/contributesrobot/constructorParametersWithoutInject.kt");
+    }
+
+    @Test
     @TestMetadata("defaultConstructorRobot.kt")
     public void testDefaultConstructorRobot() {
       runTest("metro-extensions/contribute/impl-compiler-plugin/src/test/resources/box/contributesrobot/defaultConstructorRobot.kt");
@@ -113,9 +119,21 @@ public class BoxTestGenerated extends AbstractBoxTest {
     }
 
     @Test
+    @TestMetadata("injectClassSkipsProvider.kt")
+    public void testInjectClassSkipsProvider() {
+      runTest("metro-extensions/contribute/impl-compiler-plugin/src/test/resources/box/contributesrobot/injectClassSkipsProvider.kt");
+    }
+
+    @Test
     @TestMetadata("injectConstructorRobot.kt")
     public void testInjectConstructorRobot() {
       runTest("metro-extensions/contribute/impl-compiler-plugin/src/test/resources/box/contributesrobot/injectConstructorRobot.kt");
+    }
+
+    @Test
+    @TestMetadata("injectSecondaryConstructorSkipsProvider.kt")
+    public void testInjectSecondaryConstructorSkipsProvider() {
+      runTest("metro-extensions/contribute/impl-compiler-plugin/src/test/resources/box/contributesrobot/injectSecondaryConstructorSkipsProvider.kt");
     }
   }
 

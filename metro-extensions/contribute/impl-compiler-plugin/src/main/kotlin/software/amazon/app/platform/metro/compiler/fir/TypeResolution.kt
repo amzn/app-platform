@@ -72,6 +72,14 @@ internal fun findContainingFile(classSymbol: FirClassLikeSymbol<*>, session: Fir
   }
 }
 
+internal fun resolveTypeRef(
+  typeRef: FirTypeRef,
+  owner: FirRegularClassSymbol,
+  session: FirSession,
+): ConeKotlinType? {
+  return resolveSuperTypeRef(typeRef, owner, session)
+}
+
 internal fun allSessions(session: FirSession): List<FirSession> {
   val visitedModules = linkedSetOf<FirModuleData>()
   val visited = linkedSetOf<FirSession>()

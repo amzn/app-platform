@@ -9,17 +9,23 @@ import com.google.devtools.ksp.processing.Resolver
 import com.google.devtools.ksp.processing.SymbolProcessor
 import com.google.devtools.ksp.symbol.KSAnnotated
 import com.google.devtools.ksp.symbol.KSClassDeclaration
+import com.google.devtools.ksp.symbol.KSFunctionDeclaration
+import com.google.devtools.ksp.symbol.KSValueParameter
 import com.squareup.kotlinpoet.AnnotationSpec
 import com.squareup.kotlinpoet.ClassName
+import com.squareup.kotlinpoet.CodeBlock
 import com.squareup.kotlinpoet.FileSpec
 import com.squareup.kotlinpoet.FunSpec
 import com.squareup.kotlinpoet.LambdaTypeName
+import com.squareup.kotlinpoet.ParameterSpec
 import com.squareup.kotlinpoet.ParameterizedTypeName.Companion.parameterizedBy
 import com.squareup.kotlinpoet.TypeSpec
 import com.squareup.kotlinpoet.WildcardTypeName
 import com.squareup.kotlinpoet.asClassName
 import com.squareup.kotlinpoet.ksp.addOriginatingKSFile
+import com.squareup.kotlinpoet.ksp.toAnnotationSpec
 import com.squareup.kotlinpoet.ksp.toClassName
+import com.squareup.kotlinpoet.ksp.toTypeName
 import com.squareup.kotlinpoet.ksp.writeTo
 import kotlin.reflect.KClass
 import me.tatarka.inject.annotations.Inject
@@ -70,10 +76,10 @@ internal class ContributesRobotProcessor(
       .filterIsInstance<KSClassDeclaration>()
       .onEach {
         checkIsPublic(it)
-        checkHasInjectAnnotation(it)
         checkNotSingleton(it)
         checkSuperType(it)
         checkAppScope(it)
+        checkSingleConstructorOrInject(it)
       }
       .forEach { generateComponentInterface(it) }
 
@@ -96,12 +102,13 @@ internal class ContributesRobotProcessor(
                 .build()
             )
             .apply {
-              if (!clazz.isAnnotationPresent(Inject::class)) {
+              if (!clazz.hasInjectAnnotation()) {
                 addFunction(
                   FunSpec.builder("provide${clazz.innerClassNames()}")
                     .addAnnotation(Provides::class)
                     .returns(clazz.toClassName())
-                    .addStatement("return %T()", clazz.toClassName())
+                    .addParameters(clazz.constructorParameters().map { it.toParameterSpec() })
+                    .addCode(clazz.constructorCall())
                     .build()
                 )
               }
@@ -135,15 +142,6 @@ internal class ContributesRobotProcessor(
     fileSpec.writeTo(codeGenerator, aggregating = false)
   }
 
-  private fun checkHasInjectAnnotation(clazz: KSClassDeclaration) {
-    if (clazz.primaryConstructor?.parameters?.isNotEmpty() == true) {
-      check(clazz.annotations.any { it.isAnnotation(injectFqName) }, clazz) {
-        "${clazz.simpleName.asString()} must be annotated with @Inject when " +
-          "injecting arguments into a robot."
-      }
-    }
-  }
-
   private fun checkNotSingleton(clazz: KSClassDeclaration) {
     check(clazz.annotations.none { it.isKotlinInjectScopeAnnotation() }, clazz) {
       "It's not allowed allowed for a robot to be a singleton, because the lifetime " +
@@ -168,5 +166,53 @@ internal class ContributesRobotProcessor(
     check(scope == AppScope::class.requireQualifiedName(), clazz) {
       "Robots can only be contributed to the AppScope for now. Scope $scope is unsupported."
     }
+  }
+
+  private fun checkSingleConstructorOrInject(clazz: KSClassDeclaration) {
+    if (!clazz.hasInjectAnnotation() && clazz.constructors().count() > 1) {
+      check(false, clazz) {
+        "${clazz.simpleName.asString()} has multiple constructors. Annotate the constructor " +
+          "to use with @Inject, or remove the extra constructors so @ContributesRobot can " +
+          "generate a provider."
+      }
+    }
+  }
+
+  private fun KSClassDeclaration.constructorParameters(): List<KSValueParameter> {
+    return primaryConstructor?.parameters.orEmpty()
+  }
+
+  private fun KSClassDeclaration.hasInjectAnnotation(): Boolean {
+    return isAnnotationPresent(Inject::class) ||
+      constructors().any { it.isAnnotationPresent(Inject::class) }
+  }
+
+  private fun KSClassDeclaration.constructors(): Sequence<KSFunctionDeclaration> {
+    return declarations.filterIsInstance<KSFunctionDeclaration>().filter {
+      it.simpleName.asString() == "<init>"
+    }
+  }
+
+  private fun KSValueParameter.toParameterSpec(): ParameterSpec {
+    val parameterName = name?.asString() ?: "parameter"
+    return ParameterSpec.builder(parameterName, type.toTypeName())
+      .addAnnotations(annotations.map { it.toAnnotationSpec() }.toList())
+      .build()
+  }
+
+  private fun KSClassDeclaration.constructorCall(): CodeBlock {
+    return CodeBlock.builder()
+      .add("return %T(", toClassName())
+      .apply {
+        constructorParameters().forEachIndexed { index, parameter ->
+          if (index > 0) {
+            add(", ")
+          }
+          val parameterName = parameter.name?.asString() ?: "parameter"
+          add("%N = %N", parameterName, parameterName)
+        }
+      }
+      .add(")\n")
+      .build()
   }
 }

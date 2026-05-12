@@ -53,6 +53,12 @@ public class FirDumpTestGenerated extends AbstractFirDumpTest {
     }
 
     @Test
+    @TestMetadata("constructorParametersWithoutInject.kt")
+    public void testConstructorParametersWithoutInject() {
+      runTest("metro-extensions/contribute/impl-compiler-plugin/src/test/resources/dump/contributesrobot/constructorParametersWithoutInject.kt");
+    }
+
+    @Test
     @TestMetadata("defaultConstructorRobot.kt")
     public void testDefaultConstructorRobot() {
       runTest("metro-extensions/contribute/impl-compiler-plugin/src/test/resources/dump/contributesrobot/defaultConstructorRobot.kt");

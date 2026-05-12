@@ -71,9 +71,9 @@ public class FirDiagnosticTestGenerated extends AbstractFirDiagnosticTest {
     }
 
     @Test
-    @TestMetadata("classWithConstructorParametersMustUseInject.kt")
-    public void testClassWithConstructorParametersMustUseInject() {
-      runTest("metro-extensions/contribute/impl-compiler-plugin/src/test/resources/diagnostics/contributesrobot/classWithConstructorParametersMustUseInject.kt");
+    @TestMetadata("multipleConstructorsMustUseInject.kt")
+    public void testMultipleConstructorsMustUseInject() {
+      runTest("metro-extensions/contribute/impl-compiler-plugin/src/test/resources/diagnostics/contributesrobot/multipleConstructorsMustUseInject.kt");
     }
 
     @Test

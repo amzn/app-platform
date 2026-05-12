@@ -58,13 +58,14 @@ internal object ContributesRobotChecker : FirClassChecker(MppCheckerKind.Common)
     }
 
     if (
-      requiresInjectAnnotation(declaration) && !hasAnnotation(classSymbol, ClassIds.INJECT, session)
+      !hasInjectAnnotation(declaration, classSymbol, session) && constructors(declaration).size > 1
     ) {
       reporter.reportOn(
         annotation.source ?: declaration.source,
         AppPlatformMetroExtensionsDiagnostics.CONTRIBUTES_ROBOT_ERROR,
-        "${classSymbol.name.asString()} must be annotated with @Inject when injecting arguments " +
-          "into a robot.",
+        "${classSymbol.name.asString()} has multiple constructors. Annotate the constructor " +
+          "to use with @Inject, or remove the extra constructors so @ContributesRobot can " +
+          "generate a provider.",
       )
     }
 
@@ -95,19 +96,27 @@ internal object ContributesRobotChecker : FirClassChecker(MppCheckerKind.Common)
     }
   }
 
+  @OptIn(DirectDeclarationsAccess::class)
+  private fun constructors(declaration: FirClass): List<FirConstructor> {
+    return declaration.declarations.filterIsInstance<FirConstructor>()
+  }
+
+  private fun hasInjectAnnotation(
+    declaration: FirClass,
+    classSymbol: FirRegularClassSymbol,
+    session: FirSession,
+  ): Boolean {
+    return hasAnnotation(classSymbol, ClassIds.INJECT, session) ||
+      constructors(declaration).any { constructor ->
+        constructor.annotations.any { it.toAnnotationClassIdSafe(session) == ClassIds.INJECT }
+      }
+  }
+
   private fun implementsRobot(declaration: FirClass, session: FirSession): Boolean {
     return declaration.superTypeRefs.any { superTypeRef ->
       val coneType = superTypeRef.coneType.fullyExpandedType(session)
       hasTransitiveSupertype(coneType, session, ClassIds.ROBOT_FQ_NAMES)
     }
-  }
-
-  @OptIn(DirectDeclarationsAccess::class)
-  private fun requiresInjectAnnotation(declaration: FirClass): Boolean {
-    val constructor =
-      declaration.declarations.filterIsInstance<FirConstructor>().firstOrNull { it.isPrimary }
-        ?: declaration.declarations.filterIsInstance<FirConstructor>().firstOrNull()
-    return constructor?.valueParameters?.isNotEmpty() == true
   }
 
   private fun isMetroScopeAnnotation(annotationClassId: ClassId?, session: FirSession): Boolean {

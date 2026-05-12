@@ -218,7 +218,6 @@ class ConnectionRobot : Robot {
     Android Views. To obtain an instance of such a robot use the `robot<Type>()` function:
 
     ```kotlin
-    @Inject
     @ContributesRobot(AppScope::class)
     class MetricsRobot(
       private val metricsService: FakeMetricsService
@@ -308,14 +307,16 @@ or `kotlin-inject-anvil` dependency graph.
 
         ```kotlin
         @ContributesTo(AppScope::class)
-        public interface LoginRobotGraph {
-          @Provides public fun provideLoginRobot(): LoginRobot = LoginRobot()
+        public interface MetricsRobotGraph {
+          @Provides
+          public fun provideMetricsRobot(metricsService: FakeMetricsService): MetricsRobot =
+            MetricsRobot(metricsService)
     
           @Provides
           @IntoMap
-          @RobotKey(LoginRobot::class)
-          public fun provideLoginRobotIntoMap(
-            robot: () -> LoginRobot
+          @RobotKey(MetricsRobot::class)
+          public fun provideMetricsRobotIntoMap(
+            robot: () -> MetricsRobot
           ): Robot = robot()
         }
         ```
@@ -324,23 +325,24 @@ or `kotlin-inject-anvil` dependency graph.
 
         ```kotlin
         @ContributesTo(AppScope::class)
-        public interface LoginRobotComponent {
-          @Provides public fun provideLoginRobot(): LoginRobot = LoginRobot()
+        public interface MetricsRobotComponent {
+          @Provides
+          public fun provideMetricsRobot(metricsService: FakeMetricsService): MetricsRobot =
+            MetricsRobot(metricsService)
 
           @Provides
           @IntoMap
-          public fun provideLoginRobotIntoMap(
-            robot: () -> LoginRobot
-          ): Pair<KClass<out Robot>, () -> Robot> = LoginRobot::class to robot
+          public fun provideMetricsRobotIntoMap(
+            robot: () -> MetricsRobot
+          ): Pair<KClass<out Robot>, () -> Robot> = MetricsRobot::class to robot
         }
         ```
 
 
-If a `Robot` needs to inject other types such a fake implementations, then it needs to be additionally annotated with
-`@Inject`, e.g.
+If a `Robot` needs other types such as fake implementations, declare them as constructor parameters. `@ContributesRobot`
+generates a provider that injects the constructor parameters and calls the robot constructor, so `@Inject` is optional.
 
 ```kotlin
-@Inject
 @ContributesRobot(AppScope::class)
 class MetricsRobot(
   private val metricsService: FakeMetricsService

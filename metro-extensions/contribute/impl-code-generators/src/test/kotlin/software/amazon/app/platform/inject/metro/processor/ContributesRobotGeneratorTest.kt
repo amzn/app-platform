@@ -113,6 +113,133 @@ class ContributesRobotGeneratorTest {
   }
 
   @Test
+  fun `a graph interface skips provider for an @Inject robot with constructor parameters`() {
+    compile(
+      """
+      package software.amazon.test
+
+      import software.amazon.app.platform.inject.robot.ContributesRobot
+      import software.amazon.app.platform.robot.Robot
+      import dev.zacsweers.metro.AppScope
+      import dev.zacsweers.metro.Inject
+
+      @Inject
+      @ContributesRobot(AppScope::class)
+      class TestRobot(
+        private val dependency: String,
+      ) : Robot {
+        fun value(): String = dependency
+      }
+      """,
+      graphInterfaceWithStringSource,
+    ) {
+      val robotGraph = testRobot.graph
+
+      assertThat(
+          robotGraph.declaredNonSyntheticMethods.singleOrNull { it.name == "provideTestRobot" }
+        )
+        .isNull()
+
+      val robot = graphInterface.newMetroGraph<TestRobotGraph>().robots[testRobot.kotlin]!!()
+      assertThat(testRobot.getMethod("value").invoke(robot)).isEqualTo("dependency")
+    }
+  }
+
+  @Test
+  fun `a graph interface skips provider for a robot with an @Inject secondary constructor`() {
+    compile(
+      """
+      package software.amazon.test
+
+      import software.amazon.app.platform.inject.robot.ContributesRobot
+      import software.amazon.app.platform.robot.Robot
+      import dev.zacsweers.metro.AppScope
+      import dev.zacsweers.metro.Inject
+
+      @ContributesRobot(AppScope::class)
+      class TestRobot private constructor(
+        private val dependency: String,
+        private val marker: String,
+      ) : Robot {
+        @Inject constructor(dependency: String) : this(dependency, "injected")
+
+        fun value(): String = dependency + " " + marker
+      }
+      """,
+      graphInterfaceWithStringSource,
+    ) {
+      val robotGraph = testRobot.graph
+
+      assertThat(
+          robotGraph.declaredNonSyntheticMethods.singleOrNull { it.name == "provideTestRobot" }
+        )
+        .isNull()
+
+      val robot = graphInterface.newMetroGraph<TestRobotGraph>().robots[testRobot.kotlin]!!()
+      assertThat(testRobot.getMethod("value").invoke(robot)).isEqualTo("dependency injected")
+    }
+  }
+
+  @Test
+  fun `a robot with multiple constructors must use @Inject`() {
+    compile(
+      """
+      package software.amazon.test
+
+      import software.amazon.app.platform.inject.robot.ContributesRobot
+      import software.amazon.app.platform.robot.Robot
+      import dev.zacsweers.metro.AppScope
+
+      @ContributesRobot(AppScope::class)
+      class TestRobot(
+        private val dependency: String,
+      ) : Robot {
+        constructor(dependency: String, marker: String) : this(dependency)
+      }
+      """,
+      exitCode = COMPILATION_ERROR,
+    ) {
+      assertThat(messages)
+        .contains(
+          "TestRobot has multiple constructors. Annotate the constructor to use with @Inject, " +
+            "or remove the extra constructors so @ContributesRobot can generate a provider."
+        )
+    }
+  }
+
+  @Test
+  fun `a graph interface is generated for constructor parameters without @Inject`() {
+    compile(
+      """
+      package software.amazon.test
+
+      import software.amazon.app.platform.inject.robot.ContributesRobot
+      import software.amazon.app.platform.robot.Robot
+      import dev.zacsweers.metro.AppScope
+
+      @ContributesRobot(AppScope::class)
+      class TestRobot(
+        private val dependency: String,
+      ) : Robot {
+        fun value(): String = dependency
+      }
+      """,
+      graphInterfaceWithStringSource,
+    ) {
+      val robotGraph = testRobot.graph
+
+      with(robotGraph.declaredNonSyntheticMethods.single { it.name == "provideTestRobot" }) {
+        assertThat(parameters.single().type).isEqualTo(String::class.java)
+        assertThat(returnType).isEqualTo(testRobot)
+        assertThat(this).isAnnotatedWith(Provides::class)
+      }
+
+      val robot = graphInterface.newMetroGraph<TestRobotGraph>().robots[testRobot.kotlin]!!()
+      assertThat(testRobot.getMethod("value").invoke(robot)).isEqualTo("dependency")
+    }
+  }
+
+  @Test
   fun `a graph interface is generated without direct super type`() {
     compile(
       """
@@ -223,6 +350,28 @@ class ContributesRobotGeneratorTest {
         @DependencyGraph(AppScope::class)
         @SingleIn(AppScope::class)
         interface GraphInterface : TestRobotGraph {
+            companion object {
+                fun create(): GraphInterface = createGraph<GraphInterface>()
+            }
+        }
+    """
+
+  @Language("kotlin")
+  private val graphInterfaceWithStringSource =
+    """
+        package software.amazon.test
+
+        import dev.zacsweers.metro.AppScope
+        import dev.zacsweers.metro.createGraph
+        import dev.zacsweers.metro.DependencyGraph
+        import dev.zacsweers.metro.Provides
+        import dev.zacsweers.metro.SingleIn
+
+        @DependencyGraph(AppScope::class)
+        @SingleIn(AppScope::class)
+        interface GraphInterface : TestRobotGraph {
+            @Provides fun provideString(): String = "dependency"
+
             companion object {
                 fun create(): GraphInterface = createGraph<GraphInterface>()
             }

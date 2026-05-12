@@ -7,7 +7,9 @@ FILE: defaultConstructorRobotIr.kt
         }
 
         @R|dev/zacsweers/metro/ContributesTo|(scope = <getClass>(Q|dev/zacsweers/metro/AppScope|)) @R|dev/zacsweers/metro/Origin|(value = <getClass>(Q|com/test/TestRobot|)) public abstract interface RobotContribution : R|kotlin/Any| {
-            @R|dev/zacsweers/metro/Provides|() public open fun provideTestRobot(): R|com/test/TestRobot|
+            @R|dev/zacsweers/metro/Provides|() public open fun provideTestRobot(): R|com/test/TestRobot| {
+                ^provideTestRobot R|com/test/TestRobot.TestRobot|()
+            }
 
             @R|dev/zacsweers/metro/Binds|() @R|dev/zacsweers/metro/IntoMap|() @R|software/amazon/app/platform/renderer/metro/RobotKey|(value = <getClass>(Q|com/test/TestRobot|)) public open fun provideTestRobotIntoMap(robot: R|com/test/TestRobot|): R|software/amazon/app/platform/robot/Robot|
 
