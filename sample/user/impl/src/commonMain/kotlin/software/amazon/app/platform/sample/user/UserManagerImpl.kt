@@ -4,7 +4,6 @@ import app_platform.sample.user.impl.generated.resources.Res
 import app_platform.sample.user.impl.generated.resources.allDrawableResources
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
-import dev.zacsweers.metro.Inject
 import dev.zacsweers.metro.SingleIn
 import kotlin.random.Random
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -20,7 +19,6 @@ import software.amazon.app.platform.scope.register
  *
  * This class is responsible for creating the [UserScope] and [UserGraph].
  */
-@Inject
 @SingleIn(AppScope::class)
 @ContributesBinding(AppScope::class)
 class UserManagerImpl(

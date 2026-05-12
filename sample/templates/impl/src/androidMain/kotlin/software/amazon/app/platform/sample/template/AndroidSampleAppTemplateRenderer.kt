@@ -12,7 +12,6 @@ import software.amazon.app.platform.sample.templates.impl.R
 /** An Android renderer implementation for templates used in the sample application. */
 // This implementation is disabled and we always use ComposeSampleAppTemplateRenderer.
 // The Android sample app could use this renderer if desired.
-// @Inject
 // @ContributesRenderer
 class AndroidSampleAppTemplateRenderer(rendererFactory: RendererFactory) :
   AndroidTemplateRenderer<SampleAppTemplate>(rendererFactory) {

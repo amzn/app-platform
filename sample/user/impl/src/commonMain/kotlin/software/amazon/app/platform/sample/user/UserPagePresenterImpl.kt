@@ -2,7 +2,6 @@ package software.amazon.app.platform.sample.user
 
 import androidx.compose.runtime.Composable
 import dev.zacsweers.metro.ContributesBinding
-import dev.zacsweers.metro.Inject
 import software.amazon.app.platform.presenter.BaseModel
 import software.amazon.app.platform.presenter.molecule.backgesture.BackHandlerPresenter
 import software.amazon.app.platform.presenter.template.ModelDelegate
@@ -19,7 +18,6 @@ import software.amazon.app.platform.sample.user.UserPagePresenter.Model
  * Note that this class itself doesn't have a [Renderer], because it only combines models from child
  * presenters, which come with a [Renderer].
  */
-@Inject
 @ContributesBinding(UserScope::class)
 class UserPagePresenterImpl(
   private val user: User,

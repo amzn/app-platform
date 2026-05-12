@@ -8,7 +8,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
-import dev.zacsweers.metro.Inject
 import kotlin.random.Random
 import kotlin.time.Duration.Companion.seconds
 import kotlinx.coroutines.delay
@@ -16,7 +15,6 @@ import software.amazon.app.platform.sample.login.LoginPresenter.Model
 import software.amazon.app.platform.sample.user.UserManager
 
 /** Production implementation for [LoginPresenter]. */
-@Inject
 @ContributesBinding(AppScope::class)
 class LoginPresenterImpl(private val userManager: UserManager) : LoginPresenter {
   @Composable

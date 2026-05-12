@@ -12,7 +12,6 @@ import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Modifier
-import dev.zacsweers.metro.Inject
 import software.amazon.app.platform.inject.ContributesRenderer
 import software.amazon.app.platform.presenter.BaseModel
 import software.amazon.app.platform.presenter.molecule.backgesture.BackGestureDispatcherPresenter
@@ -30,7 +29,6 @@ import software.amazon.app.platform.sample.template.animation.LocalSharedTransit
  * [rendererFactory] is used to get the [Renderer] for the [BaseModel] wrapped in the template.
  */
 @OptIn(ExperimentalSharedTransitionApi::class)
-@Inject
 @ContributesRenderer
 class ComposeSampleAppTemplateRenderer(
   private val rendererFactory: RendererFactory,
