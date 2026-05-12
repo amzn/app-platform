@@ -1,6 +1,5 @@
 package software.amazon.app.platform.sample.user
 
-import dev.zacsweers.metro.Inject
 import dev.zacsweers.metro.SingleIn
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.milliseconds
@@ -23,7 +22,6 @@ import software.amazon.app.platform.scope.coroutine.launch
  * will be called. [onExitScope] will be called on the `CoroutineScope` will be destroyed when the
  * user logs out.
  */
-@Inject
 @SingleIn(UserScope::class)
 @ContributesScoped(UserScope::class)
 class SessionTimeout(private val userManager: UserManager, animationHelper: AnimationHelper) :

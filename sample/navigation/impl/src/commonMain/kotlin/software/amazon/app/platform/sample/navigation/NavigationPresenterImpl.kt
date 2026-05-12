@@ -7,7 +7,6 @@ import androidx.compose.runtime.remember
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
 import dev.zacsweers.metro.ContributesTo
-import dev.zacsweers.metro.Inject
 import software.amazon.app.platform.presenter.BaseModel
 import software.amazon.app.platform.presenter.molecule.MoleculePresenter
 import software.amazon.app.platform.sample.login.LoginPresenter
@@ -23,7 +22,6 @@ import software.amazon.app.platform.scope.di.metro.metroDependencyGraph
  * [loginPresenter] is injected lazily to delay initialization until it's actually needed. See
  * [MoleculePresenter] for more details.
  */
-@Inject
 @ContributesBinding(AppScope::class)
 class NavigationPresenterImpl(
   private val userManager: UserManager,
