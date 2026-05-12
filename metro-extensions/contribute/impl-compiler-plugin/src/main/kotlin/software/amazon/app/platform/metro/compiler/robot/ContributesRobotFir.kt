@@ -10,6 +10,7 @@ import org.jetbrains.kotlin.descriptors.Visibilities
 import org.jetbrains.kotlin.fir.FirFunctionTarget
 import org.jetbrains.kotlin.fir.FirSession
 import org.jetbrains.kotlin.fir.declarations.DirectDeclarationsAccess
+import org.jetbrains.kotlin.fir.declarations.FirConstructor
 import org.jetbrains.kotlin.fir.declarations.FirFunction
 import org.jetbrains.kotlin.fir.declarations.FirResolvePhase
 import org.jetbrains.kotlin.fir.declarations.FirValueParameter
@@ -28,9 +29,12 @@ import org.jetbrains.kotlin.fir.expressions.builder.buildPropertyAccessExpressio
 import org.jetbrains.kotlin.fir.expressions.builder.buildReturnExpression
 import org.jetbrains.kotlin.fir.expressions.impl.buildSingleExpressionBlock
 import org.jetbrains.kotlin.fir.extensions.FirDeclarationPredicateRegistrar
+import org.jetbrains.kotlin.fir.extensions.MemberGenerationContext
 import org.jetbrains.kotlin.fir.extensions.NestedClassGenerationContext
 import org.jetbrains.kotlin.fir.extensions.predicateBasedProvider
 import org.jetbrains.kotlin.fir.moduleData
+import org.jetbrains.kotlin.fir.plugin.createCompanionObject
+import org.jetbrains.kotlin.fir.plugin.createDefaultPrivateConstructor
 import org.jetbrains.kotlin.fir.references.builder.buildResolvedNamedReference
 import org.jetbrains.kotlin.fir.resolve.defaultType
 import org.jetbrains.kotlin.fir.resolve.providers.symbolProvider
@@ -50,8 +54,10 @@ import org.jetbrains.kotlin.fir.types.impl.ConeClassLikeTypeImpl
 import org.jetbrains.kotlin.name.CallableId
 import org.jetbrains.kotlin.name.ClassId
 import org.jetbrains.kotlin.name.Name
+import org.jetbrains.kotlin.name.SpecialNames
 import software.amazon.app.platform.metro.compiler.ClassIds
 import software.amazon.app.platform.metro.compiler.Keys
+import software.amazon.app.platform.metro.compiler.fir.addGeneratedDeclaration
 import software.amazon.app.platform.metro.compiler.fir.buildAnnotationCallWithArgument
 import software.amazon.app.platform.metro.compiler.fir.buildClassExpression
 import software.amazon.app.platform.metro.compiler.fir.buildSimpleAnnotationCall
@@ -69,14 +75,17 @@ import software.amazon.app.platform.metro.compiler.fir.resolveTypeRef
  * class TestRobot : Robot {
  *
  *   @ContributesTo(AppScope::class)
+ *   @BindingContainer
  *   interface RobotContribution {
- *     @Provides
- *     fun provideTestRobot(dependency: RobotDependency): TestRobot
- *
  *     @Binds
  *     @IntoMap
  *     @RobotKey(TestRobot::class)
  *     fun provideTestRobotIntoMap(robot: TestRobot): Robot
+ *
+ *     companion object {
+ *       @Provides
+ *       fun provideTestRobot(dependency: RobotDependency): TestRobot
+ *     }
  *   }
  * }
  * ```
@@ -108,6 +117,14 @@ public class ContributesRobotFir(session: FirSession) :
     classSymbol: FirClassSymbol<*>,
     context: NestedClassGenerationContext,
   ): Set<Name> {
+    generatedRobotContributionOwner(classSymbol)?.let { owner ->
+      return if (hasInjectAnnotation(owner)) {
+        emptySet()
+      } else {
+        setOf(SpecialNames.DEFAULT_NAME_FOR_COMPANION_OBJECT)
+      }
+    }
+
     return if (
       hasAnnotation(classSymbol, ContributesRobotIds.CONTRIBUTES_ROBOT_CLASS_ID, session)
     ) {
@@ -122,6 +139,17 @@ public class ContributesRobotFir(session: FirSession) :
     name: Name,
     context: NestedClassGenerationContext,
   ): FirClassLikeSymbol<*>? {
+    if (name == SpecialNames.DEFAULT_NAME_FOR_COMPANION_OBJECT) {
+      val robotOwner = generatedRobotContributionOwner(owner) ?: return null
+      if (hasInjectAnnotation(robotOwner)) return null
+      val contributionSymbol = owner as? FirRegularClassSymbol ?: return null
+      val companion =
+        buildProviderCompanionObject(contributionSymbol) { companionClassId ->
+          listOf(buildProvideRobotFunction(companionClassId, robotOwner))
+        }
+      return companion.symbol
+    }
+
     if (name != ContributesRobotIds.NESTED_INTERFACE_NAME) return null
     if (!hasAnnotation(owner, ContributesRobotIds.CONTRIBUTES_ROBOT_CLASS_ID, session)) return null
 
@@ -131,7 +159,7 @@ public class ContributesRobotFir(session: FirSession) :
     val nestedClassId = owner.classId.createNestedClassId(name)
     val classSymbol = FirRegularClassSymbol(nestedClassId)
 
-    buildRegularClass {
+    val contributionClass = buildRegularClass {
       resolvePhase = FirResolvePhase.BODY_RESOLVE
       moduleData = session.moduleData
       origin = Keys.ContributesRobotGeneratorKey.origin
@@ -147,6 +175,7 @@ public class ContributesRobotFir(session: FirSession) :
           Visibilities.Public.toEffectiveVisibility(owner, forClass = true),
         )
       superTypeRefs += session.builtinTypes.anyType
+      annotations += buildSimpleAnnotationCall(ClassIds.BINDING_CONTAINER, classSymbol, session)
       annotations +=
         buildAnnotationCallWithArgument(
           ClassIds.CONTRIBUTES_TO,
@@ -156,12 +185,75 @@ public class ContributesRobotFir(session: FirSession) :
           session,
         )
       annotations += buildOriginAnnotation(owner)
-      for (function in buildProvidesFunctions(nestedClassId, owner)) {
-        declarations += function
+      declarations += buildProvideRobotIntoMapFunction(nestedClassId, owner)
+    }
+
+    return contributionClass.symbol
+  }
+
+  override fun getCallableNamesForClass(
+    classSymbol: FirClassSymbol<*>,
+    context: MemberGenerationContext,
+  ): Set<Name> {
+    return if (generatedRobotProviderCompanionOwner(classSymbol) != null) {
+      setOf(SpecialNames.INIT)
+    } else {
+      emptySet()
+    }
+  }
+
+  override fun generateConstructors(context: MemberGenerationContext): List<FirConstructorSymbol> {
+    if (generatedRobotProviderCompanionOwner(context.owner) == null) {
+      return emptyList()
+    }
+    val constructor: FirConstructor =
+      createDefaultPrivateConstructor(context.owner, Keys.ContributesRobotGeneratorKey)
+    return listOf(constructor.symbol)
+  }
+
+  private fun buildProviderCompanionObject(
+    classSymbol: FirRegularClassSymbol,
+    buildFunctions: (ClassId) -> List<FirFunction>,
+  ) =
+    createCompanionObject(classSymbol, Keys.ContributesRobotGeneratorKey).apply {
+      for (function in buildFunctions(symbol.classId)) {
+        addGeneratedDeclaration(function)
       }
     }
 
-    return classSymbol
+  private fun generatedRobotContributionOwner(
+    classSymbol: FirClassSymbol<*>
+  ): FirRegularClassSymbol? {
+    if (classSymbol.classId.shortClassName != ContributesRobotIds.NESTED_INTERFACE_NAME) {
+      return null
+    }
+    val ownerClassId = classSymbol.classId.outerClassId ?: return null
+    val ownerSymbol =
+      session.symbolProvider.getClassLikeSymbolByClassId(ownerClassId) as? FirRegularClassSymbol
+        ?: return null
+    return ownerSymbol.takeIf {
+      hasAnnotation(it, ContributesRobotIds.CONTRIBUTES_ROBOT_CLASS_ID, session)
+    }
+  }
+
+  private fun generatedRobotProviderCompanionOwner(
+    classSymbol: FirClassSymbol<*>
+  ): FirRegularClassSymbol? {
+    if (classSymbol.classId.shortClassName != SpecialNames.DEFAULT_NAME_FOR_COMPANION_OBJECT) {
+      return null
+    }
+    val contributionClassId = classSymbol.classId.outerClassId ?: return null
+    if (contributionClassId.shortClassName != ContributesRobotIds.NESTED_INTERFACE_NAME) {
+      return null
+    }
+    val ownerClassId = contributionClassId.outerClassId ?: return null
+    val ownerSymbol =
+      session.symbolProvider.getClassLikeSymbolByClassId(ownerClassId) as? FirRegularClassSymbol
+        ?: return null
+    return ownerSymbol.takeIf {
+      hasAnnotation(it, ContributesRobotIds.CONTRIBUTES_ROBOT_CLASS_ID, session) &&
+        !hasInjectAnnotation(it)
+    }
   }
 
   private fun annotatedRobotClasses(): List<FirRegularClassSymbol> {
@@ -169,18 +261,6 @@ public class ContributesRobotFir(session: FirSession) :
       .getSymbolsByPredicate(ContributesRobotIds.PREDICATE)
       .filterIsInstance<FirRegularClassSymbol>()
       .toList()
-  }
-
-  private fun buildProvidesFunctions(
-    graphClassId: ClassId,
-    owner: FirClassSymbol<*>,
-  ): List<FirFunction> {
-    val functions = mutableListOf<FirFunction>()
-    if (!hasInjectAnnotation(owner)) {
-      functions += buildProvideRobotFunction(graphClassId, owner)
-    }
-    functions += buildProvideRobotIntoMapFunction(graphClassId, owner)
-    return functions
   }
 
   private fun buildProvideRobotFunction(

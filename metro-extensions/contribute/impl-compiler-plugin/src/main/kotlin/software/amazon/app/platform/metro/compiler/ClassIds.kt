@@ -12,6 +12,9 @@ internal object ClassIds {
 
   val BINDS = ClassId(FqName("dev.zacsweers.metro"), Name.identifier("Binds"))
 
+  val BINDING_CONTAINER =
+    ClassId(FqName("dev.zacsweers.metro"), Name.identifier("BindingContainer"))
+
   val CONTRIBUTES_RENDERER =
     ClassId(FqName("software.amazon.app.platform.inject"), Name.identifier("ContributesRenderer"))
 

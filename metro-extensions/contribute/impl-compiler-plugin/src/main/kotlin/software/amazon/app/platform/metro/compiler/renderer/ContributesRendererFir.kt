@@ -9,6 +9,7 @@ import org.jetbrains.kotlin.descriptors.Modality
 import org.jetbrains.kotlin.descriptors.Visibilities
 import org.jetbrains.kotlin.fir.FirFunctionTarget
 import org.jetbrains.kotlin.fir.FirSession
+import org.jetbrains.kotlin.fir.declarations.FirConstructor
 import org.jetbrains.kotlin.fir.declarations.FirFunction
 import org.jetbrains.kotlin.fir.declarations.FirResolvePhase
 import org.jetbrains.kotlin.fir.declarations.FirValueParameter
@@ -26,9 +27,12 @@ import org.jetbrains.kotlin.fir.expressions.builder.buildPropertyAccessExpressio
 import org.jetbrains.kotlin.fir.expressions.builder.buildReturnExpression
 import org.jetbrains.kotlin.fir.expressions.impl.buildSingleExpressionBlock
 import org.jetbrains.kotlin.fir.extensions.FirDeclarationPredicateRegistrar
+import org.jetbrains.kotlin.fir.extensions.MemberGenerationContext
 import org.jetbrains.kotlin.fir.extensions.NestedClassGenerationContext
 import org.jetbrains.kotlin.fir.extensions.predicateBasedProvider
 import org.jetbrains.kotlin.fir.moduleData
+import org.jetbrains.kotlin.fir.plugin.createCompanionObject
+import org.jetbrains.kotlin.fir.plugin.createDefaultPrivateConstructor
 import org.jetbrains.kotlin.fir.references.builder.buildResolvedNamedReference
 import org.jetbrains.kotlin.fir.resolve.defaultType
 import org.jetbrains.kotlin.fir.resolve.providers.symbolProvider
@@ -51,8 +55,10 @@ import org.jetbrains.kotlin.name.CallableId
 import org.jetbrains.kotlin.name.ClassId
 import org.jetbrains.kotlin.name.FqName
 import org.jetbrains.kotlin.name.Name
+import org.jetbrains.kotlin.name.SpecialNames
 import software.amazon.app.platform.metro.compiler.ClassIds
 import software.amazon.app.platform.metro.compiler.Keys
+import software.amazon.app.platform.metro.compiler.fir.addGeneratedDeclaration
 import software.amazon.app.platform.metro.compiler.fir.buildAnnotationCallWithArgument
 import software.amazon.app.platform.metro.compiler.fir.buildClassExpression
 import software.amazon.app.platform.metro.compiler.fir.buildSimpleAnnotationCall
@@ -68,21 +74,24 @@ import software.amazon.app.platform.metro.compiler.fir.resolveTypeRef
  * class TestRenderer : Renderer<Model> {
  *
  *   @ContributesTo(RendererScope::class)
+ *   @BindingContainer
  *   @Origin(TestRenderer::class)
  *   interface RendererContribution {
- *     @Provides
- *     fun provideTestRenderer(): TestRenderer
- *
  *     @Binds
  *     @IntoMap
  *     @RendererKey(Model::class)
  *     fun provideTestRendererModel(renderer: TestRenderer): Renderer<*>
  *
- *     @Provides
- *     @IntoMap
- *     @RendererKey(Model::class)
- *     @ForScope(RendererScope::class)
- *     fun provideTestRendererModelKey(): KClass<out Renderer<*>>
+ *     companion object {
+ *       @Provides
+ *       fun provideTestRenderer(): TestRenderer
+ *
+ *       @Provides
+ *       @IntoMap
+ *       @RendererKey(Model::class)
+ *       @ForScope(RendererScope::class)
+ *       fun provideTestRendererModelKey(): KClass<out Renderer<*>>
+ *     }
  *   }
  * }
  * ```
@@ -113,6 +122,15 @@ public class ContributesRendererFir(session: FirSession) :
     classSymbol: FirClassSymbol<*>,
     context: NestedClassGenerationContext,
   ): Set<Name> {
+    generatedRendererContributionOwner(classSymbol)?.let { rendererOwner ->
+      val metadata = rendererContributionMetadata(rendererOwner, session) ?: return emptySet()
+      return if (!metadata.hasInjectAnnotation || metadata.modelClasses.isNotEmpty()) {
+        setOf(SpecialNames.DEFAULT_NAME_FOR_COMPANION_OBJECT)
+      } else {
+        emptySet()
+      }
+    }
+
     return if (
       hasAnnotation(classSymbol, ContributesRendererIds.CONTRIBUTES_RENDERER_CLASS_ID, session)
     ) {
@@ -127,6 +145,17 @@ public class ContributesRendererFir(session: FirSession) :
     name: Name,
     context: NestedClassGenerationContext,
   ): FirClassLikeSymbol<*>? {
+    if (name == SpecialNames.DEFAULT_NAME_FOR_COMPANION_OBJECT) {
+      val rendererOwner = generatedRendererContributionOwner(owner) ?: return null
+      val metadata = rendererContributionMetadata(rendererOwner, session) ?: return null
+      val contributionSymbol = owner as? FirRegularClassSymbol ?: return null
+      val companion =
+        buildProviderCompanionObject(contributionSymbol) { companionClassId ->
+          buildProviderFunctions(companionClassId, rendererOwner, metadata)
+        }
+      return companion?.symbol
+    }
+
     if (name != ContributesRendererIds.NESTED_INTERFACE_NAME) return null
     if (!hasAnnotation(owner, ContributesRendererIds.CONTRIBUTES_RENDERER_CLASS_ID, session))
       return null
@@ -136,7 +165,7 @@ public class ContributesRendererFir(session: FirSession) :
     val nestedClassId = rendererOwner.classId.createNestedClassId(name)
     val graphSymbol = FirRegularClassSymbol(nestedClassId)
 
-    buildRegularClass {
+    val contributionClass = buildRegularClass {
       resolvePhase = FirResolvePhase.BODY_RESOLVE
       moduleData = session.moduleData
       origin = Keys.ContributesRendererGeneratorKey.origin
@@ -152,14 +181,98 @@ public class ContributesRendererFir(session: FirSession) :
           Visibilities.Public.toEffectiveVisibility(rendererOwner, forClass = true),
         )
       superTypeRefs += session.builtinTypes.anyType
+      annotations += buildSimpleAnnotationCall(ClassIds.BINDING_CONTAINER, graphSymbol, session)
       annotations += buildReflectionContributesToAnnotation()
       annotations += buildOriginAnnotation(rendererOwner, graphSymbol)
-      for (function in buildProvidesFunctions(nestedClassId, rendererOwner, metadata)) {
+      for (function in buildBindFunctions(nestedClassId, rendererOwner, metadata)) {
         declarations += function
       }
     }
 
-    return graphSymbol
+    return contributionClass.symbol
+  }
+
+  override fun getCallableNamesForClass(
+    classSymbol: FirClassSymbol<*>,
+    context: MemberGenerationContext,
+  ): Set<Name> {
+    return if (generatedRendererProviderCompanionOwner(classSymbol) != null) {
+      setOf(SpecialNames.INIT)
+    } else {
+      emptySet()
+    }
+  }
+
+  override fun generateConstructors(context: MemberGenerationContext): List<FirConstructorSymbol> {
+    if (generatedRendererProviderCompanionOwner(context.owner) == null) {
+      return emptyList()
+    }
+    val constructor: FirConstructor =
+      createDefaultPrivateConstructor(context.owner, Keys.ContributesRendererGeneratorKey)
+    return listOf(constructor.symbol)
+  }
+
+  private fun buildProviderCompanionObject(
+    classSymbol: FirRegularClassSymbol,
+    buildFunctions: (ClassId) -> List<FirFunction>,
+  ) =
+    createCompanionObject(classSymbol, Keys.ContributesRendererGeneratorKey).let { companion ->
+      val functions = buildFunctions(companion.symbol.classId)
+      if (functions.isEmpty()) {
+        null
+      } else {
+        companion.apply {
+          for (function in functions) {
+            addGeneratedDeclaration(function)
+          }
+        }
+      }
+    }
+
+  private fun generatedRendererContributionOwner(
+    classSymbol: FirClassSymbol<*>
+  ): FirRegularClassSymbol? {
+    if (classSymbol.classId.shortClassName != ContributesRendererIds.NESTED_INTERFACE_NAME) {
+      return null
+    }
+    val ownerClassId = classSymbol.classId.outerClassId ?: return null
+    val ownerSymbol =
+      session.symbolProvider.getClassLikeSymbolByClassId(ownerClassId) as? FirRegularClassSymbol
+        ?: return null
+    return ownerSymbol.takeIf {
+      hasAnnotation(it, ContributesRendererIds.CONTRIBUTES_RENDERER_CLASS_ID, session)
+    }
+  }
+
+  private fun generatedRendererProviderCompanionOwner(
+    classSymbol: FirClassSymbol<*>
+  ): FirRegularClassSymbol? {
+    if (classSymbol.classId.shortClassName != SpecialNames.DEFAULT_NAME_FOR_COMPANION_OBJECT) {
+      return null
+    }
+    val contributionClassId = classSymbol.classId.outerClassId ?: return null
+    if (contributionClassId.shortClassName != ContributesRendererIds.NESTED_INTERFACE_NAME) {
+      return null
+    }
+    val ownerClassId = contributionClassId.outerClassId ?: return null
+    val ownerSymbol =
+      session.symbolProvider.getClassLikeSymbolByClassId(ownerClassId) as? FirRegularClassSymbol
+        ?: return null
+    val metadata = rendererContributionMetadata(ownerSymbol, session) ?: return null
+    return ownerSymbol.takeIf {
+      hasAnnotation(it, ContributesRendererIds.CONTRIBUTES_RENDERER_CLASS_ID, session) &&
+        (!metadata.hasInjectAnnotation || metadata.modelClasses.isNotEmpty())
+    }
+  }
+
+  private fun buildBindFunctions(
+    graphClassId: ClassId,
+    owner: FirRegularClassSymbol,
+    metadata: RendererContributionMetadata,
+  ): List<FirFunction> {
+    return metadata.modelClasses.map { modelClass ->
+      buildProvideRendererIntoMapFunction(graphClassId, owner, modelClass)
+    }
   }
 
   private fun annotatedRendererClasses(): List<FirRegularClassSymbol> {
@@ -169,7 +282,7 @@ public class ContributesRendererFir(session: FirSession) :
       .toList()
   }
 
-  private fun buildProvidesFunctions(
+  private fun buildProviderFunctions(
     graphClassId: ClassId,
     owner: FirRegularClassSymbol,
     metadata: RendererContributionMetadata,
@@ -180,7 +293,6 @@ public class ContributesRendererFir(session: FirSession) :
       functions += buildProvideRendererFunction(graphClassId, owner)
     }
     metadata.modelClasses.forEach { modelClass ->
-      functions += buildProvideRendererIntoMapFunction(graphClassId, owner, modelClass)
       functions += buildProvideRendererKeyFunction(graphClassId, owner, modelClass)
     }
     return functions
