@@ -10,19 +10,25 @@ import com.google.devtools.ksp.processing.Resolver
 import com.google.devtools.ksp.processing.SymbolProcessor
 import com.google.devtools.ksp.symbol.KSAnnotated
 import com.google.devtools.ksp.symbol.KSClassDeclaration
+import com.google.devtools.ksp.symbol.KSFunctionDeclaration
 import com.google.devtools.ksp.symbol.KSType
+import com.google.devtools.ksp.symbol.KSValueParameter
 import com.squareup.kotlinpoet.AnnotationSpec
 import com.squareup.kotlinpoet.ClassName
+import com.squareup.kotlinpoet.CodeBlock
 import com.squareup.kotlinpoet.FileSpec
 import com.squareup.kotlinpoet.FunSpec
 import com.squareup.kotlinpoet.LambdaTypeName
+import com.squareup.kotlinpoet.ParameterSpec
 import com.squareup.kotlinpoet.ParameterizedTypeName.Companion.parameterizedBy
 import com.squareup.kotlinpoet.STAR
 import com.squareup.kotlinpoet.TypeSpec
 import com.squareup.kotlinpoet.WildcardTypeName
 import com.squareup.kotlinpoet.asClassName
 import com.squareup.kotlinpoet.ksp.addOriginatingKSFile
+import com.squareup.kotlinpoet.ksp.toAnnotationSpec
 import com.squareup.kotlinpoet.ksp.toClassName
+import com.squareup.kotlinpoet.ksp.toTypeName
 import com.squareup.kotlinpoet.ksp.writeTo
 import kotlin.reflect.KClass
 import me.tatarka.inject.annotations.Inject
@@ -73,6 +79,7 @@ import software.amazon.lastmile.kotlin.inject.anvil.SingleIn
  * }
  * ```
  */
+@OptIn(KspExperimental::class)
 internal class ContributesRendererProcessor(
   private val codeGenerator: CodeGenerator,
   override val logger: KSPLogger,
@@ -97,23 +104,17 @@ internal class ContributesRendererProcessor(
       .onEach {
         checkIsPublic(it)
         checkNoSingleton(it)
+        checkNoZeroArgInjectConstructor(it)
+        checkSingleConstructorOrInject(it)
       }
       .forEach { generateComponentInterface(it) }
 
     return emptyList()
   }
 
-  @OptIn(KspExperimental::class)
   private fun generateComponentInterface(clazz: KSClassDeclaration) {
     val packageName = "${APP_PLATFORM_LOOKUP_PACKAGE}.${clazz.packageName.asString()}"
     val componentClassName = ClassName(packageName, "${clazz.innerClassNames()}Component")
-    val hasInjectAnnotation = clazz.isAnnotationPresent(Inject::class)
-
-    if (hasInjectAnnotation) {
-      checkNoZeroArgConstructor(clazz)
-    } else {
-      checkZeroArgConstructor(clazz)
-    }
 
     val includeSealedSubtypes =
       try {
@@ -154,12 +155,13 @@ internal class ContributesRendererProcessor(
                 .build()
             )
             .apply {
-              if (!hasInjectAnnotation) {
+              if (!clazz.hasInjectAnnotation()) {
                 addFunction(
                   FunSpec.builder("provide${clazz.safeClassName}")
                     .addAnnotation(Provides::class)
                     .returns(clazz.toClassName())
-                    .addStatement("return %T()", clazz.toClassName())
+                    .addParameters(clazz.constructorParameters().map { it.toParameterSpec() })
+                    .addCode(clazz.constructorCall())
                     .build()
                 )
               }
@@ -275,20 +277,70 @@ internal class ContributesRendererProcessor(
     }
   }
 
-  private fun checkNoZeroArgConstructor(clazz: KSClassDeclaration) {
-    val parameterCount = clazz.primaryConstructor?.parameters?.size ?: 0
-    check(parameterCount > 0, clazz) {
-      "It's redundant to use @Inject when using " +
-        "@ContributesRenderer for a Renderer with a zero-arg constructor."
+  private fun checkNoZeroArgInjectConstructor(clazz: KSClassDeclaration) {
+    if (clazz.hasInjectAnnotation()) {
+      check(clazz.injectConstructorParameters().isNotEmpty(), clazz) {
+        "It's redundant to use @Inject when using " +
+          "@ContributesRenderer for a Renderer with a zero-arg constructor."
+      }
     }
   }
 
-  private fun checkZeroArgConstructor(clazz: KSClassDeclaration) {
-    val parameterCount = clazz.primaryConstructor?.parameters?.size ?: 0
-    check(parameterCount == 0, clazz) {
-      "When using @ContributesRenderer and you need to inject types in the constructor, " +
-        "then it's necessary to add the @Inject annotation."
+  private fun checkSingleConstructorOrInject(clazz: KSClassDeclaration) {
+    if (!clazz.hasInjectAnnotation() && clazz.constructors().count() > 1) {
+      check(false, clazz) {
+        "${clazz.simpleName.asString()} has multiple constructors. Annotate the constructor " +
+          "to use with @Inject, or remove the extra constructors so @ContributesRenderer can " +
+          "generate a provider."
+      }
     }
+  }
+
+  private fun KSClassDeclaration.constructorParameters(): List<KSValueParameter> {
+    return providerConstructor()?.parameters.orEmpty()
+  }
+
+  private fun KSClassDeclaration.injectConstructorParameters(): List<KSValueParameter> {
+    return constructors().firstOrNull { it.isAnnotationPresent(Inject::class) }?.parameters
+      ?: constructorParameters()
+  }
+
+  private fun KSClassDeclaration.providerConstructor(): KSFunctionDeclaration? {
+    return primaryConstructor ?: constructors().singleOrNull()
+  }
+
+  private fun KSClassDeclaration.hasInjectAnnotation(): Boolean {
+    return isAnnotationPresent(Inject::class) ||
+      constructors().any { it.isAnnotationPresent(Inject::class) }
+  }
+
+  private fun KSClassDeclaration.constructors(): Sequence<KSFunctionDeclaration> {
+    return declarations.filterIsInstance<KSFunctionDeclaration>().filter {
+      it.simpleName.asString() == "<init>"
+    }
+  }
+
+  private fun KSValueParameter.toParameterSpec(): ParameterSpec {
+    val parameterName = name?.asString() ?: "parameter"
+    return ParameterSpec.builder(parameterName, type.toTypeName())
+      .addAnnotations(annotations.map { it.toAnnotationSpec() }.toList())
+      .build()
+  }
+
+  private fun KSClassDeclaration.constructorCall(): CodeBlock {
+    return CodeBlock.builder()
+      .add("return %T(", toClassName())
+      .apply {
+        constructorParameters().forEachIndexed { index, parameter ->
+          if (index > 0) {
+            add(", ")
+          }
+          val parameterName = parameter.name?.asString() ?: "parameter"
+          add("%N = %N", parameterName, parameterName)
+        }
+      }
+      .add(")\n")
+      .build()
   }
 
   private fun KSType.extendsBaseModel(): Boolean {

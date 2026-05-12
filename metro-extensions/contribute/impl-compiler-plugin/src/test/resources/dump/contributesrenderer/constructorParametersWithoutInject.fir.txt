@@ -1,4 +1,4 @@
-FILE: defaultConstructorRenderer.kt
+FILE: constructorParametersWithoutInject.kt
     package com.test
 
     public final class Model : R|software/amazon/app/platform/presenter/BaseModel| {
@@ -7,18 +7,36 @@ FILE: defaultConstructorRenderer.kt
         }
 
     }
-    @R|software/amazon/app/platform/inject/ContributesRenderer|() public final class TestRenderer : R|software/amazon/app/platform/renderer/Renderer<com/test/Model>| {
-        public constructor(): R|com/test/TestRenderer| {
+    public final class RendererDependency : R|kotlin/Any| {
+        public constructor(): R|com/test/RendererDependency| {
             super<R|kotlin/Any|>()
         }
+
+    }
+    public final class AnotherRendererDependency : R|kotlin/Any| {
+        public constructor(): R|com/test/AnotherRendererDependency| {
+            super<R|kotlin/Any|>()
+        }
+
+    }
+    @R|software/amazon/app/platform/inject/ContributesRenderer|() public final class TestRenderer : R|software/amazon/app/platform/renderer/Renderer<com/test/Model>| {
+        public constructor(dependency: R|com/test/RendererDependency|, anotherDependency: R|com/test/AnotherRendererDependency|): R|com/test/TestRenderer| {
+            super<R|kotlin/Any|>()
+        }
+
+        public final val dependency: R|com/test/RendererDependency| = R|<local>/dependency|
+            public get(): R|com/test/RendererDependency|
+
+        public final val anotherDependency: R|com/test/AnotherRendererDependency| = R|<local>/anotherDependency|
+            public get(): R|com/test/AnotherRendererDependency|
 
         public open override fun render(model: R|com/test/Model|): R|kotlin/Unit| {
             ^render Q|kotlin/Unit|
         }
 
         @R|dev/zacsweers/metro/ContributesTo|(scope = <getClass>(Q|software/amazon/app/platform/renderer/RendererScope|)) @R|dev/zacsweers/metro/Origin|(value = <getClass>(Q|com/test/TestRenderer|)) public abstract interface RendererContribution : R|kotlin/Any| {
-            @R|dev/zacsweers/metro/Provides|() public open fun provideComTestTestRenderer(): R|com/test/TestRenderer| {
-                ^provideComTestTestRenderer R|com/test/TestRenderer.TestRenderer|()
+            @R|dev/zacsweers/metro/Provides|() public open fun provideComTestTestRenderer(dependency: R|com/test/RendererDependency|, anotherDependency: R|com/test/AnotherRendererDependency|): R|com/test/TestRenderer| {
+                ^provideComTestTestRenderer R|com/test/TestRenderer.TestRenderer|(R|<local>/dependency|, R|<local>/anotherDependency|)
             }
 
             @R|dev/zacsweers/metro/Binds|() @R|dev/zacsweers/metro/IntoMap|() @R|software/amazon/app/platform/renderer/metro/RendererKey|(value = <getClass>(Q|com/test/Model|)) public open fun provideComTestTestRendererModel(renderer: R|com/test/TestRenderer|): R|software/amazon/app/platform/renderer/Renderer<*>|
@@ -28,7 +46,7 @@ FILE: defaultConstructorRenderer.kt
             @R|kotlin/Deprecated|(message = String(This synthesized declaration should not be used directly), level = Q|kotlin/DeprecationLevel|.R|kotlin/DeprecationLevel.HIDDEN|) @R|dev/zacsweers/metro/internal/MetroContribution|(scope = <getClass>(Q|software/amazon/app/platform/renderer/RendererScope|)) public abstract interface MetroContributionToSoftwareamazonappplatformrendererrendererScope2FKSELE : R|com/test/TestRenderer.RendererContribution| {
             }
 
-            @R|kotlin/Deprecated|(message = String(This synthesized declaration should not be used directly), level = Q|kotlin/DeprecationLevel|.R|kotlin/DeprecationLevel.HIDDEN|) @R|dev/zacsweers/metro/internal/CallableMetadata|(callableName = String(provideComTestTestRenderer), propertyName = String(), startOffset = Int(276), endOffset = Int(380), newInstanceName = String(provideComTestTestRenderer)) public final class ProvideComTestTestRendererMetroFactory : R|kotlin/Any| {
+            @R|kotlin/Deprecated|(message = String(This synthesized declaration should not be used directly), level = Q|kotlin/DeprecationLevel|.R|kotlin/DeprecationLevel.HIDDEN|) @R|dev/zacsweers/metro/internal/CallableMetadata|(callableName = String(provideComTestTestRenderer), propertyName = String(), startOffset = Int(335), endOffset = Int(532), newInstanceName = String(provideComTestTestRenderer)) public final class ProvideComTestTestRendererMetroFactory : R|kotlin/Any| {
                 public final companion object Companion : R|kotlin/Any| {
                     private constructor(): R|com/test/TestRenderer.RendererContribution.ProvideComTestTestRendererMetroFactory.Companion| {
                         super<R|kotlin/Any|>()
@@ -38,7 +56,7 @@ FILE: defaultConstructorRenderer.kt
 
             }
 
-            @R|kotlin/Deprecated|(message = String(This synthesized declaration should not be used directly), level = Q|kotlin/DeprecationLevel|.R|kotlin/DeprecationLevel.HIDDEN|) @R|dev/zacsweers/metro/internal/CallableMetadata|(callableName = String(provideComTestTestRendererModelKey), propertyName = String(), startOffset = Int(276), endOffset = Int(380), newInstanceName = String(provideComTestTestRendererModelKey)) public final class ProvideComTestTestRendererModelKeyMetroFactory : R|kotlin/Any| {
+            @R|kotlin/Deprecated|(message = String(This synthesized declaration should not be used directly), level = Q|kotlin/DeprecationLevel|.R|kotlin/DeprecationLevel.HIDDEN|) @R|dev/zacsweers/metro/internal/CallableMetadata|(callableName = String(provideComTestTestRendererModelKey), propertyName = String(), startOffset = Int(335), endOffset = Int(532), newInstanceName = String(provideComTestTestRendererModelKey)) public final class ProvideComTestTestRendererModelKeyMetroFactory : R|kotlin/Any| {
                 public final companion object Companion : R|kotlin/Any| {
                     private constructor(): R|com/test/TestRenderer.RendererContribution.ProvideComTestTestRendererModelKeyMetroFactory.Companion| {
                         super<R|kotlin/Any|>()

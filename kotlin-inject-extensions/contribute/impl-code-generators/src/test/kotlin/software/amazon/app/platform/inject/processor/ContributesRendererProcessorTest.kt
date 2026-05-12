@@ -39,7 +39,7 @@ class ContributesRendererProcessorTest {
     compile(
       """
             package software.amazon.test
-    
+
             import software.amazon.app.platform.presenter.BaseModel
             import software.amazon.app.platform.renderer.Renderer
             import software.amazon.app.platform.inject.ContributesRenderer
@@ -109,7 +109,7 @@ class ContributesRendererProcessorTest {
     compile(
       """
             package software.amazon.test
-    
+
             import software.amazon.app.platform.presenter.BaseModel
             import software.amazon.app.platform.renderer.Renderer
             import software.amazon.app.platform.inject.ContributesRenderer
@@ -163,7 +163,7 @@ class ContributesRendererProcessorTest {
     compile(
       """
             package software.amazon.test
-    
+
             import software.amazon.app.platform.presenter.BaseModel
             import software.amazon.app.platform.renderer.Renderer
             import software.amazon.app.platform.inject.ContributesRenderer
@@ -217,7 +217,7 @@ class ContributesRendererProcessorTest {
     compile(
       """
             package software.amazon.test
-    
+
             import software.amazon.app.platform.inject.ContributesRenderer
             import software.amazon.app.platform.presenter.BaseModel
             import software.amazon.app.platform.renderer.Renderer
@@ -242,13 +242,13 @@ class ContributesRendererProcessorTest {
     compile(
       """
             package software.amazon.test
-    
+
             import software.amazon.app.platform.inject.ContributesRenderer
             import software.amazon.app.platform.presenter.BaseModel
             import software.amazon.app.platform.renderer.Renderer
 
             class Model : BaseModel
-            
+
             interface OtherRenderer : Renderer<Model>
 
             @ContributesRenderer
@@ -266,18 +266,18 @@ class ContributesRendererProcessorTest {
     compile(
       """
             package software.amazon.test
-    
+
             import software.amazon.app.platform.inject.ContributesRenderer
             import software.amazon.app.platform.presenter.BaseModel
             import software.amazon.app.platform.renderer.Renderer
 
             class Model : BaseModel
-            
+
             interface OtherRenderer<S : Any, T : BaseModel, U : CharSequence> : Renderer<T>
             interface OtherRenderer2<S : BaseModel, T : Any> : OtherRenderer<T, S, String>
             interface OtherRenderer3 : OtherRenderer2<Model, Any>
             interface OtherRenderer4 : OtherRenderer3
-    
+
 
             @ContributesRenderer
             class TestRenderer : OtherRenderer4 {
@@ -294,14 +294,14 @@ class ContributesRendererProcessorTest {
     compile(
       """
             package software.amazon.test
-    
+
             import software.amazon.app.platform.inject.ContributesRenderer
             import software.amazon.app.platform.presenter.BaseModel
             import software.amazon.app.platform.renderer.Renderer
 
             class Model1 : BaseModel
             class Model2 : BaseModel
-            
+
             interface OtherRenderer<S : BaseModel, T : BaseModel> : Renderer<S>
 
             @ContributesRenderer
@@ -324,7 +324,7 @@ class ContributesRendererProcessorTest {
     compile(
       """
             package software.amazon.test
-    
+
             import software.amazon.app.platform.presenter.BaseModel
             import software.amazon.app.platform.renderer.Renderer
             import software.amazon.app.platform.inject.ContributesRenderer
@@ -440,7 +440,7 @@ class ContributesRendererProcessorTest {
     compile(
       """
             package software.amazon.test
-    
+
             import software.amazon.app.platform.presenter.BaseModel
             import software.amazon.app.platform.renderer.Renderer
             import software.amazon.app.platform.inject.ContributesRenderer
@@ -494,7 +494,7 @@ class ContributesRendererProcessorTest {
     compile(
       """
             package software.amazon.test
-    
+
             import software.amazon.app.platform.inject.ContributesRenderer
             import software.amazon.app.platform.presenter.BaseModel
             import software.amazon.app.platform.renderer.Renderer
@@ -527,11 +527,51 @@ class ContributesRendererProcessorTest {
   }
 
   @Test
+  fun `the component skips the provider for a renderer with an @Inject secondary constructor`() {
+    compile(
+      """
+            package software.amazon.test
+
+            import software.amazon.app.platform.inject.ContributesRenderer
+            import software.amazon.app.platform.presenter.BaseModel
+            import software.amazon.app.platform.renderer.Renderer
+            import me.tatarka.inject.annotations.Inject
+
+            class Model : BaseModel
+
+            @ContributesRenderer
+            class TestRenderer private constructor(
+                val string: String,
+                val marker: String,
+            ) : Renderer<Model> {
+                @Inject constructor(string: String) : this(string, "injected")
+
+                override fun render(model: Model) = Unit
+
+                fun value(): String = "${'$'}string ${'$'}marker"
+            }
+            """,
+      componentInterfaceSource,
+    ) {
+      val generatedComponent = testRenderer.rendererComponent
+
+      assertThat(generatedComponent.declaredNonSyntheticMethods.map { it.name })
+        .containsOnly(
+          "provideSoftwareAmazonTestTestRendererModel",
+          "provideSoftwareAmazonTestTestRendererModelKey",
+        )
+
+      val renderer = componentInterface.newComponent<RendererComponent>().renderers[model]!!()
+      assertThat(testRenderer.getMethod("value").invoke(renderer)).isEqualTo("abc injected")
+    }
+  }
+
+  @Test
   fun `when using @SingleIn(RendererScope_class) then a warning is printed`() {
     compile(
       """
             package software.amazon.test
-    
+
             import software.amazon.app.platform.inject.ContributesRenderer
             import software.amazon.app.platform.presenter.BaseModel
             import software.amazon.app.platform.renderer.Renderer
@@ -565,7 +605,7 @@ class ContributesRendererProcessorTest {
     compile(
       """
             package software.amazon.test
-    
+
             import software.amazon.app.platform.inject.ContributesRenderer
             import software.amazon.app.platform.presenter.BaseModel
             import software.amazon.app.platform.renderer.Renderer
@@ -591,11 +631,11 @@ class ContributesRendererProcessorTest {
   }
 
   @Test
-  fun `it is required to use @Inject for a non-zero arg constructor`() {
+  fun `a component interface is generated for constructor parameters without @Inject`() {
     compile(
       """
             package software.amazon.test
-    
+
             import software.amazon.app.platform.inject.ContributesRenderer
             import software.amazon.app.platform.presenter.BaseModel
             import software.amazon.app.platform.renderer.Renderer
@@ -603,7 +643,47 @@ class ContributesRendererProcessorTest {
             class Model : BaseModel
 
             @ContributesRenderer
-            class TestRenderer(@Suppress("unused") val string: String) : Renderer<Model> {
+            class TestRenderer(val string: String) : Renderer<Model> {
+                override fun render(model: Model) = Unit
+
+                fun value(): String = string
+            }
+            """,
+      componentInterfaceSource,
+    ) {
+      val generatedComponent = testRenderer.rendererComponent
+
+      with(
+        generatedComponent.declaredNonSyntheticMethods.single {
+          it.name == "provideSoftwareAmazonTestTestRenderer"
+        }
+      ) {
+        assertThat(parameters.single().type).isEqualTo(String::class.java)
+        assertThat(returnType).isEqualTo(testRenderer)
+        assertThat(this).isAnnotatedWith(Provides::class)
+      }
+
+      val renderer = componentInterface.newComponent<RendererComponent>().renderers[model]!!()
+      assertThat(testRenderer.getMethod("value").invoke(renderer)).isEqualTo("abc")
+    }
+  }
+
+  @Test
+  fun `a renderer with multiple constructors must use @Inject`() {
+    compile(
+      """
+            package software.amazon.test
+
+            import software.amazon.app.platform.inject.ContributesRenderer
+            import software.amazon.app.platform.presenter.BaseModel
+            import software.amazon.app.platform.renderer.Renderer
+
+            class Model : BaseModel
+
+            @ContributesRenderer
+            class TestRenderer(val string: String) : Renderer<Model> {
+                constructor(string: String, marker: String) : this(string)
+
                 override fun render(model: Model) = Unit
             }
             """,
@@ -612,8 +692,9 @@ class ContributesRendererProcessorTest {
     ) {
       assertThat(messages)
         .contains(
-          "When using @ContributesRenderer and you need to inject types " +
-            "in the constructor, then it's necessary to add the @Inject annotation."
+          "TestRenderer has multiple constructors. Annotate the constructor to use with " +
+            "@Inject, or remove the extra constructors so @ContributesRenderer can generate " +
+            "a provider."
         )
     }
   }

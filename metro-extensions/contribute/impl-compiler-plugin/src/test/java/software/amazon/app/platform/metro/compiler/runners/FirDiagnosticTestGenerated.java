@@ -31,15 +31,15 @@ public class FirDiagnosticTestGenerated extends AbstractFirDiagnosticTest {
     }
 
     @Test
-    @TestMetadata("missingInjectOnNonZeroArgConstructor.kt")
-    public void testMissingInjectOnNonZeroArgConstructor() {
-      runTest("metro-extensions/contribute/impl-compiler-plugin/src/test/resources/diagnostics/contributesrenderer/missingInjectOnNonZeroArgConstructor.kt");
-    }
-
-    @Test
     @TestMetadata("modelTypeMustBeExplicitWhenNotInferable.kt")
     public void testModelTypeMustBeExplicitWhenNotInferable() {
       runTest("metro-extensions/contribute/impl-compiler-plugin/src/test/resources/diagnostics/contributesrenderer/modelTypeMustBeExplicitWhenNotInferable.kt");
+    }
+
+    @Test
+    @TestMetadata("multipleConstructorsMustUseInject.kt")
+    public void testMultipleConstructorsMustUseInject() {
+      runTest("metro-extensions/contribute/impl-compiler-plugin/src/test/resources/diagnostics/contributesrenderer/multipleConstructorsMustUseInject.kt");
     }
 
     @Test

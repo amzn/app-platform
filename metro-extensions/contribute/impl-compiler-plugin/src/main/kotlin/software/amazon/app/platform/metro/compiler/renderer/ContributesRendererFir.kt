@@ -7,26 +7,36 @@ import dev.zacsweers.metro.compiler.compat.CompatContext
 import org.jetbrains.kotlin.descriptors.ClassKind
 import org.jetbrains.kotlin.descriptors.Modality
 import org.jetbrains.kotlin.descriptors.Visibilities
+import org.jetbrains.kotlin.fir.FirFunctionTarget
 import org.jetbrains.kotlin.fir.FirSession
 import org.jetbrains.kotlin.fir.declarations.FirFunction
 import org.jetbrains.kotlin.fir.declarations.FirResolvePhase
+import org.jetbrains.kotlin.fir.declarations.FirValueParameter
 import org.jetbrains.kotlin.fir.declarations.builder.buildNamedFunction
 import org.jetbrains.kotlin.fir.declarations.builder.buildRegularClass
 import org.jetbrains.kotlin.fir.declarations.builder.buildValueParameter
 import org.jetbrains.kotlin.fir.declarations.impl.FirResolvedDeclarationStatusImpl
 import org.jetbrains.kotlin.fir.declarations.origin
+import org.jetbrains.kotlin.fir.expressions.FirExpression
+import org.jetbrains.kotlin.fir.expressions.buildResolvedArgumentList
 import org.jetbrains.kotlin.fir.expressions.builder.buildAnnotation
 import org.jetbrains.kotlin.fir.expressions.builder.buildAnnotationArgumentMapping
+import org.jetbrains.kotlin.fir.expressions.builder.buildFunctionCall
+import org.jetbrains.kotlin.fir.expressions.builder.buildPropertyAccessExpression
+import org.jetbrains.kotlin.fir.expressions.builder.buildReturnExpression
+import org.jetbrains.kotlin.fir.expressions.impl.buildSingleExpressionBlock
 import org.jetbrains.kotlin.fir.extensions.FirDeclarationPredicateRegistrar
 import org.jetbrains.kotlin.fir.extensions.NestedClassGenerationContext
 import org.jetbrains.kotlin.fir.extensions.predicateBasedProvider
 import org.jetbrains.kotlin.fir.moduleData
+import org.jetbrains.kotlin.fir.references.builder.buildResolvedNamedReference
 import org.jetbrains.kotlin.fir.resolve.defaultType
 import org.jetbrains.kotlin.fir.resolve.providers.symbolProvider
 import org.jetbrains.kotlin.fir.scopes.kotlinScopeProvider
 import org.jetbrains.kotlin.fir.symbols.impl.ConeClassLikeLookupTagImpl
 import org.jetbrains.kotlin.fir.symbols.impl.FirClassLikeSymbol
 import org.jetbrains.kotlin.fir.symbols.impl.FirClassSymbol
+import org.jetbrains.kotlin.fir.symbols.impl.FirConstructorSymbol
 import org.jetbrains.kotlin.fir.symbols.impl.FirNamedFunctionSymbol
 import org.jetbrains.kotlin.fir.symbols.impl.FirRegularClassSymbol
 import org.jetbrains.kotlin.fir.symbols.impl.FirValueParameterSymbol
@@ -35,6 +45,7 @@ import org.jetbrains.kotlin.fir.toFirResolvedTypeRef
 import org.jetbrains.kotlin.fir.types.ConeKotlinType
 import org.jetbrains.kotlin.fir.types.ConeKotlinTypeProjectionOut
 import org.jetbrains.kotlin.fir.types.ConeStarProjection
+import org.jetbrains.kotlin.fir.types.coneType
 import org.jetbrains.kotlin.fir.types.impl.ConeClassLikeTypeImpl
 import org.jetbrains.kotlin.name.CallableId
 import org.jetbrains.kotlin.name.ClassId
@@ -46,6 +57,7 @@ import software.amazon.app.platform.metro.compiler.fir.buildAnnotationCallWithAr
 import software.amazon.app.platform.metro.compiler.fir.buildClassExpression
 import software.amazon.app.platform.metro.compiler.fir.buildSimpleAnnotationCall
 import software.amazon.app.platform.metro.compiler.fir.hasAnnotation
+import software.amazon.app.platform.metro.compiler.fir.resolveTypeRef
 
 /**
  * Generates the declaration shape for `@ContributesRenderer` classes.
@@ -182,25 +194,51 @@ public class ContributesRendererFir(session: FirSession) :
       "provide${ContributesRendererIds.generatedSafeClassNamePrefix(owner.classId)}"
     val callableId = CallableId(graphClassId, Name.identifier(functionName))
     val functionSymbol = FirNamedFunctionSymbol(callableId)
+    val constructor = rendererConstructor(owner)
+    val generatedParameters =
+      constructor
+        ?.parameters
+        ?.map { it.toGeneratedParameter(constructor.owner, functionSymbol) }
+        .orEmpty()
+    var returnTarget: FirFunctionTarget? = null
 
     return buildNamedFunction {
-      isLocal = false
-      resolvePhase = FirResolvePhase.BODY_RESOLVE
-      moduleData = session.moduleData
-      origin = Keys.ContributesRendererGeneratorKey.origin
-      source = owner.source
-      symbol = functionSymbol
-      name = callableId.callableName
-      returnTypeRef = owner.defaultType().toFirResolvedTypeRef()
-      dispatchReceiverType = generatedGraphType(graphClassId)
-      status =
-        FirResolvedDeclarationStatusImpl(
-          Visibilities.Public,
-          Modality.OPEN,
-          Visibilities.Public.toEffectiveVisibility(owner, forClass = true),
-        )
-      annotations += buildSimpleAnnotationCall(ClassIds.PROVIDES, functionSymbol, session)
-    }
+        isLocal = false
+        resolvePhase = FirResolvePhase.BODY_RESOLVE
+        moduleData = session.moduleData
+        origin = Keys.ContributesRendererGeneratorKey.origin
+        source = owner.source
+        symbol = functionSymbol
+        name = callableId.callableName
+        returnTypeRef = owner.defaultType().toFirResolvedTypeRef()
+        dispatchReceiverType = generatedGraphType(graphClassId)
+        status =
+          FirResolvedDeclarationStatusImpl(
+            Visibilities.Public,
+            Modality.OPEN,
+            Visibilities.Public.toEffectiveVisibility(owner, forClass = true),
+          )
+        annotations += buildSimpleAnnotationCall(ClassIds.PROVIDES, functionSymbol, session)
+        valueParameters += generatedParameters
+        if (constructor != null) {
+          body =
+            buildSingleExpressionBlock(
+              buildReturnExpression {
+                val target = FirFunctionTarget(labelName = null, isLambda = false)
+                returnTarget = target
+                this.target = target
+                result =
+                  buildConstructorCall(
+                    owner,
+                    constructor.symbol,
+                    constructor.parameters,
+                    generatedParameters,
+                  )
+              }
+            )
+        }
+      }
+      .also { function -> returnTarget?.bind(function) }
   }
 
   private fun buildProvideRendererIntoMapFunction(
@@ -279,6 +317,64 @@ public class ContributesRendererFir(session: FirSession) :
       annotations += buildSimpleAnnotationCall(ClassIds.INTO_MAP, functionSymbol, session)
       annotations += buildRendererKeyAnnotation(owner, modelClass, functionSymbol)
       annotations += buildForScopeAnnotation(functionSymbol)
+    }
+  }
+
+  private fun FirValueParameter.toGeneratedParameter(
+    owner: FirRegularClassSymbol,
+    functionSymbol: FirNamedFunctionSymbol,
+  ): FirValueParameter {
+    val constructorParameter = this
+    return buildValueParameter {
+      resolvePhase = FirResolvePhase.BODY_RESOLVE
+      moduleData = session.moduleData
+      origin = Keys.ContributesRendererGeneratorKey.origin
+      source = null
+      returnTypeRef =
+        resolveTypeRef(constructorParameter.returnTypeRef, owner, session)?.toFirResolvedTypeRef()
+          ?: constructorParameter.returnTypeRef
+      name = constructorParameter.name
+      symbol = FirValueParameterSymbol()
+      containingDeclarationSymbol = functionSymbol
+      isCrossinline = constructorParameter.isCrossinline
+      isNoinline = constructorParameter.isNoinline
+      isVararg = constructorParameter.isVararg
+      annotations += constructorParameter.annotations
+    }
+  }
+
+  private fun buildConstructorCall(
+    owner: FirClassSymbol<*>,
+    constructorSymbol: FirConstructorSymbol,
+    constructorParameters: List<FirValueParameter>,
+    generatedParameters: List<FirValueParameter>,
+  ): FirExpression {
+    return buildFunctionCall {
+      coneTypeOrNull = owner.defaultType()
+      calleeReference = buildResolvedNamedReference {
+        name = owner.name
+        resolvedSymbol = constructorSymbol
+      }
+      argumentList =
+        buildResolvedArgumentList(
+          original = null,
+          mapping =
+            generatedParameters.zip(constructorParameters).associateTo(LinkedHashMap()) {
+              (generatedParameter, constructorParameter) ->
+              buildParameterAccess(generatedParameter) to constructorParameter
+            },
+        )
+    }
+  }
+
+  private fun buildParameterAccess(parameter: FirValueParameter): FirExpression {
+    return buildPropertyAccessExpression {
+      source = parameter.source
+      coneTypeOrNull = parameter.returnTypeRef.coneType
+      calleeReference = buildResolvedNamedReference {
+        name = parameter.name
+        resolvedSymbol = parameter.symbol
+      }
     }
   }
 

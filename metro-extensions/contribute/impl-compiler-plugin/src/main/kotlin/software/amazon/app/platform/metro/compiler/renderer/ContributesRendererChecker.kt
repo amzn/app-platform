@@ -9,9 +9,7 @@ import org.jetbrains.kotlin.fir.analysis.checkers.declaration.FirClassChecker
 import org.jetbrains.kotlin.fir.declarations.FirClass
 import org.jetbrains.kotlin.fir.declarations.toAnnotationClassId
 import org.jetbrains.kotlin.fir.symbols.impl.FirRegularClassSymbol
-import software.amazon.app.platform.metro.compiler.ClassIds
 import software.amazon.app.platform.metro.compiler.fir.AppPlatformMetroExtensionsDiagnostics
-import software.amazon.app.platform.metro.compiler.fir.hasAnnotation
 
 internal object ContributesRendererChecker : FirClassChecker(MppCheckerKind.Common) {
 
@@ -60,8 +58,8 @@ internal object ContributesRendererChecker : FirClassChecker(MppCheckerKind.Comm
       )
     }
 
-    val parameterCount = constructorParameterCount(classSymbol)
-    if (hasAnnotation(classSymbol, ClassIds.INJECT, session)) {
+    val parameterCount = injectedRendererConstructorParameterCount(classSymbol, session)
+    if (hasRendererInjectAnnotation(classSymbol, session)) {
       if (parameterCount == 0) {
         reporter.reportOn(
           annotation.source ?: declaration.source,
@@ -70,12 +68,13 @@ internal object ContributesRendererChecker : FirClassChecker(MppCheckerKind.Comm
             "a zero-arg constructor.",
         )
       }
-    } else if (parameterCount > 0) {
+    } else if (rendererConstructors(classSymbol).size > 1) {
       reporter.reportOn(
         annotation.source ?: declaration.source,
         AppPlatformMetroExtensionsDiagnostics.CONTRIBUTES_RENDERER_ERROR,
-        "When using @ContributesRenderer and you need to inject types in the constructor, " +
-          "then it's necessary to add the @Inject annotation.",
+        "${classSymbol.name.asString()} has multiple constructors. Annotate the constructor " +
+          "to use with @Inject, or remove the extra constructors so @ContributesRenderer can " +
+          "generate a provider.",
       )
     }
   }
