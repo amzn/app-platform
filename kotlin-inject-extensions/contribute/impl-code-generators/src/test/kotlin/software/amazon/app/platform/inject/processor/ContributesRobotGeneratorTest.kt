@@ -118,6 +118,133 @@ class ContributesRobotGeneratorTest {
   }
 
   @Test
+  fun `a component interface skips provider for an @Inject robot with constructor parameters`() {
+    compile(
+      """
+            package software.amazon.test
+
+            import software.amazon.app.platform.inject.robot.ContributesRobot
+            import software.amazon.app.platform.robot.Robot
+            import me.tatarka.inject.annotations.Inject
+            import software.amazon.lastmile.kotlin.inject.anvil.AppScope
+
+            @Inject
+            @ContributesRobot(AppScope::class)
+            class TestRobot(
+              private val dependency: String,
+            ) : Robot {
+              fun value(): String = dependency
+            }
+            """,
+      componentInterfaceWithStringSource,
+    ) {
+      val robotComponent = testRobot.component
+
+      assertThat(
+          robotComponent.declaredNonSyntheticMethods.singleOrNull { it.name == "provideTestRobot" }
+        )
+        .isNull()
+
+      val robot = componentInterface.newComponent<RobotComponent>().robots[testRobot.kotlin]!!()
+      assertThat(testRobot.getMethod("value").invoke(robot)).isEqualTo("dependency")
+    }
+  }
+
+  @Test
+  fun `a component interface skips provider for a robot with an @Inject secondary constructor`() {
+    compile(
+      """
+            package software.amazon.test
+
+            import software.amazon.app.platform.inject.robot.ContributesRobot
+            import software.amazon.app.platform.robot.Robot
+            import me.tatarka.inject.annotations.Inject
+            import software.amazon.lastmile.kotlin.inject.anvil.AppScope
+
+            @ContributesRobot(AppScope::class)
+            class TestRobot private constructor(
+              private val dependency: String,
+              private val marker: String,
+            ) : Robot {
+              @Inject constructor(dependency: String) : this(dependency, "injected")
+
+              fun value(): String = dependency + " " + marker
+            }
+            """,
+      componentInterfaceWithStringSource,
+    ) {
+      val robotComponent = testRobot.component
+
+      assertThat(
+          robotComponent.declaredNonSyntheticMethods.singleOrNull { it.name == "provideTestRobot" }
+        )
+        .isNull()
+
+      val robot = componentInterface.newComponent<RobotComponent>().robots[testRobot.kotlin]!!()
+      assertThat(testRobot.getMethod("value").invoke(robot)).isEqualTo("dependency injected")
+    }
+  }
+
+  @Test
+  fun `a robot with multiple constructors must use @Inject`() {
+    compile(
+      """
+            package software.amazon.test
+
+            import software.amazon.app.platform.inject.robot.ContributesRobot
+            import software.amazon.app.platform.robot.Robot
+            import software.amazon.lastmile.kotlin.inject.anvil.AppScope
+
+            @ContributesRobot(AppScope::class)
+            class TestRobot(
+              private val dependency: String,
+            ) : Robot {
+              constructor(dependency: String, marker: String) : this(dependency)
+            }
+            """,
+      exitCode = COMPILATION_ERROR,
+    ) {
+      assertThat(messages)
+        .contains(
+          "TestRobot has multiple constructors. Annotate the constructor to use with @Inject, " +
+            "or remove the extra constructors so @ContributesRobot can generate a provider."
+        )
+    }
+  }
+
+  @Test
+  fun `a component interface is generated for constructor parameters without @Inject`() {
+    compile(
+      """
+            package software.amazon.test
+
+            import software.amazon.app.platform.inject.robot.ContributesRobot
+            import software.amazon.app.platform.robot.Robot
+            import software.amazon.lastmile.kotlin.inject.anvil.AppScope
+
+            @ContributesRobot(AppScope::class)
+            class TestRobot(
+              private val dependency: String,
+            ) : Robot {
+              fun value(): String = dependency
+            }
+            """,
+      componentInterfaceWithStringSource,
+    ) {
+      val robotComponent = testRobot.component
+
+      with(robotComponent.declaredNonSyntheticMethods.single { it.name == "provideTestRobot" }) {
+        assertThat(parameters.single().type).isEqualTo(String::class.java)
+        assertThat(returnType).isEqualTo(testRobot)
+        assertThat(this).isAnnotatedWith(Provides::class)
+      }
+
+      val robot = componentInterface.newComponent<RobotComponent>().robots[testRobot.kotlin]!!()
+      assertThat(testRobot.getMethod("value").invoke(robot)).isEqualTo("dependency")
+    }
+  }
+
+  @Test
   fun `a component interface is generated without direct super type`() {
     compile(
       """
@@ -230,6 +357,26 @@ class ContributesRobotGeneratorTest {
         @MergeComponent(AppScope::class, exclude = [RendererComponent::class])
         @SingleIn(AppScope::class)
         interface ComponentInterface : ComponentInterfaceMerged
+    """
+
+  @Language("kotlin")
+  private val componentInterfaceWithStringSource =
+    """
+        package software.amazon.test
+
+        import software.amazon.app.platform.renderer.RendererComponent
+        import me.tatarka.inject.annotations.Component
+        import me.tatarka.inject.annotations.Provides
+        import software.amazon.lastmile.kotlin.inject.anvil.AppScope
+        import software.amazon.lastmile.kotlin.inject.anvil.MergeComponent
+        import software.amazon.lastmile.kotlin.inject.anvil.SingleIn
+
+        @Component
+        @MergeComponent(AppScope::class, exclude = [RendererComponent::class])
+        @SingleIn(AppScope::class)
+        interface ComponentInterface : ComponentInterfaceMerged {
+          @Provides fun provideString(): String = "dependency"
+        }
     """
 
   private val JvmCompilationResult.testRobot: Class<*>

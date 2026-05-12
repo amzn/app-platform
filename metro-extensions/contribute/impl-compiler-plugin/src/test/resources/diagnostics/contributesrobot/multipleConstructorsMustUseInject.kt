@@ -9,4 +9,6 @@ class RobotDependency
 <!CONTRIBUTES_ROBOT_ERROR!>@ContributesRobot(AppScope::class)<!>
 class TestRobot(
   val dependency: RobotDependency,
-) : Robot
+) : Robot {
+  constructor(dependency: RobotDependency, marker: String) : this(dependency)
+}

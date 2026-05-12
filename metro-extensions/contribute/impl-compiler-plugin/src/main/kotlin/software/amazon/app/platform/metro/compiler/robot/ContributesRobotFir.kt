@@ -7,31 +7,45 @@ import dev.zacsweers.metro.compiler.compat.CompatContext
 import org.jetbrains.kotlin.descriptors.ClassKind
 import org.jetbrains.kotlin.descriptors.Modality
 import org.jetbrains.kotlin.descriptors.Visibilities
+import org.jetbrains.kotlin.fir.FirFunctionTarget
 import org.jetbrains.kotlin.fir.FirSession
+import org.jetbrains.kotlin.fir.declarations.DirectDeclarationsAccess
 import org.jetbrains.kotlin.fir.declarations.FirFunction
 import org.jetbrains.kotlin.fir.declarations.FirResolvePhase
+import org.jetbrains.kotlin.fir.declarations.FirValueParameter
 import org.jetbrains.kotlin.fir.declarations.builder.buildNamedFunction
 import org.jetbrains.kotlin.fir.declarations.builder.buildRegularClass
 import org.jetbrains.kotlin.fir.declarations.builder.buildValueParameter
 import org.jetbrains.kotlin.fir.declarations.impl.FirResolvedDeclarationStatusImpl
 import org.jetbrains.kotlin.fir.declarations.origin
+import org.jetbrains.kotlin.fir.declarations.toAnnotationClassIdSafe
+import org.jetbrains.kotlin.fir.expressions.FirExpression
+import org.jetbrains.kotlin.fir.expressions.buildResolvedArgumentList
 import org.jetbrains.kotlin.fir.expressions.builder.buildAnnotation
 import org.jetbrains.kotlin.fir.expressions.builder.buildAnnotationArgumentMapping
+import org.jetbrains.kotlin.fir.expressions.builder.buildFunctionCall
+import org.jetbrains.kotlin.fir.expressions.builder.buildPropertyAccessExpression
+import org.jetbrains.kotlin.fir.expressions.builder.buildReturnExpression
+import org.jetbrains.kotlin.fir.expressions.impl.buildSingleExpressionBlock
 import org.jetbrains.kotlin.fir.extensions.FirDeclarationPredicateRegistrar
 import org.jetbrains.kotlin.fir.extensions.NestedClassGenerationContext
 import org.jetbrains.kotlin.fir.extensions.predicateBasedProvider
 import org.jetbrains.kotlin.fir.moduleData
+import org.jetbrains.kotlin.fir.references.builder.buildResolvedNamedReference
 import org.jetbrains.kotlin.fir.resolve.defaultType
 import org.jetbrains.kotlin.fir.resolve.providers.symbolProvider
 import org.jetbrains.kotlin.fir.scopes.kotlinScopeProvider
+import org.jetbrains.kotlin.fir.symbols.SymbolInternals
 import org.jetbrains.kotlin.fir.symbols.impl.ConeClassLikeLookupTagImpl
 import org.jetbrains.kotlin.fir.symbols.impl.FirClassLikeSymbol
 import org.jetbrains.kotlin.fir.symbols.impl.FirClassSymbol
+import org.jetbrains.kotlin.fir.symbols.impl.FirConstructorSymbol
 import org.jetbrains.kotlin.fir.symbols.impl.FirNamedFunctionSymbol
 import org.jetbrains.kotlin.fir.symbols.impl.FirRegularClassSymbol
 import org.jetbrains.kotlin.fir.symbols.impl.FirValueParameterSymbol
 import org.jetbrains.kotlin.fir.toEffectiveVisibility
 import org.jetbrains.kotlin.fir.toFirResolvedTypeRef
+import org.jetbrains.kotlin.fir.types.coneType
 import org.jetbrains.kotlin.fir.types.impl.ConeClassLikeTypeImpl
 import org.jetbrains.kotlin.name.CallableId
 import org.jetbrains.kotlin.name.ClassId
@@ -44,6 +58,7 @@ import software.amazon.app.platform.metro.compiler.fir.buildSimpleAnnotationCall
 import software.amazon.app.platform.metro.compiler.fir.extractScopeArgument
 import software.amazon.app.platform.metro.compiler.fir.extractScopeClassId
 import software.amazon.app.platform.metro.compiler.fir.hasAnnotation
+import software.amazon.app.platform.metro.compiler.fir.resolveTypeRef
 
 /**
  * Generates the declaration shape for `@ContributesRobot` classes.
@@ -56,7 +71,7 @@ import software.amazon.app.platform.metro.compiler.fir.hasAnnotation
  *   @ContributesTo(AppScope::class)
  *   interface RobotContribution {
  *     @Provides
- *     fun provideTestRobot(): TestRobot
+ *     fun provideTestRobot(dependency: RobotDependency): TestRobot
  *
  *     @Binds
  *     @IntoMap
@@ -67,7 +82,7 @@ import software.amazon.app.platform.metro.compiler.fir.hasAnnotation
  * ```
  *
  * No top-level graph interface is generated. If the robot class is already `@Inject`-constructible,
- * the nested declaration omits `provideTestRobot()` and only synthesizes the map-binding method.
+ * the nested declaration omits `provideTestRobot(...)` and only synthesizes the map-binding method.
  */
 public class ContributesRobotFir(session: FirSession) :
   MetroFirDeclarationGenerationExtension(session) {
@@ -161,7 +176,7 @@ public class ContributesRobotFir(session: FirSession) :
     owner: FirClassSymbol<*>,
   ): List<FirFunction> {
     val functions = mutableListOf<FirFunction>()
-    if (!hasAnnotation(owner, ClassIds.INJECT, session)) {
+    if (!hasInjectAnnotation(owner)) {
       functions += buildProvideRobotFunction(graphClassId, owner)
     }
     functions += buildProvideRobotIntoMapFunction(graphClassId, owner)
@@ -175,25 +190,51 @@ public class ContributesRobotFir(session: FirSession) :
     val functionName = "provide${ContributesRobotIds.generatedClassNamePrefix(owner.classId)}"
     val callableId = CallableId(graphClassId, Name.identifier(functionName))
     val functionSymbol = FirNamedFunctionSymbol(callableId)
+    val constructor = robotConstructor(owner)
+    val generatedParameters =
+      constructor
+        ?.parameters
+        ?.map { it.toGeneratedParameter(constructor.owner, functionSymbol) }
+        .orEmpty()
+    var returnTarget: FirFunctionTarget? = null
 
     return buildNamedFunction {
-      isLocal = false
-      resolvePhase = FirResolvePhase.BODY_RESOLVE
-      moduleData = session.moduleData
-      origin = Keys.ContributesRobotGeneratorKey.origin
-      source = owner.source
-      symbol = functionSymbol
-      name = callableId.callableName
-      returnTypeRef = owner.defaultType().toFirResolvedTypeRef()
-      dispatchReceiverType = generatedGraphType(graphClassId)
-      status =
-        FirResolvedDeclarationStatusImpl(
-          Visibilities.Public,
-          Modality.OPEN,
-          Visibilities.Public.toEffectiveVisibility(owner, forClass = true),
-        )
-      annotations += buildSimpleAnnotationCall(ClassIds.PROVIDES, functionSymbol, session)
-    }
+        isLocal = false
+        resolvePhase = FirResolvePhase.BODY_RESOLVE
+        moduleData = session.moduleData
+        origin = Keys.ContributesRobotGeneratorKey.origin
+        source = owner.source
+        symbol = functionSymbol
+        name = callableId.callableName
+        returnTypeRef = owner.defaultType().toFirResolvedTypeRef()
+        dispatchReceiverType = generatedGraphType(graphClassId)
+        status =
+          FirResolvedDeclarationStatusImpl(
+            Visibilities.Public,
+            Modality.OPEN,
+            Visibilities.Public.toEffectiveVisibility(owner, forClass = true),
+          )
+        annotations += buildSimpleAnnotationCall(ClassIds.PROVIDES, functionSymbol, session)
+        valueParameters += generatedParameters
+        if (constructor != null) {
+          body =
+            buildSingleExpressionBlock(
+              buildReturnExpression {
+                val target = FirFunctionTarget(labelName = null, isLambda = false)
+                returnTarget = target
+                this.target = target
+                result =
+                  buildConstructorCall(
+                    owner,
+                    constructor.symbol,
+                    constructor.parameters,
+                    generatedParameters,
+                  )
+              }
+            )
+        }
+      }
+      .also { function -> returnTarget?.bind(function) }
   }
 
   private fun buildProvideRobotIntoMapFunction(
@@ -235,6 +276,90 @@ public class ContributesRobotFir(session: FirSession) :
       annotations += buildSimpleAnnotationCall(ClassIds.BINDS, functionSymbol, session)
       annotations += buildSimpleAnnotationCall(ClassIds.INTO_MAP, functionSymbol, session)
       annotations += buildRobotKeyAnnotation(owner.classId)
+    }
+  }
+
+  private data class RobotConstructor(
+    val owner: FirRegularClassSymbol,
+    val symbol: FirConstructorSymbol,
+    val parameters: List<FirValueParameter>,
+  )
+
+  @OptIn(DirectDeclarationsAccess::class, SymbolInternals::class)
+  private fun robotConstructor(owner: FirClassSymbol<*>): RobotConstructor? {
+    val ownerClass = owner as? FirRegularClassSymbol ?: return null
+    val constructorSymbol =
+      ownerClass.declarationSymbols.filterIsInstance<FirConstructorSymbol>().firstOrNull {
+        it.isPrimary
+      } ?: ownerClass.declarationSymbols.filterIsInstance<FirConstructorSymbol>().firstOrNull()
+    return constructorSymbol?.let { RobotConstructor(ownerClass, it, it.fir.valueParameters) }
+  }
+
+  @OptIn(DirectDeclarationsAccess::class, SymbolInternals::class)
+  private fun hasInjectAnnotation(owner: FirClassSymbol<*>): Boolean {
+    if (hasAnnotation(owner, ClassIds.INJECT, session)) return true
+    val ownerClass = owner as? FirRegularClassSymbol ?: return false
+    return ownerClass.declarationSymbols.filterIsInstance<FirConstructorSymbol>().any { constructor
+      ->
+      constructor.fir.annotations.any { it.toAnnotationClassIdSafe(session) == ClassIds.INJECT }
+    }
+  }
+
+  private fun FirValueParameter.toGeneratedParameter(
+    owner: FirRegularClassSymbol,
+    functionSymbol: FirNamedFunctionSymbol,
+  ): FirValueParameter {
+    val constructorParameter = this
+    return buildValueParameter {
+      resolvePhase = FirResolvePhase.BODY_RESOLVE
+      moduleData = session.moduleData
+      origin = Keys.ContributesRobotGeneratorKey.origin
+      source = null
+      returnTypeRef =
+        resolveTypeRef(constructorParameter.returnTypeRef, owner, session)?.toFirResolvedTypeRef()
+          ?: constructorParameter.returnTypeRef
+      name = constructorParameter.name
+      symbol = FirValueParameterSymbol()
+      containingDeclarationSymbol = functionSymbol
+      isCrossinline = constructorParameter.isCrossinline
+      isNoinline = constructorParameter.isNoinline
+      isVararg = constructorParameter.isVararg
+      annotations += constructorParameter.annotations
+    }
+  }
+
+  private fun buildConstructorCall(
+    owner: FirClassSymbol<*>,
+    constructorSymbol: FirConstructorSymbol,
+    constructorParameters: List<FirValueParameter>,
+    generatedParameters: List<FirValueParameter>,
+  ): FirExpression {
+    return buildFunctionCall {
+      coneTypeOrNull = owner.defaultType()
+      calleeReference = buildResolvedNamedReference {
+        name = owner.name
+        resolvedSymbol = constructorSymbol
+      }
+      argumentList =
+        buildResolvedArgumentList(
+          original = null,
+          mapping =
+            generatedParameters.zip(constructorParameters).associateTo(LinkedHashMap()) {
+              (generatedParameter, constructorParameter) ->
+              buildParameterAccess(generatedParameter) to constructorParameter
+            },
+        )
+    }
+  }
+
+  private fun buildParameterAccess(parameter: FirValueParameter): FirExpression {
+    return buildPropertyAccessExpression {
+      source = parameter.source
+      coneTypeOrNull = parameter.returnTypeRef.coneType
+      calleeReference = buildResolvedNamedReference {
+        name = parameter.name
+        resolvedSymbol = parameter.symbol
+      }
     }
   }
 

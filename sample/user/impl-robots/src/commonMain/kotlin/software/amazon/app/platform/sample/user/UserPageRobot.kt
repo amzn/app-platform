@@ -5,7 +5,6 @@ import androidx.compose.ui.test.assertTextEquals
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performClick
 import dev.zacsweers.metro.AppScope
-import dev.zacsweers.metro.Inject
 import software.amazon.app.platform.inject.robot.ContributesRobot
 import software.amazon.app.platform.robot.ComposeRobot
 
@@ -16,7 +15,6 @@ import software.amazon.app.platform.robot.ComposeRobot
  * further data or change behavior of classes. Robots are not exclusive to verifying UI and UI
  * interactions.
  */
-@Inject
 @ContributesRobot(AppScope::class)
 class UserPageRobot(private val userManager: UserManager) : ComposeRobot() {
 

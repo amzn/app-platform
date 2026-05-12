@@ -7,14 +7,17 @@ import org.jetbrains.kotlin.ir.IrStatement
 import org.jetbrains.kotlin.ir.UNDEFINED_OFFSET
 import org.jetbrains.kotlin.ir.builders.irBlockBody
 import org.jetbrains.kotlin.ir.builders.irCallConstructor
+import org.jetbrains.kotlin.ir.builders.irGet
 import org.jetbrains.kotlin.ir.builders.irReturn
 import org.jetbrains.kotlin.ir.declarations.IrDeclarationOrigin
 import org.jetbrains.kotlin.ir.declarations.IrModuleFragment
+import org.jetbrains.kotlin.ir.declarations.IrParameterKind
 import org.jetbrains.kotlin.ir.declarations.IrSimpleFunction
 import org.jetbrains.kotlin.ir.symbols.UnsafeDuringIrConstructionAPI
 import org.jetbrains.kotlin.ir.types.IrSimpleType
 import org.jetbrains.kotlin.ir.types.classOrNull
 import org.jetbrains.kotlin.ir.util.constructors
+import org.jetbrains.kotlin.ir.util.primaryConstructor
 import org.jetbrains.kotlin.ir.visitors.IrElementTransformerVoid
 import org.jetbrains.kotlin.ir.visitors.transformChildrenVoid
 import software.amazon.app.platform.metro.compiler.Keys
@@ -30,7 +33,7 @@ import software.amazon.app.platform.metro.compiler.Keys
  *   @ContributesTo(AppScope::class)
  *   interface RobotContribution {
  *     @Provides
- *     fun provideTestRobot(): TestRobot = TestRobot()
+ *     fun provideTestRobot(dependency: RobotDependency): TestRobot = TestRobot(dependency)
  *
  *     @Binds
  *     @IntoMap
@@ -40,8 +43,8 @@ import software.amazon.app.platform.metro.compiler.Keys
  * }
  * ```
  *
- * The direct constructor call is only generated for zero-arg robots. The `@IntoMap` binding stays
- * abstract and is handled by Metro's normal `@Binds` support.
+ * The direct constructor call forwards the generated provider parameters to the robot constructor.
+ * The `@IntoMap` binding stays abstract and is handled by Metro's normal `@Binds` support.
  */
 @Suppress("DEPRECATION")
 internal class ContributesRobotIrExtension : IrGenerationExtension {
@@ -77,13 +80,22 @@ private class ContributesRobotIrTransformer(private val pluginContext: IrPluginC
   private fun generateProvideRobotBody(declaration: IrSimpleFunction) {
     val classSymbol = (declaration.returnType as? IrSimpleType)?.classOrNull ?: return
     val constructor =
-      classSymbol.constructors.singleOrNull { it.owner.parameters.isEmpty() } ?: return
+      classSymbol.owner.primaryConstructor?.symbol
+        ?: classSymbol.constructors.firstOrNull()
+        ?: return
+    val constructorParameters =
+      constructor.owner.parameters.filter { it.kind == IrParameterKind.Regular }
+    val functionParameters = declaration.parameters.filter { it.kind == IrParameterKind.Regular }
+    if (constructorParameters.size != functionParameters.size) return
     val irBuilder = irBuilderFor(declaration)
 
     declaration.body = irBuilder.irBlockBody {
       val constructorCall = irCallConstructor(constructor, emptyList())
       constructorCall.startOffset = UNDEFINED_OFFSET
       constructorCall.endOffset = UNDEFINED_OFFSET
+      functionParameters.forEachIndexed { index, parameter ->
+        constructorCall.arguments[index] = irGet(parameter)
+      }
       +irReturn(constructorCall)
     }
   }
