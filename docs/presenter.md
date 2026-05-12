@@ -102,7 +102,6 @@ interface LoginPresenter : MoleculePresenter<Unit, Model> {
 A concrete implementation of `LoginPresenter` could look like this:
 
 ```kotlin
-@Inject
 @ContributesBinding(AppScope::class)
 class AmazonLoginPresenter : LoginPresenter {
   @Composable
@@ -124,10 +123,12 @@ class AmazonLoginPresenter : LoginPresenter {
 
 !!! note
 
-    `MoleculePresenters` are never singletons. While they use Metro or `kotlin-inject-anvil` for constructor injection and
-    automatically bind the concrete implementation to an API using `@ContributesBinding`, they don't use the
-    `@SingleIn` annotation. `MoleculePresenters` manage their state in the `@Composable` function with the Compose
-    runtime. Therefore, it's strongly discouraged to have any class properties.
+    `MoleculePresenters` are never singletons. They are automatically bound to an API using
+    `@ContributesBinding`, but they don't use the `@SingleIn` annotation. Metro can instantiate a
+    contributed presenter with a single constructor without `@Inject`; `kotlin-inject-anvil` users
+    should still use `@Inject` for constructor injection. `MoleculePresenters` manage their state in
+    the `@Composable` function with the Compose runtime. Therefore, it's strongly discouraged to have
+    any class properties.
 
 ## Model driven navigation
 
@@ -452,7 +453,6 @@ The last step is to forward back gestures from the UI layer to `Presenters` to i
 `Presenters`. Here again it's recommended to do this from within the root `Renderer`:
 
 ```kotlin hl_lines="4 8"
-@Inject
 @ContributesRenderer
 class RootPresenterRenderer(
   private val backGestureDispatcherPresenter: BackGestureDispatcherPresenter,
@@ -942,7 +942,6 @@ wraps the backstack in a `NavDisplay` and forwards back gestures to the `Present
 for each position in the stack and the individual `Renderer` for each `Model` is invoked:
 
 ```kotlin
-@Inject
 @ContributesRenderer
 class Navigation3HomeRenderer(private val rendererFactory: RendererFactory) : ComposeRenderer<Model>() {
   @Composable
@@ -977,7 +976,6 @@ With this integration handling of the backstack is managed in the `Presenter` an
     data object List
     data object Detail
 
-    @Inject
     @ContributesRenderer
     class Navigation3Renderer(
       private val listPresenter: ListPresenter,

@@ -117,7 +117,6 @@ interface LocationProvider
 === "Android"
 
     ```kotlin title="androidMain"
-    @Inject
     @SingleIn(AppScope::class)
     @ContributesBinding(AppScope::class)
     class AndroidLocationProvider(
@@ -128,7 +127,6 @@ interface LocationProvider
 === "iOS"
 
     ```kotlin title="iosMain"
-    @Inject
     @SingleIn(AppScope::class)
     @ContributesBinding(AppScope::class)
     class IosLocationProvider(
@@ -139,7 +137,6 @@ interface LocationProvider
 === "Desktop"
 
     ```kotlin title="desktopMain"
-    @Inject
     @SingleIn(AppScope::class)
     @ContributesBinding(AppScope::class)
     class DesktopLocationProvider(
@@ -150,7 +147,6 @@ interface LocationProvider
 === "WasmJs"
 
     ```kotlin title="wasmJsMain"
-    @Inject
     @SingleIn(AppScope::class)
     @ContributesBinding(AppScope::class)
     class WasmLocationProvider(
@@ -298,8 +294,7 @@ multi-bindings for the `Scoped` interface. This is a lot of boilerplate to write
 `@ContributesScoped` instead. When using `@ContributesScoped`, all bindings are generated and `@ContributesBinding`
 doesn't need to be added. A typical implementation looks like this:
 
-```kotlin hl_lines="3"
-@Inject
+```kotlin hl_lines="2"
 @SingleIn(AppScope::class)
 @ContributesScoped(AppScope::class)
 class AndroidLocationProvider : LocationProvider, Scoped

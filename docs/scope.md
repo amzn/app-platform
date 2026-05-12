@@ -354,9 +354,8 @@ With Metro, or alternatively `kotlin-inject-anvil`, for the app scope it would b
 === "Metro"
 
     ```kotlin
-    @Inject // (1)!
-    @SingleIn(AppScope::class) // (2)!
-    @ContributesScoped(AppScope::class) //(3)!
+    @SingleIn(AppScope::class) // (1)!
+    @ContributesScoped(AppScope::class) // (2)!
     class AndroidLocationProvider(
       ...
     ) : LocationProvider, Scoped {
@@ -364,23 +363,40 @@ With Metro, or alternatively `kotlin-inject-anvil`, for the app scope it would b
     }
     ```
 
-    1.  This annotation is required to support constructor injection.
-    2.  This annotation ensures that there is only ever a single instance of `AndroidLocationProvider` in the `AppScope`.
-    3.  This annotation ensures that when somebody injects `LocationProvider`, then they get the singleton instance of `AndroidLocationProvider`.
+    1.  This annotation ensures that there is only ever a single instance of `AndroidLocationProvider` in the `AppScope`.
+    2.  This annotation ensures that when somebody injects `LocationProvider`, then they get the singleton instance of `AndroidLocationProvider`.
 
     ??? note "`@ContributesScoped` will generate and contribute bindings"
 
-        The `@ContributesScoped` annotation will generate a graph interface with bindings for `LocationProvider`
-        and `Scoped`. The generated interface will be added automatically to the `AppScope`. No further manual step
+        The `@ContributesScoped` annotation will generate a binding container with bindings for `LocationProvider`
+        and `Scoped`. The generated container will be added automatically to the `AppScope`. No further manual step
         is needed.
 
         ```kotlin
-        @Binds
-        val AndroidLocationProvider.binds: LocationProvider
+        @ContributesTo(AppScope::class)
+        @BindingContainer
+        @Origin(AndroidLocationProvider::class)
+        interface AndroidLocationProviderContribution {
+          @Binds
+          fun bindAndroidLocationProvider(instance: AndroidLocationProvider): LocationProvider
 
-        @Binds @IntoSet @ForScope(AppScope::class)
-        val AndroidLocationProvider.bindsScoped: Scoped
+          @Binds
+          @IntoSet
+          @ForScope(AppScope::class)
+          fun bindAndroidLocationProviderScoped(instance: AndroidLocationProvider): Scoped
+
+          companion object {
+            @Provides
+            fun provideAndroidLocationProvider(
+              locationManager: LocationManager
+            ): AndroidLocationProvider = AndroidLocationProvider(locationManager)
+          }
+        }
         ```
+
+        If the class has an `@Inject` constructor, the generated constructor provider is skipped
+        and only the bindings are generated. If it has multiple constructors, annotate the
+        constructor to use with `@Inject`.
 
 === "kotlin-inject-anvil"
 
@@ -423,7 +439,6 @@ With Metro, or alternatively `kotlin-inject-anvil`, for the app scope it would b
     the user logs in and `onExitScope()` when the user logs out.
 
     ```kotlin
-    @Inject
     @SingleIn(UserScope::class)
     @ContributesScoped(UserScope::class) // Use @ContributesBinding with kotlin-inject-anvil.
     class SessionTimeout(...) : Scoped {
@@ -522,7 +537,6 @@ not create a property in the class itself. This callback notifies you when the `
 === "Metro"
 
     ```kotlin
-    @Inject
     @SingleIn(AppScope::class)
     @ContributesScoped(AppScope::class)
     class MyClass(private val application: Application) : Scoped {

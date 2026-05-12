@@ -84,7 +84,6 @@ The `TemplateRenderer` receives the specific `Template`, lays out necessary cont
 models in these layers. The renderer often injects `RendererFactory` to create renderers for the models, e.g.
 
 ```kotlin
-@Inject
 @ContributesRenderer
 class ComposeSampleAppTemplateRenderer(
   private val rendererFactory: RendererFactory
