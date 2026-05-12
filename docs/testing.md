@@ -307,17 +307,19 @@ or `kotlin-inject-anvil` dependency graph.
 
         ```kotlin
         @ContributesTo(AppScope::class)
-        public interface MetricsRobotGraph {
-          @Provides
-          public fun provideMetricsRobot(metricsService: FakeMetricsService): MetricsRobot =
-            MetricsRobot(metricsService)
-    
-          @Provides
+        @BindingContainer
+        @Origin(MetricsRobot::class)
+        public interface MetricsRobotContribution {
+          @Binds
           @IntoMap
           @RobotKey(MetricsRobot::class)
-          public fun provideMetricsRobotIntoMap(
-            robot: () -> MetricsRobot
-          ): Robot = robot()
+          public fun bindMetricsRobotIntoMap(robot: MetricsRobot): Robot
+
+          companion object {
+            @Provides
+            public fun provideMetricsRobot(metricsService: FakeMetricsService): MetricsRobot =
+              MetricsRobot(metricsService)
+          }
         }
         ```
 

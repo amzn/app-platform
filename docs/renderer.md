@@ -153,11 +153,11 @@ different implementations:
 ### `@ContributesRenderer`
 
 All factory implementations rely on Metro or `kotlin-inject-anvil` to discover and initialize
-renderers. When the factory is created, it builds the generated renderer graph or component, whose
-parent is the app graph or component. That generated type lazily provides all renderers using the
+renderers. When the factory is created, it builds the generated renderer bindings, whose parent is
+the app graph or component. Those generated bindings lazily provide all renderers using the
 multibindings feature. To participate in the lookup, renderers must tell Metro or
-`kotlin-inject-anvil` which models they can render. This is done through a generated graph or
-component interface, which is automatically added to the renderer scope by using the
+`kotlin-inject-anvil` which models they can render. This is done through generated bindings, which
+are automatically added to the renderer scope by using the
 [`@ContributesRenderer` annotation](https://github.com/amzn/app-platform/blob/main/kotlin-inject-extensions/contribute/public/src/commonMain/kotlin/software/amazon/app/platform/inject/ContributesRenderer.kt).
 
 Which `Model` type is used for the binding is determined based on the super type. In the following example
@@ -176,20 +176,25 @@ class LoginRenderer : ComposeRenderer<LoginPresenter.Model>()
     
         ```kotlin
         @ContributesTo(RendererScope::class)
-        interface LoginRendererGraph {
-          @Provides
-          public fun provideSoftwareAmazonAppPlatformSampleLoginLoginRenderer(): LoginRenderer = LoginRenderer()
-    
-          @Provides
+        @BindingContainer
+        @Origin(LoginRenderer::class)
+        interface LoginRendererContribution {
+          @Binds
           @IntoMap
           @RendererKey(LoginPresenter.Model::class)
-          public fun provideSoftwareAmazonAppPlatformSampleLoginLoginRendererLoginPresenterModel(renderer: () -> LoginRenderer): Renderer<*> = renderer()
-    
-          @Provides
-          @IntoMap
-          @ForScope(scope = RendererScope::class)
-          @RendererKey(LoginPresenter.Model::class)
-          public fun provideSoftwareAmazonAppPlatformSampleLoginLoginRendererLoginPresenterModelKey(): KClass<out Renderer<*>> = LoginRenderer::class
+          public fun bindLoginRendererModel(renderer: LoginRenderer): Renderer<*>
+
+          companion object {
+            @Provides
+            public fun provideLoginRenderer(): LoginRenderer = LoginRenderer()
+
+            @Provides
+            @IntoMap
+            @ForScope(scope = RendererScope::class)
+            @RendererKey(LoginPresenter.Model::class)
+            public fun provideLoginRendererModelKey(): KClass<out Renderer<*>> =
+              LoginRenderer::class
+          }
         }
         ```
 
@@ -303,12 +308,11 @@ class MainActivity : ComponentActivity() {
 
 ### Injecting `RendererFactory`
 
-The `RendererFactory` is provided in the `RendererComponent`, meaning it can be injected by any `Renderer`. This
-allows you to create child renderers without knowing the concrete type of the model and injecting the child
-renderers ahead of time:
+The `RendererFactory` is provided in the generated renderer graph or component, meaning it can be
+injected by any `Renderer`. This allows you to create child renderers without knowing the concrete
+type of the model and injecting the child renderers ahead of time:
 
 ```kotlin
-@Inject
 @ContributesRenderer
 class SampleRenderer(
   private val rendererFactory: RendererFactory
@@ -331,8 +335,9 @@ class SampleRenderer(
 
 !!! note
 
-    Whenever a `Renderer` has an injected constructor parameter like `rendererFactory` in the sample above, then
-    the class must be annotated with `@Inject` in addition to `@ContributesRenderer`.
+    A `Renderer` with a single constructor does not need `@Inject`. Constructor parameters like
+    `rendererFactory` are injected through the generated provider. Add `@Inject` only when the
+    renderer has multiple constructors and one must be selected explicitly.
 
 ## Android support
 
