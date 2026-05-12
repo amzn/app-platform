@@ -8,6 +8,8 @@ import software.amazon.app.platform.renderer.Renderer
 class Model : BaseModel
 
 <!CONTRIBUTES_RENDERER_ERROR!>@ContributesRenderer<!>
-class TestRenderer(@Suppress("unused") val string: String) : Renderer<Model> {
+class TestRenderer(val string: String) : Renderer<Model> {
+  constructor(string: String, marker: String) : this(string)
+
   override fun render(model: Model) = Unit
 }

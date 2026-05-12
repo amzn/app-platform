@@ -31,6 +31,12 @@ public class BoxTestGenerated extends AbstractBoxTest {
     }
 
     @Test
+    @TestMetadata("constructorParametersWithoutInject.kt")
+    public void testConstructorParametersWithoutInject() {
+      runTest("metro-extensions/contribute/impl-compiler-plugin/src/test/resources/box/contributesrenderer/constructorParametersWithoutInject.kt");
+    }
+
+    @Test
     @TestMetadata("defaultConstructorRenderer.kt")
     public void testDefaultConstructorRenderer() {
       runTest("metro-extensions/contribute/impl-compiler-plugin/src/test/resources/box/contributesrenderer/defaultConstructorRenderer.kt");
@@ -58,6 +64,12 @@ public class BoxTestGenerated extends AbstractBoxTest {
     @TestMetadata("injectConstructorRenderer.kt")
     public void testInjectConstructorRenderer() {
       runTest("metro-extensions/contribute/impl-compiler-plugin/src/test/resources/box/contributesrenderer/injectConstructorRenderer.kt");
+    }
+
+    @Test
+    @TestMetadata("injectSecondaryConstructorSkipsProvider.kt")
+    public void testInjectSecondaryConstructorSkipsProvider() {
+      runTest("metro-extensions/contribute/impl-compiler-plugin/src/test/resources/box/contributesrenderer/injectSecondaryConstructorSkipsProvider.kt");
     }
 
     @Test

@@ -5,7 +5,9 @@ import org.jetbrains.kotlin.fir.declarations.DirectDeclarationsAccess
 import org.jetbrains.kotlin.fir.declarations.FirDeclaration
 import org.jetbrains.kotlin.fir.declarations.FirFile
 import org.jetbrains.kotlin.fir.declarations.FirRegularClass
+import org.jetbrains.kotlin.fir.declarations.FirValueParameter
 import org.jetbrains.kotlin.fir.declarations.getSealedClassInheritors
+import org.jetbrains.kotlin.fir.declarations.toAnnotationClassIdSafe
 import org.jetbrains.kotlin.fir.declarations.utils.isSealed
 import org.jetbrains.kotlin.fir.expressions.FirAnnotationCall
 import org.jetbrains.kotlin.fir.expressions.FirLiteralExpression
@@ -45,6 +47,12 @@ internal data class RendererContributionMetadata(
   val modelClasses: List<ResolvedModelClass>,
 )
 
+internal data class RendererConstructor(
+  val owner: FirRegularClassSymbol,
+  val symbol: FirConstructorSymbol,
+  val parameters: List<FirValueParameter>,
+)
+
 internal sealed interface RendererModelTypeResolution {
   data class Success(val modelClass: ResolvedModelClass) : RendererModelTypeResolution
 
@@ -61,7 +69,7 @@ internal fun rendererContributionMetadata(
   val includeSealedSubtypes = contributesRendererIncludeSealedSubtypes(classSymbol, session)
 
   return RendererContributionMetadata(
-    hasInjectAnnotation = hasAnnotation(classSymbol, ClassIds.INJECT, session),
+    hasInjectAnnotation = hasRendererInjectAnnotation(classSymbol, session),
     modelClasses =
       if (includeSealedSubtypes) {
         collectModelClasses(modelType.modelClass, session)
@@ -112,12 +120,41 @@ internal fun isSingleInRendererScope(
 }
 
 @OptIn(DirectDeclarationsAccess::class, SymbolInternals::class)
-internal fun constructorParameterCount(classSymbol: FirRegularClassSymbol): Int {
+internal fun rendererConstructors(classSymbol: FirRegularClassSymbol): List<FirConstructorSymbol> {
+  return classSymbol.declarationSymbols.filterIsInstance<FirConstructorSymbol>()
+}
+
+@OptIn(DirectDeclarationsAccess::class, SymbolInternals::class)
+internal fun rendererConstructor(classSymbol: FirRegularClassSymbol): RendererConstructor? {
   val constructorSymbol =
-    classSymbol.declarationSymbols.filterIsInstance<FirConstructorSymbol>().firstOrNull {
-      it.isPrimary
-    } ?: classSymbol.declarationSymbols.filterIsInstance<FirConstructorSymbol>().firstOrNull()
-  return constructorSymbol?.fir?.valueParameters?.size ?: 0
+    rendererConstructors(classSymbol).firstOrNull { it.isPrimary }
+      ?: rendererConstructors(classSymbol).firstOrNull()
+  return constructorSymbol?.let { RendererConstructor(classSymbol, it, it.fir.valueParameters) }
+}
+
+@OptIn(DirectDeclarationsAccess::class, SymbolInternals::class)
+internal fun hasRendererInjectAnnotation(
+  classSymbol: FirRegularClassSymbol,
+  session: FirSession,
+): Boolean {
+  return hasAnnotation(classSymbol, ClassIds.INJECT, session) ||
+    rendererConstructors(classSymbol).any { constructor ->
+      constructor.fir.annotations.any { it.toAnnotationClassIdSafe(session) == ClassIds.INJECT }
+    }
+}
+
+@OptIn(DirectDeclarationsAccess::class, SymbolInternals::class)
+internal fun injectedRendererConstructorParameterCount(
+  classSymbol: FirRegularClassSymbol,
+  session: FirSession,
+): Int {
+  val constructorSymbol =
+    rendererConstructors(classSymbol).firstOrNull { constructor ->
+      constructor.fir.annotations.any { it.toAnnotationClassIdSafe(session) == ClassIds.INJECT }
+    }
+  return constructorSymbol?.fir?.valueParameters?.size
+    ?: rendererConstructor(classSymbol)?.parameters?.size
+    ?: 0
 }
 
 private fun explicitRendererModelType(

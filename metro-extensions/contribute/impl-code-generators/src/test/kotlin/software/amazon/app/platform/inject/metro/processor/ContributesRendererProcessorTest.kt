@@ -519,6 +519,46 @@ class ContributesRendererProcessorTest {
   }
 
   @Test
+  fun `the graph skips the provider for a renderer with an @Inject secondary constructor`() {
+    compile(
+      """
+      package software.amazon.test
+
+      import dev.zacsweers.metro.Inject
+      import software.amazon.app.platform.inject.ContributesRenderer
+      import software.amazon.app.platform.presenter.BaseModel
+      import software.amazon.app.platform.renderer.Renderer
+
+      class Model : BaseModel
+
+      @ContributesRenderer
+      class TestRenderer private constructor(
+        val string: String,
+        val marker: String,
+      ) : Renderer<Model> {
+        @Inject constructor(string: String) : this(string, "injected")
+
+        override fun render(model: Model) = Unit
+
+        fun value(): String = "${'$'}string ${'$'}marker"
+      }
+      """,
+      graphInterfaceSource,
+    ) {
+      val generatedGraph = testRenderer.rendererGraph
+
+      assertThat(generatedGraph.declaredNonSyntheticMethods.map { it.name })
+        .containsOnly(
+          "provideSoftwareAmazonTestTestRendererModel",
+          "provideSoftwareAmazonTestTestRendererModelKey",
+        )
+
+      val renderer = graphInterface.newMetroGraph<TestRendererGraph>().renderers[model]!!()
+      assertThat(testRenderer.getMethod("value").invoke(renderer)).isEqualTo("abc injected")
+    }
+  }
+
+  @Test
   fun `when using @SingleIn(RendererScope_class) then a warning is printed`() {
     compile(
       """
@@ -583,7 +623,7 @@ class ContributesRendererProcessorTest {
   }
 
   @Test
-  fun `it is required to use @Inject for a non-zero arg constructor`() {
+  fun `a graph interface is generated for constructor parameters without @Inject`() {
     compile(
       """
       package software.amazon.test
@@ -595,7 +635,47 @@ class ContributesRendererProcessorTest {
       class Model : BaseModel
 
       @ContributesRenderer
-      class TestRenderer(@Suppress("unused") val string: String) : Renderer<Model> {
+      class TestRenderer(val string: String) : Renderer<Model> {
+        override fun render(model: Model) = Unit
+
+        fun value(): String = string
+      }
+      """,
+      graphInterfaceSource,
+    ) {
+      val generatedGraph = testRenderer.rendererGraph
+
+      with(
+        generatedGraph.declaredNonSyntheticMethods.single {
+          it.name == "provideSoftwareAmazonTestTestRenderer"
+        }
+      ) {
+        assertThat(parameters.single().type).isEqualTo(String::class.java)
+        assertThat(returnType).isEqualTo(testRenderer)
+        assertThat(this).isAnnotatedWith(Provides::class)
+      }
+
+      val renderer = graphInterface.newMetroGraph<TestRendererGraph>().renderers[model]!!()
+      assertThat(testRenderer.getMethod("value").invoke(renderer)).isEqualTo("abc")
+    }
+  }
+
+  @Test
+  fun `a renderer with multiple constructors must use @Inject`() {
+    compile(
+      """
+      package software.amazon.test
+
+      import software.amazon.app.platform.inject.ContributesRenderer
+      import software.amazon.app.platform.presenter.BaseModel
+      import software.amazon.app.platform.renderer.Renderer
+
+      class Model : BaseModel
+
+      @ContributesRenderer
+      class TestRenderer(val string: String) : Renderer<Model> {
+        constructor(string: String, marker: String) : this(string)
+
         override fun render(model: Model) = Unit
       }
       """,
@@ -604,8 +684,9 @@ class ContributesRendererProcessorTest {
     ) {
       assertThat(messages)
         .contains(
-          "When using @ContributesRenderer and you need to inject types " +
-            "in the constructor, then it's necessary to add the @Inject annotation."
+          "TestRenderer has multiple constructors. Annotate the constructor to use with " +
+            "@Inject, or remove the extra constructors so @ContributesRenderer can generate " +
+            "a provider."
         )
     }
   }

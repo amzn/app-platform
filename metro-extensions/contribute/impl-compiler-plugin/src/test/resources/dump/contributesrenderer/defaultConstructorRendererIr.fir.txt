@@ -17,7 +17,9 @@ FILE: defaultConstructorRendererIr.kt
         }
 
         @R|dev/zacsweers/metro/ContributesTo|(scope = <getClass>(Q|software/amazon/app/platform/renderer/RendererScope|)) @R|dev/zacsweers/metro/Origin|(value = <getClass>(Q|com/test/TestRenderer|)) public abstract interface RendererContribution : R|kotlin/Any| {
-            @R|dev/zacsweers/metro/Provides|() public open fun provideComTestTestRenderer(): R|com/test/TestRenderer|
+            @R|dev/zacsweers/metro/Provides|() public open fun provideComTestTestRenderer(): R|com/test/TestRenderer| {
+                ^provideComTestTestRenderer R|com/test/TestRenderer.TestRenderer|()
+            }
 
             @R|dev/zacsweers/metro/Binds|() @R|dev/zacsweers/metro/IntoMap|() @R|software/amazon/app/platform/renderer/metro/RendererKey|(value = <getClass>(Q|com/test/Model|)) public open fun provideComTestTestRendererModel(renderer: R|com/test/TestRenderer|): R|software/amazon/app/platform/renderer/Renderer<*>|
 
