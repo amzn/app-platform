@@ -40,19 +40,21 @@ import software.amazon.app.platform.metro.compiler.Keys
  *   @ContributesTo(RendererScope::class)
  *   @Origin(TestRenderer::class)
  *   interface RendererContribution {
- *     @Provides
- *     fun provideTestRenderer(): TestRenderer = TestRenderer()
- *
  *     @Binds
  *     @IntoMap
  *     @RendererKey(Model::class)
  *     fun provideTestRendererModel(renderer: TestRenderer): Renderer<*>
  *
- *     @Provides
- *     @IntoMap
- *     @RendererKey(Model::class)
- *     @ForScope(RendererScope::class)
- *     fun provideTestRendererModelKey(): KClass<out Renderer<*>> = TestRenderer::class
+ *     companion object {
+ *       @Provides
+ *       fun provideTestRenderer(): TestRenderer = TestRenderer()
+ *
+ *       @Provides
+ *       @IntoMap
+ *       @RendererKey(Model::class)
+ *       @ForScope(RendererScope::class)
+ *       fun provideTestRendererModelKey(): KClass<out Renderer<*>> = TestRenderer::class
+ *     }
  *   }
  * }
  * ```
@@ -137,8 +139,14 @@ private class ContributesRendererIrTransformer(private val pluginContext: IrPlug
 
   private fun generatedOwnerClass(declaration: IrSimpleFunction): IrClass? {
     val parentClass = declaration.parent as? IrClass ?: return null
+    val contributionClass =
+      if (parentClass.isCompanion) {
+        parentClass.parentAsClass
+      } else {
+        parentClass
+      }
     val originAnnotation =
-      parentClass.annotations.firstOrNull { annotation ->
+      contributionClass.annotations.firstOrNull { annotation ->
         annotation.symbol.owner.parentAsClass.name == ClassIds.ORIGIN.shortClassName
       } ?: return null
     val classReference = originAnnotation.arguments[0] as? IrClassReference ?: return null

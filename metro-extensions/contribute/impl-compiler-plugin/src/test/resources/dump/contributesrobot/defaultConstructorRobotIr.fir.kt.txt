@@ -3,6 +3,7 @@ package com.test
 
 @ContributesRobot(scope = AppScope::class)
 class TestRobot : Robot {
+  @BindingContainer
   @ContributesTo(scope = AppScope::class)
   @Origin(value = TestRobot::class)
   interface RobotContribution {
@@ -23,16 +24,10 @@ class TestRobot : Robot {
 
     }
 
-    @Deprecated(message = "This synthesized declaration should not be used directly", level = DeprecationLevel.HIDDEN)
-    @MetroContribution(scope = AppScope::class)
-    interface MetroContributionToDevzacsweersmetroappScopeoxd1AHI : RobotContribution {
-    }
-
-    @Deprecated(message = "This synthesized declaration should not be used directly", level = DeprecationLevel.HIDDEN)
-    @CallableMetadata(callableName = "provideTestRobot", propertyName = "", startOffset = 206, endOffset = 264, newInstanceName = "provideTestRobot")
-    class ProvideTestRobotMetroFactory : Factory<TestRobot> {
-      private /* final field */ val instance: RobotContribution = instance
-      companion object Companion {
+    companion object Companion {
+      @Deprecated(message = "This synthesized declaration should not be used directly", level = DeprecationLevel.HIDDEN)
+      @CallableMetadata(callableName = "provideTestRobot", propertyName = "", startOffset = 206, endOffset = 264, newInstanceName = "provideTestRobot")
+      object ProvideTestRobotMetroFactory : Factory<TestRobot> {
         private constructor() /* primary */ {
           super/*Any*/()
           /* <init>() */
@@ -42,41 +37,40 @@ class TestRobot : Robot {
         @HiddenFromObjC
         @JvmStatic
         @JsStatic
-        fun create(instance: RobotContribution): Factory<TestRobot> {
-          return ProvideTestRobotMetroFactory(instance = instance)
+        fun create(): Factory<TestRobot> {
+          return ProvideTestRobotMetroFactory
         }
 
         @HiddenFromObjC
         @JvmStatic
         @JsStatic
-        fun provideTestRobot(instance: RobotContribution): TestRobot {
-          return instance.provideTestRobot()
+        fun provideTestRobot(): TestRobot {
+          return Companion.provideTestRobot()
+        }
+
+        @HiddenFromObjC
+        override operator fun invoke(): TestRobot {
+          return ProvideTestRobotMetroFactory.provideTestRobot()
+        }
+
+        @HiddenFromObjC
+        fun mirrorFunction(): TestRobot {
+          return error(message = "Never called")
         }
 
       }
 
-      @HiddenFromObjC
-      private constructor(instance: RobotContribution) /* primary */ {
+      private constructor() /* primary */ {
         super/*Any*/()
         /* <init>() */
 
       }
 
-      @HiddenFromObjC
-      override operator fun invoke(): TestRobot {
-        return Companion.provideTestRobot(instance = <this>.#instance)
+      @Provides
+      open fun provideTestRobot(): TestRobot {
+        return TestRobot()
       }
 
-      @HiddenFromObjC
-      fun mirrorFunction(): TestRobot {
-        return error(message = "Never called")
-      }
-
-    }
-
-    @Provides
-    fun provideTestRobot(): TestRobot {
-      return TestRobot()
     }
 
     @Binds

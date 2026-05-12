@@ -42,6 +42,12 @@ import org.jetbrains.kotlin.name.ClassId
 import org.jetbrains.kotlin.name.FqName
 import org.jetbrains.kotlin.name.Name
 
+@OptIn(DirectDeclarationsAccess::class)
+internal fun FirRegularClass.addGeneratedDeclaration(declaration: FirDeclaration) {
+  @Suppress("UNCHECKED_CAST") val mutableDeclarations = declarations as MutableList<FirDeclaration>
+  mutableDeclarations += declaration
+}
+
 internal fun hasAnnotation(
   classSymbol: FirClassSymbol<*>,
   annotationClassId: ClassId,

@@ -9,6 +9,7 @@ import org.jetbrains.kotlin.descriptors.Modality
 import org.jetbrains.kotlin.descriptors.Visibilities
 import org.jetbrains.kotlin.fir.FirFunctionTarget
 import org.jetbrains.kotlin.fir.FirSession
+import org.jetbrains.kotlin.fir.declarations.FirConstructor
 import org.jetbrains.kotlin.fir.declarations.FirFunction
 import org.jetbrains.kotlin.fir.declarations.FirResolvePhase
 import org.jetbrains.kotlin.fir.declarations.FirValueParameter
@@ -24,11 +25,15 @@ import org.jetbrains.kotlin.fir.expressions.builder.buildPropertyAccessExpressio
 import org.jetbrains.kotlin.fir.expressions.builder.buildReturnExpression
 import org.jetbrains.kotlin.fir.expressions.impl.buildSingleExpressionBlock
 import org.jetbrains.kotlin.fir.extensions.FirDeclarationPredicateRegistrar
+import org.jetbrains.kotlin.fir.extensions.MemberGenerationContext
 import org.jetbrains.kotlin.fir.extensions.NestedClassGenerationContext
 import org.jetbrains.kotlin.fir.extensions.predicateBasedProvider
 import org.jetbrains.kotlin.fir.moduleData
+import org.jetbrains.kotlin.fir.plugin.createCompanionObject
+import org.jetbrains.kotlin.fir.plugin.createDefaultPrivateConstructor
 import org.jetbrains.kotlin.fir.references.builder.buildResolvedNamedReference
 import org.jetbrains.kotlin.fir.resolve.defaultType
+import org.jetbrains.kotlin.fir.resolve.providers.symbolProvider
 import org.jetbrains.kotlin.fir.scopes.kotlinScopeProvider
 import org.jetbrains.kotlin.fir.symbols.impl.ConeClassLikeLookupTagImpl
 import org.jetbrains.kotlin.fir.symbols.impl.FirClassLikeSymbol
@@ -45,8 +50,10 @@ import org.jetbrains.kotlin.fir.types.impl.ConeClassLikeTypeImpl
 import org.jetbrains.kotlin.name.CallableId
 import org.jetbrains.kotlin.name.ClassId
 import org.jetbrains.kotlin.name.Name
+import org.jetbrains.kotlin.name.SpecialNames
 import software.amazon.app.platform.metro.compiler.ClassIds
 import software.amazon.app.platform.metro.compiler.Keys
+import software.amazon.app.platform.metro.compiler.fir.addGeneratedDeclaration
 import software.amazon.app.platform.metro.compiler.fir.buildAnnotationCallWithArgument
 import software.amazon.app.platform.metro.compiler.fir.buildClassExpression
 import software.amazon.app.platform.metro.compiler.fir.buildSimpleAnnotationCall
@@ -65,11 +72,9 @@ import software.amazon.app.platform.metro.compiler.fir.resolveTypeRef
  * class TestClass : SuperType, Scoped {
  *
  *   @ContributesTo(AppScope::class)
+ *   @BindingContainer
  *   @Origin(TestClass::class)
  *   interface ScopedContribution {
- *     @Provides
- *     fun provideTestClass(dependency: Dependency): TestClass
- *
  *     @Binds
  *     fun bindSuperType(instance: TestClass): SuperType
  *
@@ -77,6 +82,11 @@ import software.amazon.app.platform.metro.compiler.fir.resolveTypeRef
  *     @IntoSet
  *     @ForScope(AppScope::class)
  *     fun bindTestClassScoped(instance: TestClass): Scoped
+ *
+ *     companion object {
+ *       @Provides
+ *       fun provideTestClass(dependency: Dependency): TestClass
+ *     }
  *   }
  * }
  * ```
@@ -113,6 +123,14 @@ public class ContributesScopedFir(session: FirSession) :
     classSymbol: FirClassSymbol<*>,
     context: NestedClassGenerationContext,
   ): Set<Name> {
+    generatedScopedContributionOwner(classSymbol)?.let { scopedOwner ->
+      return if (hasScopedInjectAnnotation(scopedOwner, session)) {
+        emptySet()
+      } else {
+        setOf(SpecialNames.DEFAULT_NAME_FOR_COMPANION_OBJECT)
+      }
+    }
+
     val regularClass = classSymbol as? FirRegularClassSymbol ?: return emptySet()
     return if (
       hasAnnotation(classSymbol, ContributesScopedIds.CONTRIBUTES_SCOPED_CLASS_ID, session) &&
@@ -129,6 +147,17 @@ public class ContributesScopedFir(session: FirSession) :
     name: Name,
     context: NestedClassGenerationContext,
   ): FirClassLikeSymbol<*>? {
+    if (name == SpecialNames.DEFAULT_NAME_FOR_COMPANION_OBJECT) {
+      val scopedOwner = generatedScopedContributionOwner(owner) ?: return null
+      if (hasScopedInjectAnnotation(scopedOwner, session)) return null
+      val contributionSymbol = owner as? FirRegularClassSymbol ?: return null
+      val companion =
+        buildProviderCompanionObject(contributionSymbol) { companionClassId ->
+          listOf(buildProvideScopedFunction(companionClassId, scopedOwner))
+        }
+      return companion.symbol
+    }
+
     if (name != ContributesScopedIds.NESTED_INTERFACE_NAME) return null
     if (!hasAnnotation(owner, ContributesScopedIds.CONTRIBUTES_SCOPED_CLASS_ID, session)) {
       return null
@@ -142,7 +171,7 @@ public class ContributesScopedFir(session: FirSession) :
     val nestedClassId = scopedOwner.classId.createNestedClassId(name)
     val contributionSymbol = FirRegularClassSymbol(nestedClassId)
 
-    buildRegularClass {
+    val contributionClass = buildRegularClass {
       resolvePhase = FirResolvePhase.BODY_RESOLVE
       moduleData = session.moduleData
       origin = Keys.ContributesScopedGeneratorKey.origin
@@ -159,6 +188,8 @@ public class ContributesScopedFir(session: FirSession) :
         )
       superTypeRefs += session.builtinTypes.anyType
       annotations +=
+        buildSimpleAnnotationCall(ClassIds.BINDING_CONTAINER, contributionSymbol, session)
+      annotations +=
         buildAnnotationCallWithArgument(
           classId = ClassIds.CONTRIBUTES_TO,
           argName = Name.identifier("scope"),
@@ -174,13 +205,79 @@ public class ContributesScopedFir(session: FirSession) :
           containingSymbol = contributionSymbol,
           session = session,
         )
-      buildContributionFunctions(nestedClassId, scopedOwner, metadata, scopeArg).forEach { function
-        ->
+      buildBindFunctions(nestedClassId, scopedOwner, metadata, scopeArg).forEach { function ->
         declarations += function
       }
     }
 
-    return contributionSymbol
+    return contributionClass.symbol
+  }
+
+  override fun getCallableNamesForClass(
+    classSymbol: FirClassSymbol<*>,
+    context: MemberGenerationContext,
+  ): Set<Name> {
+    return if (generatedScopedProviderCompanionOwner(classSymbol) != null) {
+      setOf(SpecialNames.INIT)
+    } else {
+      emptySet()
+    }
+  }
+
+  override fun generateConstructors(context: MemberGenerationContext): List<FirConstructorSymbol> {
+    if (generatedScopedProviderCompanionOwner(context.owner) == null) {
+      return emptyList()
+    }
+    val constructor: FirConstructor =
+      createDefaultPrivateConstructor(context.owner, Keys.ContributesScopedGeneratorKey)
+    return listOf(constructor.symbol)
+  }
+
+  private fun buildProviderCompanionObject(
+    classSymbol: FirRegularClassSymbol,
+    buildFunctions: (ClassId) -> List<FirFunction>,
+  ) =
+    createCompanionObject(classSymbol, Keys.ContributesScopedGeneratorKey).apply {
+      for (function in buildFunctions(symbol.classId)) {
+        addGeneratedDeclaration(function)
+      }
+    }
+
+  private fun generatedScopedContributionOwner(
+    classSymbol: FirClassSymbol<*>
+  ): FirRegularClassSymbol? {
+    if (classSymbol.classId.shortClassName != ContributesScopedIds.NESTED_INTERFACE_NAME) {
+      return null
+    }
+    val ownerClassId = classSymbol.classId.outerClassId ?: return null
+    val ownerSymbol =
+      session.symbolProvider.getClassLikeSymbolByClassId(ownerClassId) as? FirRegularClassSymbol
+        ?: return null
+    return ownerSymbol.takeIf {
+      hasAnnotation(it, ContributesScopedIds.CONTRIBUTES_SCOPED_CLASS_ID, session) &&
+        contributesScopedMetadata(it, session) != null
+    }
+  }
+
+  private fun generatedScopedProviderCompanionOwner(
+    classSymbol: FirClassSymbol<*>
+  ): FirRegularClassSymbol? {
+    if (classSymbol.classId.shortClassName != SpecialNames.DEFAULT_NAME_FOR_COMPANION_OBJECT) {
+      return null
+    }
+    val contributionClassId = classSymbol.classId.outerClassId ?: return null
+    if (contributionClassId.shortClassName != ContributesScopedIds.NESTED_INTERFACE_NAME) {
+      return null
+    }
+    val ownerClassId = contributionClassId.outerClassId ?: return null
+    val ownerSymbol =
+      session.symbolProvider.getClassLikeSymbolByClassId(ownerClassId) as? FirRegularClassSymbol
+        ?: return null
+    return ownerSymbol.takeIf {
+      hasAnnotation(it, ContributesScopedIds.CONTRIBUTES_SCOPED_CLASS_ID, session) &&
+        contributesScopedMetadata(it, session) != null &&
+        !hasScopedInjectAnnotation(it, session)
+    }
   }
 
   private fun annotatedScopedClasses(): List<FirRegularClassSymbol> {
@@ -190,16 +287,13 @@ public class ContributesScopedFir(session: FirSession) :
       .toList()
   }
 
-  private fun buildContributionFunctions(
+  private fun buildBindFunctions(
     contributionClassId: ClassId,
     owner: FirRegularClassSymbol,
     metadata: ScopedContributionMetadata,
     scopeArg: org.jetbrains.kotlin.fir.expressions.FirExpression,
   ): List<FirFunction> {
     return buildList {
-      if (!hasScopedInjectAnnotation(owner, session)) {
-        add(buildProvideScopedFunction(contributionClassId, owner))
-      }
       metadata.otherSuperType?.let { otherSuperType ->
         add(buildBindFunction(contributionClassId, owner, otherSuperType))
       }
