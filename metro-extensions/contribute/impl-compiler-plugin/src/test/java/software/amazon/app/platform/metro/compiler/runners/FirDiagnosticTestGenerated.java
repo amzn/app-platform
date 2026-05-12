@@ -99,15 +99,15 @@ public class FirDiagnosticTestGenerated extends AbstractFirDiagnosticTest {
     }
 
     @Test
-    @TestMetadata("multipleOtherSupertypes.kt")
-    public void testMultipleOtherSupertypes() {
-      runTest("metro-extensions/contribute/impl-compiler-plugin/src/test/resources/diagnostics/contributesscoped/multipleOtherSupertypes.kt");
+    @TestMetadata("multipleConstructorsMustUseInject.kt")
+    public void testMultipleConstructorsMustUseInject() {
+      runTest("metro-extensions/contribute/impl-compiler-plugin/src/test/resources/diagnostics/contributesscoped/multipleConstructorsMustUseInject.kt");
     }
 
     @Test
-    @TestMetadata("mustBeInject.kt")
-    public void testMustBeInject() {
-      runTest("metro-extensions/contribute/impl-compiler-plugin/src/test/resources/diagnostics/contributesscoped/mustBeInject.kt");
+    @TestMetadata("multipleOtherSupertypes.kt")
+    public void testMultipleOtherSupertypes() {
+      runTest("metro-extensions/contribute/impl-compiler-plugin/src/test/resources/diagnostics/contributesscoped/multipleOtherSupertypes.kt");
     }
 
     @Test

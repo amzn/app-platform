@@ -9,6 +9,9 @@ internal object ContributesScopedIds {
   val CONTRIBUTES_SCOPED_CLASS_ID = ClassIds.CONTRIBUTES_SCOPED
   val NESTED_INTERFACE_NAME: Name = Name.identifier("ScopedContribution")
   val PREDICATE = LookupPredicate.create { annotated(CONTRIBUTES_SCOPED_CLASS_ID.asSingleFqName()) }
+  val SINGLE_IN_PREDICATE = LookupPredicate.create {
+    annotated(ClassIds.SINGLE_IN.asSingleFqName())
+  }
 
   fun generatedOwnerName(contributingClassId: ClassId): String {
     return contributingClassId.relativeClassName.pathSegments().joinToString(separator = "") {

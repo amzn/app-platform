@@ -159,9 +159,21 @@ public class BoxTestGenerated extends AbstractBoxTest {
     }
 
     @Test
+    @TestMetadata("constructorParametersWithoutInject.kt")
+    public void testConstructorParametersWithoutInject() {
+      runTest("metro-extensions/contribute/impl-compiler-plugin/src/test/resources/box/contributesscoped/constructorParametersWithoutInject.kt");
+    }
+
+    @Test
     @TestMetadata("defaultScoped.kt")
     public void testDefaultScoped() {
       runTest("metro-extensions/contribute/impl-compiler-plugin/src/test/resources/box/contributesscoped/defaultScoped.kt");
+    }
+
+    @Test
+    @TestMetadata("injectSecondaryConstructorSkipsProvider.kt")
+    public void testInjectSecondaryConstructorSkipsProvider() {
+      runTest("metro-extensions/contribute/impl-compiler-plugin/src/test/resources/box/contributesscoped/injectSecondaryConstructorSkipsProvider.kt");
     }
 
     @Test
