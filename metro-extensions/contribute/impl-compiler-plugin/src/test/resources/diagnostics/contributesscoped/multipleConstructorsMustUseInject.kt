@@ -6,6 +6,9 @@ import software.amazon.app.platform.scope.Scoped
 
 interface SuperType
 
-@SingleIn(AppScope::class)
 <!CONTRIBUTES_SCOPED_ERROR!>@ContributesScoped(AppScope::class)<!>
-class TestClass : SuperType, Scoped
+class TestClass(
+  val dependency: String,
+) : SuperType, Scoped {
+  constructor(dependency: String, marker: String) : this(dependency)
+}

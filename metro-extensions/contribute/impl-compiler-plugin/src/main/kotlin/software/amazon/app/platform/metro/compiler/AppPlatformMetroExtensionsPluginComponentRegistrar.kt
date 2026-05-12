@@ -7,6 +7,7 @@ import org.jetbrains.kotlin.config.CompilerConfiguration
 import org.jetbrains.kotlin.fir.extensions.FirExtensionRegistrarAdapter
 import software.amazon.app.platform.metro.compiler.renderer.ContributesRendererIrExtension
 import software.amazon.app.platform.metro.compiler.robot.ContributesRobotIrExtension
+import software.amazon.app.platform.metro.compiler.scoped.ContributesScopedIrExtension
 
 @AutoService(CompilerPluginRegistrar::class)
 public class AppPlatformMetroExtensionsPluginComponentRegistrar : CompilerPluginRegistrar() {
@@ -17,5 +18,6 @@ public class AppPlatformMetroExtensionsPluginComponentRegistrar : CompilerPlugin
     FirExtensionRegistrarAdapter.registerExtension(AppPlatformMetroExtensionsPluginRegistrar())
     IrGenerationExtension.registerExtension(ContributesRendererIrExtension())
     IrGenerationExtension.registerExtension(ContributesRobotIrExtension())
+    IrGenerationExtension.registerExtension(ContributesScopedIrExtension())
   }
 }

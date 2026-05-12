@@ -8,6 +8,7 @@
 
 - `@ContributesRobot` no longer requires `@Inject` for robots with constructor parameters. The generated contribution now provides a constructor-calling `@Provides` function that injects the same arguments.
 - `@ContributesRenderer` no longer requires `@Inject` for renderers with constructor parameters. The generated contribution now provides a constructor-calling `@Provides` function and reports an error when multiple constructors make that provider ambiguous.
+- `@ContributesScoped` no longer requires `@Inject` for classes with constructor parameters. The generated contribution now provides a constructor-calling `@Provides` function and reports an error when multiple constructors make that provider ambiguous.
 
 ### Deprecated
 

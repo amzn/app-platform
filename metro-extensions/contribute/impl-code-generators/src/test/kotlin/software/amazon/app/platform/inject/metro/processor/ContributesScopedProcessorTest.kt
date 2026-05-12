@@ -7,10 +7,12 @@ import assertk.assertions.contains
 import assertk.assertions.hasSize
 import assertk.assertions.isEqualTo
 import assertk.assertions.isNotNull
+import assertk.assertions.isNull
 import com.tschuchort.compiletesting.JvmCompilationResult
 import com.tschuchort.compiletesting.KotlinCompilation.ExitCode.COMPILATION_ERROR
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesTo
+import dev.zacsweers.metro.Provides
 import org.jetbrains.kotlin.compiler.plugin.ExperimentalCompilerApi
 import org.junit.jupiter.api.Test
 import software.amazon.app.platform.inject.metro.compile
@@ -19,6 +21,7 @@ import software.amazon.app.platform.inject.metro.graphInterface
 import software.amazon.app.platform.inject.metro.newMetroGraph
 import software.amazon.app.platform.ksp.capitalize
 import software.amazon.app.platform.ksp.inner
+import software.amazon.app.platform.ksp.isAnnotatedWith
 import software.amazon.app.platform.metro.METRO_LOOKUP_PACKAGE
 import software.amazon.app.platform.scope.Scoped
 
@@ -136,6 +139,143 @@ class ContributesScopedProcessorTest {
         assertThat(parameters.single().type).isEqualTo(testClass.inner)
         assertThat(returnType).isEqualTo(Scoped::class.java)
       }
+    }
+  }
+
+  @Test
+  fun `a graph interface is generated for constructor parameters without @Inject`() {
+    compile(
+      """
+      package software.amazon.test
+
+      import software.amazon.app.platform.inject.metro.ContributesScoped
+      import software.amazon.app.platform.scope.Scoped
+      import dev.zacsweers.metro.AppScope
+      import dev.zacsweers.metro.createGraph
+      import dev.zacsweers.metro.DependencyGraph
+      import dev.zacsweers.metro.ForScope
+      import dev.zacsweers.metro.Provides
+      import dev.zacsweers.metro.SingleIn
+
+      interface SuperType
+
+      @SingleIn(AppScope::class)
+      @ContributesScoped(AppScope::class)
+      class TestClass(
+        private val dependency: String,
+      ) : SuperType, Scoped {
+        fun value(): String = dependency
+      }
+
+      @DependencyGraph(AppScope::class)
+      @SingleIn(AppScope::class)
+      interface GraphInterface {
+        val superTypeInstance: SuperType
+
+        @ForScope(AppScope::class)
+        val allScoped: Set<Scoped>
+
+        @Provides
+        fun provideString(): String = "dependency"
+
+        companion object {
+          fun create(): GraphInterface = createGraph<GraphInterface>()
+        }
+      }
+      """
+    ) {
+      val scopedGraph = testClass.graph
+
+      with(scopedGraph.declaredNonSyntheticMethods.single { it.name == "provideTestClass" }) {
+        assertThat(parameters.single().type).isEqualTo(String::class.java)
+        assertThat(returnType).isEqualTo(testClass)
+        assertThat(this).isAnnotatedWith(Provides::class)
+      }
+
+      val graph = graphInterface.newMetroGraph<Any>()
+
+      @Suppress("UNCHECKED_CAST")
+      val scoped =
+        graphInterface.declaredNonSyntheticMethods
+          .single { it.name == "getAllScoped" }
+          .invoke(graph) as Set<Scoped>
+
+      val scopedInstance = scoped.single()
+      assertThat(scopedInstance::class.java).isEqualTo(testClass)
+      assertThat(testClass.getMethod("value").invoke(scopedInstance)).isEqualTo("dependency")
+      assertThat(
+          graphInterface.declaredNonSyntheticMethods
+            .single { it.name == "getSuperTypeInstance" }
+            .invoke(graph)
+        )
+        .isEqualTo(scopedInstance)
+    }
+  }
+
+  @Test
+  fun `a graph interface skips provider for an @Inject secondary constructor`() {
+    compile(
+      """
+      package software.amazon.test
+
+      import software.amazon.app.platform.inject.metro.ContributesScoped
+      import software.amazon.app.platform.scope.Scoped
+      import dev.zacsweers.metro.AppScope
+      import dev.zacsweers.metro.createGraph
+      import dev.zacsweers.metro.DependencyGraph
+      import dev.zacsweers.metro.ForScope
+      import dev.zacsweers.metro.Inject
+      import dev.zacsweers.metro.Provides
+      import dev.zacsweers.metro.SingleIn
+
+      interface SuperType
+
+      @SingleIn(AppScope::class)
+      @ContributesScoped(AppScope::class)
+      class TestClass private constructor(
+        private val dependency: String,
+        private val marker: String,
+      ) : SuperType, Scoped {
+        @Inject constructor(dependency: String) : this(dependency, "injected")
+
+        fun value(): String = "${'$'}dependency ${'$'}marker"
+      }
+
+      @DependencyGraph(AppScope::class)
+      @SingleIn(AppScope::class)
+      interface GraphInterface {
+        val superTypeInstance: SuperType
+
+        @ForScope(AppScope::class)
+        val allScoped: Set<Scoped>
+
+        @Provides
+        fun provideString(): String = "dependency"
+
+        companion object {
+          fun create(): GraphInterface = createGraph<GraphInterface>()
+        }
+      }
+      """
+    ) {
+      val scopedGraph = testClass.graph
+
+      assertThat(
+          scopedGraph.declaredNonSyntheticMethods.singleOrNull { it.name == "provideTestClass" }
+        )
+        .isNull()
+
+      val graph = graphInterface.newMetroGraph<Any>()
+
+      @Suppress("UNCHECKED_CAST")
+      val scoped =
+        graphInterface.declaredNonSyntheticMethods
+          .single { it.name == "getAllScoped" }
+          .invoke(graph) as Set<Scoped>
+
+      val scopedInstance = scoped.single()
+      assertThat(testClass.getMethod("value").invoke(scopedInstance))
+        .isEqualTo("dependency injected")
     }
   }
 
@@ -272,6 +412,35 @@ class ContributesScopedProcessorTest {
       """
     ) {
       assertThat(testClass.graph).isNotNull()
+    }
+  }
+
+  @Test
+  fun `a scoped class with multiple constructors must use @Inject`() {
+    compile(
+      """
+      package software.amazon.test
+
+      import software.amazon.app.platform.inject.metro.ContributesScoped
+      import software.amazon.app.platform.scope.Scoped
+      import dev.zacsweers.metro.AppScope
+
+      interface SuperType
+
+      @ContributesScoped(AppScope::class)
+      class TestClass(
+        private val dependency: String,
+      ) : SuperType, Scoped {
+        constructor(dependency: String, marker: String) : this(dependency)
+      }
+      """,
+      exitCode = COMPILATION_ERROR,
+    ) {
+      assertThat(messages)
+        .contains(
+          "TestClass has multiple constructors. Annotate the constructor to use with @Inject, " +
+            "or remove the extra constructors so @ContributesScoped can generate a provider."
+        )
     }
   }
 

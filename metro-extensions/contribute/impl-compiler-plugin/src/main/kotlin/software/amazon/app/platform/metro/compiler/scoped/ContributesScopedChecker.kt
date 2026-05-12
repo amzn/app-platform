@@ -11,7 +11,6 @@ import org.jetbrains.kotlin.fir.declarations.toAnnotationClassId
 import org.jetbrains.kotlin.fir.symbols.impl.FirRegularClassSymbol
 import software.amazon.app.platform.metro.compiler.ClassIds
 import software.amazon.app.platform.metro.compiler.fir.AppPlatformMetroExtensionsDiagnostics
-import software.amazon.app.platform.metro.compiler.fir.hasAnnotation
 
 internal object ContributesScopedChecker : FirClassChecker(MppCheckerKind.Common) {
 
@@ -36,16 +35,6 @@ internal object ContributesScopedChecker : FirClassChecker(MppCheckerKind.Common
         return
       }
 
-      if (!hasAnnotation(classSymbol, ClassIds.INJECT, session)) {
-        reporter.reportOn(
-          contributesScopedAnnotation.source ?: declaration.source,
-          AppPlatformMetroExtensionsDiagnostics.CONTRIBUTES_SCOPED_ERROR,
-          "${classSymbol.name.asString()} must be annotated with @Inject when using " +
-            "@ContributesScoped.",
-        )
-        return
-      }
-
       if (!implementsScoped(classSymbol, session)) {
         reporter.reportOn(
           contributesScopedAnnotation.source ?: declaration.source,
@@ -62,6 +51,19 @@ internal object ContributesScopedChecker : FirClassChecker(MppCheckerKind.Common
           AppPlatformMetroExtensionsDiagnostics.CONTRIBUTES_SCOPED_ERROR,
           "In order to use @ContributesScoped, ${classSymbol.name.asString()} is allowed to " +
             "have only one other super type besides Scoped.",
+        )
+        return
+      }
+
+      if (
+        !hasScopedInjectAnnotation(classSymbol, session) && scopedConstructors(classSymbol).size > 1
+      ) {
+        reporter.reportOn(
+          contributesScopedAnnotation.source ?: declaration.source,
+          AppPlatformMetroExtensionsDiagnostics.CONTRIBUTES_SCOPED_ERROR,
+          "${classSymbol.name.asString()} has multiple constructors. Annotate the constructor " +
+            "to use with @Inject, or remove the extra constructors so @ContributesScoped can " +
+            "generate a provider.",
         )
         return
       }
