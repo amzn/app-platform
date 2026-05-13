@@ -6,10 +6,6 @@
 
 ### Changed
 
-- `@ContributesRobot` no longer requires `@Inject` for robots with constructor parameters. The generated contribution now provides a constructor-calling `@Provides` function that injects the same arguments.
-- `@ContributesRenderer` no longer requires `@Inject` for renderers with constructor parameters. The generated contribution now provides a constructor-calling `@Provides` function and reports an error when multiple constructors make that provider ambiguous.
-- `@ContributesScoped` no longer requires `@Inject` for classes with constructor parameters. The generated contribution now provides a constructor-calling `@Provides` function and reports an error when multiple constructors make that provider ambiguous.
-
 ### Deprecated
 
 ### Removed
@@ -20,6 +16,14 @@
 
 ### Other Notes & Contributions
 
+
+## [0.0.12] - 2026-05-12
+
+### Changed
+
+- `@ContributesRobot` no longer requires `@Inject` for robots with constructor parameters. The generated contribution now provides a constructor-calling `@Provides` function that injects the same arguments.
+- `@ContributesRenderer` no longer requires `@Inject` for renderers with constructor parameters. The generated contribution now provides a constructor-calling `@Provides` function and reports an error when multiple constructors make that provider ambiguous.
+- `@ContributesScoped` no longer requires `@Inject` for classes with constructor parameters. The generated contribution now provides a constructor-calling `@Provides` function and reports an error when multiple constructors make that provider ambiguous.
 
 ## [0.0.11] - 2026-05-03
 
@@ -178,7 +182,8 @@
 
 - Initial release.
 
-[Unreleased]: https://github.com/amzn/app-platform/compare/0.0.11...HEAD
+[Unreleased]: https://github.com/amzn/app-platform/compare/0.0.12...HEAD
+[0.0.12]: https://github.com/amzn/app-platform/compare/0.0.12
 [0.0.11]: https://github.com/amzn/app-platform/compare/0.0.11
 [0.0.10]: https://github.com/amzn/app-platform/compare/0.0.10
 [0.0.9]: https://github.com/amzn/app-platform/compare/0.0.9
