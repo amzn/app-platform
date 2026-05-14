@@ -1,6 +1,7 @@
 package software.amazon.app.platform.scope.coroutine.metro
 
 import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.BindingContainer
 import dev.zacsweers.metro.ContributesTo
 import dev.zacsweers.metro.Provides
 import kotlinx.coroutines.CoroutineDispatcher
@@ -11,7 +12,8 @@ import software.amazon.app.platform.scope.coroutine.MainCoroutineDispatcher
 
 /** Provides default dispatchers for coroutine scopes. */
 @ContributesTo(AppScope::class)
-public interface CoroutineDispatcherGraph {
+@BindingContainer
+public object CoroutineDispatcherGraph {
   /** Provides the IO dispatcher in the dependency graph. */
   @Provides
   @IoCoroutineDispatcher

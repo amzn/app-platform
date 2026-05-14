@@ -1,6 +1,7 @@
 package software.amazon.app.platform.presenter.metro
 
 import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.BindingContainer
 import dev.zacsweers.metro.ContributesTo
 import dev.zacsweers.metro.ForScope
 import dev.zacsweers.metro.Provides
@@ -12,7 +13,8 @@ import software.amazon.app.platform.scope.coroutine.MainCoroutineDispatcher
 
 /** Provides the coroutine scope to run presenters. */
 @ContributesTo(AppScope::class)
-public interface PresenterCoroutineScopeGraph {
+@BindingContainer
+public object PresenterCoroutineScopeGraph {
   /**
    * Bind the app coroutine scope as default scope for presenters to allow them to run as long as
    * the app is alive. The coroutine scope will use the main dispatcher by default, because

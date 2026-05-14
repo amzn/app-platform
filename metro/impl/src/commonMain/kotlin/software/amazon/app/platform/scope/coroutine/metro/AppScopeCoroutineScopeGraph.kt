@@ -1,6 +1,7 @@
 package software.amazon.app.platform.scope.coroutine.metro
 
 import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.BindingContainer
 import dev.zacsweers.metro.ContributesTo
 import dev.zacsweers.metro.ForScope
 import dev.zacsweers.metro.Provides
@@ -14,7 +15,8 @@ import software.amazon.app.platform.scope.coroutine.IoCoroutineDispatcher
 
 /** Graph providing coroutine scopes in the App scope. */
 @ContributesTo(AppScope::class)
-public interface AppScopeCoroutineScopeGraph {
+@BindingContainer
+public object AppScopeCoroutineScopeGraph {
   /**
    * Provides the [CoroutineScopeScoped] for the app scope. This is a single instance for the app
    * scope.
