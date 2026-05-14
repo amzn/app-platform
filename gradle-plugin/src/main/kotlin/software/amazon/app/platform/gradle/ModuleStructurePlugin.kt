@@ -1,6 +1,5 @@
 package software.amazon.app.platform.gradle
 
-import com.android.build.api.dsl.androidLibrary
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import software.amazon.app.platform.gradle.ModuleStructureDependencyCheckTask.Companion.registerModuleStructureDependencyCheckTask
@@ -87,11 +86,8 @@ public open class ModuleStructurePlugin : Plugin<Project> {
       }
     }
     plugins.withId(PluginIds.ANDROID_KMP_LIBRARY) {
-      @Suppress("UnstableApiUsage")
-      kmpExtension.androidLibrary {
-        if (namespace == null) {
-          namespace = namespace()
-        }
+      if (androidKmpTarget.namespace == null) {
+        androidKmpTarget.namespace = namespace()
       }
     }
   }
