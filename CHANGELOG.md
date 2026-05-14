@@ -6,6 +6,8 @@
 
 ### Changed
 
+- Use the `Dispatchers.Main` as default main dispatcher instead of the immediate main dispatcher.
+
 ### Deprecated
 
 ### Removed

@@ -25,5 +25,5 @@ public interface CoroutineDispatcherGraph {
   /** Provides the main dispatcher in the dependency graph. */
   @Provides
   @MainCoroutineDispatcher
-  public fun provideMainCoroutineDispatcher(): CoroutineDispatcher = Dispatchers.Main.immediate
+  public fun provideMainCoroutineDispatcher(): CoroutineDispatcher = Dispatchers.Main
 }
