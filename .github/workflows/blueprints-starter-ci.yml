@@ -28,6 +28,7 @@ jobs:
         uses: ./.github/actions/setup-action
         with:
           gradle-encryption-key: ${{ secrets.GRADLE_ENCRYPTION_KEY }}
+          select-xcode-26: "true"
       - name: Build iOS Framework
         run: ./gradlew :app:linkDebugFrameworkIosSimulatorArm64
 
