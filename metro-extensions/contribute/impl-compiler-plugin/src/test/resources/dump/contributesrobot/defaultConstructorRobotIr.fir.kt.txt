@@ -53,6 +53,7 @@ class TestRobot : Robot {
           return ProvideTestRobotMetroFactory.provideTestRobot()
         }
 
+        @ComptimeOnly
         @HiddenFromObjC
         fun mirrorFunction(): TestRobot {
           return error(message = "Never called")

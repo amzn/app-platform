@@ -7,6 +7,7 @@
 ### Changed
 
 - Use the `Dispatchers.Main` as default main dispatcher instead of the immediate main dispatcher.
+- Upgrade Kotlin to `2.3.21`, Compose Multiplatform to `1.11.0`, Metro to `1.1.1`, and other dependencies.
 
 ### Deprecated
 

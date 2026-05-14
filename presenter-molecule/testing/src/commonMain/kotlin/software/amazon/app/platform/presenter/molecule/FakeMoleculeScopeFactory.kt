@@ -1,8 +1,8 @@
 package software.amazon.app.platform.presenter.molecule
 
 import app.cash.molecule.RecompositionMode
+import kotlin.coroutines.ContinuationInterceptor
 import kotlin.coroutines.CoroutineContext
-import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.plus
 import kotlinx.coroutines.test.TestDispatcher
@@ -25,7 +25,7 @@ public class FakeMoleculeScopeFactory(private val coroutineScope: CoroutineScope
       coroutineScope.moleculeScope(coroutineContext)
     } else {
       @OptIn(ExperimentalStdlibApi::class)
-      val coroutineDispatcher = coroutineScope.coroutineContext[CoroutineDispatcher.Key]
+      val coroutineDispatcher = coroutineScope.coroutineContext[ContinuationInterceptor.Key]
       if (coroutineDispatcher is TestDispatcher) {
         // If this is a TestDispatcher, then this scope was likely based on a TestScope
         // and we can create a wrapper. E.g. this happens if you do

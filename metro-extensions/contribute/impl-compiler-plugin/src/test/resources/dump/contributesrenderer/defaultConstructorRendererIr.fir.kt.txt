@@ -62,6 +62,7 @@ class TestRenderer : Renderer<Model> {
           return ProvideComTestTestRendererMetroFactory.provideComTestTestRenderer()
         }
 
+        @ComptimeOnly
         @HiddenFromObjC
         fun mirrorFunction(): TestRenderer {
           return error(message = "Never called")
@@ -100,6 +101,7 @@ class TestRenderer : Renderer<Model> {
         @IntoMap
         @ForScope(scope = RendererScope::class)
         @RendererKey(value = Model::class)
+        @ComptimeOnly
         @HiddenFromObjC
         fun mirrorFunction(): KClass<out Renderer<*>> {
           return error(message = "Never called")

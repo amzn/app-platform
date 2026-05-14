@@ -6,11 +6,11 @@ import assertk.assertions.containsExactly
 import assertk.assertions.isEqualTo
 import assertk.assertions.isFalse
 import assertk.assertions.isTrue
+import kotlin.coroutines.ContinuationInterceptor
 import kotlin.coroutines.EmptyCoroutineContext
 import kotlin.test.Test
 import kotlin.test.assertFailsWith
 import kotlinx.coroutines.CancellationException
-import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineName
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.Job
@@ -66,9 +66,9 @@ class CoroutineScopeScopedTest {
     val scope = CoroutineScopeScoped(Job() + StandardTestDispatcher() + CoroutineName("abc"))
     val child = scope.createChild(UnconfinedTestDispatcher())
 
-    assertThat(scope.coroutineContext[CoroutineDispatcher.Key].toString())
+    assertThat(scope.coroutineContext[ContinuationInterceptor.Key].toString())
       .contains("StandardTestDispatcher")
-    assertThat(child.coroutineContext[CoroutineDispatcher.Key].toString())
+    assertThat(child.coroutineContext[ContinuationInterceptor.Key].toString())
       .contains("UnconfinedTestDispatcher")
   }
 
@@ -109,7 +109,7 @@ class CoroutineScopeScopedTest {
     coroutineScope.launch {
       try {
         delay(10)
-      } catch (ignored: CancellationException) {
+      } catch (_: CancellationException) {
         exitScopeOrder += "coroutine"
       }
     }
