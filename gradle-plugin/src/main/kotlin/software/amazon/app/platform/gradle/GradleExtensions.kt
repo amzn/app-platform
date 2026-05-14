@@ -1,12 +1,14 @@
 package software.amazon.app.platform.gradle
 
 import com.android.build.api.dsl.CommonExtension
+import com.android.build.api.dsl.KotlinMultiplatformAndroidLibraryTarget
 import com.android.build.api.variant.AndroidComponentsExtension
 import java.util.Locale
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.Task
 import org.gradle.api.UnknownTaskException
+import org.gradle.api.plugins.ExtensionAware
 import org.gradle.api.plugins.PluginContainer
 import org.gradle.api.project.IsolatedProject
 import org.gradle.api.tasks.TaskContainer
@@ -28,7 +30,7 @@ internal fun Project.requireParent(): IsolatedProject =
 internal val Project.isKmpModule: Boolean
   get() = plugins.hasPlugin(PluginIds.KOTLIN_MULTIPLATFORM)
 
-internal val Project.android: CommonExtension<*, *, *, *, *, *>
+internal val Project.android: CommonExtension
   get() = extensions.getByType(CommonExtension::class.java)
 
 internal val Project.androidComponents: AndroidComponentsExtension<*, *, *>
@@ -36,6 +38,12 @@ internal val Project.androidComponents: AndroidComponentsExtension<*, *, *>
 
 internal val Project.kmpExtension: KotlinMultiplatformExtension
   get() = extensions.getByType(KotlinMultiplatformExtension::class.java)
+
+internal val Project.androidKmpTarget: KotlinMultiplatformAndroidLibraryTarget
+  get() =
+    (kmpExtension as ExtensionAware)
+      .extensions
+      .getByType(KotlinMultiplatformAndroidLibraryTarget::class.java)
 
 internal fun TaskContainer.namedOptional(name: String, configurationAction: (Task) -> Unit) {
   try {

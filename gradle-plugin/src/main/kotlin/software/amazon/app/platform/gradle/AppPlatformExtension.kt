@@ -363,7 +363,7 @@ private fun Project.enableComposeUi() {
     }
   }
 
-  plugins.withIds(PluginIds.KOTLIN_ANDROID) {
+  plugins.withIds(PluginIds.ANDROID_APP, PluginIds.ANDROID_LIBRARY) {
     plugins.apply(PluginIds.COMPOSE_COMPILER)
 
     android.buildFeatures.compose = true
@@ -384,10 +384,6 @@ private fun Project.enableComposeUi() {
         "$APP_PLATFORM_GROUP:robot-compose-multiplatform-public:$APP_PLATFORM_VERSION",
       )
     }
-  }
-
-  plugins.withIds(PluginIds.ANDROID_APP, PluginIds.ANDROID_LIBRARY) {
-    android.buildFeatures.compose = true
 
     if (isAppModule()) {
       dependencies.add(

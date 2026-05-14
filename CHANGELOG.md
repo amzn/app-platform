@@ -16,6 +16,8 @@
 
 ### Fixed
 
+- Make the App Platform Gradle plugin compatible with AGP 9's Android KMP and built-in Kotlin behavior while staying compatible with AGP 8.
+
 ### Security
 
 ### Other Notes & Contributions
