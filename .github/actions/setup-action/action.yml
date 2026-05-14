@@ -5,6 +5,10 @@ inputs:
   gradle-encryption-key:
     description: "The key used to encrypt the Gradle cache"
     required: true
+  select-xcode-26:
+    description: "Whether to select an installed Xcode 26 bundle on macOS"
+    required: false
+    default: "false"
 
 runs:
   using: "composite"
@@ -13,6 +17,20 @@ runs:
       with:
         distribution: 'zulu'
         java-version: 21
+
+    - name: Select Xcode 26
+      if: ${{ runner.os == 'macOS' && inputs['select-xcode-26'] == 'true' }}
+      shell: bash
+      run: |
+        XCODE_APP=$(/usr/bin/find /Applications -maxdepth 1 -name 'Xcode_26*.app' -print | /usr/bin/sort -r | /usr/bin/head -1)
+        if [[ -z "$XCODE_APP" ]]; then
+          echo "::error::Xcode 26 is required to build the iOS 26 deployment target"
+          /bin/ls -1 /Applications | /usr/bin/grep '^Xcode' || true
+          exit 1
+        fi
+        sudo xcode-select -s "$XCODE_APP/Contents/Developer"
+        /usr/bin/xcodebuild -version
+        /usr/bin/xcodebuild -showsdks
 
     - name: Setup Gradle
       uses: gradle/actions/setup-gradle@v4

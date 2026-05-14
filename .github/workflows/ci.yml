@@ -47,6 +47,7 @@ jobs:
         uses: ./.github/actions/setup-action
         with:
           gradle-encryption-key: ${{ secrets.GRADLE_ENCRYPTION_KEY }}
+          select-xcode-26: "true"
 
       - name: Test
         run: ./gradlew iosSimulatorArm64Test -Pkotlin.incremental.native=false --stacktrace --show-version --continue
@@ -256,23 +257,30 @@ jobs:
         uses: ./.github/actions/setup-action
         with:
           gradle-encryption-key: ${{ secrets.GRADLE_ENCRYPTION_KEY }}
+          select-xcode-26: "true"
 
       # The command to build is executed by the Android Studio iOS app run action.
       #
-      # The destination id was printed in the Github Action console
+      # Select an iOS 26.0 simulator explicitly. Older simulator runtimes are ineligible because
+      # the project deployment target is 26.0.
       #
-      #   { platform:iOS Simulator, id:77D15A8A-0E47-4200-A192-A0C6311C808D, OS:18.2, name:iPhone SE (3rd generation) }
-      #
-      #
-      # Downloading the iOS platform is needed with the latest macos runners. This is quite slow, so we should see
-      # if can we avoid this in the future.
+      # Downloading the iOS platform is needed with the latest macos runners. This is quite slow, so we should
+      # see if we can avoid this in the future.
       # See: https://github.com/actions/runner-images/issues/12758#issuecomment-3206748945
       - name: Build swift
         run: |
           /usr/bin/xcodebuild -version
           /usr/bin/xcodebuild -showsdks
           /usr/bin/xcrun simctl list devices
-          export DESTINATION_DEVICE=`/usr/bin/xcrun simctl list devices | grep -A 1 "iOS 18.6" | grep -oE '\([0-9A-F-]+\)' | head -1 | tr -d '()'`
+          DESTINATION_DEVICE=$(
+            /usr/bin/xcrun simctl list devices "iOS 26.0" available |
+              awk '/iPhone / && match($0, /\([0-9A-F-]+\)/) { print substr($0, RSTART + 1, RLENGTH - 2); exit }'
+          )
+          export DESTINATION_DEVICE
+          if [[ -z "$DESTINATION_DEVICE" ]]; then
+            echo "::error::No available iOS 26.0 iPhone simulator found"
+            exit 1
+          fi
           echo "Using simulator $DESTINATION_DEVICE"
           /usr/bin/xcodebuild -project sample/iosApp/iosApp.xcodeproj -scheme iosApp -configuration Debug OBJROOT=build/ios SYMROOT=build/ios -destination id=$DESTINATION_DEVICE -allowProvisioningDeviceRegistration -allowProvisioningUpdates
 
