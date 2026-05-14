@@ -5,8 +5,7 @@ import android.provider.Settings.Global.TRANSITION_ANIMATION_SCALE
 import android.provider.Settings.Global.WINDOW_ANIMATION_SCALE
 import androidx.activity.ComponentActivity
 import androidx.compose.ui.test.SemanticsNodeInteractionsProvider
-import androidx.compose.ui.test.junit4.AndroidComposeTestRule
-import androidx.compose.ui.test.junit4.ComposeTestRule
+import androidx.compose.ui.test.junit4.v2.AndroidComposeTestRule
 import androidx.test.espresso.Espresso
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.platform.app.InstrumentationRegistry
@@ -28,8 +27,8 @@ class AndroidLoginUiTest : ComposeInteractionsProvider {
   @get:Rule val activityRule = ActivityScenarioRule(MainActivity::class.java)
 
   @get:Rule
-  val composeTestRule: ComposeTestRule =
-    AndroidComposeTestRule(activityRule, ::getActivityFromTestRule)
+  val composeTestRule =
+    AndroidComposeTestRule(activityRule, activityProvider = { getActivityFromTestRule(it) })
 
   override val semanticsNodeInteractionsProvider: SemanticsNodeInteractionsProvider
     get() = composeTestRule
@@ -67,12 +66,17 @@ class AndroidLoginUiTest : ComposeInteractionsProvider {
     // Note that this code doesn't run within the `waitUntilCatching` on purpose. The code
     // above waits until we're logged in and retries the operation until the UI displayed. The
     // operations below should not be retried.
-    composeRobot<UserPageRobot> {
-      clickProfilePicture()
-      seeProfilePicture(fullScreen = true)
 
-      clickProfilePicture()
-      seeProfilePicture(fullScreen = false)
+    composeRobot<UserPageRobot> { clickProfilePicture() }
+
+    waitUntilCatching("profile picture opened fullscreen", timeout = 2.seconds) {
+      composeRobot<UserPageRobot> { seeProfilePicture(fullScreen = true) }
+    }
+
+    composeRobot<UserPageRobot> { clickProfilePicture() }
+
+    waitUntilCatching("profile picture closed fullscreen", timeout = 2.seconds) {
+      composeRobot<UserPageRobot> { seeProfilePicture(fullScreen = false) }
     }
   }
 

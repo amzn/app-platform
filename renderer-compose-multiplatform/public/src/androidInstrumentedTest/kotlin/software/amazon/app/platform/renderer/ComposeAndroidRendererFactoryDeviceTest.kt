@@ -18,7 +18,7 @@ import androidx.compose.ui.test.assertAny
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertTextEquals
 import androidx.compose.ui.test.hasText
-import androidx.compose.ui.test.junit4.AndroidComposeTestRule
+import androidx.compose.ui.test.junit4.v2.AndroidComposeTestRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.onRoot
@@ -44,7 +44,9 @@ class ComposeAndroidRendererFactoryDeviceTest {
 
   @get:Rule val activityRule = ActivityScenarioRule(TestActivity::class.java)
 
-  @get:Rule val composeTestRule = AndroidComposeTestRule(activityRule, ::getActivityFromTestRule)
+  @get:Rule
+  val composeTestRule =
+    AndroidComposeTestRule(activityRule, activityProvider = { getActivityFromTestRule(it) })
 
   private lateinit var activity: TestActivity
   private lateinit var factory: RendererFactory

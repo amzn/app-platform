@@ -26,6 +26,14 @@ internal sealed interface Platform {
     abstract val target: KotlinNativeTarget
 
     override fun configurePlatform() {
+      val minimumIosDeploymentTarget =
+        project.libs.findVersion("ios.deploymentTarget").get().requiredVersion
+
+      target.binaries.configureEach { binary ->
+        binary.freeCompilerArgs +=
+          "-Xoverride-konan-properties=minVersion.ios=$minimumIosDeploymentTarget"
+      }
+
       target.binaries.framework {
         baseName =
           if (project.isAppModule()) {

@@ -2,7 +2,7 @@ package software.amazon.app.platform.sample
 
 import androidx.compose.ui.test.ComposeUiTest
 import androidx.compose.ui.test.ExperimentalTestApi
-import androidx.compose.ui.test.runComposeUiTest
+import androidx.compose.ui.test.v2.runComposeUiTest
 import dev.zacsweers.metro.createGraphFactory
 import kotlin.test.AfterTest
 import kotlin.test.BeforeTest
@@ -57,12 +57,17 @@ class LoginUiTest {
     // Note that this code doesn't run within the `waitUntilCatching` on purpose. The code
     // above waits until we're logged in and retries the operation until the UI displayed. The
     // operations below should not be retried.
-    composeRobot<UserPageRobot> {
-      clickProfilePicture()
-      seeProfilePicture(fullScreen = true)
 
-      clickProfilePicture()
-      seeProfilePicture(fullScreen = false)
+    composeRobot<UserPageRobot> { clickProfilePicture() }
+
+    waitUntilCatching("profile picture opened fullscreen", timeout = 2.seconds) {
+      composeRobot<UserPageRobot> { seeProfilePicture(fullScreen = true) }
+    }
+
+    composeRobot<UserPageRobot> { clickProfilePicture() }
+
+    waitUntilCatching("profile picture closed fullscreen", timeout = 2.seconds) {
+      composeRobot<UserPageRobot> { seeProfilePicture(fullScreen = false) }
     }
   }
 
