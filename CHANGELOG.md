@@ -6,21 +6,28 @@
 
 ### Changed
 
-- Use the `Dispatchers.Main` as default main dispatcher instead of the immediate main dispatcher.
-- Upgrade Kotlin to `2.3.21`, Compose Multiplatform to `1.11.0`, Metro to `1.1.1`, and other dependencies.
-- **Breaking change:** The App Platform Gradle plugin doesn't apply the KSP plugin automatically anymore. If you use kotlin-inject as DI framework, then you need to add a dependency on KSP yourself (similar to how you apply the App Platform Gradle plugin).
-
 ### Deprecated
 
 ### Removed
 
 ### Fixed
 
-- Make the App Platform Gradle plugin compatible with AGP 9's Android KMP and built-in Kotlin behavior while staying compatible with AGP 8.
-
 ### Security
 
 ### Other Notes & Contributions
+
+
+## [0.0.13] - 2026-05-14
+
+### Changed
+
+- Use the `Dispatchers.Main` as default main dispatcher instead of the immediate main dispatcher.
+- Upgrade Kotlin to `2.3.21`, Compose Multiplatform to `1.11.0`, Metro to `1.1.1`, and other dependencies.
+- **Breaking change:** The App Platform Gradle plugin doesn't apply the KSP plugin automatically anymore. If you use kotlin-inject as DI framework, then you need to add a dependency on KSP yourself (similar to how you apply the App Platform Gradle plugin).
+
+### Fixed
+
+- Make the App Platform Gradle plugin compatible with AGP 9's Android KMP and built-in Kotlin behavior while staying compatible with AGP 8.
 
 
 ## [0.0.12] - 2026-05-12
@@ -30,6 +37,7 @@
 - `@ContributesRobot` no longer requires `@Inject` for robots with constructor parameters. The generated contribution now provides a constructor-calling `@Provides` function that injects the same arguments.
 - `@ContributesRenderer` no longer requires `@Inject` for renderers with constructor parameters. The generated contribution now provides a constructor-calling `@Provides` function and reports an error when multiple constructors make that provider ambiguous.
 - `@ContributesScoped` no longer requires `@Inject` for classes with constructor parameters. The generated contribution now provides a constructor-calling `@Provides` function and reports an error when multiple constructors make that provider ambiguous.
+
 
 ## [0.0.11] - 2026-05-03
 
@@ -188,7 +196,8 @@
 
 - Initial release.
 
-[Unreleased]: https://github.com/amzn/app-platform/compare/0.0.12...HEAD
+[Unreleased]: https://github.com/amzn/app-platform/compare/0.0.13...HEAD
+[0.0.13]: https://github.com/amzn/app-platform/compare/0.0.13
 [0.0.12]: https://github.com/amzn/app-platform/compare/0.0.12
 [0.0.11]: https://github.com/amzn/app-platform/compare/0.0.11
 [0.0.10]: https://github.com/amzn/app-platform/compare/0.0.10
