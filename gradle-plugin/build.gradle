@@ -52,7 +52,7 @@ dependencies {
 
     // This is needed to reference KspExperimental for experimental features.
     compileOnly libs.ksp.api
-    implementation libs.ksp.gradle.plugin
+    compileOnly libs.ksp.gradle.plugin
 
     // compileOnly to not set a minimum version for any consumers of this Gradle plugin and
     // because AGP is purely optional. Usage of AGP APIs is gated by checks when the plugin
