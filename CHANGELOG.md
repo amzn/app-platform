@@ -4,6 +4,9 @@
 
 ### Added
 
+- Add `@ExperimentalAppPlatform` in `:common:public` for APIs that require explicit consumer opt-in.
+- Add experimental `MoleculePresenter.presentDetached()` to compose presenter subtrees in detached Molecule hierarchies so busy parent presenters do not recompose slower child presenters.
+
 ### Changed
 
 ### Deprecated
