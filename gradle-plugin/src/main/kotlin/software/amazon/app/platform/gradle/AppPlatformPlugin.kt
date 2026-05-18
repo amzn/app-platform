@@ -28,6 +28,7 @@ public open class AppPlatformPlugin : Plugin<Project> {
 
     val implementationDependencies =
       setOf(
+        "$APP_PLATFORM_GROUP:common-public:$APP_PLATFORM_VERSION",
         "$APP_PLATFORM_GROUP:presenter-public:$APP_PLATFORM_VERSION",
         "$APP_PLATFORM_GROUP:renderer-public:$APP_PLATFORM_VERSION",
         "$APP_PLATFORM_GROUP:scope-public:$APP_PLATFORM_VERSION",
@@ -116,6 +117,7 @@ public open class AppPlatformPlugin : Plugin<Project> {
     @JvmStatic
     public fun exportedDependencies(): Set<String> =
       setOf(
+          "common-public",
           "di-common-public",
           "kotlin-inject-contribute-public",
           "kotlin-inject-impl",

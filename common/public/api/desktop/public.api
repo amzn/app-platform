@@ -1,0 +1,3 @@
+public abstract interface annotation class software/amazon/app/platform/ExperimentalAppPlatform : java/lang/annotation/Annotation {
+}
+
