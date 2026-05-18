@@ -55,6 +55,7 @@ public open class BasePlugin : Plugin<Project> {
     // as well.
     val substitutions =
       mapOf(
+        "${APP_PLATFORM_GROUP}:common-public" to ":common:public",
         "${APP_PLATFORM_GROUP}:di-common-public" to ":di-common:public",
         "${APP_PLATFORM_GROUP}:kotlin-inject-public" to ":kotlin-inject:public",
         "${APP_PLATFORM_GROUP}:kotlin-inject-contribute-impl-code-generators" to
