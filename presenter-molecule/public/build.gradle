@@ -8,6 +8,7 @@ appPlatformBuildSrc {
 }
 
 dependencies {
+    commonMainApi project(':common:public')
     commonMainApi project(':presenter:public')
     commonMainApi libs.androidx.annotations
     commonTestImplementation project(':internal:testing')

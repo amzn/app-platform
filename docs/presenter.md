@@ -367,6 +367,51 @@ val stateFlow = moleculeScope
     }
     ```
 
+### Detached presenters
+
+Calling a child presenter's `present()` function directly makes it part of the same Compose hierarchy as its parent.
+This is the right default because the call is simple and composition locals naturally flow through the presenter tree.
+However, every parent recomposition also invokes every inline child presenter. If a busy parent produces a new value
+frequently, then expensive child presenters below it are called just as frequently even when their own input has not
+changed.
+
+Use `presentDetached()` when a child presenter should run in its own Molecule hierarchy:
+
+```kotlin
+class ParentPresenter(
+  private val busyPresenter: BusyPresenter,
+  private val expensivePresenter: ExpensivePresenter,
+) : MoleculePresenter<Unit, ParentPresenter.Model> {
+
+  @Composable
+  override fun present(input: Unit): Model {
+    val busyModel = busyPresenter.present(Unit)
+    val expensiveModel = expensivePresenter.presentDetached(Unit)
+
+    return Model(busyModel, expensiveModel)
+  }
+
+  data class Model(
+    val busyModel: BusyPresenter.Model,
+    val expensiveModel: ExpensivePresenter.Model,
+  ) : BaseModel
+}
+```
+
+In this example, recompositions caused by `BusyPresenter` do not invoke `ExpensivePresenter.present()` again. The
+detached presenter still recomposes when its own `input` changes or when state read by the detached hierarchy changes.
+
+`presentDetached()` uses the current presenter's `RecompositionMode` by default and cancels the detached hierarchy when
+the call leaves composition. Prefer direct `present()` calls for cheap child presenters or when the child depends on
+composition locals provided by the parent. Only App Platform composition locals explicitly preserved by
+`presentDetached()` are available in the detached hierarchy.
+
+The detached hierarchy catches up to input changes asynchronously. If the parent input changes, the parent presenter may
+emit one model containing the new parent input and the previous detached child model before the detached presenter
+recomposes with the new input. Prefer a direct `present()` call when parent and child model state must update atomically
+in the same emission. This is not a concern when the detached presenter always receives the same input, such as `Unit`;
+in that case, child presenter updates are driven by the detached hierarchy's own state changes.
+
 ## Testing
 
 A [`test()`](https://github.com/amzn/app-platform/blob/main/presenter-molecule/testing/src/commonMain/kotlin/software/amazon/app/platform/presenter/molecule/TestPresenter.kt)

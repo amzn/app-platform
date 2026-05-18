@@ -2,6 +2,7 @@ public final class software/amazon/app/platform/presenter/molecule/LaunchMolecul
 	public static final fun launchMoleculePresenter (Lkotlinx/coroutines/CoroutineScope;Lsoftware/amazon/app/platform/presenter/molecule/MoleculePresenter;Lkotlinx/coroutines/flow/StateFlow;Lapp/cash/molecule/RecompositionMode;)Lsoftware/amazon/app/platform/presenter/Presenter;
 	public static final fun launchMoleculePresenter (Lsoftware/amazon/app/platform/presenter/molecule/MoleculeScope;Lsoftware/amazon/app/platform/presenter/molecule/MoleculePresenter;Ljava/lang/Object;)Lsoftware/amazon/app/platform/presenter/Presenter;
 	public static final fun launchMoleculePresenter (Lsoftware/amazon/app/platform/presenter/molecule/MoleculeScope;Lsoftware/amazon/app/platform/presenter/molecule/MoleculePresenter;Lkotlinx/coroutines/flow/StateFlow;)Lsoftware/amazon/app/platform/presenter/Presenter;
+	public static final fun presentDetached (Lsoftware/amazon/app/platform/presenter/molecule/MoleculePresenter;Ljava/lang/Object;Lapp/cash/molecule/RecompositionMode;Landroidx/compose/runtime/Composer;II)Lsoftware/amazon/app/platform/presenter/BaseModel;
 }
 
 public abstract interface class software/amazon/app/platform/presenter/molecule/MoleculePresenter {
