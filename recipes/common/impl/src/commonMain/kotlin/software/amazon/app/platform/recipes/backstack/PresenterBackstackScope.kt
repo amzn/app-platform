@@ -5,12 +5,13 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import software.amazon.app.platform.ExperimentalAppPlatform
 import software.amazon.app.platform.presenter.BaseModel
 import software.amazon.app.platform.presenter.molecule.MoleculePresenter
 import software.amazon.app.platform.presenter.molecule.returningCompositionLocalProvider
+import software.amazon.app.platform.presenter.molecule.saveable.rememberReturningSaveableStateHolder
 import software.amazon.app.platform.recipes.backstack.PresenterBackstackScope.BackstackChange
 import software.amazon.app.platform.recipes.backstack.PresenterBackstackScope.BackstackChange.Action
-import software.amazon.app.platform.recipes.saveable.rememberReturningSaveableStateHolder
 
 /**
  * Receiver scope for content lambda for [presenterBackstack]. In this scope, [lastBackstackChange]
@@ -137,6 +138,7 @@ val LocalBackstackScope = compositionLocalOf<PresenterBackstackScope?> { null }
  * [CrossSlideBackstackPresenter].
  */
 @Composable
+@OptIn(ExperimentalAppPlatform::class)
 fun <ModelT : BaseModel> presenterBackstack(
   initialPresenter: MoleculePresenter<Unit, out BaseModel>,
   content: @Composable PresenterBackstackScope.(model: BaseModel) -> ModelT,

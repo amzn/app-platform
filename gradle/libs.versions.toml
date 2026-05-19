@@ -12,6 +12,7 @@ ios-deploymentTarget = "26.0"
 androidx-activity = "1.13.0"
 androidx-annotations = "1.9.1"
 androidx-collection = "1.5.0"
+androidx-lifecycle = "2.9.4"
 #noinspection GradleDependency
 androidx-constraintlayout = "2.1.4"
 #noinspection GradleDependency
@@ -69,6 +70,7 @@ androidx-annotations = { module = "androidx.annotation:annotation", version.ref 
 androidx-constraintlayout = { module = "androidx.constraintlayout:constraintlayout", version.ref = "androidx-constraintlayout" }
 androidx-core = { module = "androidx.core:core-ktx", version.ref = "androidx-core" }
 androidx-collection = { module = "androidx.collection:collection", version.ref = "androidx-collection" }
+androidx-lifecycle-runtime = { module = "androidx.lifecycle:lifecycle-runtime", version.ref = "androidx-lifecycle" }
 androidx-lint-gradle = {  module = "androidx.lint:lint-gradle", version.ref = "androidx-lint-gradle" }
 androidx-test-espresso = { module = "androidx.test.espresso:espresso-core", version.ref = "androidx-test-espresso" }
 androidx-test-junit = { module = "androidx.test.ext:junit", version.ref = "androidx-test-junit" }
@@ -82,6 +84,7 @@ auto-service-ksp = { module = "dev.zacsweers.autoservice:auto-service-ksp", vers
 build-config-gradle-plugin = { module = "com.github.gmazzo.buildconfig:plugin", version.ref = "build-config" }
 compose-gradle-plugin = { module = "org.jetbrains.compose:compose-gradle-plugin", version.ref = "compose-multiplatform" }
 compose-foundation = { module = "org.jetbrains.compose.foundation:foundation", version.ref = "compose-multiplatform" }
+compose-runtime-saveable = { module = "androidx.compose.runtime:runtime-saveable", version.ref = "android-compose-version" }
 compose-ui-back-handler = { module = "org.jetbrains.compose.ui:ui-backhandler", version.ref = "compose-multiplatform" }
 compose-ui-test-junit4 = { module = "androidx.compose.ui:ui-test-junit4", version.ref = "android-compose-version" }
 compose-ui-test-junit4-android = { module = "androidx.compose.ui:ui-test-junit4-android", version.ref = "android-compose-version" }
