@@ -10,10 +10,11 @@ appPlatformBuildSrc {
 
 dependencies {
     commonMainApi project(':presenter:public')
+    commonMainApi project(':presenter-molecule:public')
     commonMainApi project(':renderer:public')
     commonMainApi project(':scope:public')
+    commonMainApi libs.compose.foundation
 
-    commonMainImplementation project(':presenter-molecule:public')
     commonMainImplementation libs.navigation.event.compose
 
     androidMainApi project(':renderer-android-view:public')

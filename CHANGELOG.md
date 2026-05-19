@@ -6,6 +6,7 @@
 
 - Add `@ExperimentalAppPlatform` in `:common:public` for APIs that require explicit consumer opt-in.
 - Add experimental `MoleculePresenter.presentDetached()` to compose presenter subtrees in detached Molecule hierarchies so busy parent presenters do not recompose slower child presenters.
+- Add experimental Molecule presenter-backed text field state helpers for sharing text input state between presenters and Compose renderers.
 
 ### Changed
 

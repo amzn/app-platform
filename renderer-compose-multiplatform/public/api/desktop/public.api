@@ -37,3 +37,7 @@ public final class software/amazon/app/platform/renderer/ComposeRendererFactoryK
 	public static synthetic fun getComposeRenderer$default (Lsoftware/amazon/app/platform/renderer/RendererFactory;Lsoftware/amazon/app/platform/presenter/BaseModel;IILjava/lang/Object;)Lsoftware/amazon/app/platform/renderer/BaseComposeRenderer;
 }
 
+public final class software/amazon/app/platform/renderer/text/PresenterBackedTextFieldStateKt {
+	public static final fun rememberPresenterBackedTextFieldState (Lsoftware/amazon/app/platform/presenter/molecule/text/PresenterTextFieldState;Landroidx/compose/runtime/Composer;I)Landroidx/compose/foundation/text/input/TextFieldState;
+}
+
