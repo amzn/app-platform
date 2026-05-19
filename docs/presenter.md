@@ -684,9 +684,8 @@ There are common scenarios you may encounter when using `Presenters`.
 
 !!! info
 
-    The recipes below are not part of the App Platform API and we look for feedback. The solutions are either
-    implemented in the Recipes or Sample app. Please let us know if these solutions work for you or which use cases
-    you're missing.
+    Most recipes below are not part of the stable App Platform API and we look for feedback. Some pieces, such as
+    `ReturningSaveableStateHolder`, are exposed as experimental APIs while their shape is validated.
 
     The [Recipes app](index.md#web-recipe-app) and [Sample app](index.md#web-clickable) can be tested in the browser.
 
@@ -714,23 +713,30 @@ fun present(input: Unit): Model {
 Take this function for example. Every time `showLogin` is toggled then either `loginPresenter` or `registerPresenter`
 is called with their initial state. These presenters only remember their state, if `showLogin` doesn't change.
 
-The Compose runtime provides `rememberSaveable { }` and `SaveableStateHolder` as solution to save and restore instance
-state within a process or across process death. The Recipes app
-[ported `SaveableStateHolder`](https://github.com/amzn/app-platform/blob/main/recipes/common/impl/src/commonMain/kotlin/software/amazon/app/platform/recipes/saveable/ReturningSaveableStateHolder.kt)
-to work for `@Composable` functions that must return a value. `Presenters` wrapped with a
-`ReturningSaveableStateHolder` can use `rememberSaveable { }` to restore state even after they weren't part of the
-hierarchy anymore:
+The Compose runtime provides `rememberSaveable { }` and `SaveableStateHolder` as a solution to save and restore small
+pieces of UI state. App Platform provides the experimental
+[`ReturningSaveableStateHolder`](https://github.com/amzn/app-platform/blob/main/presenter-molecule/public/src/commonMain/kotlin/software/amazon/app/platform/presenter/molecule/saveable/ReturningSaveableStateHolder.kt)
+API for `@Composable` functions that return a value. This matters for `MoleculePresenter` functions, because a presenter
+doesn't render UI directly; it returns a model.
+
+`Presenters` wrapped with `ReturningSaveableStateHolder` can use `rememberSaveable { }` to restore state even after they
+weren't part of the hierarchy anymore:
 
 ```kotlin
+import software.amazon.app.platform.ExperimentalAppPlatform
+import software.amazon.app.platform.presenter.molecule.saveable.rememberReturningSaveableStateHolder
+
+@OptIn(ExperimentalAppPlatform::class)
 @Composable
 fun present(input: Unit): Model {
   val showLogin = ...
-    
+
   val saveableStateHolder = rememberReturningSaveableStateHolder()
 
   val presenter = if (showLogin) loginPresenter else registerPresenter
+  val presenterKey = if (showLogin) "login" else "register"
 
-  return saveableStateHolder.SaveableStateProvider(key = presenter) {
+  return saveableStateHolder.SaveableStateProvider(key = presenterKey) {
     presenter.present(Unit)
   }
 }
@@ -738,6 +744,17 @@ fun present(input: Unit): Model {
 
 State wrapped in `rememberSaveable { }` in `LoginPresenter` and `RegisterPresenter` will be preserved no
 matter how often `showLogin` is toggled.
+
+The key passed to `SaveableStateProvider` identifies the state bucket for that subtree. Use a stable key with stable
+`equals()` and `hashCode()` behavior, and don't compose the same key in two active providers at the same time. If the
+holder is running under a parent `LocalSaveableStateRegistry`, the key and saved values must also be saveable by that
+registry. On Android that generally means they need to fit into saved instance state, or be converted by a custom
+`Saver`.
+
+There are two persistence layers. While the holder is alive, inactive presenter state is kept in the holder. The holder
+itself is remembered with `rememberSaveable`, so a parent saveable registry can save that inactive-state map. Without a
+parent saveable registry, `ReturningSaveableStateHolder` still preserves state while switching between subtrees in the
+current composition, but it doesn't provide process-death persistence by itself.
 
 ### `Presenter` backstack
 

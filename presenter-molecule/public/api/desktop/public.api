@@ -63,6 +63,15 @@ public final class software/amazon/app/platform/presenter/molecule/backgesture/B
 	public static final fun getLocalBackGestureDispatcherPresenter ()Landroidx/compose/runtime/ProvidableCompositionLocal;
 }
 
+public abstract interface class software/amazon/app/platform/presenter/molecule/saveable/ReturningSaveableStateHolder {
+	public abstract fun SaveableStateProvider (Ljava/lang/Object;Lkotlin/jvm/functions/Function2;Landroidx/compose/runtime/Composer;I)Ljava/lang/Object;
+	public abstract fun removeState (Ljava/lang/Object;)V
+}
+
+public final class software/amazon/app/platform/presenter/molecule/saveable/ReturningSaveableStateHolderKt {
+	public static final fun rememberReturningSaveableStateHolder (Landroidx/compose/runtime/Composer;I)Lsoftware/amazon/app/platform/presenter/molecule/saveable/ReturningSaveableStateHolder;
+}
+
 public final class software/amazon/app/platform/presenter/molecule/text/PresenterTextFieldState : androidx/compose/runtime/State {
 	public static final field $stable I
 	public fun <init> ()V

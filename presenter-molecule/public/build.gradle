@@ -11,6 +11,9 @@ dependencies {
     commonMainApi project(':common:public')
     commonMainApi project(':presenter:public')
     commonMainApi libs.androidx.annotations
+    commonMainImplementation libs.compose.runtime.saveable
+    commonMainImplementation libs.androidx.collection
+    commonMainImplementation libs.androidx.lifecycle.runtime
     commonTestImplementation project(':internal:testing')
     commonTestImplementation project(':presenter-molecule:testing')
 }
