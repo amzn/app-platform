@@ -873,6 +873,55 @@ class ChildPresenter : MoleculePresenter<Unit, Model> {
 While `CompositionLocals` are powerful, their biggest downsides are unit tests. In a unit test for `ChildPresenter`
 a value for `LocalYourType.current` must be provided, otherwise the call will throw an exception.
 
+### Presenter-backed text fields
+
+Text inputs have renderer-specific editing state, such as cursor position and selection, but presenters
+often still need to own the actual text value. `PresenterTextFieldState` stores the text value in the presenter 
+layer without depending on Compose Foundation's `TextFieldState`.
+
+```kotlin
+@OptIn(ExperimentalAppPlatform::class)
+class SearchPresenter : MoleculePresenter<Unit, SearchPresenter.Model> {
+  @Composable
+  override fun present(input: Unit): Model {
+    val query = remember { PresenterTextFieldState() }
+
+    return Model(
+      query = query,
+      clearQuery = query::clearText,
+    )
+  }
+
+  data class Model(
+    val query: PresenterTextFieldState,
+    val clearQuery: () -> Unit,
+  ) : BaseModel
+}
+```
+
+Compose renderers can bridge the presenter-owned text value to Compose Foundation's `TextFieldState`
+with the experimental `rememberPresenterBackedTextFieldState()` helper:
+
+```kotlin
+@OptIn(ExperimentalAppPlatform::class)
+@ContributesRenderer
+class SearchRenderer : ComposeRenderer<SearchPresenter.Model>() {
+  @Composable
+  override fun Compose(model: SearchPresenter.Model, modifier: Modifier) {
+    val queryState = rememberPresenterBackedTextFieldState(model.query)
+
+    BasicTextField(
+      state = queryState,
+      modifier = modifier,
+    )
+  }
+}
+```
+
+Edits made by the user are copied back to the `PresenterTextFieldState`, and presenter changes such
+as `replaceText()` or `clearText()` are copied into the Compose text field. When presenter text is
+applied to the renderer state, the cursor is placed at the end of the new value.
+
 ### App Bar
 
 The Recipes app implements an app bar for all its screens and allows child presenters to change the content.
