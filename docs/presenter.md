@@ -858,6 +858,45 @@ override fun present(input: Unit): Model {
 }
 ```
 
+For unit tests of presenters that read `LocalBackstackScope`, use the testing module and wrap the presenter with a
+fake scope. `withPresenterBackstackScope()` only provides the composition local. It does not add the presenter under
+test to the fake backstack automatically.
+
+```kotlin
+val backstackScope = FakePresenterBackstackScope()
+
+presenter
+  .withPresenterBackstackScope(backstackScope)
+  .test(this) {
+    val model = awaitItem()
+
+    model.onContinue()
+
+    assertThat(backstackScope.lastBackstackChange.value.action)
+      .isEqualTo(Action.PUSH)
+  }
+```
+
+If the presenter under test calls `pop()`, use the fake's default placeholder root and push the presenter before
+invoking the callback. When the presenter under test is the root entry, `pop()` is ignored, matching production
+behavior.
+
+```kotlin
+val backstackScope = FakePresenterBackstackScope()
+backstackScope.push(presenter)
+
+presenter
+  .withPresenterBackstackScope(backstackScope)
+  .test(this) {
+    val model = awaitItem()
+
+    model.onBack()
+
+    assertThat(backstackScope.recordedBackstackChanges.value.map { it.action })
+      .containsExactly(Action.PUSH, Action.PUSH, Action.POP)
+  }
+```
+
 Consumers define their own `PresenterBackstackModel` and renderer. The base `PresenterBackstackRenderer` creates stable
 Navigation 3 keys for model entries, keeps popped models available while exit transitions finish, and forwards
 `PresenterBackstackModel.onBack` to `NavDisplay`. The renderer only needs to render each model:
