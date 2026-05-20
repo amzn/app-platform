@@ -169,8 +169,11 @@ internal sealed interface Platform {
   companion object {
 
     private val projectsUsingCompose =
-      setOf(":renderer-compose-multiplatform:public", ":robot-compose-multiplatform:public") +
-        AppPlugin.App.entries.map { it.rootProjectPath }
+      setOf(
+        ":presenter-backstack-nav3:public",
+        ":renderer-compose-multiplatform:public",
+        ":robot-compose-multiplatform:public",
+      ) + AppPlugin.App.entries.map { it.rootProjectPath }
 
     fun Project.allPlatforms(): Set<Platform> = buildSet {
       // Always add Android. It's our most important platform and buildable in all
