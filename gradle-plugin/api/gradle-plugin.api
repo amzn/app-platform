@@ -6,6 +6,7 @@ public class software/amazon/app/platform/gradle/AppPlatformExtension {
 	public final fun enableKotlinInject (Z)V
 	public final fun enableMetro (Z)V
 	public final fun enableModuleStructure (Z)V
+	public final fun enableMoleculePresenterBackstack (Z)V
 	public final fun enableMoleculePresenters (Z)V
 }
 

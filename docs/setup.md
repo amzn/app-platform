@@ -28,6 +28,9 @@ are explained in more detail in many of the following sections.
       // false by default. Configures Molecule and provides access to the MoleculePresenter API.
       enableMoleculePresenters true
 
+      // false by default. Adds the Navigation 3 presenter backstack module and enables Molecule presenters and Compose UI.
+      enableMoleculePresenterBackstack true
+
       // false by default. Adds the necessary dependencies to use Compose Multiplatform with Renderers.
       enableComposeUi true
 
@@ -59,6 +62,9 @@ are explained in more detail in many of the following sections.
 
       // false by default. Configures Molecule and provides access to the MoleculePresenter API.
       enableMoleculePresenters(true)
+
+      // false by default. Adds the Navigation 3 presenter backstack module and enables Molecule presenters and Compose UI.
+      enableMoleculePresenterBackstack(true)
 
       // false by default. Adds the necessary dependencies to use Compose Multiplatform with Renderers.
       enableComposeUi(true)

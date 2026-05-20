@@ -800,41 +800,57 @@ This solution always shows the `Presenter` for which `navigateTo()` was called l
 anywhere in the app.
 
 Another solution is a backstack of `Presenters`, where `Presenters` can be pushed to the stack and the top
-most `Presenter` can be popped from the stack. The Recipes app
-[implemented this navigation pattern](https://github.com/amzn/app-platform/blob/main/recipes/common/impl/src/commonMain/kotlin/software/amazon/app/platform/recipes/backstack/PresenterBackstackScope.kt)
-with an easy to use `presenterBackstack { }` function:
+most `Presenter` can be popped from the stack. App Platform provides this as an experimental Navigation 3 backed API.
+The easiest way to import it is the Gradle plugin option:
+
+```groovy
+appPlatform {
+  enableMoleculePresenterBackstack true
+}
+```
+
+This option adds the presenter backstack module and also enables Molecule presenters and Compose UI. The API keeps the
+backstack in presenter code, while the renderer integration delegates rendering, back gestures, retained entries, and
+transitions to Navigation 3.
+
+The Recipes app wraps the shared API in a small app-specific presenter:
 
 ```kotlin
 class CrossSlideBackstackPresenter(
   private val initialPresenter: MoleculePresenter<Unit, out BaseModel>
-) : MoleculePresenter<Unit, Model> {
+) : MoleculePresenter<Unit, CrossSlideBackstackPresenter.Model> {
   @Composable
   override fun present(input: Unit): Model {
-    return presenterBackstack(initialPresenter) { model ->
-      // Pop the top presenter on a back press event.
-      BackHandlerPresenter(enabled = lastBackstackChange.value.backstack.size > 1) {
-        pop()
-      }
-
-      Model(delegate = model, backstackScope = this)
+    return presenterBackstack(initialPresenter) { backstack ->
+      Model(backstack = backstack, onBack = { pop() })
     }
   }
+
+  data class Model(
+    override val backstack: List<BaseModel>,
+    override val onBack: () -> Unit,
+  ) : PresenterBackstackModel
 }
 ```
 
-`presenterBackstack { }` provides
-[PresenterBackstackScope](https://github.com/amzn/app-platform/blob/main/recipes/common/impl/src/commonMain/kotlin/software/amazon/app/platform/recipes/backstack/PresenterBackstackScope.kt),
-which allows you to `push()` and `pop()` presenters.
-[Child presenters](https://github.com/amzn/app-platform/blob/main/recipes/common/impl/src/commonMain/kotlin/software/amazon/app/platform/recipes/backstack/presenter/BackstackChildPresenter.kt#L38)
-wrapped in this function get access to this scope using a composition local:
+`presenterBackstack()` always keeps the initial presenter as the root entry. It composes every presenter in the stack,
+returns the resulting model list to the `content` lambda, and provides
+[`PresenterBackstackScope`](https://github.com/amzn/app-platform/blob/main/presenter-backstack-nav3/public/src/commonMain/kotlin/software/amazon/app/platform/presenter/backstack/nav3/PresenterBackstackScope.kt)
+to the presenter subtree. The scope exposes `push()`, `pop()`, and `replaceTop()`.
+
+The model's `onBack` callback is the only back hook the presenter needs for renderer-driven back navigation.
+`PresenterBackstackRenderer` passes it to Navigation 3's `NavDisplay`, so back gestures and `NavDisplay` back events
+call back into presenter code and pop the presenter-owned stack.
+
+Child presenters get access to the nearest scope through `LocalBackstackScope`:
 
 ```kotlin
 @Composable
 override fun present(input: Unit): Model {
-  val backstack = checkNotNull(LocalBackstackScope.current)
+  val backstack = LocalBackstackScope.requireNotNull()
   ...
 
-  return Model() {
+  return Model {
     when (it) {
       Event.AddPresenterToBackstack -> backstack.push(BackstackChildPresenter())
     }
@@ -842,11 +858,51 @@ override fun present(input: Unit): Model {
 }
 ```
 
-[`CrossSlideBackstackPresenter`](https://github.com/amzn/app-platform/blob/main/recipes/common/impl/src/commonMain/kotlin/software/amazon/app/platform/recipes/backstack/CrossSlideBackstackPresenter.kt)
-from the Recipe app goes one step further and integrates the `BackHandlerPresenter { }` API to pop presenters from the
-stack when the back button is pressed. Its
-[`Renderer`](https://github.com/amzn/app-platform/blob/main/recipes/common/impl/src/commonMain/kotlin/software/amazon/app/platform/recipes/backstack/CrossSlideBackstackRenderer.kt)
-implements a slide animation whenever a presenter is pushed to the stack or popped from the stack.
+Consumers define their own `PresenterBackstackModel` and renderer. The base `PresenterBackstackRenderer` creates stable
+Navigation 3 keys for model entries, keeps popped models available while exit transitions finish, and forwards
+`PresenterBackstackModel.onBack` to `NavDisplay`. The renderer only needs to render each model:
+
+```kotlin
+@ContributesRenderer
+class CrossSlideBackstackRenderer(
+  private val rendererFactory: RendererFactory,
+) : PresenterBackstackRenderer<CrossSlideBackstackPresenter.Model>() {
+  @Composable
+  override fun ComposeBackstackEntry(model: BaseModel) {
+    rendererFactory.getComposeRenderer(model).renderCompose(model)
+  }
+}
+```
+
+The same renderer can customize Navigation 3 behavior by overriding `PresenterNavDisplay()`. When overriding this
+function, pass all received parameters to `NavDisplay`; they connect the presenter-owned stack to Navigation 3 and keep
+retained entries renderable during transitions:
+
+```kotlin
+@Composable
+override fun PresenterNavDisplay(
+  backstack: List<Int>,
+  onBack: () -> Unit,
+  entryProvider: (Int) -> NavEntry<Int>,
+  modifier: Modifier,
+) {
+  NavDisplay(
+    backStack = backstack,
+    onBack = onBack,
+    entryProvider = entryProvider,
+    modifier = modifier,
+    transitionSpec = {
+      crossSlideTransition(AnimatedContentTransitionScope.SlideDirection.Left)
+    },
+    popTransitionSpec = {
+      crossSlideTransition(AnimatedContentTransitionScope.SlideDirection.Right)
+    },
+    predictivePopTransitionSpec = {
+      crossSlideTransition(AnimatedContentTransitionScope.SlideDirection.Right)
+    },
+  )
+}
+```
 
 ### `CompositionLocal`
 
@@ -1005,14 +1061,18 @@ then the `BaseModel` from the child `Presenter` will provide the config for the 
 return contentModel.toTemplate { model ->
   val appBarConfig =
     if (model is AppBarConfigModel) {
-      model.appBarConfig().copy(backArrowAction = backArrowAction)
+      model.appBarConfig()
     } else {
-      AppBarConfig(title = AppBarConfig.DEFAULT.title, backArrowAction = backArrowAction)
+      AppBarConfig.DEFAULT
     }
 
   RecipesAppTemplate.FullScreenTemplate(model, appBarConfig)
 }
 ```
+
+For the Recipes app backstack, `CrossSlideBackstackPresenter.Model` implements `AppBarConfigModel`. It delegates the
+active child model's app bar configuration and adds the back-arrow action when the presenter stack has more than one
+entry.
 
 ### Navigation 3
 
@@ -1023,59 +1083,59 @@ For idiomatic navigation App Platform [recommends](presenter.md#model-driven-nav
 it pushes navigation logic into the Compose UI layer, which is against App Platform's philosophy of handling navigation 
 in the business logic. With the right integration strategy, this downside can be mitigated.
 
-The Recipes app manages the backstack of `Presenters` in the parent 
+The presenter backstack API is the recommended integration strategy when a Compose renderer should use Navigation 3
+but presenter code should still own navigation state. The Recipes app's
 [`Navigation3HomePresenter`](https://github.com/amzn/app-platform/blob/main/recipes/common/impl/src/commonMain/kotlin/software/amazon/app/platform/recipes/nav3/Navigation3HomePresenter.kt)
-and forwards the backstack and options to modify the stack to the `Renderer`. Note that the `Model` is computed for 
-each `Presenter` in the backstack:
+hosts a nested presenter stack:
 
 ```kotlin
 @Composable
 override fun present(input: Unit): Model {
-  val backstack = remember {
-    mutableStateListOf<MoleculePresenter<Unit, out BaseModel>>().apply {
-      // There must be always one element.
-      add(Navigation3ChildPresenter(index = 0, backstack = this))
-    }
-  }
-
-  return Model(backstack = backstack.map { it.present(Unit) }) {
-    when (it) {
-      Event.Pop -> {
-        backstack.removeAt(backstack.size - 1)
-      }
-    }
+  return presenterBackstack(Navigation3ChildPresenter(index = 0)) { backstack ->
+    Model(backstack = backstack, onBack = { pop() })
   }
 }
+
+data class Model(
+  override val backstack: List<BaseModel>,
+  override val onBack: () -> Unit,
+) : PresenterBackstackModel
 ```
 
-The [`Renderer`](https://github.com/amzn/app-platform/blob/main/recipes/common/impl/src/commonMain/kotlin/software/amazon/app/platform/recipes/nav3/Navigation3HomeRenderer.kt) 
-wraps the backstack in a `NavDisplay` and forwards back gestures to the `Presenter`. There is a unique `NavEntry`
-for each position in the stack and the individual `Renderer` for each `Model` is invoked:
+Child presenters use the scope provided by `presenterBackstack()` to mutate that stack:
 
 ```kotlin
-@ContributesRenderer
-class Navigation3HomeRenderer(private val rendererFactory: RendererFactory) : ComposeRenderer<Model>() {
-  @Composable
-  override fun Compose(model: Model, modifier: Modifier) {
-    // Use the position of the model in the backstack as key for `NavDisplay`. This way
-    // we can update models without Navigation 3 treating those changes as a new screen.
-    val backstack = model.backstack.mapIndexed { index, _ -> index }
+@Composable
+override fun present(input: Unit): Model {
+  val backstack = LocalBackstackScope.requireNotNull()
 
-    NavDisplay(
-      backStack = backstack,
-      onBack = { model.onEvent(Event.Pop) },
-      entryProvider = { key ->
-        NavEntry(key) {
-          val model = model.backstack[it]
-          rendererFactory.getComposeRenderer(model).renderCompose(model)
-        }
-      },
-    )
+  return Model {
+    when (it) {
+      Event.AddPresenter -> backstack.push(Navigation3ChildPresenter(index = index + 1))
+    }
   }
 }
 ```
 
-With this integration handling of the backstack is managed in the `Presenter` and testable. 
+The
+[`Renderer`](https://github.com/amzn/app-platform/blob/main/recipes/common/impl/src/commonMain/kotlin/software/amazon/app/platform/recipes/nav3/Navigation3HomeRenderer.kt)
+extends `PresenterBackstackRenderer`. The base renderer wraps the model stack in `NavDisplay`, gives each entry a
+stable Navigation 3 key, invokes the individual renderer for each model, and forwards back gestures to the presenter
+model's `onBack` callback:
+
+```kotlin
+class Navigation3HomeRenderer(
+  private val rendererFactory: RendererFactory,
+) : PresenterBackstackRenderer<Navigation3HomePresenter.Model>() {
+  @Composable
+  override fun ComposeBackstackEntry(model: BaseModel) {
+    rendererFactory.getComposeRenderer(model).renderCompose(model)
+  }
+}
+```
+
+With this integration, handling of the backstack remains in `Presenters` and is testable, while Navigation 3 handles
+the renderer-level navigation container and back gesture integration.
 
 ??? info "Alternative integration"
 
