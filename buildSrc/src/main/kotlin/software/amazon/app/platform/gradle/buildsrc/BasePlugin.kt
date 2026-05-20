@@ -72,6 +72,8 @@ public open class BasePlugin : Plugin<Project> {
           ":metro-extensions:contribute:impl-code-generators",
         "${APP_PLATFORM_GROUP}:presenter-backstack-nav3-public" to
           ":presenter-backstack-nav3:public",
+        "${APP_PLATFORM_GROUP}:presenter-backstack-nav3-testing" to
+          ":presenter-backstack-nav3:testing",
         "${APP_PLATFORM_GROUP}:presenter-public" to ":presenter:public",
         "${APP_PLATFORM_GROUP}:presenter-molecule-public" to ":presenter-molecule:public",
         "${APP_PLATFORM_GROUP}:presenter-molecule-impl" to ":presenter-molecule:impl",

@@ -371,6 +371,11 @@ private fun Project.enableMoleculePresenterBackstack() {
     kmpExtension.sourceSets.getByName("commonMain").dependencies {
       implementation("$APP_PLATFORM_GROUP:presenter-backstack-nav3-public:$APP_PLATFORM_VERSION")
     }
+    testingSourceSets.forEach { sourceSetName ->
+      kmpExtension.sourceSets.getByName(sourceSetName).dependencies {
+        implementation("$APP_PLATFORM_GROUP:presenter-backstack-nav3-testing:$APP_PLATFORM_VERSION")
+      }
+    }
   }
 
   plugins.withIds(PluginIds.KOTLIN_ANDROID, PluginIds.KOTLIN_JVM) {
@@ -378,6 +383,12 @@ private fun Project.enableMoleculePresenterBackstack() {
       "implementation",
       "$APP_PLATFORM_GROUP:presenter-backstack-nav3-public:$APP_PLATFORM_VERSION",
     )
+    testingSourceSets.forEach { sourceSetName ->
+      dependencies.add(
+        sourceSetName,
+        "$APP_PLATFORM_GROUP:presenter-backstack-nav3-testing:$APP_PLATFORM_VERSION",
+      )
+    }
   }
 }
 

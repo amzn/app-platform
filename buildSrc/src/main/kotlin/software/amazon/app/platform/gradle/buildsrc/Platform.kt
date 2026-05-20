@@ -171,6 +171,7 @@ internal sealed interface Platform {
     private val projectsUsingCompose =
       setOf(
         ":presenter-backstack-nav3:public",
+        ":presenter-backstack-nav3:testing",
         ":renderer-compose-multiplatform:public",
         ":robot-compose-multiplatform:public",
       ) + AppPlugin.App.entries.map { it.rootProjectPath }
