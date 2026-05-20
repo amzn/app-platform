@@ -1,3 +1,4 @@
+@file:OptIn(ExperimentalAppPlatform::class)
 @file:Suppress("UndocumentedPublicProperty", "UndocumentedPublicClass")
 
 package software.amazon.app.platform.recipes.nav3
@@ -6,20 +7,20 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.snapshots.SnapshotStateList
 import kotlin.time.Duration.Companion.seconds
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
+import software.amazon.app.platform.ExperimentalAppPlatform
 import software.amazon.app.platform.presenter.BaseModel
+import software.amazon.app.platform.presenter.backstack.nav3.LocalBackstackScope
+import software.amazon.app.platform.presenter.backstack.nav3.requireNotNull
 import software.amazon.app.platform.presenter.molecule.MoleculePresenter
 import software.amazon.app.platform.recipes.nav3.Navigation3ChildPresenter.Model
 
-class Navigation3ChildPresenter(
-  private val index: Int,
-  private val backstack: SnapshotStateList<MoleculePresenter<Unit, out BaseModel>>,
-) : MoleculePresenter<Unit, Model> {
+class Navigation3ChildPresenter(private val index: Int) : MoleculePresenter<Unit, Model> {
   @Composable
   override fun present(input: Unit): Model {
+    val backstack = LocalBackstackScope.requireNotNull()
     val color = remember { nextColor() }
 
     val counter by
@@ -32,8 +33,7 @@ class Navigation3ChildPresenter(
 
     return Model(index = index, color = color, counter = counter) {
       when (it) {
-        Event.AddPresenter ->
-          backstack.add(Navigation3ChildPresenter(index = index + 1, backstack = backstack))
+        Event.AddPresenter -> backstack.push(Navigation3ChildPresenter(index = index + 1))
       }
     }
   }
