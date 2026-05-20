@@ -27,6 +27,7 @@ import software.amazon.app.platform.gradle.ModuleStructurePlugin.Companion.testi
  *   enableMetro true // false is the default
  *
  *   enableMoleculePresenters true // false is the default
+ *   enableMoleculePresenterBackstack true // false is the default
  *   enableModuleStructure true // false is the default
  *   enableComposeUi true // false is the default
  *
@@ -92,6 +93,29 @@ constructor(objects: ObjectFactory, private val project: Project) {
   }
 
   internal fun isMoleculeEnabled(): Property<Boolean> = enableMoleculePresenters
+
+  private val enableMoleculePresenterBackstack: Property<Boolean> =
+    objects.property(Boolean::class.java).convention(false)
+
+  /**
+   * Adds the Navigation 3 presenter backstack module and enables Molecule presenters and Compose
+   * UI.
+   */
+  public fun enableMoleculePresenterBackstack(enabled: Boolean) {
+    if (enabled == enableMoleculePresenterBackstack.get()) return
+
+    enableMoleculePresenterBackstack.set(enabled)
+    enableMoleculePresenterBackstack.disallowChanges()
+
+    if (enabled) {
+      enableMoleculePresenters(true)
+      enableComposeUi(true)
+      project.enableMoleculePresenterBackstack()
+    }
+  }
+
+  internal fun isMoleculePresenterBackstackEnabled(): Property<Boolean> =
+    enableMoleculePresenterBackstack
 
   private val enableComposeUi: Property<Boolean> =
     objects.property(Boolean::class.java).convention(false)
@@ -339,6 +363,21 @@ private fun Project.enableMoleculePresenters() {
         "$APP_PLATFORM_GROUP:presenter-molecule-testing:$APP_PLATFORM_VERSION",
       )
     }
+  }
+}
+
+private fun Project.enableMoleculePresenterBackstack() {
+  plugins.withId(PluginIds.KOTLIN_MULTIPLATFORM) {
+    kmpExtension.sourceSets.getByName("commonMain").dependencies {
+      implementation("$APP_PLATFORM_GROUP:presenter-backstack-nav3-public:$APP_PLATFORM_VERSION")
+    }
+  }
+
+  plugins.withIds(PluginIds.KOTLIN_ANDROID, PluginIds.KOTLIN_JVM) {
+    dependencies.add(
+      "implementation",
+      "$APP_PLATFORM_GROUP:presenter-backstack-nav3-public:$APP_PLATFORM_VERSION",
+    )
   }
 }
 

@@ -124,6 +124,7 @@ public open class AppPlatformPlugin : Plugin<Project> {
           "kotlin-inject-public",
           "metro-impl",
           "metro-public",
+          "presenter-backstack-nav3-public",
           "presenter-molecule-impl",
           "presenter-molecule-public",
           "presenter-public",

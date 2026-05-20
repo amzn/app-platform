@@ -1,0 +1,20 @@
+plugins {
+    id 'software.amazon.app.platform.lib'
+}
+
+appPlatformBuildSrc {
+    enableCompose true
+    enableMolecule true
+    enablePublishing true
+}
+
+dependencies {
+    commonMainApi project(':di-common:public')
+    commonMainApi project(':presenter-molecule:public')
+    commonMainApi project(':renderer-compose-multiplatform:public')
+
+    commonMainApi libs.navigation3.runtime
+    commonMainApi libs.navigation3.ui
+
+    commonTestImplementation project(':presenter-molecule:testing')
+}
