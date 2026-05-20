@@ -12,6 +12,7 @@ appPlatform {
     enableKotlinInject true
     enableModuleStructure true
     enableMoleculePresenters true
+    enableMoleculePresenterBackstack true
 }
 
 dependencies {

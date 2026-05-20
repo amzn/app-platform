@@ -5,10 +5,11 @@
     <application
         android:name="software.amazon.app.platform.recipes.AndroidApplication"
         android:allowBackup="false"
+        android:enableOnBackInvokedCallback="true"
         android:label="Recipes"
         android:supportsRtl="true"
         android:theme="@android:style/Theme.Material.Light.NoActionBar"
-        tools:ignore="DataExtractionRules,MissingApplicationIcon">
+        tools:ignore="DataExtractionRules,MissingApplicationIcon,UnusedAttribute">
         <activity
             android:exported="true"
             android:configChanges="orientation|screenSize|screenLayout|keyboardHidden|mnc|colorMode|density|fontScale|fontWeightAdjustment|keyboard|layoutDirection|locale|mcc|navigation|smallestScreenSize|touchscreen|uiMode"

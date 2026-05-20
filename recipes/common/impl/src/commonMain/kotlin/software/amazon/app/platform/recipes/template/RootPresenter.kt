@@ -30,33 +30,16 @@ class RootPresenter(
       val backstackPresenter = remember { CrossSlideBackstackPresenter(landingPresenter) }
       val backstackModel = backstackPresenter.present(Unit)
 
-      backstackModelToTemplate(backstackModel)
-    }
-  }
+      backstackModel.toTemplate { model ->
+        val appBarConfig =
+          if (model is AppBarConfigModel) {
+            model.appBarConfig()
+          } else {
+            AppBarConfig.DEFAULT
+          }
 
-  @Composable
-  private fun backstackModelToTemplate(
-    backstackModel: CrossSlideBackstackPresenter.Model
-  ): RecipesAppTemplate {
-    val backstackScope = backstackModel.backstackScope
-    val showBackArrow = backstackScope.lastBackstackChange.value.backstack.size > 1
-
-    val backArrowAction =
-      if (showBackArrow) {
-        { backstackScope.pop() }
-      } else {
-        null
+        RecipesAppTemplate.FullScreenTemplate(model, appBarConfig)
       }
-
-    return backstackModel.toTemplate { model ->
-      val appBarConfig =
-        if (model is AppBarConfigModel) {
-          model.appBarConfig().copy(backArrowAction = backArrowAction)
-        } else {
-          AppBarConfig(title = AppBarConfig.DEFAULT.title, backArrowAction = backArrowAction)
-        }
-
-      RecipesAppTemplate.FullScreenTemplate(model, appBarConfig)
     }
   }
 }

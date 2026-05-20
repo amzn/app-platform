@@ -1,3 +1,4 @@
+@file:OptIn(ExperimentalAppPlatform::class)
 @file:Suppress("UndocumentedPublicProperty", "UndocumentedPublicClass")
 
 package software.amazon.app.platform.recipes.backstack.presenter
@@ -19,12 +20,14 @@ import androidx.compose.ui.unit.dp
 import kotlin.time.Duration.Companion.seconds
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
+import software.amazon.app.platform.ExperimentalAppPlatform
 import software.amazon.app.platform.inject.ContributesRenderer
 import software.amazon.app.platform.presenter.BaseModel
+import software.amazon.app.platform.presenter.backstack.nav3.LocalBackstackScope
+import software.amazon.app.platform.presenter.backstack.nav3.requireNotNull
 import software.amazon.app.platform.presenter.molecule.MoleculePresenter
 import software.amazon.app.platform.recipes.appbar.AppBarConfig
 import software.amazon.app.platform.recipes.appbar.AppBarConfigModel
-import software.amazon.app.platform.recipes.backstack.LocalBackstackScope
 import software.amazon.app.platform.recipes.backstack.presenter.BackstackChildPresenter.Model
 import software.amazon.app.platform.renderer.ComposeRenderer
 
@@ -35,7 +38,7 @@ import software.amazon.app.platform.renderer.ComposeRenderer
 class BackstackChildPresenter(private val index: Int) : MoleculePresenter<Unit, Model> {
   @Composable
   override fun present(input: Unit): Model {
-    val backstack = checkNotNull(LocalBackstackScope.current)
+    val backstack = LocalBackstackScope.requireNotNull()
 
     var counter by rememberSaveable { mutableIntStateOf(0) }
 

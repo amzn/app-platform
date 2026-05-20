@@ -1,41 +1,24 @@
+@file:OptIn(ExperimentalAppPlatform::class)
+
 package software.amazon.app.platform.recipes.nav3
 
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.navigation3.runtime.NavEntry
-import androidx.navigation3.ui.NavDisplay
 import me.tatarka.inject.annotations.Inject
+import software.amazon.app.platform.ExperimentalAppPlatform
 import software.amazon.app.platform.inject.ContributesRenderer
-import software.amazon.app.platform.recipes.nav3.Navigation3HomePresenter.Event
+import software.amazon.app.platform.presenter.BaseModel
+import software.amazon.app.platform.presenter.backstack.nav3.PresenterBackstackRenderer
 import software.amazon.app.platform.recipes.nav3.Navigation3HomePresenter.Model
-import software.amazon.app.platform.renderer.ComposeRenderer
 import software.amazon.app.platform.renderer.RendererFactory
 import software.amazon.app.platform.renderer.getComposeRenderer
 
-/**
- * Renderer that integrates the multiplatform Navigation3 UI implementation. The backstack is
- * managed in the presenter for idiomatic navigation with presenters, but interactions with the
- * backstack are handled by the Navigation3 library, e.g. back gestures.
- */
+/** Renderer that integrates the presenter backstack with Navigation 3. */
 @Inject
 @ContributesRenderer
 class Navigation3HomeRenderer(private val rendererFactory: RendererFactory) :
-  ComposeRenderer<Model>() {
+  PresenterBackstackRenderer<Model>() {
   @Composable
-  override fun Compose(model: Model, modifier: Modifier) {
-    // Use the position of the model in the backstack as key for `NavDisplay`. This way
-    // we can update models without Navigation 3 treating those changes as a new screen.
-    val backstack = model.backstack.mapIndexed { index, _ -> index }
-
-    NavDisplay(
-      backStack = backstack,
-      onBack = { model.onEvent(Event.Pop) },
-      entryProvider = { key ->
-        NavEntry(key) {
-          val model = model.backstack[it]
-          rendererFactory.getComposeRenderer(model).renderCompose(model)
-        }
-      },
-    )
+  override fun ComposeBackstackEntry(model: BaseModel) {
+    rendererFactory.getComposeRenderer(model).renderCompose(model)
   }
 }
