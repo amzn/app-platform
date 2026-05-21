@@ -4,12 +4,6 @@
 
 ### Added
 
-- Add `@ExperimentalAppPlatform` in `:common:public` for APIs that require explicit consumer opt-in.
-- Add experimental `MoleculePresenter.presentDetached()` to compose presenter subtrees in detached Molecule hierarchies so busy parent presenters do not recompose slower child presenters.
-- Add experimental Molecule presenter-backed text field state helpers for sharing text input state between presenters and Compose renderers.
-- Add experimental `ReturningSaveableStateHolder` in `:presenter-molecule:public` for preserving `rememberSaveable` state in value-returning Molecule presenter subtrees.
-- Add experimental Navigation 3 presenter backstack APIs and the `enableMoleculePresenterBackstack` Gradle plugin option.
-
 ### Changed
 
 ### Deprecated
@@ -21,6 +15,17 @@
 ### Security
 
 ### Other Notes & Contributions
+
+
+## [0.0.14] - 2026-05-20
+
+### Added
+
+- Add `@ExperimentalAppPlatform` in `:common:public` for APIs that require explicit consumer opt-in.
+- Add experimental `MoleculePresenter.presentDetached()` to compose presenter subtrees in detached Molecule hierarchies so busy parent presenters do not recompose slower child presenters.
+- Add experimental Molecule presenter-backed text field state helpers for sharing text input state between presenters and Compose renderers.
+- Add experimental `ReturningSaveableStateHolder` in `:presenter-molecule:public` for preserving `rememberSaveable` state in value-returning Molecule presenter subtrees.
+- Add experimental Navigation 3 presenter backstack APIs and the `enableMoleculePresenterBackstack` Gradle plugin option.
 
 
 ## [0.0.13] - 2026-05-14
@@ -202,7 +207,8 @@
 
 - Initial release.
 
-[Unreleased]: https://github.com/amzn/app-platform/compare/0.0.13...HEAD
+[Unreleased]: https://github.com/amzn/app-platform/compare/0.0.14...HEAD
+[0.0.14]: https://github.com/amzn/app-platform/compare/0.0.14
 [0.0.13]: https://github.com/amzn/app-platform/compare/0.0.13
 [0.0.12]: https://github.com/amzn/app-platform/compare/0.0.12
 [0.0.11]: https://github.com/amzn/app-platform/compare/0.0.11
