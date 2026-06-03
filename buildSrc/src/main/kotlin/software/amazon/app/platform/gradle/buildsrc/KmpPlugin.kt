@@ -11,6 +11,7 @@ import io.gitlab.arturbosch.detekt.extensions.DetektExtension
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.artifacts.dsl.DependencyHandler
+import org.gradle.api.plugins.BasePluginExtension
 import org.gradle.api.plugins.ExtensionAware
 import org.gradle.api.tasks.SourceTask
 import org.jetbrains.compose.ComposeExtension
@@ -35,6 +36,11 @@ public open class KmpPlugin : Plugin<Project> {
   }
 
   private fun Project.configureCommonKotlin() {
+    // KGP derives compilation module names, including metadata KLIB unique names, from the
+    // archive base name. Use the normalized project path to distinguish modules named "public"
+    // or "impl".
+    extensions.getByType(BasePluginExtension::class.java).archivesName.set(safePathString)
+
     kmpExtension.applyDefaultHierarchyTemplate()
 
     dependencies.add(
@@ -49,8 +55,6 @@ public open class KmpPlugin : Plugin<Project> {
       .optIn("kotlinx.coroutines.ExperimentalCoroutinesApi")
 
     kmpExtension.compilerOptions {
-      freeCompilerArgs.add("-Xannotation-default-target=param-property")
-
       // Unfortunately, we cannot set this to true. It produces warnings for generated code,
       // which cannot be excluded.
       extraWarnings.set(false)
@@ -65,21 +69,6 @@ public open class KmpPlugin : Plugin<Project> {
             if ("test" in task.name.lowercase() || path == ":internal:testing") {
               freeCompilerArgs.add("-Xexpect-actual-classes")
               freeCompilerArgs.add("-opt-in=kotlinx.coroutines.ExperimentalCoroutinesApi")
-            }
-
-            // We need to rename the KLib library for iOS to avoid duplicate names. By
-            // default project.name is used, which conflicts with our module structure
-            // where many modules are named "public" or "impl". If that happens during
-            // compilation only code from one module is found.
-            //
-            // There is currently no DSL to set the KLib name. For more details see
-            // https://youtrack.jetbrains.com/issue/KT-38719
-            // https://youtrack.jetbrains.com/issue/KT-38892
-            if (target.targetName != "js" && target.targetName != "wasmJs") {
-              // Note this doesn't work on JS/WASMJS yet due to
-              // https://youtrack.jetbrains.com/issue/KT-71362
-              freeCompilerArgs.add("-module-name")
-              freeCompilerArgs.add("$safePathString.${compilation.compilationName}")
             }
           }
         }
