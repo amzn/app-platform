@@ -226,10 +226,10 @@ private fun userTypeClassIdCandidates(
   return sequence {
     yield(topLevelCandidate)
 
-    var parentClassId = owner.classId.parentClassId
-    while (parentClassId != null) {
-      yield(nestedClassId(parentClassId, qualifierNames))
-      parentClassId = parentClassId.parentClassId
+    var outerClassId = owner.classId.outerClassId
+    while (outerClassId != null) {
+      yield(nestedClassId(outerClassId, qualifierNames))
+      outerClassId = outerClassId.outerClassId
     }
   }
 }

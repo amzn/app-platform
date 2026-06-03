@@ -51,7 +51,6 @@ dependencies {
 
 tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).configureEach {
     compilerOptions {
-        freeCompilerArgs.add('-Xcontext-parameters')
         optIn.add('org.jetbrains.kotlin.compiler.plugin.ExperimentalCompilerApi')
     }
 }
