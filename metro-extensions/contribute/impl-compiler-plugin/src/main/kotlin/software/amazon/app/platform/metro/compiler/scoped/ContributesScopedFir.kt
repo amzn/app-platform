@@ -2,6 +2,8 @@ package software.amazon.app.platform.metro.compiler.scoped
 
 import com.google.auto.service.AutoService
 import dev.zacsweers.metro.compiler.MetroOptions
+import dev.zacsweers.metro.compiler.api.fir.MetroContributionHintExtension
+import dev.zacsweers.metro.compiler.api.fir.MetroContributionHintExtension.ContributionHint
 import dev.zacsweers.metro.compiler.api.fir.MetroFirDeclarationGenerationExtension
 import dev.zacsweers.metro.compiler.compat.CompatContext
 import org.jetbrains.kotlin.descriptors.ClassKind
@@ -97,7 +99,7 @@ import software.amazon.app.platform.metro.compiler.fir.resolveTypeRef
  * omitted and only the scoped multibinding is generated.
  */
 public class ContributesScopedFir(session: FirSession) :
-  MetroFirDeclarationGenerationExtension(session) {
+  MetroFirDeclarationGenerationExtension(session), MetroContributionHintExtension {
 
   override fun FirDeclarationPredicateRegistrar.registerPredicates() {
     register(ContributesScopedIds.PREDICATE)
