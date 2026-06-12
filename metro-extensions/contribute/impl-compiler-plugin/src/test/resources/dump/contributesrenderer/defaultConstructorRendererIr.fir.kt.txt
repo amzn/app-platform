@@ -46,7 +46,7 @@ class TestRenderer : Renderer<Model> {
         @HiddenFromObjC
         @JvmStatic
         @JsStatic
-        fun create(): Factory<TestRenderer> {
+        fun create(): ProvideComTestTestRendererMetroFactory {
           return ProvideComTestTestRendererMetroFactory
         }
 
@@ -82,7 +82,7 @@ class TestRenderer : Renderer<Model> {
         @HiddenFromObjC
         @JvmStatic
         @JsStatic
-        fun create(): Factory<KClass<out Renderer<*>>> {
+        fun create(): ProvideComTestTestRendererModelKeyMetroFactory {
           return ProvideComTestTestRendererModelKeyMetroFactory
         }
 

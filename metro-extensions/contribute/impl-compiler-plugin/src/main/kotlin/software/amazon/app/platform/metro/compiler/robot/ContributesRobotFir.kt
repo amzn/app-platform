@@ -2,6 +2,8 @@ package software.amazon.app.platform.metro.compiler.robot
 
 import com.google.auto.service.AutoService
 import dev.zacsweers.metro.compiler.MetroOptions
+import dev.zacsweers.metro.compiler.api.fir.MetroContributionHintExtension
+import dev.zacsweers.metro.compiler.api.fir.MetroContributionHintExtension.ContributionHint
 import dev.zacsweers.metro.compiler.api.fir.MetroFirDeclarationGenerationExtension
 import dev.zacsweers.metro.compiler.compat.CompatContext
 import org.jetbrains.kotlin.descriptors.ClassKind
@@ -94,7 +96,7 @@ import software.amazon.app.platform.metro.compiler.fir.resolveTypeRef
  * the nested declaration omits `provideTestRobot(...)` and only synthesizes the map-binding method.
  */
 public class ContributesRobotFir(session: FirSession) :
-  MetroFirDeclarationGenerationExtension(session) {
+  MetroFirDeclarationGenerationExtension(session), MetroContributionHintExtension {
 
   override fun FirDeclarationPredicateRegistrar.registerPredicates() {
     register(ContributesRobotIds.PREDICATE)
