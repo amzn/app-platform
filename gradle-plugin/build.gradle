@@ -64,6 +64,14 @@ dependencies {
     compileOnly libs.kotlin.multiplatform.gradle.plugin
 
     lintChecks libs.androidx.lint.gradle
+
+    testImplementation gradleTestKit()
+    testImplementation libs.assertk
+    testImplementation libs.kotlin.test.junit5
+}
+
+test {
+    useJUnitPlatform()
 }
 
 java {

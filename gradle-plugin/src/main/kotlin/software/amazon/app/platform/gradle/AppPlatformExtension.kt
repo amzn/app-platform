@@ -9,6 +9,7 @@ import gradle_plugin.BuildConfig.KOTLIN_INJECT_ANVIL_VERSION
 import gradle_plugin.BuildConfig.KOTLIN_INJECT_VERSION
 import gradle_plugin.BuildConfig.MOLECULE_VERSION
 import javax.inject.Inject
+import org.gradle.api.Action
 import org.gradle.api.Project
 import org.gradle.api.artifacts.dsl.DependencyHandler
 import org.gradle.api.model.ObjectFactory
@@ -29,6 +30,9 @@ import software.amazon.app.platform.gradle.ModuleStructurePlugin.Companion.testi
  *   enableMoleculePresenters true // false is the default
  *   enableMoleculePresenterBackstack true // false is the default
  *   enableModuleStructure true // false is the default
+ *   enableModuleStructure {
+ *     allowLibraryImplToImplDependencies true // false is the default
+ *   }
  *   enableComposeUi true // false is the default
  *
  *   addPublicModuleDependencies true // false is the default
@@ -166,6 +170,8 @@ constructor(objects: ObjectFactory, private val project: Project) {
 
   private val enableModuleStructure: Property<Boolean> =
     objects.property(Boolean::class.java).convention(false)
+  private val moduleStructureOptions: ModuleStructureOptions =
+    objects.newInstance(ModuleStructureOptions::class.java)
 
   /** Sets up this module to use our recommended module structure and applies certain defaults. */
   public fun enableModuleStructure(enable: Boolean) {
@@ -179,7 +185,15 @@ constructor(objects: ObjectFactory, private val project: Project) {
     }
   }
 
+  /** Sets up and configures this module to use our recommended module structure. */
+  public fun enableModuleStructure(action: Action<ModuleStructureOptions>) {
+    action.execute(moduleStructureOptions)
+    enableModuleStructure(true)
+  }
+
   internal fun isModuleStructureEnabled(): Property<Boolean> = enableModuleStructure
+
+  internal fun moduleStructureOptions(): ModuleStructureOptions = moduleStructureOptions
 
   internal companion object {
     internal val Project.appPlatform: AppPlatformExtension

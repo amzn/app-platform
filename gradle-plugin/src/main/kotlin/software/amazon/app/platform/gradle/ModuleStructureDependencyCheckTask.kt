@@ -7,11 +7,13 @@ import org.gradle.api.Project
 import org.gradle.api.artifacts.Configuration
 import org.gradle.api.artifacts.ExternalDependency
 import org.gradle.api.artifacts.ProjectDependency
+import org.gradle.api.provider.Property
 import org.gradle.api.tasks.CacheableTask
 import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.Optional
 import org.gradle.api.tasks.OutputFile
 import org.gradle.api.tasks.TaskAction
+import software.amazon.app.platform.gradle.AppPlatformExtension.Companion.appPlatform
 
 /** Checks that our module structure dependency rules are followed. */
 @CacheableTask
@@ -23,12 +25,16 @@ public abstract class ModuleStructureDependencyCheckTask : DefaultTask() {
   /** All Gradle modules on the compile classpath. */
   @get:Input public abstract var moduleCompileClasspath: Set<String>
 
+  /** Whether `:impl` dependencies within the same library are allowed. */
+  @get:Input public abstract val allowLibraryImplToImplDependencies: Property<Boolean>
+
   /** An empty output makes the task work with up-to-date checks. */
   @Suppress("unused") @get:OutputFile @get:Optional public abstract var ignoredOutputFile: File
 
   init {
     description = "Checks that our module structure dependency rules are followed."
     group = "Verification"
+    allowLibraryImplToImplDependencies.convention(false)
   }
 
   @TaskAction
@@ -40,7 +46,7 @@ public abstract class ModuleStructureDependencyCheckTask : DefaultTask() {
       checkOnlyPublicModule()
     }
     if (moduleType != ModuleType.APP && moduleType != ModuleType.IMPL_ROBOTS) {
-      checkNoImplImport()
+      checkNoImplImport(moduleType)
     }
     if (moduleType != ModuleType.TESTING && !moduleType.isRobotsModule) {
       checkNoTestingImport()
@@ -65,8 +71,15 @@ public abstract class ModuleStructureDependencyCheckTask : DefaultTask() {
     }
   }
 
-  private fun checkNoImplImport() {
-    val forbiddenDependencies = moduleCompileClasspath.filter { it.moduleType == ModuleType.IMPL }
+  private fun checkNoImplImport(moduleType: ModuleType) {
+    val forbiddenDependencies =
+      moduleCompileClasspath
+        .filter { it.moduleType == ModuleType.IMPL }
+        .filterNot { dependency ->
+          allowLibraryImplToImplDependencies.get() &&
+            moduleType == ModuleType.IMPL &&
+            dependency.isProjectDependencyWithinSameLibrary()
+        }
 
     if (forbiddenDependencies.isNotEmpty()) {
       throw GradleException(
@@ -116,12 +129,7 @@ public abstract class ModuleStructureDependencyCheckTask : DefaultTask() {
           //
           // For external dependencies this check is much harder and for now we simply
           // assume that the internal dependency isn't allowed.
-          if (dependency.startsWith(":")) {
-            dependency.substringBeforeLast(':') != modulePath.substringBeforeLast(':')
-          } else {
-            // It's an external dependency
-            true
-          }
+          !dependency.isProjectDependencyWithinSameLibrary()
         }
 
     if (forbiddenDependencies.isNotEmpty()) {
@@ -140,6 +148,9 @@ public abstract class ModuleStructureDependencyCheckTask : DefaultTask() {
       } else {
         substringAfter(':').substringBefore(':').moduleTypeFromArtifactId()
       }
+
+  private fun String.isProjectDependencyWithinSameLibrary(): Boolean =
+    startsWith(":") && substringBeforeLast(':') == modulePath.substringBeforeLast(':')
 
   public companion object {
     /** Registers the task in the given project. */
@@ -160,6 +171,9 @@ public abstract class ModuleStructureDependencyCheckTask : DefaultTask() {
             ModuleStructureDependencyCheckTask::class.java,
           ) { task ->
             task.modulePath = path
+            task.allowLibraryImplToImplDependencies.set(
+              appPlatform.moduleStructureOptions().isLibraryImplToImplDependenciesAllowed()
+            )
             task.moduleCompileClasspath =
               configuration()
                 .allDependencies
