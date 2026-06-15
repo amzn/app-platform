@@ -1,0 +1,89 @@
+<mxfile host="app.diagrams.net" modified="2026-06-15T00:00:00.000Z" agent="Codex" version="24.7.17" type="device">
+  <diagram id="runtime-sequence-readable" name="Runtime Sequence">
+    <mxGraphModel dx="1800" dy="1200" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1800" pageHeight="1200" background="#FFFFFF" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <mxCell id="title" value="&lt;b&gt;Amazon App Platform - Runtime Sequence&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size: 18px;&quot;&gt;Lesbarer Ablauf vom Plattformstart bis zur gerenderten UI&lt;/font&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;fontSize=34;fontColor=#102A43;" vertex="1" parent="1">
+          <mxGeometry x="70" y="30" width="1660" height="80" as="geometry" />
+        </mxCell>
+
+        <mxCell id="readNote" value="&lt;b&gt;Leserichtung&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size: 14px;&quot;&gt;Folge den grossen nummerierten Karten. Obere Reihe von links nach rechts, dann nach unten, danach untere Reihe von rechts nach links. Der gestrichelte Pfeil zeigt den Event-Rueckweg zur Presenter-Logik.&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F8FAFC;strokeColor=#CBD5E1;fontColor=#0F172A;fontSize=14;spacing=14;shadow=1;" vertex="1" parent="1">
+          <mxGeometry x="190" y="125" width="1420" height="75" as="geometry" />
+        </mxCell>
+
+        <mxCell id="step1" value="&lt;font style=&quot;font-size: 30px;&quot;&gt;&lt;b&gt;1&lt;/b&gt;&lt;/font&gt;&lt;br&gt;&lt;b&gt;Platform Entrypoint&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size: 15px;&quot;&gt;Android, iOS, Desktop oder Wasm startet die App ueber den jeweiligen Einstiegspunkt.&lt;/font&gt;&lt;br&gt;&lt;br&gt;&lt;font style=&quot;font-size: 13px;&quot;&gt;Beispiele: MainActivity, MainViewController, Desktop Main.kt, wasmJsMain&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#DBEAFE;strokeColor=#2563EB;strokeWidth=2;fontColor=#0F172A;fontSize=16;spacing=16;shadow=1;arcSize=8;" vertex="1" parent="1">
+          <mxGeometry x="80" y="250" width="330" height="220" as="geometry" />
+        </mxCell>
+        <mxCell id="step2" value="&lt;font style=&quot;font-size: 30px;&quot;&gt;&lt;b&gt;2&lt;/b&gt;&lt;/font&gt;&lt;br&gt;&lt;b&gt;Root Scope erzeugen&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size: 15px;&quot;&gt;Die App erstellt ihre zentrale Lebenszyklusgrenze.&lt;/font&gt;&lt;br&gt;&lt;br&gt;&lt;font style=&quot;font-size: 13px;&quot;&gt;Haelt Scope-Services, CoroutineScopes und den spaeter registrierten AppGraph.&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#D1FAE5;strokeColor=#059669;strokeWidth=2;fontColor=#0F172A;fontSize=16;spacing=16;shadow=1;arcSize=8;" vertex="1" parent="1">
+          <mxGeometry x="510" y="250" width="330" height="220" as="geometry" />
+        </mxCell>
+        <mxCell id="step3" value="&lt;font style=&quot;font-size: 30px;&quot;&gt;&lt;b&gt;3&lt;/b&gt;&lt;/font&gt;&lt;br&gt;&lt;b&gt;Platform AppGraph bauen&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size: 15px;&quot;&gt;Metro oder kotlin-inject setzt den DI-Graphen fuer diese Plattform zusammen.&lt;/font&gt;&lt;br&gt;&lt;br&gt;&lt;font style=&quot;font-size: 13px;&quot;&gt;Plattformwerte kommen ueber @Provides in den Graphen.&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#EDE9FE;strokeColor=#7C3AED;strokeWidth=2;fontColor=#0F172A;fontSize=16;spacing=16;shadow=1;arcSize=8;" vertex="1" parent="1">
+          <mxGeometry x="940" y="250" width="330" height="220" as="geometry" />
+        </mxCell>
+        <mxCell id="step4" value="&lt;font style=&quot;font-size: 30px;&quot;&gt;&lt;b&gt;4&lt;/b&gt;&lt;/font&gt;&lt;br&gt;&lt;b&gt;Root Presenter aufloesen&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size: 15px;&quot;&gt;Der DI-Graph liefert TemplateProvider, Presenter und weitere Root-Abhaengigkeiten.&lt;/font&gt;&lt;br&gt;&lt;br&gt;&lt;font style=&quot;font-size: 13px;&quot;&gt;Implementierungen kommen aus den :impl-Modulen der finalen App.&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FBCFE8;strokeColor=#DB2777;strokeWidth=2;fontColor=#0F172A;fontSize=16;spacing=16;shadow=1;arcSize=8;" vertex="1" parent="1">
+          <mxGeometry x="1370" y="250" width="330" height="220" as="geometry" />
+        </mxCell>
+
+        <mxCell id="step5" value="&lt;font style=&quot;font-size: 30px;&quot;&gt;&lt;b&gt;5&lt;/b&gt;&lt;/font&gt;&lt;br&gt;&lt;b&gt;Model berechnen&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size: 15px;&quot;&gt;MoleculePresenter.present(input) berechnet den aktuellen App-Zustand.&lt;/font&gt;&lt;br&gt;&lt;br&gt;&lt;font style=&quot;font-size: 13px;&quot;&gt;Das Ergebnis ist ein immutable Model oder ein Baum aus Child Models.&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FCE7F3;strokeColor=#BE185D;strokeWidth=2;fontColor=#0F172A;fontSize=16;spacing=16;shadow=1;arcSize=8;" vertex="1" parent="1">
+          <mxGeometry x="1370" y="610" width="330" height="220" as="geometry" />
+        </mxCell>
+        <mxCell id="step6" value="&lt;font style=&quot;font-size: 30px;&quot;&gt;&lt;b&gt;6&lt;/b&gt;&lt;/font&gt;&lt;br&gt;&lt;b&gt;Template verpackt Root Model&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size: 15px;&quot;&gt;Das app-spezifische Template legt die aeussere Struktur um den Model-Baum.&lt;/font&gt;&lt;br&gt;&lt;br&gt;&lt;font style=&quot;font-size: 13px;&quot;&gt;Es bildet die Shell fuer Navigation, Root Content und App-Struktur.&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FEF3C7;strokeColor=#D97706;strokeWidth=2;fontColor=#0F172A;fontSize=16;spacing=16;shadow=1;arcSize=8;" vertex="1" parent="1">
+          <mxGeometry x="940" y="610" width="330" height="220" as="geometry" />
+        </mxCell>
+        <mxCell id="step7" value="&lt;font style=&quot;font-size: 30px;&quot;&gt;&lt;b&gt;7&lt;/b&gt;&lt;/font&gt;&lt;br&gt;&lt;b&gt;Renderer auswaehlen&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size: 15px;&quot;&gt;Die RendererFactory sucht anhand des Model-Typs den passenden Renderer.&lt;/font&gt;&lt;br&gt;&lt;br&gt;&lt;font style=&quot;font-size: 13px;&quot;&gt;Renderer-Bindings werden ueber @ContributesRenderer generiert.&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#C7D2FE;strokeColor=#4F46E5;strokeWidth=2;fontColor=#0F172A;fontSize=16;spacing=16;shadow=1;arcSize=8;" vertex="1" parent="1">
+          <mxGeometry x="510" y="610" width="330" height="220" as="geometry" />
+        </mxCell>
+        <mxCell id="step8" value="&lt;font style=&quot;font-size: 30px;&quot;&gt;&lt;b&gt;8&lt;/b&gt;&lt;/font&gt;&lt;br&gt;&lt;b&gt;UI rendern und Events senden&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size: 15px;&quot;&gt;ComposeRenderer oder ViewRenderer zeigt das Model auf der Plattform an.&lt;/font&gt;&lt;br&gt;&lt;br&gt;&lt;font style=&quot;font-size: 13px;&quot;&gt;User-Aktionen rufen model.onEvent(event) auf.&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#BBF7D0;strokeColor=#16A34A;strokeWidth=2;fontColor=#0F172A;fontSize=16;spacing=16;shadow=1;arcSize=8;" vertex="1" parent="1">
+          <mxGeometry x="80" y="610" width="330" height="220" as="geometry" />
+        </mxCell>
+
+        <mxCell id="arrow12" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#2563EB;strokeWidth=4;endArrow=block;endFill=1;" edge="1" parent="1" source="step1" target="step2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="arrow23" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#7C3AED;strokeWidth=4;endArrow=block;endFill=1;" edge="1" parent="1" source="step2" target="step3">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="arrow34" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#DB2777;strokeWidth=4;endArrow=block;endFill=1;" edge="1" parent="1" source="step3" target="step4">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="arrow45" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#BE185D;strokeWidth=4;endArrow=block;endFill=1;" edge="1" parent="1" source="step4" target="step5">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1535" y="540" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="arrow56" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#D97706;strokeWidth=4;endArrow=block;endFill=1;" edge="1" parent="1" source="step5" target="step6">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="arrow67" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#4F46E5;strokeWidth=4;endArrow=block;endFill=1;" edge="1" parent="1" source="step6" target="step7">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="arrow78" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#16A34A;strokeWidth=4;endArrow=block;endFill=1;" edge="1" parent="1" source="step7" target="step8">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <mxCell id="eventLoop" value="Event loop: user action -&amp;gt; model.onEvent(event) -&amp;gt; Presenter updates state -&amp;gt; new Model" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;dashed=1;strokeColor=#BE185D;strokeWidth=4;endArrow=block;endFill=1;fontSize=16;fontStyle=1;fontColor=#831843;labelBackgroundColor=#FFFFFF;" edge="1" parent="1" source="step8" target="step5">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="245" y="910" />
+              <mxPoint x="1535" y="910" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+
+        <mxCell id="support1" value="&lt;b&gt;Build-time support&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size: 14px;&quot;&gt;Gradle Plugin, KSP, Metro Extensions und kotlin-inject Extensions erzeugen DI- und Renderer-Bindings vor der Laufzeit.&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F8FAFC;strokeColor=#CBD5E1;fontColor=#0F172A;fontSize=14;spacing=14;shadow=1;" vertex="1" parent="1">
+          <mxGeometry x="130" y="990" width="500" height="95" as="geometry" />
+        </mxCell>
+        <mxCell id="support2" value="&lt;b&gt;Runtime principle&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size: 14px;&quot;&gt;Der Plattformcode startet nur die App. Zustand entsteht in Presentern. Darstellung passiert in Renderern. Events gehen kontrolliert ueber Models zurueck.&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F8FAFC;strokeColor=#CBD5E1;fontColor=#0F172A;fontSize=14;spacing=14;shadow=1;" vertex="1" parent="1">
+          <mxGeometry x="650" y="990" width="500" height="95" as="geometry" />
+        </mxCell>
+        <mxCell id="support3" value="&lt;b&gt;Why this is useful&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size: 14px;&quot;&gt;Business-Logik bleibt plattformunabhaengig und testbar. Jede Plattform kann trotzdem ihren eigenen Renderer und eigene Startlogik haben.&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F8FAFC;strokeColor=#CBD5E1;fontColor=#0F172A;fontSize=14;spacing=14;shadow=1;" vertex="1" parent="1">
+          <mxGeometry x="1170" y="990" width="500" height="95" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

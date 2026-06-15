@@ -1,7 +1,7 @@
 # Amazon App Platform - Erklaerung des UML-Diagramms
 
 Dieses Dokument erklaert das Draw.io-Diagramm
-[`app-platform-system-architecture.drawio`](app-platform-system-architecture.drawio).
+[`app-platform-system-architecture.drawio`](../Diagrams/app-platform-system-architecture.drawio).
 Das Diagramm zeigt die Systemarchitektur der Amazon App Platform als
 UML-Komponentenuebersicht.
 

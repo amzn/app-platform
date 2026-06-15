@@ -1,7 +1,7 @@
 # Amazon App Platform - Begriffsglossar
 
 Dieses Glossar erklaert Begriffe, die im UML-Diagramm
-[`app-platform-system-architecture.drawio`](app-platform-system-architecture.drawio),
+[`app-platform-system-architecture.drawio`](../Diagrams/app-platform-system-architecture.drawio),
 in der Erklaerung
 [`app-platform-system-architecture-explanation.md`](app-platform-system-architecture-explanation.md)
 oder allgemein in diesem Repository vorkommen koennen.

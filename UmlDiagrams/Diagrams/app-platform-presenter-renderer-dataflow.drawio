@@ -1,0 +1,114 @@
+<mxfile host="app.diagrams.net" agent="Codex">
+  <diagram id="presenter-renderer-dataflow" name="Presenter Renderer Dataflow">
+    <mxGraphModel dx="1120" dy="1037" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1600" pageHeight="1080" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="title" parent="1" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;fontSize=28;fontColor=#102A43;" value="&lt;b&gt;Amazon App Platform - Presenter / Renderer Dataflow&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size: 16px;&quot;&gt;Unidirectional dataflow: State nach rechts, Events kontrolliert zurueck&lt;/font&gt;" vertex="1">
+          <mxGeometry height="70" width="1520" x="40" y="20" as="geometry" />
+        </mxCell>
+        <mxCell id="sharedLane" parent="1" style="swimlane;whiteSpace=wrap;html=1;rounded=1;startSize=42;fillColor=#F5F3FF;strokeColor=#A78BFA;fontColor=#4C1D95;fontStyle=1;fontSize=15;shadow=1;" value="Shared business logic" vertex="1">
+          <mxGeometry height="740" width="660" x="80" y="130" as="geometry" />
+        </mxCell>
+        <mxCell id="e_ui_event" edge="1" parent="sharedLane" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;dashed=1;strokeColor=#BE185D;strokeWidth=3;endArrow=block;endFill=1;fontSize=12;fontColor=#831843;" value="calls model.onEvent(event)">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="950.04" y="655" />
+              <mxPoint x="430.04" y="655" />
+            </Array>
+            <mxPoint x="950.0834782608697" y="225.0000000000001" as="sourcePoint" />
+            <mxPoint x="429.9965217391305" y="225.0000000000001" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="uiLane" parent="1" style="swimlane;whiteSpace=wrap;html=1;rounded=1;startSize=42;fillColor=#EFF6FF;strokeColor=#60A5FA;fontColor=#1E3A8A;fontStyle=1;fontSize=15;shadow=1;" value="Platform UI layer" vertex="1">
+          <mxGeometry height="740" width="660" x="860" y="130" as="geometry" />
+        </mxCell>
+        <mxCell id="presenterApi" parent="1" style="shape=component;whiteSpace=wrap;html=1;rounded=1;fillColor=#DBEAFE;strokeColor=#2563EB;fontColor=#0F172A;fontSize=13;spacing=10;shadow=1;" value="&lt;b&gt;Presenter API&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size: 12px;&quot;&gt;:feature:public&lt;br&gt;interface LoginPresenter&lt;br&gt;sealed Model / Event&lt;/font&gt;" vertex="1">
+          <mxGeometry height="120" width="210" x="135" y="235" as="geometry" />
+        </mxCell>
+        <mxCell id="presenterImpl" parent="1" style="shape=component;whiteSpace=wrap;html=1;rounded=1;fillColor=#FBCFE8;strokeColor=#DB2777;fontColor=#0F172A;fontSize=13;spacing=10;shadow=1;" value="&lt;b&gt;PresenterImpl&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size: 12px;&quot;&gt;:feature:impl&lt;br&gt;MoleculePresenter&lt;br&gt;business + navigation logic&lt;/font&gt;" vertex="1">
+          <mxGeometry height="120" width="220" x="450" y="235" as="geometry" />
+        </mxCell>
+        <mxCell id="stateFlow" parent="1" style="shape=component;whiteSpace=wrap;html=1;rounded=1;fillColor=#EDE9FE;strokeColor=#7C3AED;fontColor=#0F172A;fontSize=13;spacing=10;shadow=1;" value="&lt;b&gt;StateFlow&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size: 12px;&quot;&gt;observable stream&lt;br&gt;latest immutable Model&lt;/font&gt;" vertex="1">
+          <mxGeometry height="95" width="220" x="450" y="435" as="geometry" />
+        </mxCell>
+        <mxCell id="model" parent="1" style="shape=component;whiteSpace=wrap;html=1;rounded=1;fillColor=#FEF3C7;strokeColor=#D97706;fontColor=#0F172A;fontSize=13;spacing=10;shadow=1;" value="&lt;b&gt;Model&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size: 12px;&quot;&gt;immutable UI state&lt;br&gt;child models&lt;br&gt;onEvent lambda&lt;/font&gt;" vertex="1">
+          <mxGeometry height="115" width="220" x="690" y="585" as="geometry" />
+        </mxCell>
+        <mxCell id="factory" parent="1" style="shape=component;whiteSpace=wrap;html=1;rounded=1;fillColor=#C7D2FE;strokeColor=#4F46E5;fontColor=#0F172A;fontSize=13;spacing=10;shadow=1;" value="&lt;b&gt;RendererFactory&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size: 12px;&quot;&gt;looks up renderer&lt;br&gt;by Model type&lt;/font&gt;" vertex="1">
+          <mxGeometry height="95" width="220" x="1000" y="435" as="geometry" />
+        </mxCell>
+        <mxCell id="renderer" parent="1" style="shape=component;whiteSpace=wrap;html=1;rounded=1;fillColor=#BFDBFE;strokeColor=#2563EB;fontColor=#0F172A;fontSize=13;spacing=10;shadow=1;" value="&lt;b&gt;Renderer&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size: 12px;&quot;&gt;ComposeRenderer&lt;br&gt;ViewRenderer&lt;br&gt;renders Model&lt;/font&gt;" vertex="1">
+          <mxGeometry height="120" width="220" x="1000" y="235" as="geometry" />
+        </mxCell>
+        <mxCell id="ui" parent="1" style="shape=component;whiteSpace=wrap;html=1;rounded=1;fillColor=#BBF7D0;strokeColor=#16A34A;fontColor=#0F172A;fontSize=13;spacing=10;shadow=1;" value="&lt;b&gt;Visible UI&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size: 12px;&quot;&gt;screen content&lt;br&gt;buttons, text fields&lt;br&gt;platform look and feel&lt;/font&gt;" vertex="1">
+          <mxGeometry height="120" width="210" x="1270" y="235" as="geometry" />
+        </mxCell>
+        <mxCell id="user" parent="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#DCFCE7;strokeColor=#16A34A;fontColor=#0F172A;fontSize=13;spacing=10;shadow=1;" value="&lt;b&gt;User action&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size: 12px;&quot;&gt;click&lt;br&gt;text input&lt;br&gt;gesture&lt;/font&gt;" vertex="1">
+          <mxGeometry height="105" width="160" x="1300" y="575" as="geometry" />
+        </mxCell>
+        <mxCell id="modelExample" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFBEB;strokeColor=#F59E0B;fontColor=#0F172A;fontSize=12;spacing=10;" value="&lt;b&gt;Model example&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size: 12px;&quot;&gt;data class LoggedIn(&lt;br&gt;&amp;nbsp;&amp;nbsp;user: User,&lt;br&gt;&amp;nbsp;&amp;nbsp;onEvent: (Event) -&amp;gt; Unit&lt;br&gt;)&lt;/font&gt;" vertex="1">
+          <mxGeometry height="120" width="250" x="150" y="600" as="geometry" />
+        </mxCell>
+        <mxCell id="eventExample" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FDF2F8;strokeColor=#F472B6;fontColor=#0F172A;fontSize=12;spacing=10;" value="&lt;b&gt;Event example&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size: 12px;&quot;&gt;Logout&lt;br&gt;ChangeName(newName)&lt;br&gt;OpenDetails(userId)&lt;/font&gt;" vertex="1">
+          <mxGeometry height="95" width="250" x="150" y="735" as="geometry" />
+        </mxCell>
+        <mxCell id="e_api_impl" edge="1" parent="1" source="presenterImpl" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#2563EB;strokeWidth=2;endArrow=open;endFill=0;fontSize=12;fontColor=#1E3A8A;" target="presenterApi" value="implemented by">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_impl_flow" edge="1" parent="1" source="presenterImpl" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#DB2777;strokeWidth=2;endArrow=block;endFill=1;fontSize=12;fontColor=#831843;" target="stateFlow" value="produces">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="540" y="400" />
+              <mxPoint x="540" y="400" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e_flow_model" edge="1" parent="1" source="stateFlow" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#7C3AED;strokeWidth=2;endArrow=block;endFill=1;fontSize=12;fontColor=#4C1D95;" target="model" value="emits latest state">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="560" y="640" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e_model_factory" edge="1" parent="1" source="model" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#4F46E5;strokeWidth=2;endArrow=block;endFill=1;fontSize=12;fontColor=#3730A3;" target="factory" value="Model type">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1110" y="642" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e_factory_renderer" edge="1" parent="1" source="factory" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#2563EB;strokeWidth=2;endArrow=block;endFill=1;fontSize=12;fontColor=#1D4ED8;" target="renderer" value="selects / caches">
+          <mxGeometry relative="1" x="0.125" y="-40" as="geometry">
+            <mxPoint as="offset" />
+            <Array as="points">
+              <mxPoint x="1130" y="400" />
+              <mxPoint x="1130" y="400" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e_renderer_ui" edge="1" parent="1" source="renderer" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#16A34A;strokeWidth=2;endArrow=block;endFill=1;fontSize=12;fontColor=#166534;" target="ui" value="renders&lt;div&gt;view&lt;/div&gt;">
+          <mxGeometry relative="1" x="0.2" y="-25" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e_user_ui" edge="1" parent="1" source="user" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#16A34A;strokeWidth=2;endArrow=block;endFill=1;fontSize=12;fontColor=#166534;" target="ui" value="interacts with">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_event_new_model" edge="1" parent="1" source="presenterImpl" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;dashed=1;strokeColor=#DB2777;strokeWidth=2;endArrow=block;endFill=1;fontSize=12;fontColor=#831843;" target="stateFlow" value="event changes state,&amp;nbsp;&lt;div&gt;new Model emitted&lt;/div&gt;">
+          <mxGeometry relative="1" x="-0.0942" y="5" as="geometry">
+            <mxPoint as="offset" />
+            <Array as="points">
+              <mxPoint x="580" y="395" />
+              <mxPoint x="705" y="395" />
+              <mxPoint x="705" y="482" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="principle" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F8FAFC;strokeColor=#CBD5E1;fontColor=#0F172A;fontSize=12;spacing=12;shadow=1;" value="&lt;b&gt;Prinzip&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size: 12px;&quot;&gt;Business-Logik erzeugt Models. UI rendert Models. UI sendet Events nicht frei durch das System, sondern ueber die Event-Lambda zurueck zum Presenter.&lt;/font&gt;" vertex="1">
+          <mxGeometry height="80" width="1440" x="80" y="910" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

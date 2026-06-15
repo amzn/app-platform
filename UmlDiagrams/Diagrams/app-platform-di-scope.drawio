@@ -1,0 +1,158 @@
+<mxfile host="app.diagrams.net" agent="Codex">
+  <diagram id="di-scope" name="DI and Scope">
+    <mxGraphModel dx="766" dy="709" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1600" pageHeight="1080" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="title" parent="1" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;fontSize=28;fontColor=#102A43;" value="&lt;b&gt;Amazon App Platform - DI / Scope Architecture&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size: 16px;&quot;&gt;Wie RootScope, AppGraph, Plattformobjekte und generierte Bindings zusammenspielen&lt;/font&gt;" vertex="1">
+          <mxGeometry height="70" width="1520" x="40" y="20" as="geometry" />
+        </mxCell>
+        <mxCell id="platformLane" parent="1" style="swimlane;whiteSpace=wrap;html=1;rounded=1;startSize=42;fillColor=#EFF6FF;strokeColor=#60A5FA;fontColor=#1E3A8A;fontStyle=1;fontSize=15;shadow=1;" value="Platform source set" vertex="1">
+          <mxGeometry height="760" width="350" x="70" y="130" as="geometry" />
+        </mxCell>
+        <mxCell id="e_android_factory" edge="1" parent="platformLane" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#2563EB;strokeWidth=2;endArrow=block;endFill=1;fontSize=12;fontColor=#1E3A8A;" value="@Provides">
+          <mxGeometry relative="1" x="-0.9143" as="geometry">
+            <mxPoint as="offset" />
+            <Array as="points">
+              <mxPoint x="219.95999999999998" y="210" />
+              <mxPoint x="219.95999999999998" y="210" />
+            </Array>
+            <mxPoint x="219.99703703703705" y="195" as="sourcePoint" />
+            <mxPoint x="219.99703703703705" y="545" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="scopeLane" parent="1" style="swimlane;whiteSpace=wrap;html=1;rounded=1;startSize=42;fillColor=#ECFDF5;strokeColor=#34D399;fontColor=#064E3B;fontStyle=1;fontSize=15;shadow=1;" value="Runtime scope boundary" vertex="1">
+          <mxGeometry height="760" width="360" x="460" y="130" as="geometry" />
+        </mxCell>
+        <mxCell id="graphLane" parent="1" style="swimlane;whiteSpace=wrap;html=1;rounded=1;startSize=42;fillColor=#F5F3FF;strokeColor=#A78BFA;fontColor=#4C1D95;fontStyle=1;fontSize=15;shadow=1;" value="Dependency graph" vertex="1">
+          <mxGeometry height="760" width="660" x="860" y="130" as="geometry" />
+        </mxCell>
+        <mxCell id="androidObj" parent="1" style="shape=component;whiteSpace=wrap;html=1;rounded=1;fillColor=#DBEAFE;strokeColor=#2563EB;fontColor=#0F172A;fontSize=13;spacing=10;shadow=1;" value="&lt;b&gt;Android platform values&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size: 12px;&quot;&gt;Application&lt;br&gt;Activity&lt;br&gt;Android services&lt;/font&gt;" vertex="1">
+          <mxGeometry height="110" width="250" x="110" y="215" as="geometry" />
+        </mxCell>
+        <mxCell id="iosObj" parent="1" style="shape=component;whiteSpace=wrap;html=1;rounded=1;fillColor=#DBEAFE;strokeColor=#2563EB;fontColor=#0F172A;fontSize=13;spacing=10;shadow=1;" value="&lt;b&gt;iOS platform values&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size: 12px;&quot;&gt;UIApplication&lt;br&gt;UIViewController&lt;br&gt;iOS services&lt;/font&gt;" vertex="1">
+          <mxGeometry height="110" width="250" x="110" y="360" as="geometry" />
+        </mxCell>
+        <mxCell id="desktopObj" parent="1" style="shape=component;whiteSpace=wrap;html=1;rounded=1;fillColor=#DBEAFE;strokeColor=#2563EB;fontColor=#0F172A;fontSize=13;spacing=10;shadow=1;" value="&lt;b&gt;Desktop / Wasm values&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size: 12px;&quot;&gt;window/browser context&lt;br&gt;platform services&lt;br&gt;RootScopeProvider&lt;/font&gt;" vertex="1">
+          <mxGeometry height="110" width="250" x="110" y="505" as="geometry" />
+        </mxCell>
+        <mxCell id="graphFactory" parent="1" style="shape=component;whiteSpace=wrap;html=1;rounded=1;fillColor=#C7D2FE;strokeColor=#4F46E5;fontColor=#0F172A;fontSize=13;spacing=10;shadow=1;" value="&lt;b&gt;AppGraph.Factory&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size: 12px;&quot;&gt;created in platform source set&lt;br&gt;receives @Provides values&lt;/font&gt;" vertex="1">
+          <mxGeometry height="110" width="250" x="110" y="675" as="geometry" />
+        </mxCell>
+        <mxCell id="rootScope" parent="1" style="shape=component;whiteSpace=wrap;html=1;rounded=1;fillColor=#BBF7D0;strokeColor=#16A34A;fontColor=#0F172A;fontSize=13;spacing=10;shadow=1;" value="&lt;b&gt;RootScope&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size: 12px;&quot;&gt;app lifecycle boundary&lt;br&gt;created on startup&lt;br&gt;destroyed with app&lt;/font&gt;" vertex="1">
+          <mxGeometry height="125" width="240" x="520" y="230" as="geometry" />
+        </mxCell>
+        <mxCell id="scopeServices" parent="1" style="shape=component;whiteSpace=wrap;html=1;rounded=1;fillColor=#D1FAE5;strokeColor=#059669;fontColor=#0F172A;fontSize=13;spacing=10;shadow=1;" value="&lt;b&gt;Scope services&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size: 12px;&quot;&gt;AppGraph service&lt;br&gt;CoroutineScope&lt;br&gt;lifecycle callbacks&lt;/font&gt;" vertex="1">
+          <mxGeometry height="125" width="240" x="520" y="430" as="geometry" />
+        </mxCell>
+        <mxCell id="consumerLookup" parent="1" style="shape=component;whiteSpace=wrap;html=1;rounded=1;fillColor=#D1FAE5;strokeColor=#059669;fontColor=#0F172A;fontSize=13;spacing=10;shadow=1;" value="&lt;b&gt;Graph lookup&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size: 12px;&quot;&gt;scope.metroDependencyGraph&lt;br&gt;or equivalent DI access&lt;/font&gt;" vertex="1">
+          <mxGeometry height="110" width="240" x="520" y="630" as="geometry" />
+        </mxCell>
+        <mxCell id="appGraph" parent="1" style="shape=component;whiteSpace=wrap;html=1;rounded=1;fillColor=#EDE9FE;strokeColor=#7C3AED;fontColor=#0F172A;fontSize=13;spacing=10;shadow=1;" value="&lt;b&gt;Platform AppGraph&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size: 12px;&quot;&gt;@DependencyGraph(AppScope)&lt;br&gt;knows app-wide dependencies&lt;/font&gt;" vertex="1">
+          <mxGeometry height="115" width="250" x="920" y="210" as="geometry" />
+        </mxCell>
+        <mxCell id="bindings" parent="1" style="shape=component;whiteSpace=wrap;html=1;rounded=1;fillColor=#F3E8FF;strokeColor=#9333EA;fontColor=#0F172A;fontSize=13;spacing=10;shadow=1;" value="&lt;b&gt;Generated bindings&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size: 12px;&quot;&gt;@ContributesBinding&lt;br&gt;@ContributesTo&lt;br&gt;@ContributesRenderer&lt;/font&gt;" vertex="1">
+          <mxGeometry height="115" width="250" x="1215" y="210" as="geometry" />
+        </mxCell>
+        <mxCell id="publicApis" parent="1" style="shape=component;whiteSpace=wrap;html=1;rounded=1;fillColor=#DBEAFE;strokeColor=#2563EB;fontColor=#0F172A;fontSize=13;spacing=10;shadow=1;" value="&lt;b&gt;Public APIs&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size: 12px;&quot;&gt;Presenter interfaces&lt;br&gt;Repository interfaces&lt;br&gt;Model contracts&lt;/font&gt;" vertex="1">
+          <mxGeometry height="115" width="250" x="920" y="405" as="geometry" />
+        </mxCell>
+        <mxCell id="impls" parent="1" style="shape=component;whiteSpace=wrap;html=1;rounded=1;fillColor=#FDBA74;strokeColor=#C2410C;fontColor=#0F172A;fontSize=13;spacing=10;shadow=1;" value="&lt;b&gt;Implementations&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size: 12px;&quot;&gt;PresenterImpl&lt;br&gt;Renderer&lt;br&gt;Platform providers&lt;/font&gt;" vertex="1">
+          <mxGeometry height="115" width="250" x="1215" y="405" as="geometry" />
+        </mxCell>
+        <mxCell id="consumers" parent="1" style="shape=component;whiteSpace=wrap;html=1;rounded=1;fillColor=#FBCFE8;strokeColor=#DB2777;fontColor=#0F172A;fontSize=13;spacing=10;shadow=1;" value="&lt;b&gt;Consumers&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size: 12px;&quot;&gt;TemplateProvider&lt;br&gt;Presenter tree&lt;br&gt;RendererFactory&lt;br&gt;ViewModel fallback access&lt;/font&gt;" vertex="1">
+          <mxGeometry height="130" width="260" x="1065" y="650" as="geometry" />
+        </mxCell>
+        <mxCell id="e_ios_factory" edge="1" parent="1" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#2563EB;strokeWidth=2;endArrow=block;endFill=1;fontSize=12;fontColor=#1E3A8A;" value="@Provides">
+          <mxGeometry relative="1" x="-0.8049" y="-10" as="geometry">
+            <mxPoint as="offset" />
+            <Array as="points">
+              <mxPoint x="180" y="650" />
+            </Array>
+            <mxPoint x="180" y="470" as="sourcePoint" />
+            <mxPoint x="180" y="675" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e_desktop_factory" edge="1" parent="1" source="desktopObj" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#2563EB;strokeWidth=2;endArrow=block;endFill=1;fontSize=12;fontColor=#1E3A8A;" target="graphFactory" value="@Provides">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_factory_graph" edge="1" parent="1" source="graphFactory" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#4F46E5;strokeWidth=2;endArrow=block;endFill=1;fontSize=12;fontColor=#3730A3;entryX=0;entryY=0.7;entryDx=0;entryDy=0;" target="appGraph" value="creates">
+          <mxGeometry relative="1" x="-0.9417" as="geometry">
+            <mxPoint x="-1" as="offset" />
+            <Array as="points">
+              <mxPoint x="490" y="760" />
+              <mxPoint x="490" y="380" />
+              <mxPoint x="890" y="380" />
+              <mxPoint x="890" y="290" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e_graph_scope" edge="1" parent="1" source="appGraph" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#059669;strokeWidth=2;endArrow=block;endFill=1;fontSize=12;fontColor=#065F46;" target="scopeServices" value="registered as service">
+          <mxGeometry relative="1" x="-0.6384" y="-8" as="geometry">
+            <mxPoint as="offset" />
+            <Array as="points">
+              <mxPoint x="800" y="268" />
+              <mxPoint x="800" y="492" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e_scope_services" edge="1" parent="1" source="rootScope" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#16A34A;strokeWidth=2;endArrow=block;endFill=1;fontSize=12;fontColor=#166534;" target="scopeServices" value="owns">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="670" y="410" />
+              <mxPoint x="670" y="410" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e_lookup_services" edge="1" parent="1" source="consumerLookup" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#059669;strokeWidth=2;endArrow=block;endFill=1;fontSize=12;fontColor=#065F46;" target="scopeServices" value="reads graph service">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="680" y="580" />
+              <mxPoint x="680" y="580" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e_bindings_graph" edge="1" parent="1" source="bindings" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#7C3AED;strokeWidth=2;endArrow=block;endFill=1;fontSize=12;fontColor=#4C1D95;" target="appGraph" value="assembled&amp;nbsp;&lt;div&gt;into graph&lt;/div&gt;">
+          <mxGeometry relative="1" x="0.1111" y="23" as="geometry">
+            <mxPoint y="-1" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e_impls_bindings" edge="1" parent="1" source="impls" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#C2410C;strokeWidth=2;endArrow=block;endFill=1;fontSize=12;fontColor=#7C2D12;" target="bindings" value="generate bindings">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_impls_public" edge="1" parent="1" source="impls" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#C2410C;strokeWidth=2;endArrow=open;endFill=0;fontSize=12;fontColor=#7C2D12;" target="publicApis" value="implement">
+          <mxGeometry relative="1" x="-0.3333" y="18" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e_graph_public" edge="1" parent="1" source="appGraph" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#7C3AED;strokeWidth=2;endArrow=block;endFill=1;fontSize=12;fontColor=#4C1D95;" target="publicApis" value="provides API types">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_lookup_consumers" edge="1" parent="1" source="consumerLookup" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#DB2777;strokeWidth=2;endArrow=block;endFill=1;fontSize=12;fontColor=#831843;" target="consumers" value="resolves">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="900" y="685" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e_graph_consumers" edge="1" parent="1" source="appGraph" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#DB2777;strokeWidth=2;endArrow=block;endFill=1;fontSize=12;fontColor=#831843;" target="consumers" value="constructor injection">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1045" y="590" />
+              <mxPoint x="1195" y="590" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="note" parent="1" style="shape=note;whiteSpace=wrap;html=1;size=16;fillColor=#FEF9C3;strokeColor=#CA8A04;fontColor=#0F172A;fontSize=12;spacing=10;" value="&lt;b&gt;Warum pro Plattform?&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size: 12px;&quot;&gt;Der finale Graph lebt in plattformspezifischen Source Sets. Dadurch koennen Android, iOS, Desktop und Wasm eigene Werte bereitstellen, waehrend gemeinsamer Code nur APIs injiziert bekommt.&lt;/font&gt;" vertex="1">
+          <mxGeometry height="90" width="470" x="80" y="925" as="geometry" />
+        </mxCell>
+        <mxCell id="note2" parent="1" style="shape=note;whiteSpace=wrap;html=1;size=16;fillColor=#F3E8FF;strokeColor=#9333EA;fontColor=#0F172A;fontSize=12;spacing=10;" value="&lt;b&gt;DI-Fokus&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size: 12px;&quot;&gt;Metro ist der empfohlene Standard. kotlin-inject bleibt als Alternative verfuegbar. Beide pruefen den Objektgraphen zur Build-Zeit.&lt;/font&gt;" vertex="1">
+          <mxGeometry height="90" width="430" x="580" y="925" as="geometry" />
+        </mxCell>
+        <mxCell id="note3" parent="1" style="shape=note;whiteSpace=wrap;html=1;size=16;fillColor=#DCFCE7;strokeColor=#16A34A;fontColor=#0F172A;fontSize=12;spacing=10;" value="&lt;b&gt;Scope-Fokus&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size: 12px;&quot;&gt;Der Scope ist mehr als ein DI-Container: Er ist die Lebenszyklusgrenze, an der Services, Graphen und Coroutines haengen.&lt;/font&gt;" vertex="1">
+          <mxGeometry height="90" width="480" x="1040" y="925" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

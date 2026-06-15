@@ -1,0 +1,153 @@
+<mxfile host="app.diagrams.net" agent="Codex">
+  <diagram id="feature-module-template" name="Feature Module Template">
+    <mxGraphModel dx="910" dy="843" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1600" pageHeight="1080" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="title" parent="1" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;fontSize=28;fontColor=#102A43;" value="&lt;b&gt;Amazon App Platform - Feature Module Template&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size: 16px;&quot;&gt;Bauplan fuer ein typisches Feature mit Public API, Impl, Testing und Robots&lt;/font&gt;" vertex="1">
+          <mxGeometry height="70" width="1520" x="40" y="20" as="geometry" />
+        </mxCell>
+        <mxCell id="featureBoundary" parent="1" style="swimlane;whiteSpace=wrap;html=1;rounded=1;startSize=44;fillColor=#FFF7ED;strokeColor=#FB923C;fontColor=#7C2D12;fontStyle=1;fontSize=16;shadow=1;" value="Feature package example: :sample:user" vertex="1">
+          <mxGeometry height="830" width="1020" x="70" y="125" as="geometry" />
+        </mxCell>
+        <mxCell id="robotsContents" parent="featureBoundary" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F0F9FF;strokeColor=#7DD3FC;fontColor=#0F172A;fontSize=12;spacing=10;" value="&lt;b&gt;Contains&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size: 12px;&quot;&gt;UserPageRobot&lt;br&gt;click helpers&lt;br&gt;screen assertions&lt;br&gt;shared UI test vocabulary&lt;/font&gt;" vertex="1">
+          <mxGeometry height="120" width="230" x="420" y="655" as="geometry" />
+        </mxCell>
+        <mxCell id="testingContents" parent="featureBoundary" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F0F9FF;strokeColor=#7DD3FC;fontColor=#0F172A;fontSize=12;spacing=10;" value="&lt;b&gt;Contains&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size: 12px;&quot;&gt;FakeUserRepository&lt;br&gt;Fake presenters/providers&lt;br&gt;Fixture data&lt;br&gt;Scope test helpers&lt;/font&gt;" vertex="1">
+          <mxGeometry height="120" width="230" x="70" y="605" as="geometry" />
+        </mxCell>
+        <mxCell id="implContents" parent="featureBoundary" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF7ED;strokeColor=#FDBA74;fontColor=#0F172A;fontSize=12;spacing=10;" value="&lt;b&gt;Contains&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size: 12px;&quot;&gt;UserPagePresenterImpl&lt;br&gt;UserPageListRenderer&lt;br&gt;UserPageDetailRenderer&lt;br&gt;@ContributesBinding / @ContributesRenderer&lt;/font&gt;" vertex="1">
+          <mxGeometry height="130" width="230" x="420" y="245" as="geometry" />
+        </mxCell>
+        <mxCell id="appBoundary" parent="1" style="swimlane;whiteSpace=wrap;html=1;rounded=1;startSize=44;fillColor=#ECFDF5;strokeColor=#34D399;fontColor=#064E3B;fontStyle=1;fontSize=16;shadow=1;" value="Final app assembly" vertex="1">
+          <mxGeometry height="830" width="390" x="1130" y="125" as="geometry" />
+        </mxCell>
+        <mxCell id="publicModule" parent="1" style="shape=folder;whiteSpace=wrap;html=1;tabWidth=90;tabHeight=28;tabPosition=left;fillColor=#DBEAFE;strokeColor=#2563EB;fontColor=#0F172A;fontSize=14;spacing=10;shadow=1;" value="&lt;b&gt;:sample:user:public&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size: 12px;&quot;&gt;Stable feature API&lt;/font&gt;" vertex="1">
+          <mxGeometry height="120" width="270" x="120" y="215" as="geometry" />
+        </mxCell>
+        <mxCell id="publicContents" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#EFF6FF;strokeColor=#93C5FD;fontColor=#0F172A;fontSize=12;spacing=10;" value="&lt;b&gt;Contains&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size: 12px;&quot;&gt;UserPagePresenter interface&lt;br&gt;UserPagePresenter.Model&lt;br&gt;User domain contracts&lt;br&gt;No concrete UI / storage details&lt;/font&gt;" vertex="1">
+          <mxGeometry height="120" width="230" x="140" y="345" as="geometry" />
+        </mxCell>
+        <mxCell id="implModule" parent="1" style="shape=folder;whiteSpace=wrap;html=1;tabWidth=90;tabHeight=28;tabPosition=left;fillColor=#FDBA74;strokeColor=#C2410C;fontColor=#0F172A;fontSize=14;spacing=10;shadow=1;" value="&lt;b&gt;:sample:user:impl&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size: 12px;&quot;&gt;Production implementation&lt;/font&gt;" vertex="1">
+          <mxGeometry height="120" width="270" x="470" y="215" as="geometry" />
+        </mxCell>
+        <mxCell id="testingModule" parent="1" style="shape=folder;whiteSpace=wrap;html=1;tabWidth=90;tabHeight=28;tabPosition=left;fillColor=#E0F2FE;strokeColor=#0284C7;fontColor=#0F172A;fontSize=14;spacing=10;shadow=1;" value="&lt;b&gt;:sample:user:testing&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size: 12px;&quot;&gt;Reusable test support&lt;/font&gt;" vertex="1">
+          <mxGeometry height="120" width="270" x="120" y="565" as="geometry" />
+        </mxCell>
+        <mxCell id="robotsModule" parent="1" style="shape=folder;whiteSpace=wrap;html=1;tabWidth=90;tabHeight=28;tabPosition=left;fillColor=#E0F2FE;strokeColor=#0284C7;fontColor=#0F172A;fontSize=14;spacing=10;shadow=1;" value="&lt;b&gt;:sample:user:impl-robots&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size: 12px;&quot;&gt;UI test robot module&lt;/font&gt;" vertex="1">
+          <mxGeometry height="120" width="270" x="470" y="565" as="geometry" />
+        </mxCell>
+        <mxCell id="optionalModule" parent="1" style="shape=folder;whiteSpace=wrap;html=1;tabWidth=90;tabHeight=28;tabPosition=left;fillColor=#FEF3C7;strokeColor=#D97706;fontColor=#0F172A;fontSize=14;spacing=10;shadow=1;" value="&lt;b&gt;Optional: nested feature modules&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size: 12px;&quot;&gt;:list:public / :list:impl&lt;br&gt;:detail:public / :detail:impl&lt;/font&gt;" vertex="1">
+          <mxGeometry height="120" width="250" x="790" y="390" as="geometry" />
+        </mxCell>
+        <mxCell id="optionalContents" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFBEB;strokeColor=#F59E0B;fontColor=#0F172A;fontSize=12;spacing=10;" value="&lt;b&gt;Use when&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size: 12px;&quot;&gt;feature grows large&lt;br&gt;sub-presenters are reusable&lt;br&gt;UI sections need separate tests&lt;/font&gt;" vertex="1">
+          <mxGeometry height="110" width="210" x="810" y="525" as="geometry" />
+        </mxCell>
+        <mxCell id="appModule" parent="1" style="shape=component;whiteSpace=wrap;html=1;rounded=1;fillColor=#BBF7D0;strokeColor=#16A34A;fontColor=#0F172A;fontSize=14;spacing=10;shadow=1;" value="&lt;b&gt;:sample:app&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size: 12px;&quot;&gt;Final application&lt;br&gt;Android / iOS / Desktop / Wasm entrypoints&lt;/font&gt;" vertex="1">
+          <mxGeometry height="125" width="260" x="1195" y="250" as="geometry" />
+        </mxCell>
+        <mxCell id="appGraph" parent="1" style="shape=component;whiteSpace=wrap;html=1;rounded=1;fillColor=#A7F3D0;strokeColor=#059669;fontColor=#0F172A;fontSize=14;spacing=10;shadow=1;" value="&lt;b&gt;Platform AppGraph&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size: 12px;&quot;&gt;imports feature impls&lt;br&gt;assembles object graph&lt;br&gt;provides root dependencies&lt;/font&gt;" vertex="1">
+          <mxGeometry height="125" width="260" x="1195" y="455" as="geometry" />
+        </mxCell>
+        <mxCell id="appTests" parent="1" style="shape=component;whiteSpace=wrap;html=1;rounded=1;fillColor=#DCFCE7;strokeColor=#16A34A;fontColor=#0F172A;fontSize=14;spacing=10;shadow=1;" value="&lt;b&gt;App tests&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size: 12px;&quot;&gt;desktopTest&lt;br&gt;androidInstrumentedTest&lt;br&gt;shared unit tests&lt;/font&gt;" vertex="1">
+          <mxGeometry height="125" width="260" x="1195" y="665" as="geometry" />
+        </mxCell>
+        <mxCell id="e_impl_public" edge="1" parent="1" source="implModule" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#C2410C;strokeWidth=2;endArrow=open;endFill=0;fontSize=12;fontColor=#7C2D12;" target="publicModule" value="implements&amp;nbsp;&lt;div&gt;API&lt;/div&gt;">
+          <mxGeometry relative="1" y="-25" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e_testing_public" edge="1" parent="1" source="testingModule" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#0284C7;strokeWidth=2;endArrow=open;endFill=0;fontSize=12;fontColor=#075985;" target="publicModule" value="fakes API">
+          <mxGeometry relative="1" x="-0.5217" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e_robot_impl" edge="1" parent="1" source="robotsModule" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#0284C7;strokeWidth=2;endArrow=block;endFill=1;fontSize=12;fontColor=#075985;" target="implModule" value="tests rendered behavior">
+          <mxGeometry relative="1" x="-0.8696" as="geometry">
+            <mxPoint as="offset" />
+            <Array as="points">
+              <mxPoint x="520" y="550" />
+              <mxPoint x="520" y="550" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e_optional_public" edge="1" parent="1" source="optionalModule" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;dashed=1;strokeColor=#D97706;strokeWidth=2;endArrow=block;endFill=1;fontSize=12;fontColor=#92400E;exitX=0;exitY=0;exitDx=170;exitDy=28;exitPerimeter=0;entryX=0;entryY=0;entryDx=180;entryDy=28;entryPerimeter=0;" target="publicModule" value="composes smaller APIs">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="960" y="200" />
+              <mxPoint x="300" y="200" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e_app_public" edge="1" parent="1" source="appModule" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#16A34A;strokeWidth=2;endArrow=block;endFill=1;fontSize=12;fontColor=#166534;exitX=0;exitY=0.3;exitDx=0;exitDy=0;" target="publicModule" value="uses public contracts">
+          <mxGeometry relative="1" x="-0.0683" y="-13" as="geometry">
+            <mxPoint as="offset" />
+            <Array as="points">
+              <mxPoint x="1195" y="312" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e_app_graph" edge="1" parent="1" source="appModule" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#059669;strokeWidth=2;endArrow=block;endFill=1;fontSize=12;fontColor=#065F46;" target="appGraph" value="creates graph">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_graph_impl" edge="1" parent="1" source="appGraph" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#059669;strokeWidth=2;endArrow=block;endFill=1;fontSize=12;fontColor=#065F46;exitX=0;exitY=0.3;exitDx=0;exitDy=0;" target="implModule" value="DI discovers contributions">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1195" y="520" />
+              <mxPoint x="480" y="520" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e_tests_robots" edge="1" parent="1" source="appTests" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#16A34A;strokeWidth=2;endArrow=block;endFill=1;fontSize=12;fontColor=#166534;" target="robotsModule" value="use robots">
+          <mxGeometry relative="1" x="-0.4737" as="geometry">
+            <mxPoint as="offset" />
+            <Array as="points">
+              <mxPoint x="1140" y="760" />
+              <mxPoint x="605" y="760" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="checklist" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F8FAFC;strokeColor=#CBD5E1;fontColor=#0F172A;fontSize=12;spacing=12;shadow=1;" value="&lt;b&gt;Feature checklist&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size: 12px;&quot;&gt;1. Put interfaces and Models in :public&lt;br&gt;2. Put production code in :impl&lt;br&gt;3. Add fakes to :testing when reused&lt;br&gt;4. Add UI robots when tests repeat user actions&lt;br&gt;5. Let :app assemble concrete impl modules&lt;/font&gt;" vertex="1">
+          <mxGeometry height="75" width="690" x="90" y="985" as="geometry" />
+        </mxCell>
+        <mxCell id="antiPattern" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FEF2F2;strokeColor=#F87171;fontColor=#7F1D1D;fontSize=12;spacing=12;shadow=1;" value="&lt;b&gt;Avoid&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size: 12px;&quot;&gt;Do not let another reusable feature depend directly on this feature&#39;s :impl module. That creates hidden coupling and leaks implementation details.&lt;/font&gt;" vertex="1">
+          <mxGeometry height="75" width="670" x="830" y="985" as="geometry" />
+        </mxCell>
+        <mxCell id="e_tests_testing" edge="1" parent="1" source="appTests" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#16A34A;strokeWidth=2;endArrow=block;endFill=1;fontSize=12;fontColor=#166534;exitX=0.043;exitY=0.489;exitDx=0;exitDy=0;exitPerimeter=0;entryX=0.94;entryY=1.035;entryDx=0;entryDy=0;entryPerimeter=0;" target="testingModule" value="use fakes">
+          <mxGeometry relative="1" x="-0.759" y="-6" as="geometry">
+            <mxPoint x="1" as="offset" />
+            <Array as="points">
+              <mxPoint x="505" y="726" />
+              <mxPoint x="374" y="727" />
+            </Array>
+            <mxPoint x="560.0799999999999" y="727.4782608695652" as="sourcePoint" />
+            <mxPoint x="-379.9199999999999" y="685" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="IofM1nMA8nbYvFc8HTba-2" edge="1" parent="1" source="testingContents" style="endArrow=none;dashed=1;html=1;dashPattern=1 3;strokeWidth=2;rounded=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;entryPerimeter=0;exitX=0.5;exitY=0;exitDx=0;exitDy=0;" target="testingModule" value="">
+          <mxGeometry height="50" relative="1" width="50" as="geometry">
+            <mxPoint x="430" y="680" as="sourcePoint" />
+            <mxPoint x="480" y="630" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="IofM1nMA8nbYvFc8HTba-3" edge="1" parent="1" source="robotsContents" style="endArrow=none;dashed=1;html=1;dashPattern=1 3;strokeWidth=2;rounded=0;entryX=0.25;entryY=1;entryDx=0;entryDy=0;entryPerimeter=0;exitX=0.25;exitY=0;exitDx=0;exitDy=0;" target="robotsModule" value="">
+          <mxGeometry height="50" relative="1" width="50" as="geometry">
+            <mxPoint x="440" y="835" as="sourcePoint" />
+            <mxPoint x="440" y="790" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e_app_impl" edge="1" parent="1" source="appModule" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#16A34A;strokeWidth=2;endArrow=block;endFill=1;fontSize=12;fontColor=#166534;entryX=0.75;entryY=1;entryDx=0;entryDy=0;entryPerimeter=0;exitX=0.077;exitY=0.825;exitDx=0;exitDy=0;exitPerimeter=0;" target="implModule" value="allowed direct impl import">
+          <mxGeometry relative="1" x="0.0924" as="geometry">
+            <mxPoint as="offset" />
+            <Array as="points">
+              <mxPoint x="1215" y="355" />
+              <mxPoint x="673" y="355" />
+            </Array>
+            <mxPoint x="1195" y="355.0526315789475" as="sourcePoint" />
+            <mxPoint x="672.5000000000002" y="350" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
