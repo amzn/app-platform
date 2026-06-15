@@ -4,6 +4,9 @@
 
 ### Added
 
+- Add an opt-in `allowLibraryImplToImplDependencies` module structure option for dependencies between
+  `:impl` modules within the same library.
+
 ### Changed
 
 - Upgrade Kotlin to `2.4.0`, Android Lint to `9.2.1`, KSP to `2.3.9`, and kotlin-compile-testing to `0.13.0`.

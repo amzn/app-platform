@@ -236,8 +236,8 @@ To make code easier to discover, it’s recommended to put all Gradle modules in
 
 This module structure reduces coupling between libraries and increases cohesion within modules, which are two
 desired attributes in a modularized codebase. `:impl` modules can change and be modified without impacting any
-other library. Our build dependency graph stays flat and all `:impl` modules can be compiled and assembled in
-parallel.
+other library. By default, the build dependency graph stays flat and all `:impl` modules can be compiled and
+assembled in parallel.
 
 The `:public / :impl` module split is recommended whenever dependency inversion is needed for code, because of
 all the benefits mentioned above. The split becomes more natural over time and the benefit increases. Rare
@@ -262,10 +262,15 @@ such as static utilities, extension functions and UI components.
 zero or more `:impl` modules. If a library contains multiple `:impl` modules, then they’re suffixed with a name,
 e.g. `:login:impl-amazon` and `:login:impl-google`.
 
+By default, `:impl` modules cannot depend on each other. The `allowLibraryImplToImplDependencies` option relaxes this
+rule only for `:impl` modules in the same library. Cross-library and external `:impl` dependencies remain
+forbidden.
+
 ### `:internal`
 
 `:internal` modules are used when code should be shared between multiple `:impl` modules of the same library,
 but the code should not be exposed through the `:public` module. This code is *internal* to this library.
+They remain available whether or not `allowLibraryImplToImplDependencies` is enabled.
 
 ### `:testing`
 
@@ -318,6 +323,29 @@ appPlatform {
   enableModuleStructure true
 }
 ```
+
+By default, `:impl` modules cannot depend on other `:impl` modules. This can be relaxed for dependencies within
+the same library while preserving the cross-library boundary:
+
+=== "build.gradle"
+
+    ```groovy
+    appPlatform {
+      enableModuleStructure {
+        allowLibraryImplToImplDependencies true
+      }
+    }
+    ```
+
+=== "build.gradle.kts"
+
+    ```kotlin
+    appPlatform {
+      enableModuleStructure {
+        allowLibraryImplToImplDependencies(true)
+      }
+    }
+    ```
 
 With this setting enabled, several checks and features are enabled:
 

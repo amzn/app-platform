@@ -5,6 +5,7 @@ public class software/amazon/app/platform/gradle/AppPlatformExtension {
 	public final fun enableComposeUi (Z)V
 	public final fun enableKotlinInject (Z)V
 	public final fun enableMetro (Z)V
+	public final fun enableModuleStructure (Lorg/gradle/api/Action;)V
 	public final fun enableModuleStructure (Z)V
 	public final fun enableMoleculePresenterBackstack (Z)V
 	public final fun enableMoleculePresenters (Z)V
@@ -26,6 +27,7 @@ public abstract class software/amazon/app/platform/gradle/ModuleStructureDepende
 	public static final field Companion Lsoftware/amazon/app/platform/gradle/ModuleStructureDependencyCheckTask$Companion;
 	public fun <init> ()V
 	public final fun checkDependencies ()V
+	public abstract fun getAllowLibraryImplToImplDependencies ()Lorg/gradle/api/provider/Property;
 	public abstract fun getIgnoredOutputFile ()Ljava/io/File;
 	public abstract fun getModuleCompileClasspath ()Ljava/util/Set;
 	public abstract fun getModulePath ()Ljava/lang/String;
@@ -36,6 +38,11 @@ public abstract class software/amazon/app/platform/gradle/ModuleStructureDepende
 
 public final class software/amazon/app/platform/gradle/ModuleStructureDependencyCheckTask$Companion {
 	public final fun registerModuleStructureDependencyCheckTask (Lorg/gradle/api/Project;)V
+}
+
+public class software/amazon/app/platform/gradle/ModuleStructureOptions {
+	public fun <init> (Lorg/gradle/api/model/ObjectFactory;)V
+	public final fun allowLibraryImplToImplDependencies (Z)V
 }
 
 public class software/amazon/app/platform/gradle/ModuleStructurePlugin : org/gradle/api/Plugin {
