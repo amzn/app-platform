@@ -1,0 +1,108 @@
+<mxfile host="app.diagrams.net" modified="2026-06-15T00:00:00.000Z" agent="Codex" version="24.7.17" type="device">
+  <diagram id="runtime-sequence" name="Runtime Sequence">
+    <mxGraphModel dx="1600" dy="1050" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1600" pageHeight="1080" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <mxCell id="title" value="&lt;b&gt;Amazon App Platform - Runtime Sequence&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size: 16px;&quot;&gt;Vom Plattformstart bis zum gerenderten UI-Model&lt;/font&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;fontSize=28;fontColor=#102A43;" vertex="1" parent="1">
+          <mxGeometry x="40" y="20" width="1520" height="70" as="geometry" />
+        </mxCell>
+
+        <mxCell id="note" value="&lt;b&gt;Leserichtung&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size: 12px;&quot;&gt;Zeit laeuft von oben nach unten. Durchgezogene Pfeile zeigen den Start- und Renderpfad. Gestrichelte Pfeile zeigen Reaktionen und UI-Events.&lt;/font&gt;" style="shape=note;whiteSpace=wrap;html=1;size=18;fillColor=#FEF9C3;strokeColor=#CA8A04;fontColor=#0F172A;fontSize=12;spacing=10;" vertex="1" parent="1">
+          <mxGeometry x="1120" y="105" width="390" height="86" as="geometry" />
+        </mxCell>
+
+        <mxCell id="actorPlatform" value="&lt;b&gt;Platform Entrypoint&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size: 11px;&quot;&gt;Android / iOS / Desktop / Wasm&lt;/font&gt;" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;collapsible=0;recursiveResize=0;outlineConnect=0;fillColor=#DBEAFE;strokeColor=#2563EB;fontColor=#0F172A;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="70" y="130" width="150" height="850" as="geometry" />
+        </mxCell>
+        <mxCell id="actorScope" value="&lt;b&gt;Root Scope&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size: 11px;&quot;&gt;lifecycle boundary&lt;/font&gt;" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;collapsible=0;recursiveResize=0;outlineConnect=0;fillColor=#D1FAE5;strokeColor=#059669;fontColor=#0F172A;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="260" y="130" width="140" height="850" as="geometry" />
+        </mxCell>
+        <mxCell id="actorGraph" value="&lt;b&gt;AppGraph / DI&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size: 11px;&quot;&gt;Metro or kotlin-inject&lt;/font&gt;" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;collapsible=0;recursiveResize=0;outlineConnect=0;fillColor=#EDE9FE;strokeColor=#7C3AED;fontColor=#0F172A;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="440" y="130" width="150" height="850" as="geometry" />
+        </mxCell>
+        <mxCell id="actorPresenter" value="&lt;b&gt;Presenter&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size: 11px;&quot;&gt;MoleculePresenter&lt;/font&gt;" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;collapsible=0;recursiveResize=0;outlineConnect=0;fillColor=#FBCFE8;strokeColor=#DB2777;fontColor=#0F172A;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="630" y="130" width="150" height="850" as="geometry" />
+        </mxCell>
+        <mxCell id="actorTemplate" value="&lt;b&gt;Template&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size: 11px;&quot;&gt;root model wrapper&lt;/font&gt;" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;collapsible=0;recursiveResize=0;outlineConnect=0;fillColor=#FEF3C7;strokeColor=#D97706;fontColor=#0F172A;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="820" y="130" width="140" height="850" as="geometry" />
+        </mxCell>
+        <mxCell id="actorFactory" value="&lt;b&gt;RendererFactory&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size: 11px;&quot;&gt;model to renderer&lt;/font&gt;" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;collapsible=0;recursiveResize=0;outlineConnect=0;fillColor=#C7D2FE;strokeColor=#4F46E5;fontColor=#0F172A;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="1000" y="130" width="150" height="850" as="geometry" />
+        </mxCell>
+        <mxCell id="actorRenderer" value="&lt;b&gt;Renderer&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size: 11px;&quot;&gt;Compose / Android Views&lt;/font&gt;" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;collapsible=0;recursiveResize=0;outlineConnect=0;fillColor=#BFDBFE;strokeColor=#2563EB;fontColor=#0F172A;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="1190" y="130" width="150" height="850" as="geometry" />
+        </mxCell>
+        <mxCell id="actorUI" value="&lt;b&gt;Platform UI&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size: 11px;&quot;&gt;screen, input, events&lt;/font&gt;" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;collapsible=0;recursiveResize=0;outlineConnect=0;fillColor=#ECFDF5;strokeColor=#16A34A;fontColor=#0F172A;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="1380" y="130" width="150" height="850" as="geometry" />
+        </mxCell>
+
+        <mxCell id="m1" value="1. App process starts" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#2563EB;strokeWidth=2;endArrow=block;endFill=1;fontSize=12;fontColor=#1E3A8A;" edge="1" parent="1" source="actorPlatform" target="actorScope">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points"><mxPoint x="145" y="250" /><mxPoint x="330" y="250" /></Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m2" value="2. Create RootScope" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#059669;strokeWidth=2;endArrow=block;endFill=1;fontSize=12;fontColor=#065F46;" edge="1" parent="1" source="actorScope" target="actorScope">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points"><mxPoint x="395" y="320" /><mxPoint x="395" y="360" /></Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m3" value="3. Build platform AppGraph" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#7C3AED;strokeWidth=2;endArrow=block;endFill=1;fontSize=12;fontColor=#4C1D95;" edge="1" parent="1" source="actorScope" target="actorGraph">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points"><mxPoint x="330" y="410" /><mxPoint x="515" y="410" /></Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m4" value="4. Register graph as Scope service" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#7C3AED;strokeWidth=2;endArrow=block;endFill=1;fontSize=12;fontColor=#4C1D95;" edge="1" parent="1" source="actorGraph" target="actorScope">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points"><mxPoint x="515" y="475" /><mxPoint x="330" y="475" /></Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m5" value="5. Resolve root presenter / template provider" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#DB2777;strokeWidth=2;endArrow=block;endFill=1;fontSize=12;fontColor=#831843;" edge="1" parent="1" source="actorGraph" target="actorPresenter">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points"><mxPoint x="515" y="540" /><mxPoint x="705" y="540" /></Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m6" value="6. present(input) computes Model" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#DB2777;strokeWidth=2;endArrow=block;endFill=1;fontSize=12;fontColor=#831843;" edge="1" parent="1" source="actorPresenter" target="actorPresenter">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points"><mxPoint x="775" y="610" /><mxPoint x="775" y="650" /></Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m7" value="7. Wrap root model tree" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#D97706;strokeWidth=2;endArrow=block;endFill=1;fontSize=12;fontColor=#92400E;" edge="1" parent="1" source="actorPresenter" target="actorTemplate">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points"><mxPoint x="705" y="705" /><mxPoint x="890" y="705" /></Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m8" value="8. Request renderer for Model" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#4F46E5;strokeWidth=2;endArrow=block;endFill=1;fontSize=12;fontColor=#3730A3;" edge="1" parent="1" source="actorTemplate" target="actorFactory">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points"><mxPoint x="890" y="760" /><mxPoint x="1075" y="760" /></Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m9" value="9. Create/cache renderer" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#2563EB;strokeWidth=2;endArrow=block;endFill=1;fontSize=12;fontColor=#1D4ED8;" edge="1" parent="1" source="actorFactory" target="actorRenderer">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points"><mxPoint x="1075" y="815" /><mxPoint x="1265" y="815" /></Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m10" value="10. renderCompose(model) / renderModel(model)" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#16A34A;strokeWidth=2;endArrow=block;endFill=1;fontSize=12;fontColor=#166534;" edge="1" parent="1" source="actorRenderer" target="actorUI">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points"><mxPoint x="1265" y="870" /><mxPoint x="1455" y="870" /></Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m11" value="11. User action" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;dashed=1;strokeColor=#BE185D;strokeWidth=2;endArrow=block;endFill=1;fontSize=12;fontColor=#831843;" edge="1" parent="1" source="actorUI" target="actorRenderer">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points"><mxPoint x="1455" y="930" /><mxPoint x="1265" y="930" /></Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m12" value="12. model.onEvent(event)" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;dashed=1;strokeColor=#BE185D;strokeWidth=2;endArrow=block;endFill=1;fontSize=12;fontColor=#831843;" edge="1" parent="1" source="actorRenderer" target="actorPresenter">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points"><mxPoint x="1265" y="965" /><mxPoint x="705" y="965" /></Array>
+          </mxGeometry>
+        </mxCell>
+
+        <mxCell id="legend" value="&lt;b&gt;Kernaussage&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size: 12px;&quot;&gt;Der Plattformcode startet nur die App. Zustand entsteht in Presentern, Darstellung in Renderern. Events gehen kontrolliert ueber Models zurueck.&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F8FAFC;strokeColor=#CBD5E1;fontColor=#0F172A;fontSize=12;spacing=10;shadow=1;" vertex="1" parent="1">
+          <mxGeometry x="70" y="1000" width="1460" height="50" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
