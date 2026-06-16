@@ -121,13 +121,13 @@ public open class BasePlugin : Plugin<Project> {
   private fun Project.upgradeYarnDependencies() {
     plugins.withType(CommonYarnPlugin::class.java).configureEach {
       with(extensions.getByType(BaseYarnRootExtension::class.java)) {
-        // Force the newer version due to https://github.com/amzn/app-platform/security/dependabot/5
-        resolution("webpack-dev-server", "5.2.1")
-        // Force the newer version due to https://github.com/amzn/app-platform/security/dependabot/8
-        resolution("on-headers", "1.1.0")
-        // Force the newer version due to
-        // https://github.com/amzn/app-platform/security/dependabot/10
-        resolution("tmp", "0.2.4")
+        resolution("webpack-dev-server", "5.2.5")
+        resolution("fast-uri", "3.1.2")
+        resolution("picomatch", "2.3.2")
+        resolution("path-to-regexp", "0.1.13")
+        resolution("ws", "8.21.0")
+        resolution("ajv", "8.20.0")
+        resolution("qs", "6.15.2")
       }
     }
   }
