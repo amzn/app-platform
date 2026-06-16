@@ -4,12 +4,7 @@
 
 ### Added
 
-- Add an opt-in `allowLibraryImplToImplDependencies` module structure option for dependencies between
-  `:impl` modules within the same library.
-
 ### Changed
-
-- Upgrade Kotlin to `2.4.0`, Android Lint to `9.2.1`, KSP to `2.3.9`, and kotlin-compile-testing to `0.13.0`.
 
 ### Deprecated
 
@@ -20,6 +15,18 @@
 ### Security
 
 ### Other Notes & Contributions
+
+
+## [0.0.15] - 2026-06-15
+
+### Added
+
+- Add an opt-in `allowLibraryImplToImplDependencies` module structure option for dependencies between
+  `:impl` modules within the same library.
+
+### Changed
+
+- Upgrade Kotlin to `2.4.0`, Android Lint to `9.2.1`, KSP to `2.3.9`, and kotlin-compile-testing to `0.13.0`.
 
 
 ## [0.0.14] - 2026-05-20
@@ -212,7 +219,8 @@
 
 - Initial release.
 
-[Unreleased]: https://github.com/amzn/app-platform/compare/0.0.14...HEAD
+[Unreleased]: https://github.com/amzn/app-platform/compare/0.0.15...HEAD
+[0.0.15]: https://github.com/amzn/app-platform/compare/0.0.15
 [0.0.14]: https://github.com/amzn/app-platform/compare/0.0.14
 [0.0.13]: https://github.com/amzn/app-platform/compare/0.0.13
 [0.0.12]: https://github.com/amzn/app-platform/compare/0.0.12
