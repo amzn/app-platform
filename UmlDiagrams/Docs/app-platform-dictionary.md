@@ -324,3 +324,55 @@ Die App Platform organisiert eine Kotlin-Multiplatform-App so:
 
 Dadurch bleibt Business-Logik gemeinsam nutzbar und testbar, waehrend die UI
 pro Plattform angepasst werden kann.
+
+## inCarApp- und Automotive-spezifische Begriffe
+
+| Begriff | Bedeutung |
+| --- | --- |
+| inCarApp | Die hochgeladene Beispiel-App mit Android-Automotive-Bezug. Sie dient als interner Vertical Slice fuer Fahrzeugdaten, MB Widgets, Compose UI, Hilt DI und Tests. |
+| Android Automotive | Android-basiertes Betriebssystem, das direkt im Fahrzeug auf der Head Unit laeuft. Nicht identisch mit Android Auto Projection. |
+| Android Auto | Projektionssystem, bei dem eine Phone-App auf einem kompatiblen Auto-Display dargestellt wird. Fuer diese Architektur getrennt von Android Automotive zu betrachten. |
+| Head Unit | Zentrale Infotainment-Einheit im Fahrzeug. Dort laeuft typischerweise die Android-Automotive-App. |
+| IVI | In-Vehicle Infotainment. Oberbegriff fuer Entertainment-, Navigations- und Fahrzeug-UI-Systeme im Auto. |
+| Vehicle API | Abstrakter Begriff fuer APIs, die Fahrzeugdaten oder Fahrzeugfunktionen bereitstellen. Auf Android Automotive kann das zum Beispiel die Android Car API sein. |
+| Android Car API | Android-API-Familie fuer den Zugriff auf Fahrzeugdienste in Android Automotive, zum Beispiel `android.car.Car`. |
+| `android.car.Car` | Android-Automotive-Klasse, ueber die eine App Verbindung zu Fahrzeugdiensten aufbauen kann. |
+| `CarPropertyManager` | Android-Automotive-Manager fuer Fahrzeug-Properties wie Hersteller, Modell oder VIN. |
+| `VehiclePropertyIds` | Sammlung von Konstanten fuer Fahrzeug-Properties, zum Beispiel `INFO_MAKE`, `INFO_MODEL` oder `INFO_VIN`. |
+| VehicleInfo | Gemeinsames Domain-Model fuer Fahrzeugdaten wie Hersteller, Modell, VIN und Verbindungsstatus. |
+| VehicleInfoProvider | Public API, ueber die shared Code Fahrzeugdaten anfragt, ohne Plattformdetails wie Android Car API zu kennen. |
+| AndroidAutomotiveVehicleInfoProvider | Automotive-spezifische Implementierung von `VehicleInfoProvider`, die echte Fahrzeugdaten ueber Android Automotive APIs liest. |
+| AndroidPhoneVehicleInfoProvider | Android-Phone-spezifische Implementierung von `VehicleInfoProvider`, die remote Daten, Companion-Daten oder `NotSupported` liefern kann. |
+| IosVehicleInfoProvider | iOS-spezifische Implementierung von `VehicleInfoProvider`, die remote Daten, Demo-Daten oder `NotSupported` liefern kann. |
+| VehicleInfoResult | Expliziter Rueckgabetyp fuer Fahrzeugdaten. Modelliert Erfolg, fehlende Berechtigung, nicht unterstuetzte Plattform oder Fehler. |
+| VehicleCapabilities | Modell, das beschreibt, welche Fahrzeugfunktionen auf einer Surface verfuegbar sind. |
+| Capability | Eine konkrete Faehigkeit der Plattform oder des Fahrzeugs, zum Beispiel Vehicle Info, Driving State oder Connectivity. |
+| Capability State | Zustand einer Capability, zum Beispiel `Available`, `NotSupported`, `PermissionMissing` oder `TemporarilyUnavailable`. |
+| Hardware Abstraction | Architekturtechnik, bei der konkreter Hardwarezugriff hinter Interfaces versteckt wird. Shared Code arbeitet dann mit Faehigkeiten statt Plattformklassen. |
+| Surface | Eine konkrete Zieloberflaeche oder Ausspielumgebung, zum Beispiel Android Automotive, Android Phone oder iOS. |
+| Surface Renderer | Renderer, der dasselbe Model fuer eine bestimmte Surface darstellt, zum Beispiel Automotive Renderer oder iOS Renderer. |
+| Automotive Renderer | Renderer fuer die Android-Automotive-Oberflaeche. Nutzt MB Widgets, Head-Unit-Layout und spaeter Automotive-Safety-Regeln. |
+| Android Phone Renderer | Renderer fuer Android Phone. Kann Compose Multiplatform-faehige UI teilen, hat aber phone-spezifische Navigation und Layouts. |
+| iOS Renderer | Renderer fuer iOS mit Compose Multiplatform. Nutzt dasselbe shared Model, aber einen iOS-spezifischen Host. |
+| Shared UI Foundation | Gemeinsame Compose-Multiplatform-UI-Bausteine, die von mehreren Surface Renderern wiederverwendet werden koennen. |
+| MB Widgets | Mercedes-Benz UI-Komponenten. In der aktuellen Beispiel-App Android/Automotive-fokussiert, perspektivisch Multiplatform. |
+| Compose Multiplatform iOS | Nutzung von Compose Multiplatform fuer iOS-UIs. In dieser Zielarchitektur der bevorzugte iOS-UI-Weg. |
+| DrivingStatePolicy | Abstraktion fuer Regeln, ob eine Funktion waehrend der Fahrt, nur im Parkzustand oder gar nicht verfuegbar ist. |
+| Parked Mode | Zustand, in dem das Fahrzeug steht und mehr UI-Interaktion erlaubt sein kann. |
+| Driving Mode | Zustand, in dem das Fahrzeug faehrt und UI-Interaktionen eventuell eingeschraenkt werden muessen. |
+| FeatureAvailability | Modell fuer die Verfuegbarkeit eines Features, zum Beispiel `Available`, `ParkedOnly` oder `DisabledWhileDriving`. |
+| PermissionMissing | Capability-Zustand, der ausdrueckt, dass eine Plattformfaehigkeit grundsaetzlich existiert, aber eine Berechtigung fehlt. |
+| NotSupported | Capability-Zustand, der ausdrueckt, dass eine Funktion auf dieser Surface nicht verfuegbar ist. |
+| TemporarilyUnavailable | Capability-Zustand fuer voruebergehend nicht verfuegbare Daten, zum Beispiel weil der Fahrzeugdienst noch nicht verbunden ist. |
+| Graceful Degradation | Verhalten, bei dem eine App auf eingeschraenkten Plattformen kontrolliert weniger Funktion bietet statt abzustuerzen. |
+| Companion Data | Daten, die zum Beispiel ueber eine Phone-/Companion-Verbindung kommen, wenn direkter Fahrzeugzugriff nicht moeglich ist. |
+| Remote Vehicle Data | Fahrzeugdaten, die ueber Backend oder Cloud-Services statt direkt aus der Fahrzeughardware kommen. |
+| Vertical Slice | Kleiner, aber vollstaendiger Funktionsschnitt durch alle Schichten: Datenquelle, Domain, Presenter, Renderer, Tests und App-Host. |
+| Migration Slice | Schrittweise Migration eines bestehenden Features in die neue Plattformstruktur. |
+| Hilt Adapter | Android-spezifische DI-Schicht, die bestehende Hilt-Bindings an shared Public APIs anschliesst. |
+| KMP DI | Dependency-Injection-Ansatz, der Kotlin Multiplatform unterstuetzt, zum Beispiel Metro oder kotlin-inject. |
+| Surface App | Finale App fuer eine Zieloberflaeche, zum Beispiel `app-automotive`, `app-android-phone` oder `app-ios`. |
+| Platform Adapter | Plattformspezifische Klasse oder Modul, das shared APIs mit realen Plattformdiensten verbindet. |
+| Automotive UX/Safety | Design- und Sicherheitsregeln fuer Auto-UIs, insbesondere Ablenkungsvermeidung und eingeschraenkte Interaktion waehrend der Fahrt. |
+| Rotary Input | Bedienung ueber Dreh-/Controller-Elemente im Fahrzeug statt Touch. Relevant fuer manche Automotive-Oberflaechen. |
+| Head-Unit Display Class | Kategorie oder Zielgroesse eines Fahrzeugdisplays, zum Beispiel unterschiedliche Breiten, Hoehen, Seitenverhaeltnisse oder OEM-Layouts. |

@@ -28,6 +28,7 @@ Ordner [`../Diagrams`](../Diagrams).
 | --- | --- |
 | [`app-platform-dictionary.md`](app-platform-dictionary.md) | Glossar mit Begriffen aus Architektur, KMP, DI, Scopes, Presenter/Renderer, Gradle und Testing. |
 | [`building-similar-platform-roadmap.md`](building-similar-platform-roadmap.md) | Roadmap fuer Firmen, die eine aehnliche App Platform bauen moechten. |
+| [`incarapp-platform-integration-plan.md`](incarapp-platform-integration-plan.md) | Konkreter Integrationsplan fuer die hochgeladene `inCarApp` als Beispiel fuer Android Automotive, Android Phone und iOS. |
 
 ## Kurzbeschreibung der Diagramme
 
