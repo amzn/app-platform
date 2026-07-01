@@ -36,9 +36,9 @@ coroutines = "1.11.0"
 detekt = "1.23.8"
 graphviz-java = "0.18.1"
 jvm-compatibility = "11"
-# We need a newer version for buildSrc. This project uses JDK 21, Metro requires JDK 21, and therefore we should
-# compile buildSrc with 21.
-jvm-buildsrc = "21"
+# BuildSrc runs on the same JDK as CI. Metro requires at least JDK 21, and CI now uses JDK 25, so compile buildSrc
+# with 25.
+jvm-buildsrc = "25"
 kotlin = "2.4.0"
 kotlin-atomicfu = "0.32.1"
 kotlin-compile-testing = "0.13.0"

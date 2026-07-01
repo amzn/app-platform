@@ -16,7 +16,7 @@ runs:
     - uses: actions/setup-java@v4
       with:
         distribution: 'zulu'
-        java-version: 21
+        java-version: 25
 
     - name: Select Xcode 26
       if: ${{ runner.os == 'macOS' && inputs['select-xcode-26'] == 'true' }}
