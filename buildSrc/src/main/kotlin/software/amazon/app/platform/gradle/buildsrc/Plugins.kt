@@ -12,7 +12,6 @@ internal object Plugins {
   const val KOTLIN_HIERARCHY = "io.github.terrakok.kmp-hierarchy"
   const val KOTLIN_JVM = "org.jetbrains.kotlin.jvm"
   const val KSP = "com.google.devtools.ksp"
-  const val KTFMT = "com.ncorti.ktfmt.gradle"
   const val MAVEN_PUBLISH = "com.vanniktech.maven.publish"
   const val METRO = "dev.zacsweers.metro"
 }

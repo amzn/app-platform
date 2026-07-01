@@ -1,8 +1,6 @@
 package software.amazon.app.platform.gradle.buildsrc
 
 import com.google.devtools.ksp.gradle.KspExtension
-import com.ncorti.ktfmt.gradle.KtfmtExtension
-import com.ncorti.ktfmt.gradle.TrailingCommaManagementStrategy
 import dev.detekt.gradle.Detekt
 import dev.detekt.gradle.DetektCreateBaselineTask
 import dev.detekt.gradle.extensions.DetektExtension
@@ -27,7 +25,6 @@ public open class KmpPlugin : Plugin<Project> {
 
     target.configureCommonKotlin()
     target.configureCoroutines()
-    target.configureKtfmt()
     target.configureTests()
     target.configureDetekt()
 
@@ -345,18 +342,6 @@ public open class KmpPlugin : Plugin<Project> {
       kmpExtension.sourceSets.getByName("commonMain").dependencies {
         implementation(libs.findLibrary("molecule.runtime").get().get().toString())
       }
-    }
-
-    fun Project.configureKtfmt() {
-      plugins.apply(Plugins.KTFMT)
-
-      extensions.getByType(KtfmtExtension::class.java).apply {
-        googleStyle()
-        trailingCommaManagementStrategy.set(TrailingCommaManagementStrategy.COMPLETE)
-        removeUnusedImports.set(true)
-      }
-
-      releaseTask.configure { releaseTask -> releaseTask.dependsOn("ktfmtCheck") }
     }
 
     private fun Project.configureDetekt() {

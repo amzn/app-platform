@@ -11,11 +11,11 @@ class ModuleStructureDependencyCheckTaskTest {
   @Test
   fun `impl dependency within the same library is forbidden by default`() {
     assertFailure {
-        checkDependencies(
-          modulePath = ":library:impl-specific",
-          moduleCompileClasspath = setOf(":library:impl-common"),
-        )
-      }
+      checkDependencies(
+        modulePath = ":library:impl-specific",
+        moduleCompileClasspath = setOf(":library:impl-common"),
+      )
+    }
       .isInstanceOf<GradleException>()
   }
 
@@ -31,36 +31,36 @@ class ModuleStructureDependencyCheckTaskTest {
   @Test
   fun `impl dependency from another library remains forbidden`() {
     assertFailure {
-        checkDependencies(
-          modulePath = ":library:impl-specific",
-          moduleCompileClasspath = setOf(":other-library:impl-common"),
-          allowLibraryImplToImplDependencies = true,
-        )
-      }
+      checkDependencies(
+        modulePath = ":library:impl-specific",
+        moduleCompileClasspath = setOf(":other-library:impl-common"),
+        allowLibraryImplToImplDependencies = true,
+      )
+    }
       .isInstanceOf<GradleException>()
   }
 
   @Test
   fun `external impl dependency remains forbidden`() {
     assertFailure {
-        checkDependencies(
-          modulePath = ":library:impl-specific",
-          moduleCompileClasspath = setOf("com.example:library-impl-common:1.0"),
-          allowLibraryImplToImplDependencies = true,
-        )
-      }
+      checkDependencies(
+        modulePath = ":library:impl-specific",
+        moduleCompileClasspath = setOf("com.example:library-impl-common:1.0"),
+        allowLibraryImplToImplDependencies = true,
+      )
+    }
       .isInstanceOf<GradleException>()
   }
 
   @Test
   fun `non-impl module cannot use the option to import an impl module`() {
     assertFailure {
-        checkDependencies(
-          modulePath = ":library:internal",
-          moduleCompileClasspath = setOf(":library:impl-common"),
-          allowLibraryImplToImplDependencies = true,
-        )
-      }
+      checkDependencies(
+        modulePath = ":library:internal",
+        moduleCompileClasspath = setOf(":library:impl-common"),
+        allowLibraryImplToImplDependencies = true,
+      )
+    }
       .isInstanceOf<GradleException>()
   }
 
@@ -75,11 +75,11 @@ class ModuleStructureDependencyCheckTaskTest {
   @Test
   fun `internal dependency from another library remains forbidden`() {
     assertFailure {
-        checkDependencies(
-          modulePath = ":library:impl",
-          moduleCompileClasspath = setOf(":other-library:internal"),
-        )
-      }
+      checkDependencies(
+        modulePath = ":library:impl",
+        moduleCompileClasspath = setOf(":other-library:internal"),
+      )
+    }
       .isInstanceOf<GradleException>()
   }
 

@@ -76,29 +76,3 @@ jobs:
           gradle-encryption-key: ${{ secrets.GRADLE_ENCRYPTION_KEY }}
       - name: Build Desktop binary
         run: ./gradlew :app:desktopMainClasses
-
-  ktfmt:
-    runs-on: ubuntu-latest
-    timeout-minutes: 25
-    defaults:
-      run:
-        working-directory: blueprints/starter
-    steps:
-      - uses: actions/checkout@v4
-      - name: Setup
-        uses: ./.github/actions/setup-action
-        with:
-          gradle-encryption-key: ${{ secrets.GRADLE_ENCRYPTION_KEY }}
-
-      - name: Install ktfmt
-        run: |
-          KTFMT_VERSION="$(sed -n 's/^ktfmt = "\(.*\)"$/\1/p' gradle/libs.versions.toml)"
-          test -n "$KTFMT_VERSION"
-          curl -fsSL \
-            "https://github.com/facebook/ktfmt/releases/download/v${KTFMT_VERSION}/ktfmt-${KTFMT_VERSION}-with-dependencies.jar" \
-            -o "$RUNNER_TEMP/ktfmt.jar"
-
-      - name: Run ktfmt
-        run: |
-          java -jar "$RUNNER_TEMP/ktfmt.jar" --google-style --dry-run --set-exit-if-changed \
-            $(find . -type f -name "*.kt")

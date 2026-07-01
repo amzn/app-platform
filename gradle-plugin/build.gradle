@@ -2,18 +2,11 @@
 plugins {
     id 'java-gradle-plugin'
     alias libs.plugins.kotlin.jvm
-    alias libs.plugins.ktfmt
     alias libs.plugins.build.config
     alias libs.plugins.maven.publish
     alias libs.plugins.detekt
     alias libs.plugins.kotlinx.binaryCompatibilityValidator
     alias libs.plugins.android.lint
-}
-
-ktfmt {
-    googleStyle()
-    trailingCommaManagementStrategy.set(com.ncorti.ktfmt.gradle.TrailingCommaManagementStrategy.COMPLETE)
-    removeUnusedImports.set(true)
 }
 
 mavenPublishing {
@@ -109,5 +102,5 @@ detekt {
 }
 
 tasks.register('release') {
-    dependsOn('build', 'check', 'ktfmtCheck', 'detekt', 'apiCheck')
+    dependsOn('build', 'check', 'detekt', 'apiCheck')
 }

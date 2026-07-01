@@ -311,8 +311,8 @@ jobs:
         with:
           gradle-encryption-key: ${{ secrets.GRADLE_ENCRYPTION_KEY }}
 
-      - name: ktfmt
-        run: ./gradlew ktfmtCheck --stacktrace --show-version --continue
+      - name: Run ktfmt
+        run: ./ktfmt.sh --dry-run --set-exit-if-changed
 
   android-lint:
     runs-on: ubuntu-latest

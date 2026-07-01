@@ -2,18 +2,11 @@
 plugins {
     id 'java-gradle-plugin'
     alias libs.plugins.kotlin.jvm
-    alias libs.plugins.ktfmt
     alias libs.plugins.build.config
 }
 
 buildConfig {
     buildConfigField(String, 'APP_PLATFORM_GROUP', property('GROUP'))
-}
-
-ktfmt {
-    googleStyle()
-    trailingCommaManagementStrategy.set(com.ncorti.ktfmt.gradle.TrailingCommaManagementStrategy.COMPLETE)
-    removeUnusedImports.set(true)
 }
 
 java {
@@ -75,7 +68,6 @@ dependencies {
 
     implementation libs.graphviz.java
     implementation libs.kotlin.hierarchy.plugin
-    implementation libs.ktfmt.gradle.plugin
     implementation libs.maven.publish.gradle.plugin
     implementation libs.metro.gradle.plugin
     implementation libs.detekt.gradle.plugin
@@ -83,5 +75,5 @@ dependencies {
 }
 
 tasks.register('release') {
-    dependsOn('build', 'check', 'ktfmtCheck')
+    dependsOn('build', 'check')
 }
