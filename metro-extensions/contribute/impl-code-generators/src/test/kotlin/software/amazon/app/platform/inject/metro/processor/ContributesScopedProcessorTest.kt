@@ -512,11 +512,7 @@ class ContributesScopedProcessorTest {
       """,
       exitCode = COMPILATION_ERROR,
     ) {
-      assertThat(messages)
-        .contains(
-          "Cannot find an @Inject constructor or @Provides-annotated " +
-            "function/property for: software.amazon.test.SuperType"
-        )
+      assertThat(messages).contains("[Metro/MissingBinding] No binding found for SuperType")
     }
   }
 

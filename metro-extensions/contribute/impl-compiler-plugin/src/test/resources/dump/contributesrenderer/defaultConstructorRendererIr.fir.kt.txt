@@ -29,7 +29,9 @@ class TestRenderer : Renderer<Model> {
       @IntoMap
       @RendererKey(value = Model::class)
       @CallableMetadata(callableName = "provideComTestTestRendererModel", propertyName = "", startOffset = 290, endOffset = 394)
-      abstract fun provideComTestTestRendererModel1186685849_intomap(renderer: TestRenderer): Renderer<*>
+      fun provideComTestTestRendererModel1186685849_intomap(renderer: TestRenderer): Renderer<*> {
+        return error(message = "Never called")
+      }
 
     }
 
@@ -152,10 +154,10 @@ class TestRenderer : Renderer<Model> {
 
 }
 
-// FILE: comTestTestRendererRendererContributionRendererScope.kt
+// FILE: comTestTestRendererRendererContributionSoftware_amazon_app_platform_renderer_RendererScope.kt
 package metro.hints
 
-fun RendererScope(contributed: RendererContribution) {
+fun software_amazon_app_platform_renderer_RendererScope(contributed: RendererContribution) {
   return error(message = "Never called")
 }
 
