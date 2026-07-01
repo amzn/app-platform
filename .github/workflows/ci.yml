@@ -37,7 +37,7 @@ jobs:
           path: ./**/build/reports/
 
   test-ios:
-    runs-on: macos-latest-xlarge
+    runs-on: macos-latest
     timeout-minutes: 25
 
     steps:
@@ -248,7 +248,7 @@ jobs:
           path: ./**/build/reports/
 
   build-ios-sample-app:
-    runs-on: macos-latest-xlarge
+    runs-on: macos-latest
     timeout-minutes: 25
 
     steps:

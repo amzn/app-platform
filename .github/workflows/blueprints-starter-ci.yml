@@ -17,7 +17,7 @@ permissions:
 
 jobs:
   build-ios-starter-app:
-    runs-on: macos-latest-xlarge
+    runs-on: macos-latest
     timeout-minutes: 25
     defaults:
       run:

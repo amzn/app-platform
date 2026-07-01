@@ -18,7 +18,7 @@ concurrency:
 
 jobs:
   publish-snapshot:
-    runs-on: macos-latest-xlarge
+    runs-on: macos-latest
     if: github.repository == 'amzn/app-platform'
     timeout-minutes: 60
 
