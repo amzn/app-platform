@@ -5,7 +5,6 @@ import org.gradle.api.Project
 import org.gradle.api.plugins.JavaPluginExtension
 import org.jetbrains.kotlin.gradle.dsl.KotlinJvmProjectExtension
 import software.amazon.app.platform.gradle.buildsrc.AppPlatformExtension.Companion.appPlatformBuildSrc
-import software.amazon.app.platform.gradle.buildsrc.KmpPlugin.Companion.configureKtfmt
 
 public open class JvmLibraryPlugin : Plugin<Project> {
   override fun apply(target: Project) {
@@ -15,7 +14,6 @@ public open class JvmLibraryPlugin : Plugin<Project> {
     target.configureKotlin()
     target.configureTests()
     target.configureCoroutines()
-    target.configureKtfmt()
   }
 
   private fun Project.configureKotlin() {

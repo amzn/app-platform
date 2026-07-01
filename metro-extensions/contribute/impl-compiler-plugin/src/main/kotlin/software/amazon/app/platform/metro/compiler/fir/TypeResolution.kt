@@ -118,23 +118,22 @@ private fun resolveUserType(
   val file = findContainingFile(owner, session) ?: return typeRef.coneTypeOrNull ?: manualType
   val scopes = createImportingScopes(file, session, ScopeSession())
   val configuration = TypeResolutionConfiguration(scopes, emptyList(), useSiteFile = file)
-  val resolvedType =
-    runCatching {
-        session.typeResolver
-          .resolveType(
-            typeRef = typeRef,
-            configuration = configuration,
-            areBareTypesAllowed = true,
-            isOperandOfIsOperator = false,
-            resolveDeprecations = false,
-            supertypeSupplier = SupertypeSupplier.Default,
-            expandTypeAliases = false,
-          )
-          .type
-      }
-      .getOrElse {
-        return manualType ?: throw it
-      }
+  val resolvedType = runCatching {
+    session.typeResolver
+      .resolveType(
+        typeRef = typeRef,
+        configuration = configuration,
+        areBareTypesAllowed = true,
+        isOperandOfIsOperator = false,
+        resolveDeprecations = false,
+        supertypeSupplier = SupertypeSupplier.Default,
+        expandTypeAliases = false,
+      )
+      .type
+  }
+    .getOrElse {
+      return manualType ?: throw it
+    }
 
   if (resolvedType.classId?.shortClassName?.asString() != "<error>") {
     return resolvedType

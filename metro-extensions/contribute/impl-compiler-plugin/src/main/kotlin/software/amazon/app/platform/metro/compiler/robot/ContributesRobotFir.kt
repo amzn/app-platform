@@ -281,41 +281,41 @@ public class ContributesRobotFir(session: FirSession) :
     var returnTarget: FirFunctionTarget? = null
 
     return buildNamedFunction {
-        isLocal = false
-        resolvePhase = FirResolvePhase.BODY_RESOLVE
-        moduleData = session.moduleData
-        origin = Keys.ContributesRobotGeneratorKey.origin
-        source = owner.source
-        symbol = functionSymbol
-        name = callableId.callableName
-        returnTypeRef = owner.defaultType().toFirResolvedTypeRef()
-        dispatchReceiverType = generatedGraphType(graphClassId)
-        status =
-          FirResolvedDeclarationStatusImpl(
-            Visibilities.Public,
-            Modality.OPEN,
-            Visibilities.Public.toEffectiveVisibility(owner, forClass = true),
+      isLocal = false
+      resolvePhase = FirResolvePhase.BODY_RESOLVE
+      moduleData = session.moduleData
+      origin = Keys.ContributesRobotGeneratorKey.origin
+      source = owner.source
+      symbol = functionSymbol
+      name = callableId.callableName
+      returnTypeRef = owner.defaultType().toFirResolvedTypeRef()
+      dispatchReceiverType = generatedGraphType(graphClassId)
+      status =
+        FirResolvedDeclarationStatusImpl(
+          Visibilities.Public,
+          Modality.OPEN,
+          Visibilities.Public.toEffectiveVisibility(owner, forClass = true),
+        )
+      annotations += buildSimpleAnnotationCall(ClassIds.PROVIDES, functionSymbol, session)
+      valueParameters += generatedParameters
+      if (constructor != null) {
+        body =
+          buildSingleExpressionBlock(
+            buildReturnExpression {
+              val target = FirFunctionTarget(labelName = null, isLambda = false)
+              returnTarget = target
+              this.target = target
+              result =
+                buildConstructorCall(
+                  owner,
+                  constructor.symbol,
+                  constructor.parameters,
+                  generatedParameters,
+                )
+            }
           )
-        annotations += buildSimpleAnnotationCall(ClassIds.PROVIDES, functionSymbol, session)
-        valueParameters += generatedParameters
-        if (constructor != null) {
-          body =
-            buildSingleExpressionBlock(
-              buildReturnExpression {
-                val target = FirFunctionTarget(labelName = null, isLambda = false)
-                returnTarget = target
-                this.target = target
-                result =
-                  buildConstructorCall(
-                    owner,
-                    constructor.symbol,
-                    constructor.parameters,
-                    generatedParameters,
-                  )
-              }
-            )
-        }
       }
+    }
       .also { function -> returnTarget?.bind(function) }
   }
 

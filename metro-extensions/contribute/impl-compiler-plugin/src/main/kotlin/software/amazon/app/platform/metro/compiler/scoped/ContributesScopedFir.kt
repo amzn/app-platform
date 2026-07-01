@@ -319,51 +319,51 @@ public class ContributesScopedFir(session: FirSession) :
     var returnTarget: FirFunctionTarget? = null
 
     return buildNamedFunction {
-        isLocal = false
-        resolvePhase = FirResolvePhase.BODY_RESOLVE
-        moduleData = session.moduleData
-        origin = Keys.ContributesScopedGeneratorKey.origin
-        source = owner.source
-        symbol = functionSymbol
-        name = callableId.callableName
-        returnTypeRef = owner.defaultType().toFirResolvedTypeRef()
-        dispatchReceiverType = contributionType(contributionClassId)
-        status =
-          FirResolvedDeclarationStatusImpl(
-            Visibilities.Public,
-            Modality.OPEN,
-            Visibilities.Public.toEffectiveVisibility(owner, forClass = true),
+      isLocal = false
+      resolvePhase = FirResolvePhase.BODY_RESOLVE
+      moduleData = session.moduleData
+      origin = Keys.ContributesScopedGeneratorKey.origin
+      source = owner.source
+      symbol = functionSymbol
+      name = callableId.callableName
+      returnTypeRef = owner.defaultType().toFirResolvedTypeRef()
+      dispatchReceiverType = contributionType(contributionClassId)
+      status =
+        FirResolvedDeclarationStatusImpl(
+          Visibilities.Public,
+          Modality.OPEN,
+          Visibilities.Public.toEffectiveVisibility(owner, forClass = true),
+        )
+      annotations += buildSimpleAnnotationCall(ClassIds.PROVIDES, functionSymbol, session)
+      extractScopeClassId(owner, ClassIds.SINGLE_IN, session)?.let { scopeClassId ->
+        annotations +=
+          buildAnnotationCallWithArgument(
+            ClassIds.SINGLE_IN,
+            Name.identifier("scope"),
+            buildClassExpression(scopeClassId, session),
+            functionSymbol,
+            session,
           )
-        annotations += buildSimpleAnnotationCall(ClassIds.PROVIDES, functionSymbol, session)
-        extractScopeClassId(owner, ClassIds.SINGLE_IN, session)?.let { scopeClassId ->
-          annotations +=
-            buildAnnotationCallWithArgument(
-              ClassIds.SINGLE_IN,
-              Name.identifier("scope"),
-              buildClassExpression(scopeClassId, session),
-              functionSymbol,
-              session,
-            )
-        }
-        valueParameters += generatedParameters
-        if (constructor != null) {
-          body =
-            buildSingleExpressionBlock(
-              buildReturnExpression {
-                val target = FirFunctionTarget(labelName = null, isLambda = false)
-                returnTarget = target
-                this.target = target
-                result =
-                  buildConstructorCall(
-                    owner,
-                    constructor.symbol,
-                    constructor.parameters,
-                    generatedParameters,
-                  )
-              }
-            )
-        }
       }
+      valueParameters += generatedParameters
+      if (constructor != null) {
+        body =
+          buildSingleExpressionBlock(
+            buildReturnExpression {
+              val target = FirFunctionTarget(labelName = null, isLambda = false)
+              returnTarget = target
+              this.target = target
+              result =
+                buildConstructorCall(
+                  owner,
+                  constructor.symbol,
+                  constructor.parameters,
+                  generatedParameters,
+                )
+            }
+          )
+      }
+    }
       .also { function -> returnTarget?.bind(function) }
   }
 

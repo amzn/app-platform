@@ -67,16 +67,6 @@ This template demonstrates:
 ```
 
 > This runs the desktop Compose app using the JVM target.
- 
-
-## Formatting
-
-### ktfmt
-```bash
-ktfmt **/*.kt --google-style
-```
-
-> This will run through all the kt files and format them.
 
 ## Configuration
 

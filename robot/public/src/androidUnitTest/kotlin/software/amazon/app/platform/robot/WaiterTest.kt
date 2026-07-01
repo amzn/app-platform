@@ -77,14 +77,14 @@ class WaiterTest {
   @Test
   fun `waitUntilCatching throws an error when condition is never met`() {
     assertFailure {
-        waitUntilCatching(
-          condition = "Wait for test condition",
-          timeout = 200.milliseconds,
-          delay = 20.milliseconds,
-        ) {
-          error("Test exception")
-        }
+      waitUntilCatching(
+        condition = "Wait for test condition",
+        timeout = 200.milliseconds,
+        delay = 20.milliseconds,
+      ) {
+        error("Test exception")
       }
+    }
       .all {
         messageContains("Waiting until 'Wait for test condition' never succeeded.")
         cause().isNotNull().messageContains("Test exception")

@@ -199,7 +199,7 @@ These are the main root-level quality gates used by GitHub Actions:
 ./gradlew linuxX64Test
 ./gradlew wasmJsTest
 ./gradlew apiCheck
-./gradlew ktfmtCheck
+./ktfmt.sh --dry-run --set-exit-if-changed
 ./gradlew detekt
 ./gradlew lint
 ./gradlew checkModuleStructureDependencies
@@ -252,7 +252,6 @@ Run these from the repo root:
 ./gradlew :metro-extensions:contribute:impl-compiler-plugin:test --tests 'software.amazon.app.platform.metro.compiler.runners.BoxTestGenerated$Metro.testTinyGraph'
 ./gradlew :metro-extensions:contribute:impl-compiler-plugin:test -PupdateTestData
 ./gradlew :metro-extensions:contribute:impl-compiler-plugin:generateTests
-./gradlew :metro-extensions:contribute:impl-compiler-plugin:ktfmtCheck
 ```
 
 Use this workflow for compiler tests:
