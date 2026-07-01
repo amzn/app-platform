@@ -128,6 +128,8 @@ public open class BasePlugin : Plugin<Project> {
         resolution("ws", "8.21.0")
         resolution("ajv", "8.20.0")
         resolution("qs", "6.15.2")
+        resolution("http-proxy-middleware", "2.0.10")
+        resolution("uuid", "11.1.1")
       }
     }
   }
