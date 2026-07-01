@@ -20,7 +20,9 @@ class TestRobot : Robot {
       @IntoMap
       @RobotKey(value = TestRobot::class)
       @CallableMetadata(callableName = "provideTestRobotIntoMap", propertyName = "", startOffset = 206, endOffset = 264)
-      abstract fun provideTestRobotIntoMap1666857635_intomap(robot: TestRobot): Robot
+      fun provideTestRobotIntoMap1666857635_intomap(robot: TestRobot): Robot {
+        return error(message = "Never called")
+      }
 
     }
 
@@ -92,10 +94,10 @@ class TestRobot : Robot {
 
 }
 
-// FILE: comTestTestRobotRobotContributionAppScope.kt
+// FILE: comTestTestRobotRobotContributionDev_zacsweers_metro_AppScope.kt
 package metro.hints
 
-fun AppScope(contributed: RobotContribution) {
+fun dev_zacsweers_metro_AppScope(contributed: RobotContribution) {
   return error(message = "Never called")
 }
 
