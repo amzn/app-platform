@@ -3,11 +3,11 @@ package software.amazon.app.platform.gradle.buildsrc
 import com.google.devtools.ksp.gradle.KspExtension
 import com.ncorti.ktfmt.gradle.KtfmtExtension
 import com.ncorti.ktfmt.gradle.TrailingCommaManagementStrategy
+import dev.detekt.gradle.Detekt
+import dev.detekt.gradle.DetektCreateBaselineTask
+import dev.detekt.gradle.extensions.DetektExtension
 import guru.nidi.graphviz.engine.Format
 import io.github.terrakok.KmpHierarchyConfig
-import io.gitlab.arturbosch.detekt.Detekt
-import io.gitlab.arturbosch.detekt.DetektCreateBaselineTask
-import io.gitlab.arturbosch.detekt.extensions.DetektExtension
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.artifacts.dsl.DependencyHandler
@@ -378,14 +378,14 @@ public open class KmpPlugin : Plugin<Project> {
 
       // Make Detekt use the right version of Java
       tasks.withType(Detekt::class.java).configureEach { detekt ->
-        detekt.jvmTarget = javaVersion.toString()
+        detekt.jvmTarget.set(javaVersion.toString())
 
         if (detekt.name == "detekt") {
           detekt.configureDefaultDetektTask()
         }
       }
       tasks.withType(DetektCreateBaselineTask::class.java).configureEach {
-        it.jvmTarget = javaVersion.toString()
+        it.jvmTarget.set(javaVersion.toString())
 
         if (it.name == "detektBaseline") {
           it.configureDefaultDetektTask()
@@ -394,10 +394,10 @@ public open class KmpPlugin : Plugin<Project> {
       with(extensions.getByType(DetektExtension::class.java)) {
         // From the Groovy DSL at https://detekt.github.io/detekt/gradle.html#groovy-dsl-3
         // This produces baselines named "detekt-baseline.xml"
-        baseline = file("detekt/detekt-baseline.xml")
+        baseline.set(file("detekt/detekt-baseline.xml"))
         // Config overrides
         config.from(rootProject.file("gradle/detekt-config.yml"))
-        buildUponDefaultConfig = true
+        buildUponDefaultConfig.set(true)
       }
 
       releaseTask.configure { releaseTask -> releaseTask.dependsOn("detekt") }

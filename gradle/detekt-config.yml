@@ -1,6 +1,6 @@
 # Detekt configuration tweaks. These are documented at
-#   https://detekt.github.io/detekt/configurations.html
-#   https://detekt.github.io/detekt/comments.html
+#   https://detekt.dev/docs/rules/configurations/
+#   https://detekt.dev/docs/rules/comments/
 # Also helpful are the Detekt default settings at
 #   https://github.com/detekt/detekt/blob/main/detekt-core/src/main/resources/default-detekt-config.yml
 style:
@@ -12,7 +12,13 @@ style:
     # The next two parameters are recommended for Compose: https://detekt.dev/docs/introduction/compose/
     ignorePropertyDeclaration: true
     ignoreCompanionObjectPropertyDeclaration: true
-  UnusedPrivateMember:
+  UnusedPrivateClass:
+    # Recommended for Compose: https://detekt.dev/docs/introduction/compose/
+    ignoreAnnotated: ['Preview']
+  UnusedPrivateFunction:
+    # Recommended for Compose: https://detekt.dev/docs/introduction/compose/
+    ignoreAnnotated: ['Preview']
+  UnusedPrivateProperty:
     # Recommended for Compose: https://detekt.dev/docs/introduction/compose/
     ignoreAnnotated: ['Preview']
   MaxLineLength:
@@ -43,12 +49,12 @@ comments:
     ]
 complexity:
   LongParameterList:
-    constructorThreshold: 12
-    ignoreAnnotated: [
-      ‘Inject’,
+    allowedConstructorParameters: 12
+    ignoreAnnotatedParameter: [
+      'Inject',
     ]
     # The next two parameters are recommended for Compose: https://detekt.dev/docs/introduction/compose/
-    functionThreshold: 12
+    allowedFunctionParameters: 12
     ignoreDefaultParameters: true
   TooManyFunctions:
     excludes: [
