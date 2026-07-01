@@ -261,28 +261,13 @@ jobs:
 
       # The command to build is executed by the Android Studio iOS app run action.
       #
-      # Select an iOS 26.0 simulator explicitly. Older simulator runtimes are ineligible because
-      # the project deployment target is 26.0.
-      #
-      # Downloading the iOS platform is needed with the latest macos runners. This is quite slow, so we should
-      # see if we can avoid this in the future.
-      # See: https://github.com/actions/runner-images/issues/12758#issuecomment-3206748945
+      # Target the generic simulator platform so the build does not depend on a
+      # specific installed iOS 26.x simulator runtime.
       - name: Build swift
         run: |
           /usr/bin/xcodebuild -version
           /usr/bin/xcodebuild -showsdks
-          /usr/bin/xcrun simctl list devices
-          DESTINATION_DEVICE=$(
-            /usr/bin/xcrun simctl list devices "iOS 26.0" available |
-              awk '/iPhone / && match($0, /\([0-9A-F-]+\)/) { print substr($0, RSTART + 1, RLENGTH - 2); exit }'
-          )
-          export DESTINATION_DEVICE
-          if [[ -z "$DESTINATION_DEVICE" ]]; then
-            echo "::error::No available iOS 26.0 iPhone simulator found"
-            exit 1
-          fi
-          echo "Using simulator $DESTINATION_DEVICE"
-          /usr/bin/xcodebuild -project sample/iosApp/iosApp.xcodeproj -scheme iosApp -configuration Debug OBJROOT=build/ios SYMROOT=build/ios -destination id=$DESTINATION_DEVICE -allowProvisioningDeviceRegistration -allowProvisioningUpdates
+          /usr/bin/xcodebuild -project sample/iosApp/iosApp.xcodeproj -scheme iosApp -configuration Debug OBJROOT=build/ios SYMROOT=build/ios -destination 'generic/platform=iOS Simulator' ARCHS=arm64 ONLY_ACTIVE_ARCH=YES -allowProvisioningDeviceRegistration -allowProvisioningUpdates
 
   build-wasm-sample-app:
     runs-on: ubuntu-latest
