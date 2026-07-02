@@ -252,7 +252,7 @@ private fun Project.enableKotlinInject() {
     }
   }
 
-  plugins.withIds(PluginIds.KOTLIN_ANDROID, PluginIds.KOTLIN_JVM) {
+  withJvmOrAndroidPlugin {
     dependencies.add("implementation", "$APP_PLATFORM_GROUP:di-common-public:$APP_PLATFORM_VERSION")
     dependencies.add(
       "implementation",
@@ -314,7 +314,7 @@ private fun Project.enableMetroKsp() {
     }
   }
 
-  plugins.withIds(PluginIds.KOTLIN_ANDROID, PluginIds.KOTLIN_JVM) {
+  withJvmOrAndroidPlugin {
     dependencies.add("implementation", "$APP_PLATFORM_GROUP:di-common-public:$APP_PLATFORM_VERSION")
     dependencies.add("implementation", "$APP_PLATFORM_GROUP:metro-public:$APP_PLATFORM_VERSION")
     dependencies.addKspProcessorDependencies("ksp")
@@ -322,15 +322,23 @@ private fun Project.enableMetroKsp() {
 }
 
 private fun Project.enableMetroCompilerPlugin() {
+  val compilerPluginDependency =
+    "$APP_PLATFORM_GROUP:metro-contribute-impl-compiler-plugin:$APP_PLATFORM_VERSION"
+
   fun DependencyHandler.addCompilerPluginDependencies() {
-    add(
-      PLUGIN_CLASSPATH_CONFIGURATION_NAME,
-      "$APP_PLATFORM_GROUP:metro-contribute-impl-compiler-plugin:$APP_PLATFORM_VERSION",
-    )
-    add(
-      NATIVE_COMPILER_PLUGIN_CLASSPATH_CONFIGURATION_NAME,
-      "$APP_PLATFORM_GROUP:metro-contribute-impl-compiler-plugin:$APP_PLATFORM_VERSION",
-    )
+    add(PLUGIN_CLASSPATH_CONFIGURATION_NAME, compilerPluginDependency)
+    add(NATIVE_COMPILER_PLUGIN_CLASSPATH_CONFIGURATION_NAME, compilerPluginDependency)
+  }
+
+  fun addAgpBuiltInKotlinCompilerPluginDependencies() {
+    configurations.configureEach { configuration ->
+      if (
+        configuration.name.startsWith(PLUGIN_CLASSPATH_CONFIGURATION_NAME) &&
+          configuration.name != PLUGIN_CLASSPATH_CONFIGURATION_NAME
+      ) {
+        dependencies.add(configuration.name, compilerPluginDependency)
+      }
+    }
   }
 
   plugins.withId(PluginIds.KOTLIN_MULTIPLATFORM) {
@@ -341,12 +349,18 @@ private fun Project.enableMetroCompilerPlugin() {
     dependencies.addCompilerPluginDependencies()
   }
 
-  plugins.withIds(PluginIds.KOTLIN_ANDROID, PluginIds.KOTLIN_JVM) {
+  withLegacyKotlinJvmOrAndroidPlugin {
     dependencies.add("implementation", "$APP_PLATFORM_GROUP:di-common-public:$APP_PLATFORM_VERSION")
 
     dependencies.add("implementation", "$APP_PLATFORM_GROUP:metro-public:$APP_PLATFORM_VERSION")
 
     dependencies.addCompilerPluginDependencies()
+  }
+
+  withAgpBuiltInKotlinAndroidPlugin {
+    dependencies.add("implementation", "$APP_PLATFORM_GROUP:di-common-public:$APP_PLATFORM_VERSION")
+    dependencies.add("implementation", "$APP_PLATFORM_GROUP:metro-public:$APP_PLATFORM_VERSION")
+    addAgpBuiltInKotlinCompilerPluginDependencies()
   }
 }
 
@@ -365,7 +379,7 @@ private fun Project.enableMoleculePresenters() {
     }
   }
 
-  plugins.withIds(PluginIds.KOTLIN_ANDROID, PluginIds.KOTLIN_JVM) {
+  withJvmOrAndroidPlugin {
     dependencies.add("implementation", "app.cash.molecule:molecule-runtime:$MOLECULE_VERSION")
     dependencies.add(
       "implementation",
@@ -392,7 +406,7 @@ private fun Project.enableMoleculePresenterBackstack() {
     }
   }
 
-  plugins.withIds(PluginIds.KOTLIN_ANDROID, PluginIds.KOTLIN_JVM) {
+  withJvmOrAndroidPlugin {
     dependencies.add(
       "implementation",
       "$APP_PLATFORM_GROUP:presenter-backstack-nav3-public:$APP_PLATFORM_VERSION",

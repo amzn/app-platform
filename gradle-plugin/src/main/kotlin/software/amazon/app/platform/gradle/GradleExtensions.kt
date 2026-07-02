@@ -18,6 +18,68 @@ internal fun PluginContainer.withIds(vararg pluginIds: String, action: (Plugin<*
   pluginIds.forEach { id -> withId(id) { action(it) } }
 }
 
+/**
+ * Runs [action] once for single-platform JVM and Android projects. Android projects may use either
+ * the legacy Kotlin Android plugin or AGP built-in Kotlin.
+ */
+internal fun Project.withJvmOrAndroidPlugin(action: () -> Unit) {
+  var didRun = false
+
+  fun runOnce() {
+    if (didRun || plugins.hasPlugin(PluginIds.KOTLIN_MULTIPLATFORM)) return
+
+    didRun = true
+    action()
+  }
+
+  plugins.withIds(
+    PluginIds.KOTLIN_ANDROID,
+    PluginIds.KOTLIN_JVM,
+    PluginIds.ANDROID_APP,
+    PluginIds.ANDROID_LIBRARY,
+  ) {
+    runOnce()
+  }
+}
+
+/** Runs [action] once for projects using the legacy Kotlin Android plugin or Kotlin JVM. */
+internal fun Project.withLegacyKotlinJvmOrAndroidPlugin(action: () -> Unit) {
+  var didRun = false
+
+  fun runOnce() {
+    if (didRun || plugins.hasPlugin(PluginIds.KOTLIN_MULTIPLATFORM)) return
+
+    didRun = true
+    action()
+  }
+
+  plugins.withIds(PluginIds.KOTLIN_ANDROID, PluginIds.KOTLIN_JVM) {
+    runOnce()
+  }
+}
+
+/** Runs [action] once for Android projects using AGP built-in Kotlin. */
+internal fun Project.withAgpBuiltInKotlinAndroidPlugin(action: () -> Unit) {
+  var didRun = false
+
+  fun runOnce() {
+    if (
+      didRun ||
+        plugins.hasPlugin(PluginIds.KOTLIN_MULTIPLATFORM) ||
+        plugins.hasPlugin(PluginIds.KOTLIN_ANDROID)
+    ) {
+      return
+    }
+
+    didRun = true
+    action()
+  }
+
+  plugins.withIds(PluginIds.ANDROID_APP, PluginIds.ANDROID_LIBRARY) {
+    runOnce()
+  }
+}
+
 // This is OK because no properties within parent are accessed
 // https://github.com/gradle/gradle/issues/33198
 @Suppress("GradleProjectIsolation")
@@ -26,9 +88,6 @@ internal fun Project.requireParent(): IsolatedProject =
       "The parent project for a module enabling the module structure should not be null."
     }
     .isolated
-
-internal val Project.isKmpModule: Boolean
-  get() = plugins.hasPlugin(PluginIds.KOTLIN_MULTIPLATFORM)
 
 internal val Project.android: CommonExtension
   get() = extensions.getByType(CommonExtension::class.java)

@@ -20,25 +20,20 @@ public open class ModuleStructurePlugin : Plugin<Project> {
   }
 
   private fun Project.addModuleStructureDependencies() {
-    plugins.withIds(
-      PluginIds.KOTLIN_MULTIPLATFORM,
-      PluginIds.KOTLIN_JVM,
-      PluginIds.KOTLIN_ANDROID,
+    fun addModuleStructureDependencies(
+      publicModuleConfiguration: String,
+      implModuleConfiguration: String,
     ) {
       val parent = requireParent()
 
       // Nothing to add.
-      if (isPublicModule()) return@withIds
+      if (isPublicModule()) return
 
       fun addPublicModule() {
         // this is ok because no properties within publicModule are accessed
         @Suppress("GradleProjectIsolation") val publicModule = findProject("${parent.path}:public")
         if (publicModule != null) {
-          if (isKmpModule) {
-            dependencies.add("commonMainApi", publicModule)
-          } else {
-            dependencies.add("api", publicModule)
-          }
+          dependencies.add(publicModuleConfiguration, publicModule)
         }
       }
 
@@ -66,15 +61,23 @@ public open class ModuleStructurePlugin : Plugin<Project> {
           @Suppress("GradleProjectIsolation") // no properties within project are accessed
           findProject(path.substringBefore("-robots"))
             ?.takeIf { it.isImplModule() }
-            ?.let { implModule ->
-              if (isKmpModule) {
-                dependencies.add("commonMainImplementation", implModule)
-              } else {
-                dependencies.add("implementation", implModule)
-              }
-            }
+            ?.let { implModule -> dependencies.add(implModuleConfiguration, implModule) }
         }
       }
+    }
+
+    plugins.withId(PluginIds.KOTLIN_MULTIPLATFORM) {
+      addModuleStructureDependencies(
+        publicModuleConfiguration = "commonMainApi",
+        implModuleConfiguration = "commonMainImplementation",
+      )
+    }
+
+    withJvmOrAndroidPlugin {
+      addModuleStructureDependencies(
+        publicModuleConfiguration = "api",
+        implModuleConfiguration = "implementation",
+      )
     }
   }
 
@@ -160,7 +163,9 @@ public open class ModuleStructurePlugin : Plugin<Project> {
           }
 
           plugins.hasPlugin(PluginIds.KOTLIN_ANDROID) ||
-            plugins.hasPlugin(PluginIds.KOTLIN_JVM) -> {
+            plugins.hasPlugin(PluginIds.KOTLIN_JVM) ||
+            plugins.hasPlugin(PluginIds.ANDROID_APP) ||
+            plugins.hasPlugin(PluginIds.ANDROID_LIBRARY) -> {
             add("testImplementation")
             if (moduleType.useTestDependenciesInMain) {
               add("implementation")
