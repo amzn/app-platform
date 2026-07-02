@@ -65,6 +65,26 @@ class ModuleStructureDependencyCheckTaskTest {
   }
 
   @Test
+  fun `app modules can import impl modules`() {
+    listOf(
+        ":app",
+        ":app-mobile",
+        ":feature:app:feature",
+        ":apps:feature",
+        ":app-mobile:feature",
+        ":feature:app-mobile:feature",
+        ":apps-mobile:feature",
+        ":feature:apps-mobile:feature",
+      )
+      .forEach { modulePath ->
+        checkDependencies(
+          modulePath = modulePath,
+          moduleCompileClasspath = setOf(":library:impl-common"),
+        )
+      }
+  }
+
+  @Test
   fun `internal dependency within the same library remains allowed`() {
     checkDependencies(
       modulePath = ":library:impl",
