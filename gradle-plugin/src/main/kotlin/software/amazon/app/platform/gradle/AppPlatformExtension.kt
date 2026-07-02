@@ -421,6 +421,9 @@ private fun Project.enableMoleculePresenterBackstack() {
 }
 
 private fun Project.enableComposeUi() {
+  val robotComposeDependency =
+    "$APP_PLATFORM_GROUP:robot-compose-multiplatform-public:$APP_PLATFORM_VERSION"
+
   plugins.withId(PluginIds.KOTLIN_MULTIPLATFORM) {
     plugins.apply(PluginIds.COMPOSE_COMPILER)
     plugins.apply(PluginIds.COMPOSE_MULTIPLATFORM)
@@ -434,9 +437,15 @@ private fun Project.enableComposeUi() {
       )
 
       if (isRobotsModule()) {
-        implementation(
-          "$APP_PLATFORM_GROUP:robot-compose-multiplatform-public:$APP_PLATFORM_VERSION"
-        )
+        implementation(robotComposeDependency)
+      }
+    }
+
+    if (isAppModule()) {
+      testingSourceSets.forEach { sourceSetName ->
+        kmpExtension.sourceSets.getByName(sourceSetName).dependencies {
+          implementation(robotComposeDependency)
+        }
       }
     }
   }
@@ -457,17 +466,11 @@ private fun Project.enableComposeUi() {
     )
 
     if (isRobotsModule()) {
-      dependencies.add(
-        "implementation",
-        "$APP_PLATFORM_GROUP:robot-compose-multiplatform-public:$APP_PLATFORM_VERSION",
-      )
+      dependencies.add("implementation", robotComposeDependency)
     }
 
     if (isAppModule()) {
-      dependencies.add(
-        "androidTestImplementation",
-        "$APP_PLATFORM_GROUP:robot-compose-multiplatform-public:$APP_PLATFORM_VERSION",
-      )
+      dependencies.add("androidTestImplementation", robotComposeDependency)
     }
   }
 }
