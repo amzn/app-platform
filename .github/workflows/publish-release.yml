@@ -21,7 +21,7 @@ jobs:
       contents: write
 
     runs-on: macos-latest
-    if: github.repository == 'amzn/app-platform'
+    if: github.repository == 'vRallev/app-platform'
     timeout-minutes: 60
 
     steps:

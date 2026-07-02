@@ -1,7 +1,7 @@
 # App Platform
 
 [![Maven Central](https://img.shields.io/maven-central/v/software.amazon.app.platform/gradle-plugin.svg?label=Maven%20Central)](https://central.sonatype.com/search?smo=true&namespace=software.amazon.app.platform)
-[![CI](https://github.com/amzn/app-platform/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/amzn/app-platform/actions/workflows/ci.yml)
+[![CI](https://github.com/vRallev/app-platform/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/vRallev/app-platform/actions/workflows/ci.yml)
 
 <img src="docs/images/app-platform-logo.png" alt="App Platform" style="width:150px" align="left"/>
 
@@ -11,7 +11,7 @@ dependency inversion and dependency injection (DI) design patterns first class p
 features and support the variety of platforms. The UI layer is entirely decoupled from the business logic,
 which allows different application targets to change the look and feel.
 
-### [amzn.github.io/app-platform](https://amzn.github.io/app-platform/)
+### [vrallev.github.io/app-platform](https://vrallev.github.io/app-platform/)
 
 ## Security
 

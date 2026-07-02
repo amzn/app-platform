@@ -91,7 +91,7 @@
 
 ### Added
 
-- Convert the sample app to [Metro](https://zacsweers.github.io/metro/), see #173. With the recent Kotlin and Metro version updates, issues we saw with Metro and targets other than Android/JVM are solved, and Metro is now the [recommended default](https://amzn.github.io/app-platform/di/) for dependency injection.
+- Convert the sample app to [Metro](https://zacsweers.github.io/metro/), see #173. With the recent Kotlin and Metro version updates, issues we saw with Metro and targets other than Android/JVM are solved, and Metro is now the [recommended default](https://vrallev.github.io/app-platform/di/) for dependency injection.
 
 ### Changed
 
@@ -135,7 +135,7 @@
 
 ### Added
 
-- Added support for [Metro](https://zacsweers.github.io/metro/) as dependency injection framework. User can choose between [`kotlin-inject-anvil`](https://github.com/amzn/kotlin-inject-anvil) and [Metro](https://zacsweers.github.io/metro/). For more details see the [documentation](https://amzn.github.io/app-platform/di/) for how to setup and use both dependency injection frameworks with App Platform.
+- Added support for [Metro](https://zacsweers.github.io/metro/) as dependency injection framework. User can choose between [`kotlin-inject-anvil`](https://github.com/amzn/kotlin-inject-anvil) and [Metro](https://zacsweers.github.io/metro/). For more details see the [documentation](https://vrallev.github.io/app-platform/di/) for how to setup and use both dependency injection frameworks with App Platform.
 
 ### Changed
 
@@ -158,7 +158,7 @@
 ### Added
 
 - Added support for the new [Android-KMP library plugin](https://developer.android.com/kotlin/multiplatform/plugin) in App Platform's Gradle plugin.
-- Added a [recipe](https://amzn.github.io/app-platform/presenter/#navigation-3) for how to use the Navigation 3 library with App Platform.
+- Added a [recipe](https://vrallev.github.io/app-platform/presenter/#navigation-3) for how to use the Navigation 3 library with App Platform.
 
 ### Changed
 
@@ -170,9 +170,9 @@
 ### Added
 
 - Added a search field to the wiki.
-- Added a [blueprint project](https://github.com/amzn/app-platform/tree/main/blueprints/starter) for App Platform that can be copied to spin up new projects faster, see #63.
-- Added support for back press events in `Presenters`. The API is similar to the one from Compose Multiplatform and Android Compose. See the [documentation in the wiki](https://amzn.github.io/app-platform/presenter/#back-gestures) for more details.
-- Added a [recipes application](https://amzn.github.io/app-platform/#web-recipe-app) showing solutions to common problems. All solutions have been [documented in the wiki](https://amzn.github.io/app-platform/presenter/#recipes).
+- Added a [blueprint project](https://github.com/vRallev/app-platform/tree/main/blueprints/starter) for App Platform that can be copied to spin up new projects faster, see #63.
+- Added support for back press events in `Presenters`. The API is similar to the one from Compose Multiplatform and Android Compose. See the [documentation in the wiki](https://vrallev.github.io/app-platform/presenter/#back-gestures) for more details.
+- Added a [recipes application](https://vrallev.github.io/app-platform/#web-recipe-app) showing solutions to common problems. All solutions have been [documented in the wiki](https://vrallev.github.io/app-platform/presenter/#recipes).
 
 ### Changed
 
@@ -219,19 +219,19 @@
 
 - Initial release.
 
-[Unreleased]: https://github.com/amzn/app-platform/compare/0.0.15...HEAD
-[0.0.15]: https://github.com/amzn/app-platform/compare/0.0.15
-[0.0.14]: https://github.com/amzn/app-platform/compare/0.0.14
-[0.0.13]: https://github.com/amzn/app-platform/compare/0.0.13
-[0.0.12]: https://github.com/amzn/app-platform/compare/0.0.12
-[0.0.11]: https://github.com/amzn/app-platform/compare/0.0.11
-[0.0.10]: https://github.com/amzn/app-platform/compare/0.0.10
-[0.0.9]: https://github.com/amzn/app-platform/compare/0.0.9
-[0.0.8]: https://github.com/amzn/app-platform/compare/0.0.8
-[0.0.7]: https://github.com/amzn/app-platform/compare/0.0.7
-[0.0.6]: https://github.com/amzn/app-platform/compare/0.0.6
-[0.0.5]: https://github.com/amzn/app-platform/compare/0.0.5
-[0.0.4]: https://github.com/amzn/app-platform/compare/0.0.4
-[0.0.3]: https://github.com/amzn/app-platform/compare/0.0.3
-[0.0.2]: https://github.com/amzn/app-platform/compare/0.0.2
-[0.0.1]: https://github.com/amzn/app-platform/compare/0.0.1
+[Unreleased]: https://github.com/vRallev/app-platform/compare/0.0.15...HEAD
+[0.0.15]: https://github.com/vRallev/app-platform/compare/0.0.15
+[0.0.14]: https://github.com/vRallev/app-platform/compare/0.0.14
+[0.0.13]: https://github.com/vRallev/app-platform/compare/0.0.13
+[0.0.12]: https://github.com/vRallev/app-platform/compare/0.0.12
+[0.0.11]: https://github.com/vRallev/app-platform/compare/0.0.11
+[0.0.10]: https://github.com/vRallev/app-platform/compare/0.0.10
+[0.0.9]: https://github.com/vRallev/app-platform/compare/0.0.9
+[0.0.8]: https://github.com/vRallev/app-platform/compare/0.0.8
+[0.0.7]: https://github.com/vRallev/app-platform/compare/0.0.7
+[0.0.6]: https://github.com/vRallev/app-platform/compare/0.0.6
+[0.0.5]: https://github.com/vRallev/app-platform/compare/0.0.5
+[0.0.4]: https://github.com/vRallev/app-platform/compare/0.0.4
+[0.0.3]: https://github.com/vRallev/app-platform/compare/0.0.3
+[0.0.2]: https://github.com/vRallev/app-platform/compare/0.0.2
+[0.0.1]: https://github.com/vRallev/app-platform/compare/0.0.1

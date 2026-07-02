@@ -26,7 +26,7 @@ class NavigationDetailRenderer : ComposeRenderer<Model>() {
       horizontalAlignment = Alignment.CenterHorizontally,
     ) {
       Text(
-        text = "Hello, welcome to amzn/app-platform Template App",
+        text = "Hello, welcome to vRallev/app-platform Template App",
         style = MaterialTheme.typography.headlineMedium,
         textAlign = TextAlign.Center,
         modifier = Modifier.padding(16.dp),
