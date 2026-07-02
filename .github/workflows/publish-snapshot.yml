@@ -18,7 +18,7 @@ concurrency:
 
 jobs:
   publish-snapshot:
-    runs-on: macos-latest
+    runs-on: ubuntu-latest
     if: github.repository == 'vRallev/app-platform'
     timeout-minutes: 60
 
