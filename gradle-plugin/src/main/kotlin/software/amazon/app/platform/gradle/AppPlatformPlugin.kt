@@ -51,7 +51,7 @@ public open class AppPlatformPlugin : Plugin<Project> {
       }
     }
 
-    plugins.withIds(PluginIds.KOTLIN_ANDROID, PluginIds.KOTLIN_JVM) {
+    withJvmOrAndroidPlugin {
       implementationDependencies.forEach { dep -> dependencies.add("implementation", dep) }
       testingSourceSets.forEach { sourceSetName ->
         testImplementationDependencies.forEach { dep -> dependencies.add(sourceSetName, dep) }
@@ -104,7 +104,7 @@ public open class AppPlatformPlugin : Plugin<Project> {
       }
     }
 
-    plugins.withIds(PluginIds.KOTLIN_ANDROID, PluginIds.KOTLIN_JVM) {
+    withJvmOrAndroidPlugin {
       implementationDependencies.forEach { dep -> dependencies.add("implementation", dep) }
     }
   }
