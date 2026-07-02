@@ -42,7 +42,6 @@ dependencies {
 
     androidMainImplementation libs.androidx.activity.compose
 
-    desktopTestImplementation project(':robot-compose-multiplatform:public')
     desktopTestImplementation project(':sample:login:impl-robots')
     desktopTestImplementation project(':sample:user:impl-robots')
 
