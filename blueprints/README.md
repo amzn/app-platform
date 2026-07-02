@@ -1,6 +1,6 @@
 # Blueprints
 
-This folder contains reusable templates ("blueprints") to help you quickly get started with projects using [App Platform](https://github.com/amzn/app-platform).
+This folder contains reusable templates ("blueprints") to help you quickly get started with projects using [App Platform](https://github.com/vRallev/app-platform).
 
 ## 📁 `starter/`
 

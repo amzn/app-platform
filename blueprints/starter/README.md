@@ -1,13 +1,13 @@
 # Template App for Amazon App Platform
 
-This is a Kotlin Multiplatform template application built using the [Amazon App Platform](https://github.com/amzn/app-platform). It provides a modern, opinionated starting point for building scalable, testable, and multiplatform Compose applications.
+This is a Kotlin Multiplatform template application built using the [Amazon App Platform](https://github.com/vRallev/app-platform). It provides a modern, opinionated starting point for building scalable, testable, and multiplatform Compose applications.
 
 ## Overview
 
 This template demonstrates:
 
 - Kotlin Multiplatform targeting Android, iOS, WebAssembly (WASM), and Desktop (JVM)
-- [App Platform](https://github.com/amzn/app-platform) conventions for Metro DI, state, rendering, and navigation
+- [App Platform](https://github.com/vRallev/app-platform) conventions for Metro DI, state, rendering, and navigation
 - Molecule-powered presenters
 - Scoped dependency injection using Metro graphs, `@ContributesBinding`, `@SingleIn`, `@ContributesScoped`, and `@ContributesRenderer`
 - Reactive state with `StateFlow`
@@ -78,8 +78,8 @@ You can modify app behavior by editing:
 
 ## Contributing
 
-Feel free to fork and adapt this template for your own projects. If you find bugs or improvements related to App Platform usage, consider opening issues or PRs against [amzn/app-platform](https://github.com/amzn/app-platform).
+Feel free to fork and adapt this template for your own projects. If you find bugs or improvements related to App Platform usage, consider opening issues or PRs against [vRallev/app-platform](https://github.com/vRallev/app-platform).
 
 ## License
 
-This project inherits the license of the [Amazon App Platform](https://github.com/amzn/app-platform).
+This project inherits the license of the [Amazon App Platform](https://github.com/vRallev/app-platform).

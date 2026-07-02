@@ -98,14 +98,14 @@ structure is enabled.
 
 ## Getting Started
 
-App Platform gives you a working Kotlin Multiplatform setup out of the box, with support for Android, iOS, Desktop, and Web (WASM). The fastest way to get started is by using the [blueprints/starter](https://github.com/amzn/app-platform/tree/main/blueprints/starter) project — a fully functional example app that already uses App Platform and applies everything the platform provides, including the module structure, dependency injection, scopes, presenters, and renderers.
+App Platform gives you a working Kotlin Multiplatform setup out of the box, with support for Android, iOS, Desktop, and Web (WASM). The fastest way to get started is by using the [blueprints/starter](https://github.com/vRallev/app-platform/tree/main/blueprints/starter) project — a fully functional example app that already uses App Platform and applies everything the platform provides, including the module structure, dependency injection, scopes, presenters, and renderers.
 
 ### Copy the Starter App
 
 To begin a new project:
 
 ```bash
-git clone https://github.com/amzn/app-platform.git
+git clone https://github.com/vRallev/app-platform.git
 cp -r app-platform/blueprints/starter my-kmp-app
 cd my-kmp-app
 ```
@@ -114,7 +114,7 @@ The starter blueprint comes preconfigured with App Platform and is ready to buil
 
 ### Build and Run
 
-The starter project includes a detailed [README](https://github.com/amzn/app-platform/blob/main/blueprints/starter/README.md) with instructions for building and running the app on each platform:
+The starter project includes a detailed [README](https://github.com/vRallev/app-platform/blob/main/blueprints/starter/README.md) with instructions for building and running the app on each platform:
 
 - Android
 - iOS

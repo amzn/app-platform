@@ -37,7 +37,7 @@ use case of Compose is handling, creating and modifying tree-like data structure
 UI frameworks. Molecule reuses Compose to handle state management and state transitions to implement business
 logic in the form of `@Composable` functions with all the benefits that Compose provides.
 
-The [MoleculePresenter](https://github.com/amzn/app-platform/blob/main/presenter-molecule/public/src/commonMain/kotlin/software/amazon/app/platform/presenter/molecule/MoleculePresenter.kt)
+The [MoleculePresenter](https://github.com/vRallev/app-platform/blob/main/presenter-molecule/public/src/commonMain/kotlin/software/amazon/app/platform/presenter/molecule/MoleculePresenter.kt)
 interface looks like this:
 
 ```kotlin
@@ -47,7 +47,7 @@ interface MoleculePresenter<InputT : Any, ModelT : BaseModel> {
 }
 ```
 
-[`Models`](https://github.com/amzn/app-platform/blob/main/presenter/public/src/commonMain/kotlin/software/amazon/app/platform/presenter/BaseModel.kt)
+[`Models`](https://github.com/vRallev/app-platform/blob/main/presenter/public/src/commonMain/kotlin/software/amazon/app/platform/presenter/BaseModel.kt)
 represent the state of a `Presenter`. Usually, they’re implemented as immutable, inner data classes of the `Presenter`.
 Using sealed hierarchies is a good practice to allow to differentiate between different states:
 
@@ -69,9 +69,9 @@ an interface and there can be multiple implementations.
 ??? example "Sample"
 
     The sample application follows the same principle of dependency inversion. E.g. the API of the
-    [`LoginPresenter`](https://github.com/amzn/app-platform/blob/main/sample/login/public/src/commonMain/kotlin/software/amazon/app/platform/sample/login/LoginPresenter.kt)
-    is part of the `:public` module, while the implementation [`LoginPresenterImpl`](https://github.com/amzn/app-platform/blob/main/sample/login/impl/src/commonMain/kotlin/software/amazon/app/platform/sample/login/LoginPresenterImpl.kt)
-    lives in the `:impl` module. This abstraction is used in tests, where [`FakeLoginPresenter`](https://github.com/amzn/app-platform/blob/main/sample/navigation/impl/src/commonTest/kotlin/software/amazon/app/platform/sample/navigation/NavigationPresenterImplTest.kt#L45-L49)
+    [`LoginPresenter`](https://github.com/vRallev/app-platform/blob/main/sample/login/public/src/commonMain/kotlin/software/amazon/app/platform/sample/login/LoginPresenter.kt)
+    is part of the `:public` module, while the implementation [`LoginPresenterImpl`](https://github.com/vRallev/app-platform/blob/main/sample/login/impl/src/commonMain/kotlin/software/amazon/app/platform/sample/login/LoginPresenterImpl.kt)
+    lives in the `:impl` module. This abstraction is used in tests, where [`FakeLoginPresenter`](https://github.com/vRallev/app-platform/blob/main/sample/navigation/impl/src/commonTest/kotlin/software/amazon/app/platform/sample/navigation/NavigationPresenterImplTest.kt#L45-L49)
     simplifies the test setup of classes relying on `LoginPresenter`.
 
 Observers of the state of a `Presenter`, such as the UI layer, communicate back to the `Presenter` through events.
@@ -166,10 +166,10 @@ a regular function to compute their model and return it.
 
 ??? example "Sample"
 
-    [`NavigationPresenterImpl`](https://github.com/amzn/app-platform/blob/main/sample/navigation/impl/src/commonMain/kotlin/software/amazon/app/platform/sample/navigation/NavigationPresenterImpl.kt)
+    [`NavigationPresenterImpl`](https://github.com/vRallev/app-platform/blob/main/sample/navigation/impl/src/commonMain/kotlin/software/amazon/app/platform/sample/navigation/NavigationPresenterImpl.kt)
     is another example that highlights this principle.
 
-    [`UserPagePresenterImpl`](https://github.com/amzn/app-platform/blob/main/sample/user/impl/src/commonMain/kotlin/software/amazon/app/platform/sample/user/UserPagePresenterImpl.kt)
+    [`UserPagePresenterImpl`](https://github.com/vRallev/app-platform/blob/main/sample/user/impl/src/commonMain/kotlin/software/amazon/app/platform/sample/user/UserPagePresenterImpl.kt)
     goes a step further. Its `BaseModel` is composed of two sub-models. The `listModel` is even an input for the
     detail-presenter.
 
@@ -304,7 +304,7 @@ In this example the `LoginPresenter` model is computed from an iOS Compose Multi
 In other scenarios a composable context may not be available and it's necessary to turn the `@Composable` functions
 into a `StateFlow` for consumption.
 
-[`MoleculeScope`](https://github.com/amzn/app-platform/blob/main/presenter-molecule/public/src/commonMain/kotlin/software/amazon/app/platform/presenter/molecule/MoleculeScope.kt)
+[`MoleculeScope`](https://github.com/vRallev/app-platform/blob/main/presenter-molecule/public/src/commonMain/kotlin/software/amazon/app/platform/presenter/molecule/MoleculeScope.kt)
 helps to turn a `MoleculePresenter` into a `Presenter`, which then exposes a `StateFlow`:
 
 ```kotlin
@@ -322,7 +322,7 @@ val stateFlow = moleculeScope
     until the `MoleculeScope` is canceled. If the `MoleculeScope` is never canceled, then presenters leak and will
     cause issues later.
 
-    Use [`MoleculeScopeFactory`](https://github.com/amzn/app-platform/blob/main/presenter-molecule/public/src/commonMain/kotlin/software/amazon/app/platform/presenter/molecule/MoleculeScopeFactory.kt)
+    Use [`MoleculeScopeFactory`](https://github.com/vRallev/app-platform/blob/main/presenter-molecule/public/src/commonMain/kotlin/software/amazon/app/platform/presenter/molecule/MoleculeScopeFactory.kt)
     to create a new `MoleculeScope` instance and call `cancel()` when you don't need it anymore.
 
     On Android an implementation using `ViewModels` may look like this:
@@ -414,7 +414,7 @@ in that case, child presenter updates are driven by the detached hierarchy's own
 
 ## Testing
 
-A [`test()`](https://github.com/amzn/app-platform/blob/main/presenter-molecule/testing/src/commonMain/kotlin/software/amazon/app/platform/presenter/molecule/TestPresenter.kt)
+A [`test()`](https://github.com/vRallev/app-platform/blob/main/presenter-molecule/testing/src/commonMain/kotlin/software/amazon/app/platform/presenter/molecule/TestPresenter.kt)
 utility function is provided to make testing `MoleculePresenters` easy using the [Turbine](https://github.com/cashapp/turbine/)
 library:
 
@@ -438,9 +438,9 @@ The `test()` function uses the `TestScope.backgroundScope` to run the presenter.
 ??? example "Sample"
 
     The sample application implements multiple tests for its presenters, e.g.
-    [`LoginPresenterImplTest`](https://github.com/amzn/app-platform/blob/main/sample/login/impl/src/commonTest/kotlin/software/amazon/app/platform/sample/login/LoginPresenterImplTest.kt),
-    [`NavigationPresenterImplTest`](https://github.com/amzn/app-platform/blob/main/sample/navigation/impl/src/commonTest/kotlin/software/amazon/app/platform/sample/navigation/NavigationPresenterImplTest.kt)
-    and [`UserPagePresenterImplTest`](https://github.com/amzn/app-platform/blob/main/sample/user/impl/src/commonTest/kotlin/software/amazon/app/platform/sample/user/UserPagePresenterImplTest.kt).
+    [`LoginPresenterImplTest`](https://github.com/vRallev/app-platform/blob/main/sample/login/impl/src/commonTest/kotlin/software/amazon/app/platform/sample/login/LoginPresenterImplTest.kt),
+    [`NavigationPresenterImplTest`](https://github.com/vRallev/app-platform/blob/main/sample/navigation/impl/src/commonTest/kotlin/software/amazon/app/platform/sample/navigation/NavigationPresenterImplTest.kt)
+    and [`UserPagePresenterImplTest`](https://github.com/vRallev/app-platform/blob/main/sample/user/impl/src/commonTest/kotlin/software/amazon/app/platform/sample/user/UserPagePresenterImplTest.kt).
 
 ## Back gestures
 
@@ -546,9 +546,9 @@ class MyPresenterTest {
 ??? example "Sample"
 
     The `BackHandlerPresenter {}` call has been integrated in the sample application with this recommended setup. All
-    necessary changes are part of this [commit](https://github.com/amzn/app-platform/pull/84/commits/a807a5673973eae26940cd1130dad836cb3dbd43).
+    necessary changes are part of this [commit](https://github.com/vRallev/app-platform/pull/84/commits/a807a5673973eae26940cd1130dad836cb3dbd43).
 
-    The same setup has been integrated in the recipes app part of this [commit](https://github.com/amzn/app-platform/pull/82/commits/fce1b3fbc0b2683ec6a93a499694f914bac34b18)
+    The same setup has been integrated in the recipes app part of this [commit](https://github.com/vRallev/app-platform/pull/82/commits/fce1b3fbc0b2683ec6a93a499694f914bac34b18)
     as well. 
 
 ## Compose runtime
@@ -715,7 +715,7 @@ is called with their initial state. These presenters only remember their state, 
 
 The Compose runtime provides `rememberSaveable { }` and `SaveableStateHolder` as a solution to save and restore small
 pieces of UI state. App Platform provides the experimental
-[`ReturningSaveableStateHolder`](https://github.com/amzn/app-platform/blob/main/presenter-molecule/public/src/commonMain/kotlin/software/amazon/app/platform/presenter/molecule/saveable/ReturningSaveableStateHolder.kt)
+[`ReturningSaveableStateHolder`](https://github.com/vRallev/app-platform/blob/main/presenter-molecule/public/src/commonMain/kotlin/software/amazon/app/platform/presenter/molecule/saveable/ReturningSaveableStateHolder.kt)
 API for `@Composable` functions that return a value. This matters for `MoleculePresenter` functions, because a presenter
 doesn't render UI directly; it returns a model.
 
@@ -835,7 +835,7 @@ class CrossSlideBackstackPresenter(
 
 `presenterBackstack()` always keeps the initial presenter as the root entry. It composes every presenter in the stack,
 returns the resulting model list to the `content` lambda, and provides
-[`PresenterBackstackScope`](https://github.com/amzn/app-platform/blob/main/presenter-backstack-nav3/public/src/commonMain/kotlin/software/amazon/app/platform/presenter/backstack/nav3/PresenterBackstackScope.kt)
+[`PresenterBackstackScope`](https://github.com/vRallev/app-platform/blob/main/presenter-backstack-nav3/public/src/commonMain/kotlin/software/amazon/app/platform/presenter/backstack/nav3/PresenterBackstackScope.kt)
 to the presenter subtree. The scope exposes `push()`, `pop()`, and `replaceTop()`.
 
 The model's `onBack` callback is the only back hook the presenter needs for renderer-driven back navigation.
@@ -1071,7 +1071,7 @@ The `SampleAppTemplateRenderer` has access to `appBarModel` from the `FullScreen
 to configure the app bar UI.
 
 The Recipe app has chosen a different implementation, where any `BaseModel` class from a `Presenter` can implement the
-specific [`AppBarConfigModel`](https://github.com/amzn/app-platform/blob/main/recipes/common/impl/src/commonMain/kotlin/software/amazon/app/platform/recipes/appbar/AppBarConfigModel.kt)
+specific [`AppBarConfigModel`](https://github.com/vRallev/app-platform/blob/main/recipes/common/impl/src/commonMain/kotlin/software/amazon/app/platform/recipes/appbar/AppBarConfigModel.kt)
 interface, which provides the configuration for the app bar. Implementing this interface is optional:
 
 ```kotlin
@@ -1092,7 +1092,7 @@ class MenuPresenter : MoleculePresenter<Unit, Model> {
 ```
 
 If a `BaseModel` implementing `AppBarConfigModel` bubbles all the way up to the
-[`RootPresenter`](https://github.com/amzn/app-platform/blob/main/recipes/common/impl/src/commonMain/kotlin/software/amazon/app/platform/recipes/template/RootPresenter.kt),
+[`RootPresenter`](https://github.com/vRallev/app-platform/blob/main/recipes/common/impl/src/commonMain/kotlin/software/amazon/app/platform/recipes/template/RootPresenter.kt),
 then the `BaseModel` from the child `Presenter` will provide the config for the `Template` or otherwise the
 `RootPresenter` will provide a default:
 
@@ -1124,7 +1124,7 @@ in the business logic. With the right integration strategy, this downside can be
 
 The presenter backstack API is the recommended integration strategy when a Compose renderer should use Navigation 3
 but presenter code should still own navigation state. The Recipes app's
-[`Navigation3HomePresenter`](https://github.com/amzn/app-platform/blob/main/recipes/common/impl/src/commonMain/kotlin/software/amazon/app/platform/recipes/nav3/Navigation3HomePresenter.kt)
+[`Navigation3HomePresenter`](https://github.com/vRallev/app-platform/blob/main/recipes/common/impl/src/commonMain/kotlin/software/amazon/app/platform/recipes/nav3/Navigation3HomePresenter.kt)
 hosts a nested presenter stack:
 
 ```kotlin
@@ -1157,7 +1157,7 @@ override fun present(input: Unit): Model {
 ```
 
 The
-[`Renderer`](https://github.com/amzn/app-platform/blob/main/recipes/common/impl/src/commonMain/kotlin/software/amazon/app/platform/recipes/nav3/Navigation3HomeRenderer.kt)
+[`Renderer`](https://github.com/vRallev/app-platform/blob/main/recipes/common/impl/src/commonMain/kotlin/software/amazon/app/platform/recipes/nav3/Navigation3HomeRenderer.kt)
 extends `PresenterBackstackRenderer`. The base renderer wraps the model stack in `NavDisplay`, gives each entry a
 stable Navigation 3 key, invokes the individual renderer for each model, and forwards back gestures to the presenter
 model's `onBack` callback:
@@ -1220,7 +1220,7 @@ the renderer-level navigation container and back gesture integration.
 #### `Presenters` and SwiftUI `Views`
 
 In iOS it's possible to connect `Presenters` to SwiftUI `Views` so `Presenter` logic can be shared while keeping UI
-native. The Recipes app demonstrates a [set of Swift APIs](https://github.com/amzn/app-platform/tree/main/recipes/recipesIosApp/recipesIosApp/PresenterViews)
+native. The Recipes app demonstrates a [set of Swift APIs](https://github.com/vRallev/app-platform/tree/main/recipes/recipesIosApp/recipesIosApp/PresenterViews)
 that demonstrate how to launch a `Presenter` and render SwiftUI `Views` in the iOS flavor. Note that App Platform 
 does not provide an API equivalent of SwiftUI `Renderers`. As such, we need to decide how to observe the flow of models 
 from a given `Presenter` and create `Views` from them.
@@ -1325,12 +1325,12 @@ detail, and we want ensure that all back events are handled appropriately and th
 
     We provide a recipe for integration with `NavigationStack` for single column navigation based on back gesture. For 
     other kinds of navigation with `NavigationSplitView` or `NavigationLink` it is possible to integrate following our
-    [model driven navigation](https://amzn.github.io/app-platform/presenter/#model-driven-navigation) pattern. However,
+    [model driven navigation](https://vrallev.github.io/app-platform/presenter/#model-driven-navigation) pattern. However,
     we don't provide an explicit recipe for it. If you're missing some use cases here, please let us know.
 
 The Recipes app demonstrates how SwiftUI navigation APIs can be used while following App Platform's philosophy of 
 unidirectional data flow. As navigation is a part of business logic, the recipe [implements navigation with 
-a backstack of `Presenters`](https://github.com/amzn/app-platform/blob/main/recipes/common/impl/src/commonMain/kotlin/software/amazon/app/platform/recipes/swiftui/SwiftUiHomePresenter.kt).
+a backstack of `Presenters`](https://github.com/vRallev/app-platform/blob/main/recipes/common/impl/src/commonMain/kotlin/software/amazon/app/platform/recipes/swiftui/SwiftUiHomePresenter.kt).
 The root `Presenter` responsible for the `Presenter` backstack computes the `Model` backstack:
 
 ```kotlin
@@ -1356,7 +1356,7 @@ The root `Presenter` responsible for the `Presenter` backstack computes the `Mod
   }
 ```
 The `Presenter` forwards the `Models` and event callbacks to a SwiftUI `View`, which
-integrates these models with a [`NavigationStack`](https://github.com/amzn/app-platform/blob/main/recipes/recipesIosApp/recipesIosApp/SwiftUI/SwiftUiHomePresenterView.swift).
+integrates these models with a [`NavigationStack`](https://github.com/vRallev/app-platform/blob/main/recipes/recipesIosApp/recipesIosApp/SwiftUI/SwiftUiHomePresenterView.swift).
 Note that to integrate we create a [`Binding`](https://developer.apple.com/documentation/swiftui/binding) that is passed
 in to the `NavigationStack`. The `Binding's` value type must conform to `Hashable` and by default `BaseModel` does not
 conform. To resolve this in the recipe we simply represent each `Model` by the index of its position in the `Model`
