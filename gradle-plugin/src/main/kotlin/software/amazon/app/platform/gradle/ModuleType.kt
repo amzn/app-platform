@@ -98,10 +98,23 @@ internal fun String.moduleTypeFromProjectPath(): ModuleType {
     name == "testing" -> TESTING
     name.startsWith("impl") -> if (isRobots) IMPL_ROBOTS else IMPL
     name.startsWith("internal") -> if (isRobots) INTERNAL_ROBOTS else INTERNAL
-    contains(":app:") || name.startsWith("app") -> APP
+    isAppModulePath() -> APP
     else -> UNKNOWN
   }
 }
+
+private fun String.isAppModulePath(): Boolean {
+  val name = substringAfterLast(':')
+
+  return name.isAppSegment() ||
+    contains(":app:") ||
+    contains(":apps:") ||
+    contains(":app-") ||
+    contains(":apps-")
+}
+
+private fun String.isAppSegment(): Boolean =
+  this == "app" || this == "apps" || startsWith("app-") || startsWith("apps-")
 
 internal fun String.moduleTypeFromArtifactId(): ModuleType {
   // E.g. abc-public, def-impl-xyz-robots
