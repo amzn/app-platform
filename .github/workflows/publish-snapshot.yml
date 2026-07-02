@@ -19,7 +19,7 @@ concurrency:
 
 jobs:
   publish-snapshot:
-    runs-on: macos-latest
+    runs-on: ubuntu-latest
     if: github.repository == 'vRallev/app-platform'
     timeout-minutes: 60
 
@@ -30,7 +30,6 @@ jobs:
         uses: ./.github/actions/setup-action
         with:
           gradle-encryption-key: ${{ secrets.GRADLE_ENCRYPTION_KEY }}
-          select-xcode-26: "true"
 
       - name: Publish snapshot
         run: |
