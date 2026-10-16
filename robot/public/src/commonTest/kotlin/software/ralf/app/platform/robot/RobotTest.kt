@@ -5,6 +5,7 @@ import assertk.assertions.contains
 import assertk.assertions.isFalse
 import assertk.assertions.isNotNull
 import assertk.assertions.isNotSameInstanceAs
+import assertk.assertions.isSameInstanceAs
 import assertk.assertions.isTrue
 import kotlin.reflect.KClass
 import kotlin.test.Test
@@ -171,6 +172,202 @@ class RobotTest {
     childScope.destroy()
 
     assertFailsWith<IllegalStateException> { robot<ChildTestRobot>(rootScope) {} }
+  }
+
+  @Test
+  fun `scopes destroyed before their services are read are skipped`() {
+    val expectedRobot = MetroTestRobot()
+    val rootScope = rootScope(kiRobot = null, metroRobot = expectedRobot)
+    val childScope = rootScope.buildChild("child")
+    val destroyingChild =
+      object : Scope by childScope {
+        override fun isDestroyed(): Boolean {
+          val destroyed = childScope.isDestroyed()
+          childScope.destroy()
+          return destroyed
+        }
+      }
+    val scope =
+      object : Scope by rootScope {
+        override fun children(): Set<Scope> = setOf(destroyingChild)
+      }
+
+    robot<MetroTestRobot>(scope) { assertThat(this).isSameInstanceAs(expectedRobot) }
+    assertThat(childScope.isDestroyed()).isTrue()
+  }
+
+  @Test
+  fun `scopes destroyed before their children are read are skipped`() {
+    val expectedRobot = MetroTestRobot()
+    val rootScope = rootScope(kiRobot = null, metroRobot = expectedRobot)
+    val childScope = rootScope.buildChild("child")
+    val destroyingChild =
+      object : Scope by childScope {
+        override fun children(): Set<Scope> {
+          childScope.destroy()
+          return childScope.children()
+        }
+      }
+    val scope =
+      object : Scope by rootScope {
+        override fun children(): Set<Scope> = setOf(destroyingChild)
+      }
+
+    robot<MetroTestRobot>(scope) { assertThat(this).isSameInstanceAs(expectedRobot) }
+    assertThat(childScope.isDestroyed()).isTrue()
+  }
+
+  @Test
+  fun `service failures from a live scope propagate unchanged`() {
+    val failure = IllegalStateException("Service lookup failed")
+    val scope =
+      object : Scope by rootScope() {
+        override fun <T : Any> getService(key: String): T? {
+          throw failure
+        }
+      }
+
+    val actual = assertFailsWith<IllegalStateException> { robot<MetroTestRobot>(scope) {} }
+
+    assertThat(actual).isSameInstanceAs(failure)
+    assertThat(scope.isDestroyed()).isFalse()
+  }
+
+  @Test
+  fun `children failures from a live scope propagate unchanged`() {
+    val failure = IllegalStateException("Children lookup failed")
+    val scope =
+      object : Scope by rootScope() {
+        override fun children(): Set<Scope> {
+          throw failure
+        }
+      }
+
+    val actual = assertFailsWith<IllegalStateException> { robot<MetroTestRobot>(scope) {} }
+
+    assertThat(actual).isSameInstanceAs(failure)
+    assertThat(scope.isDestroyed()).isFalse()
+  }
+
+  @Test
+  fun `scopes destroyed while reading robots do not hide a sibling robot`() {
+    val rootScope = rootScope(kiRobot = null, metroRobot = null)
+    lateinit var destroyingChild: Scope
+    destroyingChild =
+      rootScope.buildChild("destroying-child") {
+        addMetroDependencyGraph(
+          object : RobotGraph {
+            override val robots: Map<KClass<*>, () -> Robot>
+              get() {
+                destroyingChild.destroy()
+                return mapOf(ChildTestRobot::class to { ChildTestRobot() })
+              }
+          },
+        )
+      }
+    val expectedRobot = ChildTestRobot()
+    rootScope.buildChild("live-child") { addMetroDependencyGraph(Graph(expectedRobot)) }
+
+    robot<ChildTestRobot>(rootScope) { assertThat(this).isSameInstanceAs(expectedRobot) }
+    assertThat(destroyingChild.isDestroyed()).isTrue()
+  }
+
+  @Test
+  fun `a matching scope destroyed later during discovery is ignored`() {
+    val rootScope = rootScope(kiRobot = null, metroRobot = null)
+    val firstChild =
+      rootScope.buildChild("first-child") { addMetroDependencyGraph(Graph(ChildTestRobot())) }
+    val expectedRobot = ChildTestRobot()
+    rootScope.buildChild("second-child") {
+      addMetroDependencyGraph(
+        object : RobotGraph {
+          override val robots: Map<KClass<*>, () -> Robot>
+            get() {
+              firstChild.destroy()
+              return mapOf(ChildTestRobot::class to { expectedRobot })
+            }
+        },
+      )
+    }
+
+    robot<ChildTestRobot>(rootScope) { assertThat(this).isSameInstanceAs(expectedRobot) }
+    assertThat(firstChild.isDestroyed()).isTrue()
+  }
+
+  @Test
+  fun `robot getter failures propagate even if the scope was destroyed`() {
+    val rootScope = rootScope(kiRobot = null, metroRobot = null)
+    val failure = IllegalStateException("Robot getter failed")
+    lateinit var childScope: Scope
+    childScope =
+      rootScope.buildChild("child") {
+        addMetroDependencyGraph(
+          object : RobotGraph {
+            override val robots: Map<KClass<*>, () -> Robot>
+              get() {
+                childScope.destroy()
+                throw failure
+              }
+          },
+        )
+      }
+
+    val actual = assertFailsWith<IllegalStateException> { robot<ChildTestRobot>(rootScope) {} }
+
+    assertThat(actual).isSameInstanceAs(failure)
+  }
+
+  @Test
+  fun `robot getters accessing another destroyed scope propagate the failure`() {
+    val destroyedScope = Scope.buildRootScope("destroyed")
+    destroyedScope.destroy()
+    var failure: IllegalStateException? = null
+    val rootScope = Scope.buildRootScope {
+      addMetroDependencyGraph(
+        object : RobotGraph {
+          override val robots: Map<KClass<*>, () -> Robot>
+            get() =
+              try {
+                destroyedScope.getService<Map<KClass<*>, () -> Robot>>("robots").orEmpty()
+              } catch (exception: IllegalStateException) {
+                failure = exception
+                throw exception
+              }
+        },
+      )
+    }
+
+    val actual = assertFailsWith<IllegalStateException> { robot<ChildTestRobot>(rootScope) {} }
+
+    assertThat(actual).isSameInstanceAs(failure)
+    assertThat(rootScope.isDestroyed()).isFalse()
+  }
+
+  @Test
+  fun `robot factory failures propagate unchanged`() {
+    val failure = IllegalStateException("Robot factory failed")
+    val rootScope = Scope.buildRootScope {
+      addKotlinInjectComponent(
+        object : RobotComponent {
+          override val robots: Map<KClass<out Robot>, () -> Robot> =
+            mapOf(KiTestRobot::class to { throw failure })
+        },
+      )
+    }
+
+    val actual = assertFailsWith<IllegalStateException> { robot<KiTestRobot>(rootScope) {} }
+
+    assertThat(actual).isSameInstanceAs(failure)
+  }
+
+  @Test
+  fun `discovery starting at a child finds robots from its parent`() {
+    val kiRobot = KiTestRobot()
+    val metroRobot = MetroTestRobot()
+    val childScope = rootScope(kiRobot, metroRobot).buildChild("child")
+
+    robot<KiTestRobot>(childScope) { assertThat(this).isSameInstanceAs(kiRobot) }
+    robot<MetroTestRobot>(childScope) { assertThat(this).isSameInstanceAs(metroRobot) }
   }
 
   private fun rootScope(

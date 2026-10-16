@@ -81,7 +81,8 @@ public interface Robot {
  *
  * [rootScope] refers to the application scope. The scope and all of its children are searched for
  * the contributed robot. Usually, the parameter doesn't need to be changed and the default value
- * can be used.
+ * can be used. Scopes destroyed during discovery are skipped. Lookup does not keep scopes alive
+ * while the robot runs.
  */
 public inline fun <reified T : Robot> robot(
   rootScope: Scope = software.ralf.app.platform.robot.internal.rootScope,
@@ -103,38 +104,58 @@ public inline fun <reified T : Robot> robot(
 
 @PublishedApi
 internal fun Scope.findRobotFactory(robotType: KClass<*>): (() -> Robot)? {
-  var match: (() -> Robot)? = null
-  var matchingScope: Scope? = null
+  val matches = mutableMapOf<Scope, () -> Robot>()
 
   fun Scope.findRobot(inheritedRobotTypes: Set<KClass<*>>) {
-    if (isDestroyed()) return
+    if (isDestroyed()) {
+      return
+    }
 
-    val robots = allRobots
-    if (robotType !in inheritedRobotTypes) {
-      robots[robotType]?.let { robotFactory ->
-        check(match == null) {
-          "Found Robot of type $robotType in multiple scopes: " +
-            "${matchingScope?.name} and $name."
-        }
-        match = robotFactory
-        matchingScope = this
+    val component: RobotComponent?
+    val graph: RobotGraph?
+    val childScopes: Set<Scope>
+    try {
+      component = kotlinInjectComponentOrNull()
+      graph = metroDependencyGraphOrNull()
+      childScopes = children()
+    } catch (exception: IllegalStateException) {
+      // Destruction can finish after the initial check or between these reads.
+      if (isDestroyed()) {
+        return
       }
+      throw exception
+    }
+
+    val robots = robotFactories(component, graph)
+    if (robotType !in inheritedRobotTypes) {
+      robots[robotType]?.let { matches[this] = it }
     }
 
     val visibleRobotTypes = inheritedRobotTypes + robots.keys
-    children().forEach { childScope -> childScope.findRobot(visibleRobotTypes) }
+    childScopes.forEach { childScope -> childScope.findRobot(visibleRobotTypes) }
   }
 
   findRobot(emptySet())
-  return match
+
+  val liveMatches = matches.filterKeys { !it.isDestroyed() }
+  check(liveMatches.size <= 1) {
+    "Found Robot of type $robotType in multiple scopes: " +
+      "${liveMatches.keys.joinToString(" and ") { it.name }}."
+  }
+  return liveMatches.values.singleOrNull()
 }
 
 @PublishedApi
 internal val Scope.allRobots: Map<KClass<*>, () -> Robot>
   get() {
-    return kotlinInjectComponentOrNull<RobotComponent>()?.robots.orEmpty() +
-      metroDependencyGraphOrNull<RobotGraph>()?.robots.orEmpty().mapValues { { it.value() } }
+    return robotFactories(kotlinInjectComponentOrNull(), metroDependencyGraphOrNull())
   }
+
+private fun robotFactories(
+  component: RobotComponent?,
+  graph: RobotGraph?,
+): Map<KClass<*>, () -> Robot> =
+  component?.robots.orEmpty() + graph?.robots.orEmpty().mapValues { { it.value() } }
 
 private inline fun <reified T : Any> Scope.metroDependencyGraphOrNull(): T? {
   return try {
