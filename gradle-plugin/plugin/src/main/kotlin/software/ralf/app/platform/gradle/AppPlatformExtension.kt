@@ -18,6 +18,7 @@ import org.jetbrains.kotlin.gradle.plugin.KotlinPlatformType
 import org.jetbrains.kotlin.gradle.plugin.KotlinTarget
 import org.jetbrains.kotlin.gradle.plugin.NATIVE_COMPILER_PLUGIN_CLASSPATH_CONFIGURATION_NAME
 import org.jetbrains.kotlin.gradle.plugin.PLUGIN_CLASSPATH_CONFIGURATION_NAME
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompilationTask
 import software.ralf.app.platform.gradle.ModuleStructureNestingCheckTask.Companion.registerModuleStructureNestingCheckTask
 import software.ralf.app.platform.gradle.ModuleStructurePlugin.Companion.testingSourceSets
 
@@ -356,6 +357,13 @@ private fun Project.enableMetroKsp() {
 }
 
 private fun Project.enableMetroCompilerPlugin() {
+  tasks.withType(KotlinCompilationTask::class.java).configureEach { task ->
+    // Generate contribution functions before Metro collects bindings.
+    task.compilerOptions.freeCompilerArgs.add(
+      "-Xcompiler-plugin-order=software.ralf.app.platform.metro.compiler>dev.zacsweers.metro.compiler",
+    )
+  }
+
   val compilerPluginDependency =
     "$APP_PLATFORM_GROUP:metro-contribute-impl-compiler-plugin:$APP_PLATFORM_VERSION"
 

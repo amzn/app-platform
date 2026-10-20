@@ -177,6 +177,12 @@ public class BoxTestGenerated extends AbstractBoxTest {
     public void testInjectSecondaryConstructorSkipsProvider() {
       run("injectSecondaryConstructorSkipsProvider.kt");
     }
+
+    @Test
+    @TestMetadata("robotInDependencyModule.kt")
+    public void testRobotInDependencyModule() {
+      run("robotInDependencyModule.kt");
+    }
   }
 
   @Nested

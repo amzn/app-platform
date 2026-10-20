@@ -29,8 +29,8 @@ public class AppPlatformMetroExtensionsPluginComponentRegistrar : CompilerPlugin
     with(compatContext) {
       registerFirExtensionCompat(AppPlatformMetroExtensionsPluginRegistrar())
       registerIrExtensionCompat(ContributesRendererIrExtension(compatContext))
-      registerIrExtensionCompat(ContributesRobotIrExtension())
-      registerIrExtensionCompat(ContributesScopedIrExtension())
+      registerIrExtensionCompat(ContributesRobotIrExtension(compatContext))
+      registerIrExtensionCompat(ContributesScopedIrExtension(compatContext))
     }
   }
 }

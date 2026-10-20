@@ -90,6 +90,28 @@ class AppPlatformPluginDependencyTest {
   }
 
   @Test
+  fun `Metro compiler ordering applies to existing and future compilations`() {
+    val project = createProject(name = "impl")
+    project.plugins.apply(PluginIds.KOTLIN_MULTIPLATFORM)
+    project.plugins.apply(AppPlatformPlugin::class.java)
+    val target = project.kmpExtension.jvm()
+    val mainCompilation = target.compilations.getByName("main")
+
+    project.appPlatform.enableMetro(true)
+    val extraCompilation = target.compilations.create("extra")
+
+    project.evaluate()
+
+    listOf(mainCompilation, extraCompilation).forEach { compilation ->
+      val arguments = compilation.compileTaskProvider.get().compilerOptions.freeCompilerArgs.get()
+      assertThat(arguments)
+        .contains(
+          "-Xcompiler-plugin-order=software.ralf.app.platform.metro.compiler>dev.zacsweers.metro.compiler",
+        )
+    }
+  }
+
+  @Test
   fun `legacy JVM Metro dependency wiring still works`() {
     val project = createProject(name = "impl")
     project.plugins.apply(PluginIds.KOTLIN_JVM)

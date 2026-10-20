@@ -1,3 +1,5 @@
+// MODULE: lib
+// FILE: TestClass.kt
 package com.test
 
 import software.ralf.app.platform.inject.metro.ContributesScoped
@@ -9,6 +11,12 @@ interface TestClassScoped
 @SingleIn(AppScope::class)
 @ContributesScoped(AppScope::class)
 class TestClass : TestClassScoped, Scoped
+
+// MODULE: main(lib)
+// FILE: main.kt
+package com.test
+
+import software.ralf.app.platform.scope.Scoped
 
 @DependencyGraph(AppScope::class)
 @SingleIn(AppScope::class)

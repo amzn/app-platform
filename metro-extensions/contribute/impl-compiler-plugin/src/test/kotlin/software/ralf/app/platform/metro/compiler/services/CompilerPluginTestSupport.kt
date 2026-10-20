@@ -43,7 +43,7 @@ private class ExtensionRegistrarConfigurator(testServices: TestServices) :
         val option = metroCommandLineProcessor.pluginOptions.single { it.optionName == optionName }
         metroCommandLineProcessor.processOption(option, "true", configuration)
       }
-    with(metroRegistrar) { registerExtensions(configuration) }
     with(extensionsRegistrar) { registerExtensions(configuration) }
+    with(metroRegistrar) { registerExtensions(configuration) }
   }
 }
