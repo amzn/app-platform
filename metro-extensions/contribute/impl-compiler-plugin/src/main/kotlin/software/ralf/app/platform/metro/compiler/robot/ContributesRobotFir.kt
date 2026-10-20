@@ -13,7 +13,7 @@ import org.jetbrains.kotlin.fir.FirFunctionTarget
 import org.jetbrains.kotlin.fir.FirSession
 import org.jetbrains.kotlin.fir.declarations.DirectDeclarationsAccess
 import org.jetbrains.kotlin.fir.declarations.FirConstructor
-import org.jetbrains.kotlin.fir.declarations.FirFunction
+import org.jetbrains.kotlin.fir.declarations.FirNamedFunction
 import org.jetbrains.kotlin.fir.declarations.FirResolvePhase
 import org.jetbrains.kotlin.fir.declarations.FirValueParameter
 import org.jetbrains.kotlin.fir.declarations.builder.buildNamedFunction
@@ -58,7 +58,6 @@ import org.jetbrains.kotlin.name.Name
 import org.jetbrains.kotlin.name.SpecialNames
 import software.ralf.app.platform.metro.compiler.ClassIds
 import software.ralf.app.platform.metro.compiler.Keys
-import software.ralf.app.platform.metro.compiler.fir.addGeneratedDeclaration
 import software.ralf.app.platform.metro.compiler.fir.buildAnnotationCallWithArgument
 import software.ralf.app.platform.metro.compiler.fir.buildClassExpression
 import software.ralf.app.platform.metro.compiler.fir.buildSimpleAnnotationCall
@@ -163,11 +162,7 @@ internal constructor(
       val robotOwner = generatedRobotContributionOwner(owner) ?: return null
       if (hasInjectAnnotation(robotOwner)) return null
       val contributionSymbol = owner as? FirRegularClassSymbol ?: return null
-      val companion =
-        buildProviderCompanionObject(contributionSymbol) { companionClassId ->
-          listOf(buildProvideRobotFunction(companionClassId, robotOwner))
-        }
-      return companion.symbol
+      return createCompanionObject(contributionSymbol, Keys.ContributesRobotGeneratorKey).symbol
     }
 
     if (!hasAnnotation(owner, ContributesRobotIds.CONTRIBUTES_ROBOT_CLASS_ID, session)) return null
@@ -239,7 +234,6 @@ internal constructor(
           session,
         )
       annotations += buildOriginAnnotation(owner)
-      declarations += buildProvideRobotIntoMapFunction(nestedClassId, owner)
     }
 
     return contributionClass.symbol
@@ -249,11 +243,29 @@ internal constructor(
     classSymbol: FirClassSymbol<*>,
     context: MemberGenerationContext,
   ): Set<Name> {
-    return if (generatedRobotProviderCompanionOwner(classSymbol) != null) {
-      setOf(SpecialNames.INIT)
-    } else {
-      emptySet()
+    generatedRobotContributionOwner(classSymbol)?.let { robotOwner ->
+      return setOf(provideRobotIntoMapName(robotOwner))
     }
+    val robotOwner = generatedRobotProviderCompanionOwner(classSymbol) ?: return emptySet()
+    return setOf(SpecialNames.INIT, provideRobotName(robotOwner))
+  }
+
+  override fun generateFunctions(
+    callableId: CallableId,
+    context: MemberGenerationContext?,
+  ): List<FirNamedFunctionSymbol> {
+    val owner = context?.owner ?: return emptyList()
+    generatedRobotContributionOwner(owner)?.let { robotOwner ->
+      if (callableId.callableName != provideRobotIntoMapName(robotOwner)) {
+        return emptyList()
+      }
+      return listOf(buildProvideRobotIntoMapFunction(owner.classId, robotOwner).symbol)
+    }
+    val robotOwner = generatedRobotProviderCompanionOwner(owner) ?: return emptyList()
+    if (callableId.callableName != provideRobotName(robotOwner)) {
+      return emptyList()
+    }
+    return listOf(buildProvideRobotFunction(owner.classId, robotOwner).symbol)
   }
 
   override fun generateConstructors(context: MemberGenerationContext): List<FirConstructorSymbol> {
@@ -264,16 +276,6 @@ internal constructor(
       createDefaultPrivateConstructor(context.owner, Keys.ContributesRobotGeneratorKey)
     return listOf(constructor.symbol)
   }
-
-  private fun buildProviderCompanionObject(
-    classSymbol: FirRegularClassSymbol,
-    buildFunctions: (ClassId) -> List<FirFunction>,
-  ) =
-    createCompanionObject(classSymbol, Keys.ContributesRobotGeneratorKey).apply {
-      for (function in buildFunctions(symbol.classId)) {
-        addGeneratedDeclaration(function)
-      }
-    }
 
   private fun generatedRobotContributionOwner(
     classSymbol: FirClassSymbol<*>,
@@ -320,9 +322,8 @@ internal constructor(
   private fun buildProvideRobotFunction(
     graphClassId: ClassId,
     owner: FirClassSymbol<*>,
-  ): FirFunction {
-    val functionName = "provide${ContributesRobotIds.generatedClassNamePrefix(owner.classId)}"
-    val callableId = CallableId(graphClassId, Name.identifier(functionName))
+  ): FirNamedFunction {
+    val callableId = CallableId(graphClassId, provideRobotName(owner))
     val functionSymbol = FirNamedFunctionSymbol(callableId)
     val constructor = robotConstructor(owner)
     val generatedParameters =
@@ -374,10 +375,8 @@ internal constructor(
   private fun buildProvideRobotIntoMapFunction(
     graphClassId: ClassId,
     owner: FirClassSymbol<*>,
-  ): FirFunction {
-    val functionName =
-      "provide${ContributesRobotIds.generatedClassNamePrefix(owner.classId)}IntoMap"
-    val callableId = CallableId(graphClassId, Name.identifier(functionName))
+  ): FirNamedFunction {
+    val callableId = CallableId(graphClassId, provideRobotIntoMapName(owner))
     val functionSymbol = FirNamedFunctionSymbol(callableId)
     val ownerType = owner.defaultType()
 
@@ -412,6 +411,12 @@ internal constructor(
       annotations += buildRobotKeyAnnotation(owner)
     }
   }
+
+  private fun provideRobotName(owner: FirClassSymbol<*>): Name =
+    Name.identifier("provide${ContributesRobotIds.generatedClassNamePrefix(owner.classId)}")
+
+  private fun provideRobotIntoMapName(owner: FirClassSymbol<*>): Name =
+    Name.identifier("provide${ContributesRobotIds.generatedClassNamePrefix(owner.classId)}IntoMap")
 
   private data class RobotConstructor(
     val owner: FirRegularClassSymbol,

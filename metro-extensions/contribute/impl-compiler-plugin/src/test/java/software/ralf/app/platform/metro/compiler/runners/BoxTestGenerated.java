@@ -39,6 +39,12 @@ public class BoxTestGenerated extends AbstractBoxTest {
     }
 
     @Test
+    @TestMetadata("bindingFunctionsInDependencyModule.kt")
+    public void testBindingFunctionsInDependencyModule() {
+      run("bindingFunctionsInDependencyModule.kt");
+    }
+
+    @Test
     @TestMetadata("constructorParametersWithoutInject.kt")
     public void testConstructorParametersWithoutInject() {
       run("constructorParametersWithoutInject.kt");
@@ -54,6 +60,12 @@ public class BoxTestGenerated extends AbstractBoxTest {
     @TestMetadata("explicitModelType.kt")
     public void testExplicitModelType() {
       run("explicitModelType.kt");
+    }
+
+    @Test
+    @TestMetadata("generatedFunctionsInMetadata.kt")
+    public void testGeneratedFunctionsInMetadata() {
+      run("generatedFunctionsInMetadata.kt");
     }
 
     @Test
@@ -137,6 +149,12 @@ public class BoxTestGenerated extends AbstractBoxTest {
     }
 
     @Test
+    @TestMetadata("generatedFunctionsInMetadata.kt")
+    public void testGeneratedFunctionsInMetadata() {
+      run("generatedFunctionsInMetadata.kt");
+    }
+
+    @Test
     @TestMetadata("indirectSupertype.kt")
     public void testIndirectSupertype() {
       run("indirectSupertype.kt");
@@ -175,6 +193,18 @@ public class BoxTestGenerated extends AbstractBoxTest {
     }
 
     @Test
+    @TestMetadata("bindingFunctionsInDependencyModule.kt")
+    public void testBindingFunctionsInDependencyModule() {
+      run("bindingFunctionsInDependencyModule.kt");
+    }
+
+    @Test
+    @TestMetadata("bindingNameCollision.kt")
+    public void testBindingNameCollision() {
+      run("bindingNameCollision.kt");
+    }
+
+    @Test
     @TestMetadata("constructorParametersWithoutInject.kt")
     public void testConstructorParametersWithoutInject() {
       run("constructorParametersWithoutInject.kt");
@@ -193,6 +223,12 @@ public class BoxTestGenerated extends AbstractBoxTest {
     }
 
     @Test
+    @TestMetadata("generatedFunctionsInMetadata.kt")
+    public void testGeneratedFunctionsInMetadata() {
+      run("generatedFunctionsInMetadata.kt");
+    }
+
+    @Test
     @TestMetadata("injectSecondaryConstructorSkipsProvider.kt")
     public void testInjectSecondaryConstructorSkipsProvider() {
       run("injectSecondaryConstructorSkipsProvider.kt");
@@ -208,6 +244,12 @@ public class BoxTestGenerated extends AbstractBoxTest {
     @TestMetadata("onlyScoped.kt")
     public void testOnlyScoped() {
       run("onlyScoped.kt");
+    }
+
+    @Test
+    @TestMetadata("scopedInDependencyModule.kt")
+    public void testScopedInDependencyModule() {
+      run("scopedInDependencyModule.kt");
     }
 
     @Test

@@ -12,7 +12,7 @@ import org.jetbrains.kotlin.descriptors.Visibilities
 import org.jetbrains.kotlin.fir.FirFunctionTarget
 import org.jetbrains.kotlin.fir.FirSession
 import org.jetbrains.kotlin.fir.declarations.FirConstructor
-import org.jetbrains.kotlin.fir.declarations.FirFunction
+import org.jetbrains.kotlin.fir.declarations.FirNamedFunction
 import org.jetbrains.kotlin.fir.declarations.FirResolvePhase
 import org.jetbrains.kotlin.fir.declarations.FirValueParameter
 import org.jetbrains.kotlin.fir.declarations.builder.buildNamedFunction
@@ -59,7 +59,6 @@ import org.jetbrains.kotlin.name.Name
 import org.jetbrains.kotlin.name.SpecialNames
 import software.ralf.app.platform.metro.compiler.ClassIds
 import software.ralf.app.platform.metro.compiler.Keys
-import software.ralf.app.platform.metro.compiler.fir.addGeneratedDeclaration
 import software.ralf.app.platform.metro.compiler.fir.buildAnnotationCallWithArgument
 import software.ralf.app.platform.metro.compiler.fir.buildClassExpression
 import software.ralf.app.platform.metro.compiler.fir.buildSimpleAnnotationCall
@@ -153,12 +152,11 @@ internal constructor(
     if (name == SpecialNames.DEFAULT_NAME_FOR_COMPANION_OBJECT) {
       val rendererOwner = generatedRendererContributionOwner(owner) ?: return null
       val metadata = rendererContributionMetadata(rendererOwner, session) ?: return null
+      if (metadata.hasInjectAnnotation && metadata.modelClasses.isEmpty()) {
+        return null
+      }
       val contributionSymbol = owner as? FirRegularClassSymbol ?: return null
-      val companion =
-        buildProviderCompanionObject(contributionSymbol) { companionClassId ->
-          buildProviderFunctions(companionClassId, rendererOwner, metadata)
-        }
-      return companion?.symbol
+      return createCompanionObject(contributionSymbol, Keys.ContributesRendererGeneratorKey).symbol
     }
 
     if (name != ContributesRendererIds.NESTED_INTERFACE_NAME) return null
@@ -166,7 +164,7 @@ internal constructor(
       return null
 
     val rendererOwner = owner as? FirRegularClassSymbol ?: return null
-    val metadata = rendererContributionMetadata(rendererOwner, session) ?: return null
+    rendererContributionMetadata(rendererOwner, session) ?: return null
     val nestedClassId = rendererOwner.classId.createNestedClassId(name)
     val graphSymbol = FirRegularClassSymbol(nestedClassId)
 
@@ -189,9 +187,6 @@ internal constructor(
       annotations += buildSimpleAnnotationCall(ClassIds.BINDING_CONTAINER, graphSymbol, session)
       annotations += buildReflectionContributesToAnnotation()
       annotations += buildOriginAnnotation(rendererOwner, graphSymbol)
-      for (function in buildBindFunctions(nestedClassId, rendererOwner, metadata)) {
-        declarations += function
-      }
     }
 
     return contributionClass.symbol
@@ -201,10 +196,62 @@ internal constructor(
     classSymbol: FirClassSymbol<*>,
     context: MemberGenerationContext,
   ): Set<Name> {
-    return if (generatedRendererProviderCompanionOwner(classSymbol) != null) {
-      setOf(SpecialNames.INIT)
-    } else {
-      emptySet()
+    generatedRendererContributionOwner(classSymbol)?.let { rendererOwner ->
+      val metadata = rendererContributionMetadata(rendererOwner, session) ?: return emptySet()
+      return metadata.modelClasses.mapTo(linkedSetOf()) { rendererBindingName(rendererOwner, it) }
+    }
+
+    val rendererOwner = generatedRendererProviderCompanionOwner(classSymbol) ?: return emptySet()
+    val metadata = rendererContributionMetadata(rendererOwner, session) ?: return emptySet()
+    return buildSet {
+      add(SpecialNames.INIT)
+      if (!metadata.hasInjectAnnotation) {
+        add(rendererProviderName(rendererOwner))
+      }
+      metadata.modelClasses.forEach { add(rendererKeyName(rendererOwner, it)) }
+    }
+  }
+
+  override fun generateFunctions(
+    callableId: CallableId,
+    context: MemberGenerationContext?,
+  ): List<FirNamedFunctionSymbol> {
+    val classSymbol = context?.owner ?: return emptyList()
+    generatedRendererContributionOwner(classSymbol)?.let { rendererOwner ->
+      val metadata = rendererContributionMetadata(rendererOwner, session) ?: return emptyList()
+      return metadata.modelClasses
+        .filter { rendererBindingName(rendererOwner, it) == callableId.callableName }
+        .map {
+          buildProvideRendererIntoMapFunction(
+              graphClassId = classSymbol.classId,
+              owner = rendererOwner,
+              modelClass = it,
+            )
+            .symbol
+        }
+    }
+
+    val rendererOwner = generatedRendererProviderCompanionOwner(classSymbol) ?: return emptyList()
+    val metadata = rendererContributionMetadata(rendererOwner, session) ?: return emptyList()
+    return buildList {
+      if (
+        !metadata.hasInjectAnnotation &&
+          callableId.callableName == rendererProviderName(rendererOwner)
+      ) {
+        add(buildProvideRendererFunction(classSymbol.classId, rendererOwner).symbol)
+      }
+      metadata.modelClasses
+        .filter { rendererKeyName(rendererOwner, it) == callableId.callableName }
+        .forEach {
+          add(
+            buildProvideRendererKeyFunction(
+                graphClassId = classSymbol.classId,
+                owner = rendererOwner,
+                modelClass = it,
+              )
+              .symbol,
+          )
+        }
     }
   }
 
@@ -216,23 +263,6 @@ internal constructor(
       createDefaultPrivateConstructor(context.owner, Keys.ContributesRendererGeneratorKey)
     return listOf(constructor.symbol)
   }
-
-  private fun buildProviderCompanionObject(
-    classSymbol: FirRegularClassSymbol,
-    buildFunctions: (ClassId) -> List<FirFunction>,
-  ) =
-    createCompanionObject(classSymbol, Keys.ContributesRendererGeneratorKey).let { companion ->
-      val functions = buildFunctions(companion.symbol.classId)
-      if (functions.isEmpty()) {
-        null
-      } else {
-        companion.apply {
-          for (function in functions) {
-            addGeneratedDeclaration(function)
-          }
-        }
-      }
-    }
 
   private fun generatedRendererContributionOwner(
     classSymbol: FirClassSymbol<*>,
@@ -270,16 +300,6 @@ internal constructor(
     }
   }
 
-  private fun buildBindFunctions(
-    graphClassId: ClassId,
-    owner: FirRegularClassSymbol,
-    metadata: RendererContributionMetadata,
-  ): List<FirFunction> {
-    return metadata.modelClasses.map { modelClass ->
-      buildProvideRendererIntoMapFunction(graphClassId, owner, modelClass)
-    }
-  }
-
   private fun annotatedRendererClasses(): List<FirRegularClassSymbol> {
     return session.predicateBasedProvider
       .getSymbolsByPredicate(ContributesRendererIds.PREDICATE)
@@ -287,29 +307,26 @@ internal constructor(
       .toList()
   }
 
-  private fun buildProviderFunctions(
-    graphClassId: ClassId,
+  private fun rendererProviderName(owner: FirRegularClassSymbol): Name =
+    Name.identifier("provide${ContributesRendererIds.generatedSafeClassNamePrefix(owner.classId)}")
+
+  private fun rendererBindingName(
     owner: FirRegularClassSymbol,
-    metadata: RendererContributionMetadata,
-    includeRendererProvider: Boolean = true,
-  ): List<FirFunction> {
-    val functions = mutableListOf<FirFunction>()
-    if (includeRendererProvider && !metadata.hasInjectAnnotation) {
-      functions += buildProvideRendererFunction(graphClassId, owner)
-    }
-    metadata.modelClasses.forEach { modelClass ->
-      functions += buildProvideRendererKeyFunction(graphClassId, owner, modelClass)
-    }
-    return functions
-  }
+    modelClass: ResolvedModelClass,
+  ): Name =
+    Name.identifier(
+      rendererProviderName(owner).asString() +
+        ContributesRendererIds.generatedModelClassNameSuffix(modelClass.classId),
+    )
+
+  private fun rendererKeyName(owner: FirRegularClassSymbol, modelClass: ResolvedModelClass): Name =
+    Name.identifier(rendererBindingName(owner, modelClass).asString() + "Key")
 
   private fun buildProvideRendererFunction(
     graphClassId: ClassId,
     owner: FirRegularClassSymbol,
-  ): FirFunction {
-    val functionName =
-      "provide${ContributesRendererIds.generatedSafeClassNamePrefix(owner.classId)}"
-    val callableId = CallableId(graphClassId, Name.identifier(functionName))
+  ): FirNamedFunction {
+    val callableId = CallableId(graphClassId, rendererProviderName(owner))
     val functionSymbol = FirNamedFunctionSymbol(callableId)
     val constructor = rendererConstructor(owner)
     val generatedParameters =
@@ -362,11 +379,8 @@ internal constructor(
     graphClassId: ClassId,
     owner: FirRegularClassSymbol,
     modelClass: ResolvedModelClass,
-  ): FirFunction {
-    val functionName =
-      "provide${ContributesRendererIds.generatedSafeClassNamePrefix(owner.classId)}" +
-        ContributesRendererIds.generatedModelClassNameSuffix(modelClass.classId)
-    val callableId = CallableId(graphClassId, Name.identifier(functionName))
+  ): FirNamedFunction {
+    val callableId = CallableId(graphClassId, rendererBindingName(owner, modelClass))
     val functionSymbol = FirNamedFunctionSymbol(callableId)
     val ownerType = owner.defaultType()
 
@@ -406,12 +420,8 @@ internal constructor(
     graphClassId: ClassId,
     owner: FirRegularClassSymbol,
     modelClass: ResolvedModelClass,
-  ): FirFunction {
-    val functionName =
-      "provide${ContributesRendererIds.generatedSafeClassNamePrefix(owner.classId)}" +
-        ContributesRendererIds.generatedModelClassNameSuffix(modelClass.classId) +
-        "Key"
-    val callableId = CallableId(graphClassId, Name.identifier(functionName))
+  ): FirNamedFunction {
+    val callableId = CallableId(graphClassId, rendererKeyName(owner, modelClass))
     val functionSymbol = FirNamedFunctionSymbol(callableId)
 
     return buildNamedFunction {

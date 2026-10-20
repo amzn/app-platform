@@ -16,19 +16,6 @@ class TestRenderer : Renderer<Model> {
   @ContributesTo(scope = RendererScope::class)
   @Origin(value = TestRenderer::class)
   interface RendererContribution {
-    @Deprecated(message = "This synthesized declaration should not be used directly", level = DeprecationLevel.HIDDEN)
-    @ComptimeOnly
-    abstract class BindsMirror {
-      @Binds
-      @IntoMap
-      @RendererKey(value = Model::class)
-      @CallableMetadata(callableName = "provideComTestTestRendererModel", propertyName = "", startOffset = 284, endOffset = 388)
-      fun provideComTestTestRendererModel1500528963_intomap(renderer: TestRenderer): Renderer<*> {
-        return error(message = "Never called")
-      }
-
-    }
-
     companion object Companion {
       @CallableMetadata(callableName = "provideComTestTestRenderer", propertyName = "", startOffset = 284, endOffset = 388, newInstanceName = "provideComTestTestRenderer")
       object ProvideComTestTestRendererMetroFactory : Factory<TestRenderer> {
@@ -50,12 +37,6 @@ class TestRenderer : Renderer<Model> {
         @JsStatic
         fun provideComTestTestRenderer(): TestRenderer {
           return Companion.provideComTestTestRenderer()
-        }
-
-        @ComptimeOnly
-        @HiddenFromObjC
-        fun declarationMirror(): TestRenderer {
-          return error(message = "Never called")
         }
 
         @HiddenFromObjC
@@ -80,20 +61,14 @@ class TestRenderer : Renderer<Model> {
           return ProvideComTestTestRendererModelKeyMetroFactory
         }
 
+        @IntoMap
+        @ForScope(scope = RendererScope::class)
+        @RendererKey(value = Model::class)
         @HiddenFromObjC
         @JvmStatic
         @JsStatic
         fun provideComTestTestRendererModelKey(): KClass<out Renderer<*>> {
           return Companion.provideComTestTestRendererModelKey()
-        }
-
-        @IntoMap
-        @ForScope(scope = RendererScope::class)
-        @RendererKey(value = Model::class)
-        @ComptimeOnly
-        @HiddenFromObjC
-        fun declarationMirror(): KClass<out Renderer<*>> {
-          return error(message = "Never called")
         }
 
         @HiddenFromObjC
