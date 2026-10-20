@@ -211,6 +211,12 @@ public class BoxTestGenerated extends AbstractBoxTest {
     }
 
     @Test
+    @TestMetadata("bindingNameCollisionInDependencyModule.kt")
+    public void testBindingNameCollisionInDependencyModule() {
+      run("bindingNameCollisionInDependencyModule.kt");
+    }
+
+    @Test
     @TestMetadata("constructorParametersWithoutInject.kt")
     public void testConstructorParametersWithoutInject() {
       run("constructorParametersWithoutInject.kt");

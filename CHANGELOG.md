@@ -14,6 +14,7 @@
 
 ### Fixed
 
+- Regenerate Metro renderer bindings after incremental changes to nested sealed models.
 - Preserve Kotlin metadata for generated Metro contribution functions so dependent Kotlin modules can call them.
 - Skip scopes destroyed during robot lookup.
 - Allow the default Metro compiler integration to use `@ContributesBinding` on `Scoped` classes with an explicit qualified set binding.

@@ -38,6 +38,7 @@ import org.jetbrains.kotlin.ir.util.classId
 import org.jetbrains.kotlin.ir.util.constructors
 import org.jetbrains.kotlin.ir.util.copyTo
 import org.jetbrains.kotlin.ir.util.defaultType
+import org.jetbrains.kotlin.ir.util.file
 import org.jetbrains.kotlin.ir.util.parentAsClass
 import org.jetbrains.kotlin.ir.util.primaryConstructor
 import org.jetbrains.kotlin.ir.visitors.IrElementTransformerVoid
@@ -270,6 +271,7 @@ internal class ContributesRendererIrExtension(private val compatContext: CompatC
       }
 
       val collected = linkedMapOf<ClassId, IrClass>()
+      val finder = pluginContext.finderForSourceCompat(file)
       val queue = ArrayDeque<IrClass>()
       queue += modelClass
       while (queue.isNotEmpty()) {
@@ -277,6 +279,8 @@ internal class ContributesRendererIrExtension(private val compatContext: CompatC
         if (collected.putIfAbsent(requireNotNull(candidate.classId), candidate) != null) {
           continue
         }
+        // Record dependencies so sealed hierarchy edits regenerate this renderer's bindings.
+        finder.findClass(requireNotNull(candidate.classId))
         if (candidate.modality == Modality.SEALED) {
           queue += candidate.sealedSubclasses.map { it.owner }
         }

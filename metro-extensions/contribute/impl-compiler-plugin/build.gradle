@@ -15,6 +15,9 @@ configurations {
     metroRuntimeClasspath {
         transitive = false
     }
+    incrementalRuntimeClasspath {
+        extendsFrom annotationsRuntimeClasspath, metroRuntimeClasspath
+    }
 }
 
 def testKotlinVersion =
@@ -56,6 +59,10 @@ dependencies {
     testImplementation libs.kotlin.compiler.internal.test.framework
     testImplementation libs.kotlin.test.junit5
     testImplementation libs.metro.compiler
+    // Keep Gradle's bundled Kotlin libraries out of the compiler compatibility tests.
+    testImplementation(gradleTestKit().files.filter {
+        !it.name.startsWith('kotlin-stdlib-') && !it.name.startsWith('kotlin-reflect-')
+    })
 
     testRuntimeOnly libs.kotlin.test
     testRuntimeOnly libs.kotlin.annotations.jvm
@@ -100,8 +107,11 @@ def annotationsClasspathFiles = configurations.annotationsRuntimeClasspath
 def metroRuntimeClasspathFiles = configurations.metroRuntimeClasspath
 def testClasspathFiles = configurations.testRuntimeClasspath
 def testSupportClasspathFiles = sourceSets.test.output.classesDirs
+def incrementalRuntimeClasspathFiles = configurations.incrementalRuntimeClasspath
+def compilerPluginJar = tasks.named('jar').flatMap { it.archiveFile }
 
 tasks.withType(Test).configureEach { testTask ->
+    dependsOn(compilerPluginJar)
     useJUnitPlatform()
     workingDir = rootDir
     maxHeapSize = '2g'
@@ -111,6 +121,8 @@ tasks.withType(Test).configureEach { testTask ->
 
     systemProperty('idea.ignore.disabled.plugins', 'true')
     systemProperty('idea.home.path', rootDir)
+    systemProperty('incremental.kotlinVersion', testKotlinVersion.get())
+    systemProperty('incremental.metroVersion', libs.versions.metro.get())
 
     if (project.hasProperty('updateTestData')) {
         systemProperty('kotlin.test.update.test.data', 'true')
@@ -128,13 +140,12 @@ tasks.withType(Test).configureEach { testTask ->
         )
         systemProperty('metroRuntime.classpath', metroRuntimeClasspath)
         systemProperty('testSupport.classpath', testSupportClasspath)
+        systemProperty('incremental.runtimeClasspath', incrementalRuntimeClasspathFiles.asPath)
+        systemProperty('incremental.compilerPlugin', compilerPluginJar.get().asFile.absolutePath)
 
         def setLib = { String propName, String jarName ->
-            def prefix = "${jarName}-"
             def path = classpathFiles.find { file ->
-                file.name.startsWith(prefix) &&
-                        file.name.endsWith('.jar') &&
-                        Character.isDigit(file.name.substring(prefix.length()).charAt(0))
+                file.name == "${jarName}-${testKotlinVersion.get()}.jar"
             }?.absolutePath
             if (path != null) {
                 systemProperty(propName, path)
