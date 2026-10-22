@@ -6,6 +6,8 @@
 
 ### Changed
 
+- Upgrade Compose Multiplatform to `1.12.1` and Navigation 3 to `1.1.2`.
+
 ### Deprecated
 
 ### Removed
